@@ -1,10 +1,16 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import type { StatusKey, TranslatorKey } from "@/types";
-import { BASE_URI, imageMimeTypes } from "@/config";
+import {
+  BASE_URI,
+  imageMimeTypes,
+  defaultTranslator,
+  defaultStatus,
+} from "@/config";
 import { OptionsPanel } from "@/components/OptionsPanel";
 import { UploadArea } from "@/components/UploadArea";
 import { Header } from "@/components/Header";
 import { fetchStatusText } from "@/utils/fetchStatusText";
+import { TranslateProgress } from "@/components/TranslateProgress";
 
 export const App: React.FC = () => {
   // アップロードファイル/結果格納
@@ -12,7 +18,7 @@ export const App: React.FC = () => {
   const [result, setResult] = useState<Blob | null>(null);
 
   // ステータス管理
-  const [status, setStatus] = useState<StatusKey>(null);
+  const [status, setStatus] = useState<StatusKey>(defaultStatus);
   const [queuePos, setQueuePos] = useState<string | null>(null);
   const [progress, setProgress] = useState<string | null>(null);
 
@@ -20,7 +26,8 @@ export const App: React.FC = () => {
   const [detectionResolution, setDetectionResolution] = useState("1536");
   const [textDetector, setTextDetector] = useState("default");
   const [renderTextDirection, setRenderTextDirection] = useState("auto");
-  const [translator, setTranslator] = useState<TranslatorKey>("youdao");
+  const [translator, setTranslator] =
+    useState<TranslatorKey>(defaultTranslator);
   const [targetLanguage, setTargetLanguage] = useState("CHS");
 
   const [inpaintingSize, setInpaintingSize] = useState("2048");
@@ -47,7 +54,7 @@ export const App: React.FC = () => {
   const clearForm = useCallback(() => {
     setFile(null);
     setResult(null);
-    setStatus(null);
+    setStatus(defaultStatus);
     setProgress(null);
     setQueuePos(null);
   }, []);
@@ -156,7 +163,7 @@ export const App: React.FC = () => {
             case 0:
               // 結果画像 (PNG)
               setResult(new Blob([data], { type: "image/png" }));
-              setStatus(null);
+              setStatus("finished");
               break;
             case 1:
               // ステータス文字列
@@ -268,6 +275,7 @@ export const App: React.FC = () => {
             handleSubmit={handleSubmit}
             clearForm={clearForm}
           />
+          <TranslateProgress status={status} error={error} />
         </div>
       </div>
     </div>

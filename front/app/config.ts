@@ -1,3 +1,5 @@
+import type { Step, TranslatorKey, StatusKey } from "@/types";
+
 export const BASE_URI = "http://127.0.0.1:8000/";
 
 export const languageOptions = [
@@ -47,3 +49,19 @@ export const imageMimeTypes = [
   "image/bmp",
   "image/webp",
 ];
+
+export const defaultSteps = [
+  { name: "upload", href: "#", status: "current" },
+  { name: "pending", href: "#", status: "upcoming" },
+  { name: "detection", href: "#", status: "upcoming" },
+  { name: "ocr", href: "#", status: "upcoming" },
+  { name: "translating", href: "#", status: "upcoming" },
+  { name: "upscaling", href: "#", status: "upcoming" },
+  { name: "mask-generation", href: "#", status: "upcoming" },
+  { name: "inpainting", href: "#", status: "upcoming" },
+  { name: "rendering", href: "#", status: "upcoming" },
+  { name: "finished", href: "#", status: "upcoming" },
+] as Step[];
+
+export const defaultTranslator: TranslatorKey = "deepl";
+export const defaultStatus: StatusKey = "init";

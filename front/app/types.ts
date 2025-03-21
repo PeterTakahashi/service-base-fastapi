@@ -1,4 +1,5 @@
 export type StatusKey =
+  | "init"
   | "upload"
   | "pending"
   | "detection"
@@ -14,30 +15,19 @@ export type StatusKey =
   | "error-lang"
   | "error-translating"
   | "error-too-large"
-  | "error-disconnect"
-  | null;
+  | "error-disconnect";
 
-export type TranslatorKey =
-  | "youdao"
-  | "baidu"
-  | "deepl"
-  | "papago"
-  | "caiyun"
-  | "sakura"
-  | "offline"
-  | "openai"
-  | "deepseek"
-  | "none";
+export type TranslatorKey = "deepl" | "openai" | "deepseek" | "none";
 
 export const validTranslators: TranslatorKey[] = [
-  "youdao",
-  "baidu",
   "deepl",
-  "papago",
-  "caiyun",
-  "sakura",
-  "offline",
   "openai",
   "deepseek",
   "none",
 ];
+
+export type Step = {
+  name: string;
+  href: string;
+  status: "complete" | "current" | "upcoming";
+};

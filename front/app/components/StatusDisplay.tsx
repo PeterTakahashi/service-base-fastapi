@@ -1,6 +1,7 @@
 import React from "react";
 import { Icon } from "@iconify/react";
 import type { StatusKey } from "@/types";
+import { defaultStatus } from "@/config";
 
 type Props = {
   status: StatusKey | null;
@@ -15,7 +16,7 @@ export const StatusDisplay: React.FC<Props> = ({
   error,
   onRetry,
 }) => {
-  if (!status) {
+  if (status == defaultStatus) {
     return null;
   }
 
@@ -36,10 +37,7 @@ export const StatusDisplay: React.FC<Props> = ({
 
   return (
     <div className="flex flex-col items-center gap-2 text-center text-gray-700">
-      <Icon
-        icon="carbon:chevron-down"
-        className="absolute top-1 right-1 text-gray-500 pointer-events-none"
-      />
+      <Icon icon="carbon:rotate" className="w-8 h-8 text-gray-500" />
       <div>{statusText}</div>
     </div>
   );

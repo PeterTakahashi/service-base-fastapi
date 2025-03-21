@@ -2,6 +2,7 @@ import React from "react";
 import { Icon } from "@iconify/react";
 import { StatusDisplay } from "@/components/StatusDisplay";
 import type { StatusKey } from "@/types";
+import { defaultStatus } from "@/config";
 
 type Props = {
   file: File | null;
@@ -53,7 +54,7 @@ export const UploadArea: React.FC<Props> = ({
             Upload another
           </button>
         </div>
-      ) : status ? (
+      ) : status != defaultStatus ? (
         // 処理中/ステータス表示エリア
         <div className="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-md p-8 h-72">
           <StatusDisplay
