@@ -58,6 +58,7 @@ async def while_streaming(req: Request, transform, config: Config, image: bytes 
 
     def notify_internal(code: int, data: bytes) -> None:
         notify(code, data, transform, messages)
+
     streaming_response = StreamingResponse(stream(messages), media_type="application/octet-stream")
     asyncio.create_task(wait_in_queue(task, notify_internal))
     return streaming_response

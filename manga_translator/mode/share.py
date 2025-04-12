@@ -3,30 +3,11 @@ import pickle
 from threading import Lock
 
 import uvicorn
-from fastapi import FastAPI, HTTPException, Path, Request, Response
-from pydantic import BaseModel
-import inspect
+from fastapi import FastAPI, HTTPException, Request, Response
 
 from starlette.responses import StreamingResponse
 
 from manga_translator import MangaTranslator
-
-class MethodCall(BaseModel):
-    method_name: str
-    attributes: bytes
-
-
-async def load_data(request: Request, method):
-    attributes_bytes = await request.body()
-    attributes = pickle.loads(attributes_bytes)
-    sig = inspect.signature(method)
-    expected_args = set(sig.parameters.keys())
-    provided_args = set(attributes.keys())
-
-    if expected_args != provided_args:
-        raise HTTPException(status_code=400, detail="Incorrect number or names of arguments")
-    return attributes
-
 
 class MangaShare:
     def __init__(self, params: dict = None):
@@ -60,10 +41,7 @@ class MangaShare:
 
     async def run_method(self, method, **attributes):
         try:
-            if asyncio.iscoroutinefunction(method):
-                result = await method(**attributes)
-            else:
-                result = method(**attributes)
+            result = await method(**attributes)
             result_bytes = pickle.dumps(result)
             encoded_result = b'\x00' + len(result_bytes).to_bytes(4, 'big') + result_bytes
             await self.progress_queue.put(encoded_result)
@@ -73,7 +51,6 @@ class MangaShare:
             await self.progress_queue.put(encoded_result)
         finally:
             self.lock.release()
-
 
     def check_nonce(self, request: Request):
         if self.nonce:
@@ -85,34 +62,17 @@ class MangaShare:
         if not self.lock.acquire(blocking=False):
             raise HTTPException(status_code=429, detail="some Method is already being executed.")
 
-    def get_fn(self, method_name: str):
-        if method_name.startswith("__"):
-            raise HTTPException(status_code=403, detail="These functions are not allowed to be executed remotely")
-        method = getattr(self.manga, method_name, None)
-        if not method:
-            raise HTTPException(status_code=404, detail="Method not found")
-        return method
-
     async def listen(self, translation_params: dict = None):
         app = FastAPI()
 
-        @app.get("/is_locked")
-        async def is_locked():
-            if self.lock.locked():
-                return {"locked": True}
-            return {"locked": False}
-
-        @app.post("/simple_execute/{method_name}")
-        async def execute_method(request: Request, method_name: str = Path(...)):
+        @app.post("/simple_execute/translate")
+        async def simple_execute_translate(request: Request):
             self.check_nonce(request)
             self.check_lock()
-            method = self.get_fn(method_name)
-            attr = await load_data(request, method)
+            attributes_bytes = await request.body()
+            attr = pickle.loads(attributes_bytes)
             try:
-                if asyncio.iscoroutinefunction(method):
-                    result = await method(**attr)
-                else:
-                    result = method(**attr)
+                result = await self.manga.translate(**attr)
                 self.lock.release()
                 result_bytes = pickle.dumps(result)
                 return Response(content=result_bytes, media_type="application/octet-stream")
@@ -120,16 +80,16 @@ class MangaShare:
                 self.lock.release()
                 raise HTTPException(status_code=500, detail=str(e))
 
-        @app.post("/execute/{method_name}")
-        async def execute_method(request: Request, method_name: str = Path(...)):
+        @app.post("/execute/translate")
+        async def execute_translate(request: Request):
             self.check_nonce(request)
             self.check_lock()
-            method = self.get_fn(method_name)
-            attr = await load_data(request, method)
+            attributes_bytes = await request.body()
+            attr = pickle.loads(attributes_bytes)
 
             # streaming response
             streaming_response = StreamingResponse(self.progress_stream(), media_type="application/octet-stream")
-            asyncio.create_task(self.run_method(method, **attr))
+            asyncio.create_task(self.run_method(self.manga.translate, **attr))
             return streaming_response
 
         config = uvicorn.Config(app, host=self.host, port=self.port)
