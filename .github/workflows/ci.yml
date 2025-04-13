@@ -7,7 +7,6 @@ on:
       - '.github/workflows/ci.yml'
       - 'manga_translator/**'
       - 'test/**'
-      - 'pyproject.toml'
       - 'requirements.txt'
       - 'requirements-dev.txt'
   pull_request:
@@ -16,7 +15,6 @@ on:
       - '.github/workflows/ci.yml'
       - 'manga_translator/**'
       - 'test/**'
-      - 'pyproject.toml'
       - 'requirements.txt'
       - 'requirements-dev.txt'
 jobs:

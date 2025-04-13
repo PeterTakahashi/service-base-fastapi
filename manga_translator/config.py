@@ -314,7 +314,6 @@ class Config(BaseModel):
     """inpainter configs"""
     ocr: OcrConfig = OcrConfig()
     """Ocr configs"""
-    # ?
     kernel_size: int = 3
     """Set the convolution kernel size of the text erasure area to completely clean up text residues"""
     mask_dilation_offset: int = 0

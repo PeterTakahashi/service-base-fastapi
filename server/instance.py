@@ -7,29 +7,26 @@ from pydantic import BaseModel
 from manga_translator import Config
 from server.sent_data_internal import fetch_data_stream, NotifyType, fetch_data
 
-
 class ExecutorInstance(BaseModel):
-    ip: str
-    port: int
     busy: bool = False
+    base_url: str = "http://localhost:8001"
 
     def free_executor(self):
         self.busy = False
 
     async def sent(self, image: Image, config: Config):
-        return await fetch_data("http://"+self.ip+":"+str(self.port)+"/simple_execute/translate", image, config)
+        url = f"{self.base_url}/simple_execute/translate"
+        return await fetch_data(url, image, config)
 
     async def sent_stream(self, image: Image, config: Config, sender: NotifyType):
-        await fetch_data_stream("http://"+self.ip+":"+str(self.port)+"/execute/translate", image, config, sender)
+        url = f"{self.base_url}/execute/translate"
+        await fetch_data_stream(url, image, config, sender)
 
 class Executors:
     def __init__(self):
-        self.list: List[ExecutorInstance] = []
+        self.list: List[ExecutorInstance] = [ExecutorInstance()]
         self.lock: Lock = Lock()
         self.event = Event()
-
-    def register(self, instance: ExecutorInstance):
-        self.list.append(instance)
 
     def free_executors(self) -> int:
         return len([item for item in self.list if not item.busy])
@@ -39,11 +36,10 @@ class Executors:
             instance = next((x for x in self.list if x.busy == False), None)
             if instance is not None:
                 return instance
-            #todo: cricial error: warn should never happen
             await self.event.wait()
 
     async def find_executor(self) -> ExecutorInstance:
-        async with self.lock:  # Using async with for lock management
+        async with self.lock: # Using async with for lock management
             instance = await self._find_instance()
             instance.busy = True
             return instance
