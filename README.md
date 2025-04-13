@@ -14,41 +14,23 @@
 Some manga/images will never be translated, therefore this project is born.
 
 - [Image/Manga Translator](#imagemanga-translator)
-    - [Samples](#samples)
-    - [Online Demo](#online-demo)
-    - [Disclaimer](#disclaimer)
-    - [Installation](#installation)
-        - [Local setup](#local-setup)
-            - [Pip/venv](#pipvenv)
-            - [Additional instructions for **Windows**](#additional-instructions-for-windows)
-        - [Docker](#docker)
-            - [Hosting the web server](#hosting-the-web-server)
-            - [Using as CLI](#using-as-cli)
-            - [Setting Translation Secrets](#setting-translation-secrets)
-            - [Using with Nvidia GPU](#using-with-nvidia-gpu)
-            - [Building locally](#building-locally)
-    - [Usage](#usage)
-        - [Batch mode (default)](#batch-mode-default)
-        - [Demo mode](#demo-mode)
-        - [Web Mode](#web-mode)
-        - [Api Mode](#api-mode)
-    - [Related Projects](#related-projects)
-    - [Docs](#docs)
-        - [Recommended Modules](#recommended-modules)
-            - [Tips to improve translation quality](#tips-to-improve-translation-quality)
-        - [Options](#options)
-        - [Language Code Reference](#language-code-reference)
-        - [Translators Reference](#translators-reference)
-        - [Config Documentation](#config-file)
-        - [GPT Config Reference](#gpt-config-reference)
-        - [Using Gimp for rendering](#using-gimp-for-rendering)
-        - [Api Documentation](#api-documentation)
-            - [Synchronous mode](#synchronous-mode)
-            - [Asynchronous mode](#asynchronous-mode)
-            - [Manual translation](#manual-translation)
-    - [Next steps](#next-steps)
-    - [Support Us](#support-us)
-        - [Thanks To All Our Contributors :](#thanks-to-all-our-contributors-)
+  - [Samples](#samples)
+  - [Online Demo](#online-demo)
+  - [Disclaimer](#disclaimer)
+  - [Installation](#installation)
+    - [Local setup](#local-setup)
+      - [Pip/venv](#pipvenv)
+  - [Usage](#usage)
+    - [Web Mode](#web-mode)
+  - [Docs](#docs)
+      - [Tips to improve translation quality](#tips-to-improve-translation-quality)
+    - [Options](#options)
+    - [Language Code Reference](#language-code-reference)
+    - [Translators Reference](#translators-reference)
+    - [Config file](#config-file)
+    - [GPT Config Reference](#gpt-config-reference)
+    - [Using Gimp for rendering](#using-gimp-for-rendering)
+  - [Next steps](#next-steps)
 
 ## Samples
 
@@ -179,107 +161,7 @@ $ pip install -r requirements.txt
 
 The models will be downloaded into `./models` at runtime.
 
-#### Additional instructions for **Windows**
-
-Before you start the pip install, first install Microsoft C++ Build
-Tools ([Download](https://visualstudio.microsoft.com/vs/),
-[Instructions](https://stackoverflow.com/questions/40504552/how-to-install-visual-c-build-tools))
-as some pip dependencies will not compile without it.
-(See [#114](https://github.com/zyddnys/manga-image-translator/issues/114)).
-
-To use [cuda](https://developer.nvidia.com/cuda-downloads?target_os=Windows&target_arch=x86_64)
-on windows install the correct pytorch version as instructed on <https://pytorch.org/>.
-
-### Docker
-
-Requirements:
-
-- Docker (version 19.03+ required for CUDA / GPU acceleration)
-- Docker Compose (Optional if you want to use files in the `demo/doc` folder)
-- Nvidia Container Runtime (Optional if you want to use CUDA)
-
-This project has docker support under `zyddnys/manga-image-translator:main` image.
-This docker image contains all required dependencies / models for the project.
-It should be noted that this image is fairly large (~ 15GB).
-
-#### Hosting the web server
-
-The web server can be hosted using (For CPU)
-
-```bash
-docker run -p 5003:5003 -v result:/app/result --ipc=host --rm zyddnys/manga-image-translator:main -l ENG --manga2eng -v --mode web --host=0.0.0.0 --port=5003
-```
-
-or
-
-```bash
-docker-compose -f demo/doc/docker-compose-web-with-cpu.yml up
-```
-
-depending on which you prefer. The web server should start on port [5003](http://localhost:5003)
-and images should become in the `/result` folder.
-
-#### Using as CLI
-
-To use docker with the CLI (I.e in batch mode)
-
-```bash
-docker run -v <targetFolder>:/app/<targetFolder> -v <targetFolder>-translated:/app/<targetFolder>-translated  --ipc=host --rm zyddnys/manga-image-translator:main --mode=batch -i=/app/<targetFolder> <cli flags>
-```
-
-**Note:** In the event you need to reference files on your host machine
-you will need to mount the associated files as volumes into the `/app` folder inside the container.
-Paths for the CLI will need to be the internal docker path `/app/...` instead of the paths on your host machine
-
-#### Setting Translation Secrets
-
-Some translation services require API keys to function to set these pass them as env vars into the docker container. For
-example:
-
-```bash
-docker run --env="DEEPL_AUTH_KEY=xxx" --ipc=host --rm zyddnys/manga-image-translator:main <cli flags>
-```
-
-#### Using with Nvidia GPU
-
-> To use with a supported GPU please first read the initial `Docker` section. There are some special dependencies you
-> will need to use
-
-To run the container with the following flags set:
-
-```bash
-docker run ... --gpus=all ... zyddnys/manga-image-translator:main ... --use-gpu
-```
-
-Or (For the web server + GPU)
-
-```bash
-docker-compose -f demo/doc/docker-compose-web-with-gpu.yml up
-```
-
-#### Building locally
-
-To build the docker image locally you can run (You will require make on your machine)
-
-```bash
-make build-image
-```
-
-Then to test the built image run
-
-```bash
-make run-web-server
-```
-
 ## Usage
-
-### Local mode
-
-```bash
-# replace <path> with the path to the image folder or file.
-$ python -m manga_translator local -v -i <path>
-# results can be found under `<path_to_image_folder>-translated`.
-```
 
 ### Web Mode
 
@@ -289,43 +171,7 @@ $ cd server && python main.py --use-gpu
 # the demo will be serving on http://127.0.0.1:5003
 ```
 
-## Related Projects
-
-GUI implementation: [BallonsTranslator](https://github.com/dmMaze/BallonsTranslator)
-
 ## Docs
-
-### Recommended Modules
-
-Detector:
-
-- ENG: ??
-- JPN: ??
-- CHS: ??
-- KOR: ??
-- Using `{"detector":{"detector": "ctd"}}` can increase the amount of text lines detected
-
-OCR:
-
-- ENG: ??
-- JPN: ??
-- CHS: ??
-- KOR: 48px
-
-Translator:
-
-- JPN -> ENG: **Sugoi**
-- CHS -> ENG: ??
-- CHS -> JPN: ??
-- JPN -> CHS: ??
-- ENG -> JPN: ??
-- ENG -> CHS: ??
-
-Inpainter: ??
-
-Colorizer: **mc2**
-
-<!-- Auto generated start (See devscripts/make_readme.py) -->
 
 #### Tips to improve translation quality
 
@@ -1028,10 +874,6 @@ Limitations:
   by an outside program.
 - Font family is controlled separately, with the `--gimp-font` argument.
 
-### Api Documentation
-
-Read openapi docs: `127.0.0.1:5003/docs`
-
 ## Next steps
 
 A list of what needs to be done next, you're welcome to contribute.
@@ -1046,20 +888,5 @@ A list of what needs to be done next, you're welcome to contribute.
    features for building custom NMT models.
 5. Make this project works for video(rewrite code in C++ and use GPU/other hardware NN accelerator).\
    Used for detecting hard subtitles in videos, generating ass file and remove them completely.
-6. ~~Mask refinement based using non deep learning algorithms, I am currently testing out CRF based algorithm.~~
-7. ~~Angled text region merge is not currently supported~~
-8. Create pip repository
+6. Create pip repository
 
-## Support Us
-
-GPU server is not cheap, please consider to donate to us.
-
-- Ko-fi: <https://ko-fi.com/voilelabs>
-- Patreon: <https://www.patreon.com/voilelabs>
-- 爱发电: <https://afdian.net/@voilelabs>
-
-  ### Thanks To All Our Contributors :
-  <a href="https://github.com/zyddnys/manga-image-translator/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=zyddnys/manga-image-translator" />
-
-</a>
