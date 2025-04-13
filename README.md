@@ -151,10 +151,6 @@ $ python -m venv venv
 # Activate venv
 $ source venv/bin/activate
 
-# For --use-gpu option go to https://pytorch.org/ and follow
-# pytorch installation instructions. Add `--upgrade --force-reinstall`
-# to the pip command to overwrite the currently installed pytorch version.
-
 # Install the dependencies
 $ pip install -r requirements.txt
 ```

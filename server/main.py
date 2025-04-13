@@ -1,27 +1,21 @@
 import io
 import os
-import secrets
-import shutil
-import signal
-import subprocess
 import sys
-from argparse import Namespace
+import uvicorn
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-
-from fastapi import FastAPI, Request, HTTPException, Header, UploadFile, File, Form
+from fastapi import FastAPI, Request, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 
 from manga_translator import Config
-from server.instance import ExecutorInstance, executor_instances
+
 from server.myqueue import task_queue
 from server.request_extraction import get_ctx, while_streaming, TranslateRequest
 from server.to_json import to_translation, TranslationResponse
 
 app = FastAPI()
-nonce = None
 
 app.add_middleware(
     CORSMiddleware,
@@ -30,13 +24,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-@app.post("/register", response_description="no response", tags=["internal-api"])
-async def register_instance(instance: ExecutorInstance, req: Request, req_nonce: str = Header(alias="X-Nonce")):
-    if req_nonce != nonce:
-        raise HTTPException(401, detail="Invalid nonce")
-    instance.ip = req.client.host
-    executor_instances.register(instance)
 
 def transform_to_image(ctx):
     img_byte_arr = io.BytesIO()
@@ -120,74 +107,5 @@ async def stream_image_form(req: Request, image: UploadFile = File(...), config:
     img = await image.read()
     return await while_streaming(req, transform_to_image, Config.parse_raw(config), img)
 
-@app.post("/queue-size", response_model=int, tags=["api", "json"])
-async def queue_size() -> int:
-    return len(task_queue.queue)
-
-def generate_nonce():
-    return secrets.token_hex(16)
-
-def start_translator_client_proc(host: str, port: int, nonce: str, params: Namespace):
-    cmds = [
-        sys.executable,
-        '-m', 'manga_translator',
-        'shared',
-        '--host', host,
-        '--port', str(port),
-        '--nonce', nonce,
-    ]
-    if params.use_gpu:
-        cmds.append('--use-gpu')
-    if params.use_gpu_limited:
-        cmds.append('--use-gpu-limited')
-    if params.ignore_errors:
-        cmds.append('--ignore-errors')
-    if params.verbose:
-        cmds.append('--verbose')
-    if params.models_ttl:
-        cmds.append('--models-ttl=%s' % params.models_ttl)
-    if params.pre_dict:
-        cmds.extend(['--pre-dict', params.pre_dict])
-    if params.pre_dict:
-        cmds.extend(['--post-dict', params.post_dict])
-    base_path = os.path.dirname(os.path.abspath(__file__))
-    parent = os.path.dirname(base_path)
-    print(cmds)
-    proc = subprocess.Popen(cmds, cwd=parent)
-    executor_instances.register(ExecutorInstance(ip=host, port=port))
-
-    def handle_exit_signals(signal, frame):
-        proc.terminate()
-        sys.exit(0)
-
-    signal.signal(signal.SIGINT, handle_exit_signals)
-    signal.signal(signal.SIGTERM, handle_exit_signals)
-
-    return proc
-
-def prepare(args):
-    global nonce
-    if args.nonce is None:
-        nonce = os.getenv('MT_WEB_NONCE', generate_nonce())
-    else:
-        nonce = args.nonce
-    if args.start_instance:
-        return start_translator_client_proc(args.host, args.port + 1, nonce, args)
-    folder_name= "upload-cache"
-    if os.path.exists(folder_name):
-        shutil.rmtree(folder_name)
-    os.makedirs(folder_name)
-
 if __name__ == '__main__':
-    import uvicorn
-    from args import parse_arguments
-
-    args = parse_arguments()
-    args.start_instance = True
-    proc = prepare(args)
-    print("Nonce: "+nonce)
-    try:
-        uvicorn.run(app, host=args.host, port=args.port)
-    except Exception:
-        if proc:
-            proc.terminate()
+    uvicorn.run(app, host='localhost', port=8000)

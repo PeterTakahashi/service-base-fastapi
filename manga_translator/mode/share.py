@@ -13,7 +13,7 @@ class MangaShare:
     def __init__(self, params: dict = None):
         self.manga = MangaTranslator(params)
         self.host = params.get('host', '127.0.0.1')
-        self.port = int(params.get('port', '5003'))
+        self.port = int(params.get('port', '8001'))
         self.nonce = params.get('nonce', None)
 
         # each chunk has a structure like this status_code(int/1byte),len(int/4bytes),bytechunk
