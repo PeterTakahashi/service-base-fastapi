@@ -15,7 +15,11 @@ from server.myqueue import task_queue
 from server.request_extraction import get_ctx, while_streaming, TranslateRequest
 from server.to_json import to_translation, TranslationResponse
 
-app = FastAPI()
+app = FastAPI(
+    title="Manga Translator API",
+    description="A FastAPI server for manga translation",
+    version="1.0.0"
+)
 
 app.add_middleware(
     CORSMiddleware,

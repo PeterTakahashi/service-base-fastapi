@@ -63,7 +63,11 @@ class MangaShare:
             raise HTTPException(status_code=429, detail="some Method is already being executed.")
 
     async def listen(self, translation_params: dict = None):
-        app = FastAPI()
+        app = FastAPI(
+            title="Manga Translator shared API",
+            description="A FastAPI server for manga translation",
+            version="1.0.0"
+        )
 
         @app.post("/simple_execute/translate")
         async def simple_execute_translate(request: Request):
