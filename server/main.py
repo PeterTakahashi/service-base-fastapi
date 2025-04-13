@@ -12,8 +12,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from fastapi import FastAPI, Request, HTTPException, Header, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse, HTMLResponse
-from pathlib import Path
+from fastapi.responses import StreamingResponse
 
 from manga_translator import Config
 from server.instance import ExecutorInstance, executor_instances
@@ -50,7 +49,10 @@ def transform_to_json(ctx):
 def transform_to_bytes(ctx):
     return to_translation(ctx).to_bytes()
 
-@app.post("/translate/json", response_model=TranslationResponse, tags=["api", "json"],response_description="json strucure inspired by the ichigo translator extension")
+@app.post("/translate/json",
+    response_model=TranslationResponse,
+    tags=["api", "json"],
+    response_description="json strucure inspired by the ichigo translator extension")
 async def json(req: Request, data: TranslateRequest):
     ctx = await get_ctx(req, data.config, data.image)
     return to_translation(ctx)
@@ -122,20 +124,6 @@ async def stream_image_form(req: Request, image: UploadFile = File(...), config:
 async def queue_size() -> int:
     return len(task_queue.queue)
 
-@app.get("/", response_class=HTMLResponse,tags=["ui"])
-async def index() -> HTMLResponse:
-    script_directory = Path(__file__).parent
-    html_file = script_directory / "index.html"
-    html_content = html_file.read_text(encoding="utf-8")
-    return HTMLResponse(content=html_content)
-
-@app.get("/manual", response_class=HTMLResponse, tags=["ui"])
-async def manual():
-    script_directory = Path(__file__).parent
-    html_file = script_directory / "manual.html"
-    html_content = html_file.read_text(encoding="utf-8")
-    return HTMLResponse(content=html_content)
-
 def generate_nonce():
     return secrets.token_hex(16)
 
@@ -158,12 +146,13 @@ def start_translator_client_proc(host: str, port: int, nonce: str, params: Names
         cmds.append('--verbose')
     if params.models_ttl:
         cmds.append('--models-ttl=%s' % params.models_ttl)
-    if params.pre_dict: 
-        cmds.extend(['--pre-dict', params.pre_dict]) 
-    if params.pre_dict: 
-        cmds.extend(['--post-dict', params.post_dict])         
+    if params.pre_dict:
+        cmds.extend(['--pre-dict', params.pre_dict])
+    if params.pre_dict:
+        cmds.extend(['--post-dict', params.post_dict])
     base_path = os.path.dirname(os.path.abspath(__file__))
     parent = os.path.dirname(base_path)
+    print(cmds)
     proc = subprocess.Popen(cmds, cwd=parent)
     executor_instances.register(ExecutorInstance(ip=host, port=port))
 
@@ -188,10 +177,6 @@ def prepare(args):
     if os.path.exists(folder_name):
         shutil.rmtree(folder_name)
     os.makedirs(folder_name)
-
-#todo: restart if crash
-#todo: cache results
-#todo: cleanup cache
 
 if __name__ == '__main__':
     import uvicorn
