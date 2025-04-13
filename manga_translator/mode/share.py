@@ -39,9 +39,9 @@ class MangaShare:
             if progress[0] != 1:
                 break
 
-    async def run_method(self, method, **attributes):
+    async def translate_stream(self, **attributes):
         try:
-            result = await method(**attributes)
+            result = await self.manga.translate(**attributes)
             result_bytes = pickle.dumps(result)
             encoded_result = b'\x00' + len(result_bytes).to_bytes(4, 'big') + result_bytes
             await self.progress_queue.put(encoded_result)
@@ -93,7 +93,7 @@ class MangaShare:
 
             # streaming response
             streaming_response = StreamingResponse(self.progress_stream(), media_type="application/octet-stream")
-            asyncio.create_task(self.run_method(self.manga.translate, **attr))
+            asyncio.create_task(self.translate_stream(**attr))
             return streaming_response
 
         config = uvicorn.Config(app, host=self.host, port=self.port)
