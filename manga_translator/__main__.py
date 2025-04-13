@@ -22,7 +22,7 @@ async def dispatch(args: Namespace):
     if args.mode == 'shared':
         from manga_translator.mode.share import MangaShare
         translator = MangaShare(args_dict)
-        await translator.listen(args_dict)
+        await translator.listen()
     elif args.mode == 'config-help':
         import json
         config = Config.schema()
