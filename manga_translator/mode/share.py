@@ -4,10 +4,11 @@ from threading import Lock
 
 import uvicorn
 from fastapi import FastAPI, HTTPException, Request, Response
+from PIL.Image import Image
 
 from starlette.responses import StreamingResponse
 
-from manga_translator import MangaTranslator
+from manga_translator import MangaTranslator, Config
 
 class MangaShare:
     def __init__(self, params: dict = None):
@@ -39,9 +40,9 @@ class MangaShare:
             if progress[0] != 1:
                 break
 
-    async def run_method(self, method, **attributes):
+    async def translate_stream(self, image: Image, config: Config):
         try:
-            result = await method(**attributes)
+            result = await self.manga.translate(image, config)
             result_bytes = pickle.dumps(result)
             encoded_result = b'\x00' + len(result_bytes).to_bytes(4, 'big') + result_bytes
             await self.progress_queue.put(encoded_result)
@@ -62,7 +63,7 @@ class MangaShare:
         if not self.lock.acquire(blocking=False):
             raise HTTPException(status_code=429, detail="some Method is already being executed.")
 
-    async def listen(self, translation_params: dict = None):
+    async def listen(self):
         app = FastAPI(
             title="Manga Translator shared API",
             description="A FastAPI server for manga translation",
@@ -73,10 +74,12 @@ class MangaShare:
         async def simple_execute_translate(request: Request):
             self.check_nonce(request)
             self.check_lock()
-            attributes_bytes = await request.body()
-            attr = pickle.loads(attributes_bytes)
+            raw_data = await request.body()
+            attributes = pickle.loads(raw_data)
+            image = attributes["image"]
+            config = attributes["config"]
             try:
-                result = await self.manga.translate(**attr)
+                result = await self.manga.translate(image, config)
                 self.lock.release()
                 result_bytes = pickle.dumps(result)
                 return Response(content=result_bytes, media_type="application/octet-stream")
@@ -88,12 +91,13 @@ class MangaShare:
         async def execute_translate(request: Request):
             self.check_nonce(request)
             self.check_lock()
-            attributes_bytes = await request.body()
-            attr = pickle.loads(attributes_bytes)
-
+            raw_data = await request.body()
+            attributes = pickle.loads(raw_data)
+            image = attributes["image"]
+            config = attributes["config"]
             # streaming response
             streaming_response = StreamingResponse(self.progress_stream(), media_type="application/octet-stream")
-            asyncio.create_task(self.run_method(self.manga.translate, **attr))
+            asyncio.create_task(self.translate_stream(image, config))
             return streaming_response
 
         config = uvicorn.Config(app, host=self.host, port=self.port)
