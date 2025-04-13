@@ -24,19 +24,20 @@ Some manga/images will never be translated, therefore this project is born.
 #### Pip/venv
 
 ```bash
-# First, you need to have Python(>=3.8) installed on your system
-# The latest version often does not work with some pytorch libraries yet
-$ python --version
-Python 3.10.16
+python --version
+# Python 3.10.16
 
 # Create venv
-$ python -m venv venv
+python -m venv venv
 
 # Activate venv
-$ source venv/bin/activate
+source venv/bin/activate
 
 # Install the dependencies
-$ pip install -r requirements.txt
+pip install -r requirements.txt
+pip install -r requirements-dev.txt
+
+pytest test
 ```
 
 ## Usage
