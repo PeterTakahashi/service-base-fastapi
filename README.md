@@ -46,8 +46,8 @@ pytest test
 
 ```bash
 # use `--mode web` to start a web server.
-$ python -m manga_translator shared --port 8001 --use-gpu
-$ cd server && uvicorn main:app --reload --host 0.0.0.0 --port 8000
+python -m manga_translator shared --port 8001 --use-gpu --font-path fonts/anime_ace_3.ttf
+cd server && uvicorn main:app --reload --host 0.0.0.0 --port 8000
 # the demo will be serving on http://127.0.0.1:5003
 ```
 
