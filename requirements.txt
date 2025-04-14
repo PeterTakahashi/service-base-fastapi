@@ -55,5 +55,5 @@ fastapi
 pydantic
 python-multipart
 paddleocr
-paddlepaddle
+paddlepaddle==2.5.0
 paddlepaddle-gpu; sys_platform != 'darwin'
