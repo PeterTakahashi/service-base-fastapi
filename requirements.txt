@@ -55,5 +55,19 @@ fastapi
 pydantic
 python-multipart
 paddleocr
-paddlepaddle==2.5.0
-paddlepaddle-gpu; sys_platform != 'darwin'
+paddlepaddle==2.5.2
+# paddlepaddle-gpu; sys_platform != 'darwin'
+asyncpg
+SQLAlchemy
+databases
+alembic
+pydantic_settings
+psycopg2
+aioredis
+python-multipart
+boto3
+fastapi_users
+fastapi-users[sqlalchemy]
+fastapi_users_db_sqlalchemy
+httpx
+ulid-py

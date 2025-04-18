@@ -1,0 +1,34 @@
+from datetime import datetime, timezone
+from sqlalchemy import Column, DateTime, Integer, String, ForeignKey
+from sqlalchemy.orm import relationship
+from app.db.base import Base
+from fastapi_users_db_sqlalchemy import generics
+from app.db.models.types.enum_types import EnumIntegerType
+from enum import Enum
+
+class StatusEnum(Enum):
+    DRAFT = 0
+    PENDING = 1
+    DETECTION = 2
+    OCR = 3
+    TRANSLATION = 4
+    UPSCALING = 5
+    MASK_GENERATION = 6
+    INPAINTING = 7
+    RENDERING = 8
+    FINISHED = 9
+
+class Page(Base):
+    __tablename__ = "pages"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    display_id = Column(generics.GUID, index=True, nullable=False)
+    episode_id = Column(Integer, ForeignKey("episodes.id"), nullable=False, index=True)
+    translation_status = Column(EnumIntegerType(StatusEnum), default=StatusEnum.DRAFT, nullable=False)
+    before_changed_image_url = Column(String(255), nullable=False)
+    after_changed_image_url = Column(String(255), nullable=False)
+
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), nullable=False)
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc), nullable=False)
+
+    episode = relationship("Episode", back_populates="pages")

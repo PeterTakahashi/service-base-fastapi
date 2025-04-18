@@ -1,7 +1,6 @@
 result
 *.ckpt
 *.pt
-.vscode
 *.onnx
 __pycache__
 ocrs
@@ -11,7 +10,7 @@ Manga-translated
 .env
 *.local
 *.local.*
-test/testdata
+manga_translator_test/testdata
 .idea
 pyvenv.cfg
 Scripts
@@ -45,3 +44,5 @@ MANIFEST
 # Input and Output
 /input/
 /input-translated/
+
+notebooks
