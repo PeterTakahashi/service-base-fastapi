@@ -1,7 +1,7 @@
 import asyncio
 import pytest
 import pytest_asyncio
-from app.db.database import database
+from app.core.startup import database
 
 @pytest.fixture(scope="session")
 def event_loop():
