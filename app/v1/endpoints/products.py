@@ -7,7 +7,7 @@ from app.db.schemas.product import ProductRead, ProductCreate, ProductUpdate
 from app.db.schemas.error import ErrorResponse
 from app.core.user_setup import current_active_user
 from app.core.user_manager import async_session_maker
-from app.core.response_type import unauthorized_response, not_found_response
+from app.core.response_type import unauthorized_response, not_found_response, not_found_response_detail
 
 router = APIRouter()
 
@@ -22,10 +22,13 @@ async def index_products(
         stmt = (
             select(
                 Product,
-                func.count(Episode.id).label("episode_count")
+                func.count(Episode.id).label("episode_count"),
             )
             .outerjoin(Episode, Episode.product_id == Product.id)
-            .where(Product.user_id == user.id)
+            .where(
+                Product.user_id == user.id,
+                Product.deleted_at.is_(None)
+            )
             .group_by(Product.id)
             .limit(limit)
             .offset(offset)
@@ -77,7 +80,8 @@ async def create_product(
     async with async_session_maker() as session:
         stmt = select(exists().where(
             Product.user_id == user.id,
-            Product.title == data.title
+            Product.title == data.title,
+            Product.deleted_at.is_(None)
         ))
         result = await session.execute(stmt)
         product_exists = result.scalar()
@@ -109,7 +113,7 @@ async def create_product(
     response_model=ProductRead,
     responses={
         **unauthorized_response,
-        **not_found_response("product", "/product_id")
+        **not_found_response("Product", "/product_id")
     })
 
 async def get_product(
@@ -127,15 +131,7 @@ async def get_product(
         if not product:
             raise HTTPException(
                 status_code=404,
-                detail={
-                    "errors": [{
-                        "status": "404",
-                        "code": "product_not_found",
-                        "title": "Not Found",
-                        "detail": f"Product with id '{product_id}' not found.",
-                        "source": { "pointer": "/product_id" }
-                    }]
-                }
+                detail=not_found_response_detail("Product", "/product_id", product_id)
             )
 
         return ProductRead.model_validate(product)
@@ -144,7 +140,7 @@ async def get_product(
     response_model=ProductRead,
     responses={
         **unauthorized_response,
-        **not_found_response("product", "/product_id")
+        **not_found_response("Product", "/product_id")
     })
 async def update_product(
     data: ProductUpdate,
@@ -154,7 +150,8 @@ async def update_product(
     async with async_session_maker() as session:
         stmt = select(Product).where(
             Product.display_id == product_id,
-            Product.user_id == user.id
+            Product.user_id == user.id,
+            Product.deleted_at.is_(None)
         )
         result = await session.execute(stmt)
         product = result.scalar_one_or_none()
@@ -162,15 +159,7 @@ async def update_product(
         if not product:
             raise HTTPException(
                 status_code=404,
-                detail={
-                    "errors": [{
-                        "status": "404",
-                        "code": "product_not_found",
-                        "title": "Not Found",
-                        "detail": f"Product with id '{product_id}' not found.",
-                        "source": { "pointer": "/product_id" }
-                    }]
-                }
+                detail=not_found_response_detail("Product", "/product_id", product_id)
             )
 
         for field, value in data.model_dump(exclude_unset=True).items():
@@ -179,3 +168,32 @@ async def update_product(
         await session.refresh(product)
 
         return ProductRead.model_validate(product)
+
+@router.delete("/{product_id}",
+    status_code=204,
+    responses={
+        **unauthorized_response,
+        **not_found_response("Product", "/product_id")
+    })
+async def delete_product(
+    product_id: str = Path(..., title="The ID of the product to delete", description="The ID of the product to delete."),
+    user=Depends(current_active_user),
+):
+    async with async_session_maker() as session:
+        stmt = select(Product).where(
+            Product.display_id == product_id,
+            Product.user_id == user.id,
+            Product.deleted_at.is_(None)
+        )
+        result = await session.execute(stmt)
+        product = result.scalar_one_or_none()
+
+        if not product:
+            raise HTTPException(
+                status_code=404,
+                detail=not_found_response_detail("Product", "/product_id", product_id)
+            )
+
+        product.deleted_at = datetime.utcnow()
+        await session.commit()
+        return None

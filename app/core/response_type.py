@@ -1,4 +1,5 @@
 from app.db.schemas.error import ErrorResponse
+from app.lib.camel_to_snake import camel_to_snake
 
 unauthorized_response = {
     401: {
@@ -20,18 +21,21 @@ def not_found_response(model_name: str, pointer: str):
             "model": ErrorResponse,
             "content": {
                 "application/json": {
-                    "example": {
-                        "errors": [
-                            {
-                                "status": "404",
-                                "code": f"{model_name}_not_found",
-                                "title": "Not Found",
-                                "detail": f"{model_name} with id '123e4567-e89b-12d3-a456-426614174000' not found.",
-                                "source": { "pointer": pointer }
-                            }
-                        ]
-                    }
+                    "example": not_found_response_detail(model_name, pointer, "123e4567-e89b-12d3-a456-426614174000"),
                 }
             }
         }
     }
+
+def not_found_response_detail(model_name: str, pointer: str, product_id: str):
+    return {
+                "errors": [
+                    {
+                        "status": "404",
+                        "code": f"{camel_to_snake(model_name)}_not_found",
+                        "title": "Not Found",
+                        "detail": f"{model_name} with id '{product_id}' not found.",
+                        "source": { "pointer": pointer }
+                    }
+                ]
+            }

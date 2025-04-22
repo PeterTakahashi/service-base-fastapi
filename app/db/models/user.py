@@ -5,7 +5,7 @@ from fastapi_users.db import SQLAlchemyBaseUserTableUUID
 from app.db.base import Base, TimestampMixin
 from app.db.models.product import Product
 
-class User(SQLAlchemyBaseUserTableUUID, TimestampMixin, Base):
+class User(SQLAlchemyBaseUserTableUUID, Base):
     __tablename__ = "users"
 
     products = relationship("Product", back_populates="user")
