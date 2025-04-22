@@ -16,7 +16,7 @@ async def index_products(
     user=Depends(current_active_user),
     limit: int = Query(10, ge=1, le=100),
     offset: int = Query(0, ge=0),
-    title: Optional[str] = Query(None, description="検索したいタイトルの一部")
+    title: Optional[str] = Query(None, description="Filter products by title", max_length=100, min_length=1)
 ):
     async with async_session_maker() as session:
         stmt = (
@@ -118,7 +118,7 @@ async def get_product(
 ):
     async with async_session_maker() as session:
         stmt = select(Product).where(
-            Product.id == product_id,
+            Product.display_id == product_id,
             Product.user_id == user.id
         )
         result = await session.execute(stmt)
@@ -153,7 +153,7 @@ async def update_product(
 ):
     async with async_session_maker() as session:
         stmt = select(Product).where(
-            Product.id == product_id,
+            Product.display_id == product_id,
             Product.user_id == user.id
         )
         result = await session.execute(stmt)

@@ -7,19 +7,19 @@ fake = Faker()
 
 @pytest.mark.asyncio
 async def test_login_success(client: AsyncClient):
-    # 1. 先にユーザー登録
+    # 1. create a user
     email = fake.unique.email()
     password = fake.password(length=12)
     await client.post("/auth/register/register", json={"email": email, "password": password})
 
-    # 2. ログイン
+    # 2. login with the user
     resp = await client.post(
         "/auth/jwt/login",
         data={"username": email, "password": password},
         headers={"Content-Type": "application/x-www-form-urlencoded"},
     )
 
-    # 3. レスポンスの検証
+    # 3. check the response
     assert resp.status_code == 200
     body = resp.json()
     assert body["token_type"] == "bearer"
