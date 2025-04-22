@@ -8,6 +8,7 @@ from app.db.schemas.error import ErrorResponse
 from app.core.user_setup import current_active_user
 from app.core.user_manager import async_session_maker
 from app.core.response_type import unauthorized_response, not_found_response, not_found_response_detail
+from datetime import datetime
 
 router = APIRouter()
 
@@ -123,7 +124,8 @@ async def get_product(
     async with async_session_maker() as session:
         stmt = select(Product).where(
             Product.display_id == product_id,
-            Product.user_id == user.id
+            Product.user_id == user.id,
+            Product.deleted_at.is_(None)
         )
         result = await session.execute(stmt)
         product = result.scalar_one_or_none()
