@@ -1,19 +1,14 @@
 import pytest
 from httpx import AsyncClient
 from tests.v1.modules.get_access_token import get_access_token
+from tests.v1.modules.create_product import create_product
 
 pytestmark = pytest.mark.asyncio
 
 @pytest.mark.asyncio
 async def test_index_products_authenticated(client: AsyncClient):
     access_token, _ = await get_access_token(client)
-
-    # Create product
-    await client.post(
-        "/products/",
-        json={"title": "Test Product"},
-        headers={"Authorization": f"Bearer {access_token}"}
-    )
+    await create_product(client, access_token, title="Test Product")
 
     # Get product list
     resp = await client.get("/products/", headers={"Authorization": f"Bearer {access_token}"})
@@ -28,16 +23,8 @@ async def test_index_products_with_title_filter(client: AsyncClient):
     access_token, _ = await get_access_token(client)
 
     # Create multiple products
-    await client.post(
-        "/products/",
-        json={"title": "My Filter Product"},
-        headers={"Authorization": f"Bearer {access_token}"}
-    )
-    await client.post(
-        "/products/",
-        json={"title": "Another Title"},
-        headers={"Authorization": f"Bearer {access_token}"}
-    )
+    await create_product(client, access_token, title="1st Test Product Filter")
+    await create_product(client, access_token, title="2nd Test Product")
 
     # Filter by title
     resp = await client.get("/products/?title=Filter", headers={"Authorization": f"Bearer {access_token}"})
@@ -51,11 +38,7 @@ async def test_index_products_pagination(client: AsyncClient):
 
     # Create 5 products
     for i in range(5):
-        await client.post(
-            "/products/",
-            json={"title": f"Paginated Product {i}"},
-            headers={"Authorization": f"Bearer {access_token}"}
-        )
+        await create_product(client, access_token, title=f"Paginated Product {i}")
 
     # Get first 2
     resp1 = await client.get("/products/?limit=2&offset=0", headers={"Authorization": f"Bearer {access_token}"})

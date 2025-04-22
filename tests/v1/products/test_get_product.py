@@ -2,29 +2,22 @@ import pytest
 from httpx import AsyncClient
 from uuid import uuid4
 from tests.v1.modules.get_access_token import get_access_token
+from tests.v1.modules.create_product import create_product
 
 pytestmark = pytest.mark.asyncio
 
 async def test_get_product_success(client: AsyncClient):
     token, _ = await get_access_token(client)
-
-    # Create a product to test retrieval
-    create_resp = await client.post(
-        "/products/",
-        json={"title": "Test Product"},
-        headers={"Authorization": f"Bearer {token}"}
-    )
-    assert create_resp.status_code == 201
-    product_id = create_resp.json()["id"]
+    product = await create_product(client, token, title="Test Product")
 
     # Retrieve the product
     get_resp = await client.get(
-        f"/products/{product_id}",
+        f"/products/{product['id']}",
         headers={"Authorization": f"Bearer {token}"}
     )
     assert get_resp.status_code == 200
     data = get_resp.json()
-    assert data["id"] == product_id
+    assert data["id"] == product['id']
     assert data["title"] == "Test Product"
 
 async def test_get_product_not_found(client: AsyncClient):

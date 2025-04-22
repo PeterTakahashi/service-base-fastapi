@@ -2,27 +2,19 @@ import pytest
 from httpx import AsyncClient
 from faker import Faker
 from tests.v1.modules.get_access_token import get_access_token
+from tests.v1.modules.create_product import create_product
 
 pytestmark = pytest.mark.asyncio
 fake = Faker()
 
 async def test_create_product_success(client: AsyncClient):
     access_token, _ = await get_access_token(client)
-
-    title = fake.unique.sentence(nb_words=3)
-    resp = await client.post(
-        "/products/",
-        json={"title": title},
-        headers={"Authorization": f"Bearer {access_token}"}
-    )
-
-    assert resp.status_code == 201
-    data = resp.json()
-    assert data["title"] == title
-    assert "id" in data
-    assert "created_at" in data
-    assert "updated_at" in data
-    assert data["episodes_count"] == 0
+    product = await create_product(client, access_token, title="Test Product")
+    assert product["title"] == "Test Product"
+    assert "id" in product
+    assert "created_at" in product
+    assert "updated_at" in product
+    assert product["episodes_count"] == 0
 
 
 async def test_create_product_unauthorized(client: AsyncClient):
@@ -36,12 +28,7 @@ async def test_create_product_duplicate_title(client: AsyncClient):
 
     title = "Duplicate Product"
     # 1st creation
-    resp1 = await client.post(
-        "/products/",
-        json={"title": title},
-        headers={"Authorization": f"Bearer {access_token}"}
-    )
-    assert resp1.status_code == 201
+    product = await create_product(client, access_token, title=title)
 
     # 2nd creation with the same title
     resp2 = await client.post(
@@ -51,7 +38,6 @@ async def test_create_product_duplicate_title(client: AsyncClient):
     )
     assert resp2.status_code == 409
     data = resp2.json()
-    print(data)
     assert data == {
         'detail': {
             'errors':
