@@ -16,7 +16,6 @@ async def test_create_product_success(client: AsyncClient):
     assert "updated_at" in product
     assert product["episodes_count"] == 0
 
-
 async def test_create_product_unauthorized(client: AsyncClient):
     resp = await client.post("/products/", json={"title": "Unauthorized Product"})
     assert resp.status_code == 401
@@ -52,3 +51,46 @@ async def test_create_product_duplicate_title(client: AsyncClient):
                 ]
         }
     }
+
+async def test_create_product_empty_title(client: AsyncClient):
+    access_token, _ = await get_access_token(client)
+    resp = await client.post(
+        "/products/",
+        json={"title": ""},
+        headers={"Authorization": f"Bearer {access_token}"}
+    )
+    assert resp.status_code == 422
+    data = resp.json()
+    assert any(
+        err["loc"] == ["body", "title"] and "at least 1 character" in err["msg"]
+        for err in data["detail"]
+    )
+
+async def test_create_product_title_too_long(client: AsyncClient):
+    access_token, _ = await get_access_token(client)
+    long_title = "A" * 256
+    resp = await client.post(
+        "/products/",
+        json={"title": long_title},
+        headers={"Authorization": f"Bearer {access_token}"}
+    )
+    assert resp.status_code == 422
+    data = resp.json()
+    assert any(
+        err["loc"] == ["body", "title"] and "at most 100 characters" in err["msg"]
+        for err in data["detail"]
+    )
+
+async def test_create_product_missing_title(client: AsyncClient):
+    access_token, _ = await get_access_token(client)
+    resp = await client.post(
+        "/products/",
+        json={},  # title キーがない
+        headers={"Authorization": f"Bearer {access_token}"}
+    )
+    assert resp.status_code == 422
+    data = resp.json()
+    assert any(
+        err["loc"] == ["body", "title"] and "field required" in err["msg"].lower()
+        for err in data["detail"]
+    )
