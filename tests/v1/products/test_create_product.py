@@ -3,6 +3,7 @@ from httpx import AsyncClient
 from faker import Faker
 from tests.v1.modules.get_access_token import get_access_token
 from tests.v1.modules.create_product import create_product
+from app.db.session import async_session_maker
 
 pytestmark = pytest.mark.asyncio
 fake = Faker()
@@ -20,7 +21,6 @@ async def test_create_product_unauthorized(client: AsyncClient):
     resp = await client.post("/products/", json={"title": "Unauthorized Product"})
     assert resp.status_code == 401
     assert resp.json()["detail"] == "Unauthorized"
-
 
 async def test_create_product_duplicate_title(client: AsyncClient):
     access_token, _ = await get_access_token(client)
