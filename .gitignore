@@ -13,7 +13,6 @@ Manga-translated
 manga_translator_test/testdata
 .idea
 pyvenv.cfg
-Scripts
 include
 share
 .DS_Store
