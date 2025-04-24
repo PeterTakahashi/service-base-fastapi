@@ -28,7 +28,6 @@ jobs:
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: postgres
         options: >-
           --health-cmd="pg_isready -U postgres"
           --health-interval=10s
@@ -58,6 +57,9 @@ jobs:
             echo "Waiting for postgres..."
             sleep 1
           done
+      - name: Execute init.sql
+        run: |
+            PGPASSWORD=postgres psql -h localhost -U postgres -f ./docker/init.sql
       - name: Load .env.ci
         run: |
           cp .env.ci .env.test
