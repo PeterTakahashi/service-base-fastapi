@@ -36,6 +36,7 @@ dependencies = [
     "langdetect>=1.0.9",
     "manga-ocr>=0.1.14",
     "marshmallow>=4.0.0",
+    "mypy>=1.15.0",
     "nest-asyncio>=1.6.0",
     "networkx>=3.4.2",
     "numpy==1.26.4",
@@ -93,3 +94,17 @@ dev = [
     "pytest-sugar==0.9.6",
     "pytest-xdist==3.3.1",
 ]
+
+
+[tool.ruff]
+line-length = 88  # または好きな長さ (PEP8は79, Blackは88)
+target-version = "py310"  # プロジェクトに合わせて (例: Python 3.10なら "py310")
+fix = true
+unsafe-fixes = false
+
+[tool.ruff.format]
+quote-style = "double"  # 文字列はダブルクオート（好みで'single'でもOK）
+docstring-code-format = true
+
+[tool.mypy]
+files = ["app", "alembic", "tests", "scripts"]

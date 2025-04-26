@@ -67,3 +67,15 @@ jobs:
           pylint $(git ls-files '*.py')
         if: always()
         continue-on-error: true # to not fail CI on lint errors
+      - name: Ruff *.py files
+        run: |
+          source .venv/bin/activate
+          ruff check .
+        if: always()
+        continue-on-error: true # to not fail CI on lint errors
+      - name: mypy
+        run: |
+          source .venv/bin/activate
+          mypy .
+        if: always()
+        continue-on-error: true # to not fail CI on lint errors
