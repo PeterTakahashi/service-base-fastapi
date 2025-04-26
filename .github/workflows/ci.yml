@@ -34,23 +34,23 @@ jobs:
           --health-timeout=5s
           --health-retries=5
 
-    strategy:
-      matrix:
-        python-version: ["3.10"] # Add more Python versions if needed
-      fail-fast: false
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v3
-        with:
-          python-version: ${{ matrix.python-version }}
+
+      - name: Setup environment
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y curl g++ wget ffmpeg libsm6 libxext6 gimp libvulkan1 cargo libpq-dev
+          curl -LsSf https://astral.sh/uv/install.sh | env UV_INSTALL_DIR="/root/.local/bin" sh
+          echo "PATH=/root/.local/bin:$PATH" >> $GITHUB_ENV
       - name: Install dependencies
         run: |
-          pip install uv
-          uv venv
+          uv python install 3.10.16
+          uv venv --python 3.10.16
           source .venv/bin/activate
           uv pip install -r requirements.txt
           uv pip install -r requirements-dev.txt
+
       - name: Wait for PostgreSQL to be ready
         run: |
           until pg_isready -h localhost -p 5432 -U postgres; do
@@ -59,7 +59,7 @@ jobs:
           done
       - name: Execute init.sql
         run: |
-            PGPASSWORD=postgres psql -h localhost -U postgres -f ./docker/init.sql
+          PGPASSWORD=postgres psql -h localhost -U postgres -f ./docker/init.sql
       - name: Load .env.ci
         run: |
           cp .env.ci .env.test
