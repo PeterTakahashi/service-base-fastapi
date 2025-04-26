@@ -43,3 +43,5 @@ MANIFEST
 /input-translated/
 
 notebooks
+.venv
+.ruff_cache

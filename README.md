@@ -13,6 +13,11 @@ source .venv/bin/activate
 pytest
 ```
 
+db migrate
+```
+alembic upgrade head
+```
+
 
 #### OpenAPI
 
