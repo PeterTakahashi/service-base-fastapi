@@ -1,50 +1,19 @@
 # Image/Manga Translator
 
-Some manga/images will never be translated, therefore this project is born.
-
-- [Image/Manga Translator](#imagemanga-translator)
-  - [Installation](#installation)
-    - [Local setup](#local-setup)
-      - [Pip/venv](#pipvenv)
-  - [Usage](#usage)
-    - [Web Mode](#web-mode)
-  - [Docs](#docs)
-    - [Tips to improve translation quality](#tips-to-improve-translation-quality)
-    - [Options](#options)
-
 ## Installation
 
 ### Local setup
 
-#### Pip/venv
+#### Docker
 
 ```bash
-python --version
-# Python 3.10.16
+docker exec -it manga-translator-web bash
+source .venv/bin/activate
 
-# Create venv
-python -m venv venv
-
-# Activate venv
-source venv/bin/activate
-
-# Install the dependencies
-pip install -r requirements.txt
-pip install -r requirements-dev.txt
-
-pytest test
+pytest
 ```
 
 ## Usage
-
-### Web Mode
-
-```bash
-# use `--mode web` to start a web server.
-python -m manga_translator shared --port 8001 --use-gpu --font-path fonts/anime_ace_3.ttf
-cd app && uvicorn main:app --reload --host 0.0.0.0 --port 8000
-# the demo will be serving on http://127.0.0.1:5003
-```
 
 ## Docs
 

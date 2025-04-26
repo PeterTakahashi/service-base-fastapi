@@ -33,7 +33,13 @@ services:
   web:
     build: .
     container_name: manga-translator-web
-    command: bash -c "pip install -r requirements.txt && pip install -r requirements-dev.txt && cd ./app && uvicorn main:app --reload --host 0.0.0.0 --port 8000"
+    command: >
+      bash -c "uv venv --python 3.10.16 &&
+      uv pip install -r requirements.txt &&
+      uv pip install -r requirements-dev.txt &&
+      source .venv/bin/activate &&
+      cd ./app &&
+      uvicorn main:app --reload --host 0.0.0.0 --port 8000"
     env_file:
       - .env
     volumes:
