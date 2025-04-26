@@ -9,6 +9,7 @@ from app.core.user_setup import current_active_user
 from app.core.response_type import unauthorized_response, not_found_response, not_found_response_detail
 from datetime import datetime
 from app.db.session import get_async_session
+from app.repositories.product_repository import ProductRepository
 
 router = APIRouter()
 
@@ -17,36 +18,19 @@ async def index_products(
     user=Depends(current_active_user),
     limit: int = Query(10, ge=1, le=100),
     offset: int = Query(0, ge=0),
-    title: Optional[str] = Query(None, description="Filter products by title", max_length=100, min_length=1),
+    title: Optional[str] = Query(None),
     session: AsyncSession = Depends(get_async_session)
 ):
-    stmt = (
-        select(
-            Product,
-            func.count(Episode.id).label("episode_count"),
-        )
-        .outerjoin(Episode, Episode.product_id == Product.id)
-        .where(
-            Product.user_id == user.id,
-            Product.deleted_at.is_(None)
-        )
-        .group_by(Product.id)
-        .limit(limit)
-        .offset(offset)
-    )
+    product_repo = ProductRepository(session)
+    product_results = await product_repo.list_products(user.id, limit=limit, offset=offset, title=title)
 
-    if title:
-        stmt = stmt.where(Product.title.ilike(f"%{title}%"))
-
-    result = await session.execute(stmt)
     products = []
-    for row in result.all():
-        product, episode_count = row
+    for product, episode_count in product_results:
         product_dict = {
             **product.__dict__,
             "episode_count": episode_count
         }
-        products.append(ProductRead.model_validate(product_dict))
+        products.append(product_dict)
     return products
 
 @router.post("/",
@@ -79,14 +63,10 @@ async def create_product(
     user=Depends(current_active_user),
     session: AsyncSession = Depends(get_async_session)
 ):
-    stmt = select(exists().where(
-        Product.user_id == user.id,
-        Product.title == data.title,
-        Product.deleted_at.is_(None)
-    ))
-    result = await session.execute(stmt)
-    product_exists = result.scalar()
+    product_repo = ProductRepository(session)
 
+    # Check if the product already exists
+    product_exists = await product_repo.product_exists(user.id, data.title)
     if product_exists:
         raise HTTPException(
             status_code=409,
@@ -100,13 +80,9 @@ async def create_product(
                 }]
             }
         )
-    product = Product(
-        title=data.title,
-        user_id=user.id
-    )
-    session.add(product)
-    await session.commit()
-    await session.refresh(product)
+
+    # Create the product using the repository
+    product = await product_repo.create_product(title=data.title, user_id=user.id)
 
     return ProductRead.model_validate(product)
 
@@ -122,13 +98,8 @@ async def get_product(
     user=Depends(current_active_user),
     session: AsyncSession = Depends(get_async_session)
 ):
-    stmt = select(Product).where(
-        Product.display_id == product_id,
-        Product.user_id == user.id,
-        Product.deleted_at.is_(None)
-    )
-    result = await session.execute(stmt)
-    product = result.scalar_one_or_none()
+    product_repo = ProductRepository(session)
+    product = await product_repo.get_product(user.id, product_id)
 
     if not product:
         raise HTTPException(
@@ -150,25 +121,15 @@ async def update_product(
     user=Depends(current_active_user),
     session: AsyncSession = Depends(get_async_session)
 ):
-    stmt = select(Product).where(
-        Product.display_id == product_id,
-        Product.user_id == user.id,
-        Product.deleted_at.is_(None)
-    )
-    result = await session.execute(stmt)
-    product = result.scalar_one_or_none()
+    product_repo = ProductRepository(session)
+    product = await product_repo.get_product(user.id, product_id)
 
     if not product:
         raise HTTPException(
             status_code=404,
             detail=not_found_response_detail("Product", "/product_id", product_id)
         )
-
-    for field, value in data.model_dump(exclude_unset=True).items():
-        setattr(product, field, value)
-    await session.commit()
-    await session.refresh(product)
-
+    product = await product_repo.update_product(product, data.dict(exclude_unset=True))
     return ProductRead.model_validate(product)
 
 @router.delete("/{product_id}",
@@ -182,20 +143,13 @@ async def delete_product(
     user=Depends(current_active_user),
     session: AsyncSession = Depends(get_async_session)
 ):
-    stmt = select(Product).where(
-        Product.display_id == product_id,
-        Product.user_id == user.id,
-        Product.deleted_at.is_(None)
-    )
-    result = await session.execute(stmt)
-    product = result.scalar_one_or_none()
+    product_repo = ProductRepository(session)
+    product = await product_repo.get_product(user.id, product_id)
 
     if not product:
         raise HTTPException(
             status_code=404,
             detail=not_found_response_detail("Product", "/product_id", product_id)
         )
-
-    product.deleted_at = datetime.utcnow()
-    await session.commit()
+    await product_repo.soft_delete_product(product)
     return None
