@@ -36,7 +36,7 @@ jobs:
           uv python install 3.10.16
           uv venv
           uv pip install .
-          uv pip install --group dev &&
+          uv pip install --group dev
 
       - name: Wait for PostgreSQL to be ready
         run: |
