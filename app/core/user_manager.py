@@ -1,6 +1,6 @@
 from fastapi_users.db import SQLAlchemyUserDatabase
 from fastapi_users import BaseUserManager, UUIDIDMixin, schemas, exceptions, models
-from app.db.models.user import User
+from app.models.user import User
 from uuid import UUID
 from app.core.config import settings
 from fastapi import Depends

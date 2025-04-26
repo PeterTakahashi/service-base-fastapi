@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 from app.db.base import Base, TimestampMixin
 from fastapi_users_db_sqlalchemy import generics
-from app.db.models.types.enum_types import EnumIntegerType
+from app.models.types.enum_types import EnumIntegerType
 from enum import Enum
 
 class StatusEnum(Enum):

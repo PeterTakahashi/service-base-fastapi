@@ -2,9 +2,9 @@ from fastapi import APIRouter, Depends, Query, HTTPException, Path
 from sqlalchemy import select, func, exists
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List, Optional
-from app.db.models import Product, Episode
-from app.db.schemas.product import ProductRead, ProductCreate, ProductUpdate
-from app.db.schemas.error import ErrorResponse
+from app.models import Product, Episode
+from app.schemas.product import ProductRead, ProductCreate, ProductUpdate
+from app.schemas.error import ErrorResponse
 from app.core.user_setup import current_active_user
 from app.core.response_type import unauthorized_response, not_found_response, not_found_response_detail
 from datetime import datetime

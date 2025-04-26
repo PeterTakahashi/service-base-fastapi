@@ -10,8 +10,8 @@ from typing import Sequence, Union
 from alembic import op
 import sqlalchemy as sa
 import fastapi_users_db_sqlalchemy
-from app.db.models.types.enum_types import EnumIntegerType
-from app.db.models.page import StatusEnum
+from app.models.types.enum_types import EnumIntegerType
+from app.models.page import StatusEnum
 
 # revision identifiers, used by Alembic.
 revision: str = '2a5849709988'

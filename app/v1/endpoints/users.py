@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from app.core.user_setup import current_active_user
-from app.db.schemas import UserRead, UserUpdate
-from app.db.models import User
+from app.schemas import UserRead, UserUpdate
+from app.models import User
 from app.core.response_type import unauthorized_response
 
 router = APIRouter()

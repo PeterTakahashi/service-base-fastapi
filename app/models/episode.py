@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 from app.db.base import Base, TimestampMixin
 from fastapi_users_db_sqlalchemy import generics
-from app.db.models.product import Product
+from app.models.product import Product
 
 class Episode(TimestampMixin, Base):
     __tablename__ = "episodes"
