@@ -1,6 +1,4 @@
 from fastapi_users import schemas, models
-from uuid import UUID
-from datetime import datetime
 from pydantic import EmailStr, ConfigDict, Field
 from typing import Optional, Generic
 

@@ -55,5 +55,5 @@ async def create_schema():
 if __name__ == "__main__":
     try:
         asyncio.run(create_schema())
-    except Exception as e:
+    except Exception:
         logger.exception("❌ An error occurred")

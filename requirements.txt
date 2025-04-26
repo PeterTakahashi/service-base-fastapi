@@ -71,3 +71,4 @@ fastapi-users[sqlalchemy]
 fastapi_users_db_sqlalchemy
 httpx
 ulid-py
+ruff

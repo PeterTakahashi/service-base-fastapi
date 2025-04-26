@@ -1,6 +1,5 @@
-from sqlalchemy import Column, ForeignKey, String, DateTime, Integer
+from sqlalchemy import Column, ForeignKey, String, Integer
 from sqlalchemy.orm import relationship
-from datetime import datetime, timezone
 from app.db.base import Base, TimestampMixin
 from fastapi_users_db_sqlalchemy import generics
 

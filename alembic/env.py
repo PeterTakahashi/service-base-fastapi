@@ -4,13 +4,12 @@ from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
 from alembic import context
-from app.db.base import Base, TimestampMixin
+from app.db.base import Base
 
 from dotenv import load_dotenv
 load_dotenv()
 
 from app.core.config import settings  # あなたの Settings クラスを使う
-from app.db.models import Page
 
 # 非同期ドライバを同期用に変換
 sync_url = settings.DATABASE_URL.replace("+asyncpg", "")

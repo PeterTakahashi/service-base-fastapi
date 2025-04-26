@@ -3,7 +3,6 @@ from httpx import AsyncClient
 from faker import Faker
 from tests.v1.modules.get_access_token import get_access_token
 from tests.v1.modules.create_product import create_product
-from app.db.session import async_session_maker
 
 pytestmark = pytest.mark.asyncio
 fake = Faker()

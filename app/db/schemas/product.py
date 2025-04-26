@@ -1,8 +1,6 @@
-from pydantic import BaseModel, field_serializer, Field, ConfigDict
+from pydantic import BaseModel, Field, ConfigDict
 from uuid import UUID
 from datetime import datetime
-from app.db.schemas.episode import EpisodeRead
-from typing import List
 
 class ProductRead(BaseModel):
     id: UUID = Field(..., validation_alias='display_id')
