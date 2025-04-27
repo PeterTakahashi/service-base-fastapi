@@ -40,7 +40,7 @@ async def create_product(
 
 @router.get("/{product_id}", response_model=ProductRead, status_code=200, responses=not_found_response("Product", "/product_id"))
 async def get_product(
-    product_id: UUID = Path(...),
+    product_id: str = Path(...),
     user=Depends(current_active_user),
     service: ProductService = Depends(get_product_service),
 ):

@@ -47,3 +47,5 @@ notebooks
 .ruff_cache
 coverage.txt
 .coverage
+.pytest_cache
+.mypy_cache

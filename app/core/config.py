@@ -12,9 +12,9 @@ load_dotenv(dotenv_path=dotenv_path, override=True)
 
 class Settings(BaseSettings):
     PROJECT_NAME: str = "Manga Translator"
-    DATABASE_URL: str = os.getenv("DATABASE_URL")
-    DEEPSEEK_API_KEY: str = os.getenv("DEEPSEEK_API_KEY")
-    DEEPL_AUTH_KEY: str = os.getenv("DEEPL_AUTH_KEY")
+    DATABASE_URL: str = os.getenv("DATABASE_URL", "postgresql+asyncpg://postgres:postgres@db:5432/manga_translator_dev")
+    DEEPSEEK_API_KEY: str = os.getenv("DEEPSEEK_API_KEY", "SECRET")
+    DEEPL_AUTH_KEY: str = os.getenv("DEEPL_AUTH_KEY", "SECRET")
     RESET_PASSWORD_TOKEN_SECRET: str = "SECRET"
     VERIFICATION_TOKEN_SECRET: str = "SECRET"
     JWT_SECRET: str = "SECRET"

@@ -46,14 +46,14 @@ def not_found_response(model_name: str, pointer: str):
     }
 
 
-def not_found_response_detail(model_name: str, pointer: str, product_id: str):
+def not_found_response_detail(model_name: str, pointer: str, target_id: str):
     return {
         "errors": [
             {
                 "status": "404",
                 "code": f"{camel_to_snake(model_name)}_not_found",
                 "title": "Not Found",
-                "detail": f"{model_name} with id '{product_id}' not found.",
+                "detail": f"{model_name} with id '{target_id}' not found.",
                 "source": {"pointer": pointer},
             }
         ]
