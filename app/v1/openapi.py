@@ -20,9 +20,22 @@ def custom_openapi(app):
             "url": "/app/v1"
         }
     ]
+
+    accept_language_header = {
+        "name": "Accept-Language",
+        "in": "header",
+        "description": "Language preference (e.g., en, ja)",
+        "required": False,
+        "schema": {
+            "type": "string",
+            "example": "en",
+        },
+    }
     for path, path_item in openapi_schema["paths"].items():
         for method, method_item in path_item.items():
             responses = method_item.setdefault("responses", {})
+            parameters = method_item.setdefault("parameters", [])
+            parameters.append(accept_language_header)
 
             if (path, method) not in skip_adding_401:
                 responses.setdefault("401", {

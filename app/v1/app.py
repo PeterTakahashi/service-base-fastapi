@@ -10,6 +10,8 @@ from app.v1.exception_handlers import (
     server_exception_handler,
     validation_exception_handler,
 )
+from app.core.i18n import load_messages
+load_messages()
 
 v1_app = FastAPI(
     title=settings.PROJECT_NAME,
