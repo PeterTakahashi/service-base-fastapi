@@ -73,10 +73,15 @@ jobs:
 
       - name: Comment coverage report on PR
         if: github.event_name == 'pull_request'
-        uses: devops-infra/action-pull-request-comment@v0.6.0
+        uses: devops-infra/action-pull-request@master
         with:
           github_token: ${{ secrets.GIT_HUB_TOKEN }}
-          file: coverage.txt
+          title: Coverage Report
+          body: |
+            ## Coverage Report
+            \`\`\`
+            $(cat coverage.txt)
+            \`\`\`
       - name: Lint *.py files
         run: |
           source .venv/bin/activate
