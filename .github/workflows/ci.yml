@@ -66,22 +66,6 @@ jobs:
         with:
           name: coverage-report
           path: htmlcov/
-      - name: Generate coverage summary
-        run: |
-          source .venv/bin/activate
-          coverage report > coverage.txt
-
-      - name: Comment coverage report on PR
-        if: github.event_name == 'pull_request'
-        uses: devops-infra/action-pull-request@master
-        with:
-          github_token: ${{ secrets.GIT_HUB_TOKEN }}
-          title: Coverage Report
-          body: |
-            ## Coverage Report
-            \`\`\`
-            $(cat coverage.txt)
-            \`\`\`
       - name: Lint *.py files
         run: |
           source .venv/bin/activate
