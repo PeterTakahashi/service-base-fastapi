@@ -113,7 +113,17 @@ async def test_register_too_short_password(client: AsyncClient):
         f"Expected 422, got {response.status_code}. Response: {response.text}"
     )
     response_data = response.json()
-    assert response_data == {'errors': [{'status': '422', 'code': 'validation_error', 'title': 'Validation Error', 'detail': 'String should have at least 8 characters', 'source': {'pointer': '/password'}}]}
+    assert response_data == {
+        'errors': [
+            {
+                'status': '422',
+                'code': 'validation_error',
+                'title': 'Validation Error',
+                'detail': 'String should have at least 8 characters',
+                'source': {'pointer': '/password'}
+            }
+        ]
+    }
 
 
 async def test_register_missing_field(client: AsyncClient):
@@ -132,4 +142,14 @@ async def test_register_missing_field(client: AsyncClient):
         f"Expected 422, got {response.status_code}. Response: {response.text}"
     )
     response_data = response.json()
-    assert response_data == {'errors': [{'status': '422', 'code': 'validation_error', 'title': 'Validation Error', 'detail': 'Field required', 'source': {'pointer': '/email'}}]}
+    assert response_data == {
+        'errors': [
+            {
+                'status': '422',
+                'code': 'validation_error',
+                'title': 'Validation Error',
+                'detail': 'Field required',
+                'source': {'pointer': '/email'}
+            }
+        ]
+    }

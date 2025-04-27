@@ -47,7 +47,14 @@ async def test_get_product_unauthorized(client: AsyncClient):
     resp = await client.get(f"/products/{str(uuid4())}")
     assert resp.status_code == 401
     assert resp.json() == {
-        'errors': [
-            {'code': 'unauthorized', 'detail': 'Authentication credentials were not provided or are invalid.', 'status': '401', 'title': 'Unauthorized'}
+        "errors": [
+            {
+                "code": "unauthorized",
+                "detail": (
+                    "Authentication credentials were not provided or are invalid."
+                ),
+                "status": "401",
+                "title": "Unauthorized",
+            }
         ]
     }

@@ -23,7 +23,12 @@ async def test_create_product_unauthorized(client: AsyncClient):
     assert resp.status_code == 401
     assert resp.json() == {
         'errors': [
-            {'code': 'unauthorized', 'detail': 'Authentication credentials were not provided or are invalid.', 'status': '401', 'title': 'Unauthorized'}
+            {
+                'code': 'unauthorized',
+                'detail': 'Authentication credentials were not provided or are invalid.',
+                'status': '401',
+                'title': 'Unauthorized'
+            }
         ]
     }
 
@@ -67,7 +72,17 @@ async def test_create_product_empty_title(client: AsyncClient):
     )
     data = response.json()
     assert response.status_code == 422
-    assert data == {'errors': [{'status': '422', 'code': 'validation_error', 'title': 'Validation Error', 'detail': 'String should have at least 1 character', 'source': {'pointer': '/title'}}]}
+    assert data == {
+        'errors': [
+            {
+                'status': '422',
+                'code': 'validation_error',
+                'title': 'Validation Error',
+                'detail': 'String should have at least 1 character',
+                'source': {'pointer': '/title'}
+            }
+        ]
+    }
 
 
 async def test_create_product_title_too_long(client: AsyncClient):
@@ -80,16 +95,36 @@ async def test_create_product_title_too_long(client: AsyncClient):
     )
     assert resp.status_code == 422
     data = resp.json()
-    assert data == {'errors': [{'status': '422', 'code': 'validation_error', 'title': 'Validation Error', 'detail': 'String should have at most 100 characters', 'source': {'pointer': '/title'}}]}
+    assert data == {
+        'errors': [
+            {
+                'status': '422',
+                'code': 'validation_error',
+                'title': 'Validation Error',
+                'detail': 'String should have at most 100 characters',
+                'source': {'pointer': '/title'}
+            }
+        ]
+    }
 
 
 async def test_create_product_missing_title(client: AsyncClient):
     access_token, _ = await get_access_token(client)
     resp = await client.post(
         "/products/",
-        json={},  # title キーがない
+        json={},  # no title provided
         headers={"Authorization": f"Bearer {access_token}"},
     )
     assert resp.status_code == 422
     data = resp.json()
-    assert data == {'errors': [{'status': '422', 'code': 'validation_error', 'title': 'Validation Error', 'detail': 'Field required', 'source': {'pointer': '/title'}}]}
+    assert data == {
+        'errors': [
+            {
+                'status': '422',
+                'code': 'validation_error',
+                'title': 'Validation Error',
+                'detail': 'Field required',
+                'source': {'pointer': '/title'}
+            }
+        ]
+    }

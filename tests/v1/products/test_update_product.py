@@ -53,7 +53,14 @@ async def test_update_product_unauthorized(client: AsyncClient):
     assert resp.status_code == 401
     assert resp.json() == {
         'errors': [
-            {'code': 'unauthorized', 'detail': 'Authentication credentials were not provided or are invalid.', 'status': '401', 'title': 'Unauthorized'}
+            {
+                'code': 'unauthorized',
+                'detail': (
+                    'Authentication credentials were not provided or are invalid.'
+                ),
+                'status': '401',
+                'title': 'Unauthorized',
+            }
         ]
     }
 
@@ -70,7 +77,17 @@ async def test_update_product_empty_title(client: AsyncClient):
     )
     assert resp.status_code == 422
     data = resp.json()
-    assert data == {'errors': [{'status': '422', 'code': 'validation_error', 'title': 'Validation Error', 'detail': 'String should have at least 1 character', 'source': {'pointer': '/title'}}]}
+    assert data == {
+        'errors': [
+            {
+                'status': '422',
+                'code': 'validation_error',
+                'title': 'Validation Error',
+                'detail': 'String should have at least 1 character',
+                'source': {'pointer': '/title'},
+            }
+        ]
+    }
 
 
 async def test_update_product_title_too_long(client: AsyncClient):
@@ -86,7 +103,17 @@ async def test_update_product_title_too_long(client: AsyncClient):
     )
     assert resp.status_code == 422
     data = resp.json()
-    assert data == {'errors': [{'status': '422', 'code': 'validation_error', 'title': 'Validation Error', 'detail': 'String should have at most 100 characters', 'source': {'pointer': '/title'}}]}
+    assert data == {
+        'errors': [
+            {
+                'status': '422',
+                'code': 'validation_error',
+                'title': 'Validation Error',
+                'detail': 'String should have at most 100 characters',
+                'source': {'pointer': '/title'},
+            }
+        ]
+    }
 
 
 async def test_update_product_missing_title(client: AsyncClient):
@@ -101,4 +128,14 @@ async def test_update_product_missing_title(client: AsyncClient):
     )
     assert resp.status_code == 422
     data = resp.json()
-    assert data == {'errors': [{'status': '422', 'code': 'validation_error', 'title': 'Validation Error', 'detail': 'Field required', 'source': {'pointer': '/title'}}]}
+    assert data == {
+        'errors': [
+            {
+                'status': '422',
+                'code': 'validation_error',
+                'title': 'Validation Error',
+                'detail': 'Field required',
+                'source': {'pointer': '/title'},
+            }
+        ]
+    }
