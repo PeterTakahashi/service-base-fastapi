@@ -45,3 +45,4 @@ MANIFEST
 notebooks
 .venv
 .ruff_cache
+coverage.txt

@@ -56,11 +56,27 @@ jobs:
           echo "Running migrations..."
           source .venv/bin/activate
           ENV=test alembic upgrade head
-      - name: Test
+      - name: Test with coverage
         run: |
           source .venv/bin/activate
-          pytest
-        timeout-minutes: 5
+          pytest --cov=app --cov-report=term-missing --cov-report=html
+          timeout-minutes: 5
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: htmlcov/
+      - name: Generate coverage summary
+        run: |
+          source .venv/bin/activate
+          coverage report > coverage.txt
+
+      - name: Comment coverage report on PR
+        if: github.event_name == 'pull_request'
+        uses: devops-infra/action-pull-request-comment@v0.6.0
+        with:
+          github_token: ${{ secrets.GIT_HUB_TOKEN }}
+          file: coverage.txt
       - name: Lint *.py files
         run: |
           source .venv/bin/activate
