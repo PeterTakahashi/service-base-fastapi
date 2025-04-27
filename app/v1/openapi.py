@@ -38,6 +38,18 @@ def custom_openapi(app):
             parameters.append(accept_language_header)
 
             if (path, method) not in skip_adding_401:
+                authorization_language_header = {
+                    "name": "Authorization",
+                    "in": "header",
+                    "description": "Bearer token for authentication",
+                    "required": True,
+                    "schema": {
+                        "type": "string",
+                        "example": "Bearer <token>",
+                    },
+                }
+                parameters.append(authorization_language_header)
+
                 responses.setdefault("401", {
                     "description": "Unauthorized",
                     "content": {
