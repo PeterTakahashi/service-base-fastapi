@@ -8,6 +8,27 @@ unauthorized_response = {
     }
 }
 
+unauthorized_detail = {
+    "errors": [
+        {
+            "status": "401",
+            "code": "unauthorized",
+            "title": "Unauthorized",
+            "detail": "Authentication credentials were not provided or are invalid.",
+        }
+    ]
+}
+
+internal_server_error_detail = {
+    "errors": [
+        {
+            "status": "500",
+            "code": "internal_server_error",
+            "title": "Internal Server Error",
+            "detail": "An unexpected error occurred. Please try again later.",
+        }
+    ]
+}
 
 def not_found_response(model_name: str, pointer: str):
     return {

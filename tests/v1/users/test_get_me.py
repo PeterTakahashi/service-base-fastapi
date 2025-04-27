@@ -20,4 +20,8 @@ async def test_get_me_authenticated(client: AsyncClient):
 async def test_get_me_unauthenticated(client: AsyncClient):
     response = await client.get("/users/me")
     assert response.status_code == 401
-    assert "detail" in response.json()
+    assert response.json() == {
+        'errors': [
+            {'code': 'unauthorized', 'detail': 'Authentication credentials were not provided or are invalid.', 'status': '401', 'title': 'Unauthorized'}
+        ]
+    }

@@ -51,7 +51,11 @@ async def test_update_product_unauthorized(client: AsyncClient):
     product_id = str(uuid4())
     resp = await client.put(f"/products/{product_id}", json={"title": "Unauthorized"})
     assert resp.status_code == 401
-    assert resp.json() == {"detail": "Unauthorized"}
+    assert resp.json() == {
+        'errors': [
+            {'code': 'unauthorized', 'detail': 'Authentication credentials were not provided or are invalid.', 'status': '401', 'title': 'Unauthorized'}
+        ]
+    }
 
 
 async def test_update_product_empty_title(client: AsyncClient):

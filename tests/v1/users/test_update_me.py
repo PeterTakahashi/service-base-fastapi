@@ -25,3 +25,8 @@ async def test_update_me_email(client: AsyncClient):
 async def test_update_me_unauthenticated(client: AsyncClient):
     response = await client.patch("/users/me", json={"email": fake.unique.email()})
     assert response.status_code == 401
+    assert response.json() == {
+        'errors': [
+            {'code': 'unauthorized', 'detail': 'Authentication credentials were not provided or are invalid.', 'status': '401', 'title': 'Unauthorized'}
+        ]
+    }

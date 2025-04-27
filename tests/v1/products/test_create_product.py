@@ -21,7 +21,11 @@ async def test_create_product_success(client: AsyncClient):
 async def test_create_product_unauthorized(client: AsyncClient):
     resp = await client.post("/products/", json={"title": "Unauthorized Product"})
     assert resp.status_code == 401
-    assert resp.json()["detail"] == "Unauthorized"
+    assert resp.json() == {
+        'errors': [
+            {'code': 'unauthorized', 'detail': 'Authentication credentials were not provided or are invalid.', 'status': '401', 'title': 'Unauthorized'}
+        ]
+    }
 
 
 async def test_create_product_duplicate_title(client: AsyncClient):

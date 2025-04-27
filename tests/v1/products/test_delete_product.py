@@ -40,4 +40,8 @@ async def test_delete_product_unauthorized(client: AsyncClient):
     product_id = str(uuid4())
     resp = await client.delete(f"/products/{product_id}")
     assert resp.status_code == 401
-    assert resp.json()["detail"] == "Unauthorized"
+    assert resp.json() == {
+        'errors': [
+            {'code': 'unauthorized', 'detail': 'Authentication credentials were not provided or are invalid.', 'status': '401', 'title': 'Unauthorized'}
+        ]
+    }

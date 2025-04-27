@@ -1,11 +1,28 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
 from app.v1.routers import api as api_router
 from app.core.config import settings
+from app.core.response_type import unauthorized_detail, internal_server_error_detail
+from fastapi.exceptions import HTTPException
+from app.v1.exception_handlers import (
+    http_exception_handler,
+    server_exception_handler,
+    validation_exception_handler,
+)
 
 v1_app = FastAPI(
     title=settings.PROJECT_NAME,
     description="Version 1 of the Manga Translator API",
-    version="1.0.0",
+    version="1.0.0"
 )
 
 v1_app.include_router(api_router.api_router)
+
+from fastapi.exceptions import RequestValidationError
+from starlette.exceptions import HTTPException as StarletteHTTPException
+
+v1_app.add_exception_handler(StarletteHTTPException, http_exception_handler)
+v1_app.add_exception_handler(Exception, server_exception_handler)
+v1_app.add_exception_handler(RequestValidationError, validation_exception_handler)
+
+v1_app

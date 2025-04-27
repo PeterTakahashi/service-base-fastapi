@@ -33,4 +33,8 @@ async def test_logout_unauthorized(client: AsyncClient):
     # 401 Unauthorized を期待
     assert logout_resp.status_code == 401
     resp_json = logout_resp.json()
-    assert "detail" in resp_json
+    assert resp_json == {
+        'errors': [
+            {'code': 'unauthorized', 'detail': 'Authentication credentials were not provided or are invalid.', 'status': '401', 'title': 'Unauthorized'}
+        ]
+    }
