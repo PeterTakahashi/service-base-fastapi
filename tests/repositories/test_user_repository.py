@@ -6,18 +6,22 @@ from uuid import uuid4
 
 pytestmark = pytest.mark.asyncio
 
+
 @pytest.fixture
 def mock_session():
     return AsyncMock()
+
 
 @pytest.fixture
 def user_repository(mock_session):
     return UserRepository(session=mock_session)
 
+
 @pytest.fixture
 def sample_user():
     user = User(id=uuid4(), email="old@example.com", hashed_password="oldpassword")
     return user
+
 
 async def test_update_user_success(user_repository, mock_session, sample_user):
     update_data = {"email": "new@example.com", "hashed_password": "newpassword"}

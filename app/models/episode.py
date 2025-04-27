@@ -4,6 +4,7 @@ from app.db.base import Base, TimestampMixin
 from fastapi_users_db_sqlalchemy import generics
 from app.models.product import Product
 
+
 class Episode(TimestampMixin, Base):
     __tablename__ = "episodes"
 
@@ -14,4 +15,9 @@ class Episode(TimestampMixin, Base):
 
     pages = relationship("Page", back_populates="episode")
     product = relationship("Product", back_populates="episodes")
-    user = relationship("User", secondary=Product.__tablename__, back_populates="episodes", viewonly=True)
+    user = relationship(
+        "User",
+        secondary=Product.__tablename__,
+        back_populates="episodes",
+        viewonly=True,
+    )

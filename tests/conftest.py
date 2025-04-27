@@ -3,17 +3,20 @@ import pytest
 import pytest_asyncio
 from app.core.startup import database
 
+
 @pytest.fixture(scope="session")
 def event_loop():
     loop = asyncio.get_event_loop()
     yield loop
     loop.close()
 
+
 @pytest_asyncio.fixture(scope="session", autouse=True)
 async def setup_database():
     await database.connect()
     yield
     await database.disconnect()
+
 
 @pytest_asyncio.fixture(autouse=True)
 async def clean_tables():

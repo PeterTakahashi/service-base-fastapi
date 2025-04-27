@@ -4,6 +4,7 @@ from app.db.base import Base, TimestampMixin
 from fastapi_users_db_sqlalchemy import generics
 from uuid import uuid4
 
+
 class Product(TimestampMixin, Base):
     __tablename__ = "products"
 

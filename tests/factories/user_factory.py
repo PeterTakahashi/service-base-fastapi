@@ -1,6 +1,6 @@
 import uuid
 from app.models.user import User
-from app.db.session import async_session_maker
+
 
 async def create_user(session):
     user = User(

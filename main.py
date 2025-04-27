@@ -8,7 +8,7 @@ from app.v1.app import v1_app
 app = FastAPI(
     title=settings.PROJECT_NAME,
     description="A FastAPI server for manga translation",
-    version="1.0.0"
+    version="1.0.0",
 )
 
 app.add_middleware(
@@ -22,9 +22,11 @@ app.add_middleware(
 app.add_event_handler("startup", startup)
 app.add_event_handler("shutdown", shutdown)
 
+
 @app.get("/")
 def root():
     return {"message": "Welcome to the Manga Translator API!"}
+
 
 @app.get("/up")
 def health_check():
@@ -32,5 +34,6 @@ def health_check():
     Health check endpoint.
     """
     return {"message": "up"}
+
 
 app.mount("/app/v1", v1_app)

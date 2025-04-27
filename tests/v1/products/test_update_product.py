@@ -6,6 +6,7 @@ from uuid import uuid4
 
 pytestmark = pytest.mark.asyncio
 
+
 async def test_update_product_success(client: AsyncClient):
     token, _ = await get_access_token(client)
     product = await create_product(client, token, title="Original Title")
@@ -15,12 +16,13 @@ async def test_update_product_success(client: AsyncClient):
     update_resp = await client.put(
         f"/products/{product_id}",
         json={"title": "Updated Title"},
-        headers={"Authorization": f"Bearer {token}"}
+        headers={"Authorization": f"Bearer {token}"},
     )
     assert update_resp.status_code == 200
     data = update_resp.json()
     assert data["id"] == product_id
     assert data["title"] == "Updated Title"
+
 
 async def test_update_product_not_found(client: AsyncClient):
     token, _ = await get_access_token(client)
@@ -29,24 +31,28 @@ async def test_update_product_not_found(client: AsyncClient):
     update_resp = await client.put(
         f"/products/{invalid_id}",
         json={"title": "New Title"},
-        headers={"Authorization": f"Bearer {token}"}
+        headers={"Authorization": f"Bearer {token}"},
     )
     assert update_resp.status_code == 404
     assert update_resp.json()["detail"] == {
-        'errors': [{
-            'status': '404',
-            'code': 'product_not_found',
-            'title': 'Not Found',
-            'detail': f"Product with id '{invalid_id}' not found.",
-            'source': {'pointer': '/product_id'}
-        }]
+        "errors": [
+            {
+                "status": "404",
+                "code": "product_not_found",
+                "title": "Not Found",
+                "detail": f"Product with id '{invalid_id}' not found.",
+                "source": {"pointer": "/product_id"},
+            }
+        ]
     }
+
 
 async def test_update_product_unauthorized(client: AsyncClient):
     product_id = str(uuid4())
     resp = await client.put(f"/products/{product_id}", json={"title": "Unauthorized"})
     assert resp.status_code == 401
     assert resp.json() == {"detail": "Unauthorized"}
+
 
 async def test_update_product_empty_title(client: AsyncClient):
     token, _ = await get_access_token(client)
@@ -56,7 +62,7 @@ async def test_update_product_empty_title(client: AsyncClient):
     resp = await client.put(
         f"/products/{product_id}",
         json={"title": ""},
-        headers={"Authorization": f"Bearer {token}"}
+        headers={"Authorization": f"Bearer {token}"},
     )
     assert resp.status_code == 422
     data = resp.json()
@@ -64,6 +70,7 @@ async def test_update_product_empty_title(client: AsyncClient):
         err["loc"] == ["body", "title"] and "at least 1 character" in err["msg"]
         for err in data["detail"]
     )
+
 
 async def test_update_product_title_too_long(client: AsyncClient):
     token, _ = await get_access_token(client)
@@ -74,7 +81,7 @@ async def test_update_product_title_too_long(client: AsyncClient):
     resp = await client.put(
         f"/products/{product_id}",
         json={"title": long_title},
-        headers={"Authorization": f"Bearer {token}"}
+        headers={"Authorization": f"Bearer {token}"},
     )
     assert resp.status_code == 422
     data = resp.json()
@@ -82,6 +89,7 @@ async def test_update_product_title_too_long(client: AsyncClient):
         err["loc"] == ["body", "title"] and "at most 100 characters" in err["msg"]
         for err in data["detail"]
     )
+
 
 async def test_update_product_missing_title(client: AsyncClient):
     token, _ = await get_access_token(client)
@@ -91,7 +99,7 @@ async def test_update_product_missing_title(client: AsyncClient):
     resp = await client.put(
         f"/products/{product_id}",
         json={},  # title がない
-        headers={"Authorization": f"Bearer {token}"}
+        headers={"Authorization": f"Bearer {token}"},
     )
     assert resp.status_code == 422
     data = resp.json()

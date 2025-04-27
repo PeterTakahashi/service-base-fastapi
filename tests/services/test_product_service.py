@@ -9,13 +9,16 @@ from fastapi import HTTPException
 
 pytestmark = pytest.mark.asyncio
 
+
 @pytest.fixture
 def mock_repository():
     return AsyncMock()
 
+
 @pytest.fixture
 def product_service(mock_repository):
     return ProductService(product_repository=mock_repository)
+
 
 @pytest.fixture
 def sample_product():
@@ -29,6 +32,7 @@ def sample_product():
         deleted_at=None,
     )
 
+
 async def test_list_products(product_service, mock_repository, sample_product):
     mock_repository.list_products.return_value = [(sample_product, 3)]
 
@@ -37,6 +41,7 @@ async def test_list_products(product_service, mock_repository, sample_product):
 
     assert len(result) == 1
     assert result[0].title == sample_product.title
+
 
 async def test_create_product_success(product_service, mock_repository, sample_product):
     user_id = str(uuid4())
@@ -50,6 +55,7 @@ async def test_create_product_success(product_service, mock_repository, sample_p
     assert result.title == sample_product.title
     mock_repository.create_product.assert_called_once()
 
+
 async def test_create_product_conflict(product_service, mock_repository):
     user_id = str(uuid4())
     data = ProductCreate(title="Duplicate")
@@ -61,6 +67,7 @@ async def test_create_product_conflict(product_service, mock_repository):
 
     assert exc_info.value.status_code == 409
 
+
 async def test_get_product_success(product_service, mock_repository, sample_product):
     user_id = str(uuid4())
     product_id = str(uuid4())
@@ -70,6 +77,7 @@ async def test_get_product_success(product_service, mock_repository, sample_prod
     result = await product_service.get_product(user_id, product_id)
 
     assert result.title == sample_product.title
+
 
 async def test_get_product_not_found(product_service, mock_repository):
     user_id = str(uuid4())
@@ -81,6 +89,7 @@ async def test_get_product_not_found(product_service, mock_repository):
         await product_service.get_product(user_id, product_id)
 
     assert exc_info.value.status_code == 404
+
 
 async def test_update_product_success(product_service, mock_repository, sample_product):
     user_id = str(uuid4())
@@ -94,6 +103,7 @@ async def test_update_product_success(product_service, mock_repository, sample_p
 
     assert result.title == sample_product.title
 
+
 async def test_update_product_not_found(product_service, mock_repository):
     user_id = str(uuid4())
     product_id = str(uuid4())
@@ -106,6 +116,7 @@ async def test_update_product_not_found(product_service, mock_repository):
 
     assert exc_info.value.status_code == 404
 
+
 async def test_delete_product_success(product_service, mock_repository, sample_product):
     user_id = str(uuid4())
     product_id = str(uuid4())
@@ -115,6 +126,7 @@ async def test_delete_product_success(product_service, mock_repository, sample_p
     await product_service.delete_product(user_id, product_id)
 
     mock_repository.soft_delete_product.assert_called_once_with(sample_product)
+
 
 async def test_delete_product_not_found(product_service, mock_repository):
     user_id = str(uuid4())

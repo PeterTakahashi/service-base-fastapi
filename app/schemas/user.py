@@ -2,6 +2,7 @@ from fastapi_users import schemas, models
 from pydantic import EmailStr, ConfigDict, Field
 from typing import Optional, Generic
 
+
 class UserRead(schemas.CreateUpdateDictModel, Generic[models.ID]):
     """Base User model."""
 
@@ -11,8 +12,10 @@ class UserRead(schemas.CreateUpdateDictModel, Generic[models.ID]):
     if schemas.PYDANTIC_V2:  # pragma: no cover
         model_config = ConfigDict(from_attributes=True)  # type: ignore
     else:  # pragma: no cover
+
         class Config:
             orm_mode = True
+
 
 class UserCreate(schemas.CreateUpdateDictModel):
     email: EmailStr = Field(
@@ -28,6 +31,7 @@ class UserCreate(schemas.CreateUpdateDictModel):
         json_schema_extra={"example": "password123%"},
         description="The password of the user.",
     )
+
 
 class UserUpdate(schemas.CreateUpdateDictModel):
     email: Optional[EmailStr] = Field(

@@ -15,8 +15,11 @@ s3 = boto3.client(
     aws_secret_access_key=MINIO_SECRET_KEY,
 )
 
+
 def upload_image(file: UploadFile) -> str:
-    ext = file.filename.split('.')[-1]
+    ext = file.filename.split(".")[-1]
     filename = f"{uuid.uuid4()}.{ext}"
-    s3.upload_fileobj(file.file, BUCKET_NAME, filename, ExtraArgs={"ContentType": file.content_type})
+    s3.upload_fileobj(
+        file.file, BUCKET_NAME, filename, ExtraArgs={"ContentType": file.content_type}
+    )
     return f"http://{MINIO_ENDPOINT}/{BUCKET_NAME}/{filename}"

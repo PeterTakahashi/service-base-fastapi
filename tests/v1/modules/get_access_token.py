@@ -3,12 +3,15 @@ from faker import Faker
 
 fake = Faker()
 
+
 async def get_access_token(client: AsyncClient) -> tuple[str, str]:
     email = fake.unique.email()
     password = fake.password(length=12)
 
     # Register user
-    await client.post("/auth/register/register", json={"email": email, "password": password})
+    await client.post(
+        "/auth/register/register", json={"email": email, "password": password}
+    )
 
     # Login
     response = await client.post(

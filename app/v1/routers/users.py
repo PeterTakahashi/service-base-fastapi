@@ -10,21 +10,24 @@ from app.services.user_service import UserService
 
 router = APIRouter()
 
+
 def get_user_service(session: AsyncSession = Depends(get_async_session)) -> UserService:
     repo = UserRepository(session)
     return UserService(repo)
 
+
 @router.get("/me", response_model=UserRead, responses=unauthorized_response)
 async def get_me(
     user: User = Depends(current_active_user),
-    service: UserService = Depends(get_user_service)
+    service: UserService = Depends(get_user_service),
 ):
     return await service.get_me(user)
+
 
 @router.patch("/me", response_model=UserRead, responses=unauthorized_response)
 async def update_me(
     data: UserUpdate,
     user: User = Depends(current_active_user),
-    service: UserService = Depends(get_user_service)
+    service: UserService = Depends(get_user_service),
 ):
     return await service.update_me(user, data)

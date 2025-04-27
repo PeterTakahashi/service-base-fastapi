@@ -8,6 +8,7 @@ from app.db.session import get_async_session
 from typing import Union
 from sqlalchemy.ext.asyncio import AsyncSession
 
+
 class UserManager(UUIDIDMixin, BaseUserManager[User, UUID]):
     reset_password_token_secret = settings.RESET_PASSWORD_TOKEN_SECRET
     verification_token_secret = settings.VERIFICATION_TOKEN_SECRET
@@ -32,8 +33,12 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, UUID]):
                 reason="Password must contain at least one special character"
             )
 
-async def get_user_db(session: AsyncSession = Depends(get_async_session)): # 依存性注入を使用
+
+async def get_user_db(
+    session: AsyncSession = Depends(get_async_session),
+):  # 依存性注入を使用
     yield SQLAlchemyUserDatabase(session, User)
+
 
 async def get_user_manager(user_db=Depends(get_user_db)):
     yield UserManager(user_db)

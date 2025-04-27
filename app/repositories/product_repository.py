@@ -4,21 +4,22 @@ from app.models import Product, Episode
 from typing import Optional, List
 from datetime import datetime
 
+
 class ProductRepository:
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def list_products(self, user_id: str, limit: int = 10, offset: int = 0, title: Optional[str] = None) -> List[tuple[Product, int]]:
+    async def list_products(
+        self,
+        user_id: str,
+        limit: int = 10,
+        offset: int = 0,
+        title: Optional[str] = None,
+    ) -> List[tuple[Product, int]]:
         stmt = (
-            select(
-                Product,
-                func.count(Episode.id).label("episode_count")
-            )
+            select(Product, func.count(Episode.id).label("episode_count"))
             .outerjoin(Episode, Episode.product_id == Product.id)
-            .where(
-                Product.user_id == user_id,
-                Product.deleted_at.is_(None)
-            )
+            .where(Product.user_id == user_id, Product.deleted_at.is_(None))
             .group_by(Product.id)
             .limit(limit)
             .offset(offset)
@@ -35,17 +36,14 @@ class ProductRepository:
             exists().where(
                 Product.user_id == user_id,
                 Product.title == title,
-                Product.deleted_at.is_(None)
+                Product.deleted_at.is_(None),
             )
         )
         result = await self.session.execute(stmt)
         return result.scalar()
 
     async def create_product(self, title: str, user_id: str) -> Product:
-        product = Product(
-            title=title,
-            user_id=user_id
-        )
+        product = Product(title=title, user_id=user_id)
         self.session.add(product)
         await self.session.commit()
         await self.session.refresh(product)
@@ -55,7 +53,7 @@ class ProductRepository:
         stmt = select(Product).where(
             Product.display_id == display_id,
             Product.user_id == user_id,
-            Product.deleted_at.is_(None)
+            Product.deleted_at.is_(None),
         )
         result = await self.session.execute(stmt)
         return result.scalar_one_or_none()

@@ -18,6 +18,7 @@ if not DATABASE_URL:
     logger.error("❌ DATABASE_URL could not be loaded from .env")
     exit(1)
 
+
 async def create_schema():
     logger.info("🔌 Connecting to the database...")
     engine = create_async_engine(DATABASE_URL)
@@ -36,12 +37,14 @@ async def create_schema():
                 columns = []
                 for column in inspector.get_columns(table_name):
                     logger.debug(f"  - Column: {column['name']}")
-                    columns.append({
-                        "name": column["name"],
-                        "type": str(column["type"]),
-                        "nullable": column["nullable"],
-                        "default": str(column["default"]),
-                    })
+                    columns.append(
+                        {
+                            "name": column["name"],
+                            "type": str(column["type"]),
+                            "nullable": column["nullable"],
+                            "default": str(column["default"]),
+                        }
+                    )
                 schema[table_name] = columns
 
         await conn.run_sync(process_schema)
@@ -51,6 +54,7 @@ async def create_schema():
             json.dump(schema, f, indent=2, ensure_ascii=False)
 
         logger.info("✅ Schema successfully saved to schema.json")
+
 
 if __name__ == "__main__":
     try:

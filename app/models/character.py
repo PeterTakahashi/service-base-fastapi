@@ -4,6 +4,7 @@ from app.db.base import Base, TimestampMixin
 from fastapi_users_db_sqlalchemy import generics
 from app.models.product import Product
 
+
 class Character(TimestampMixin, Base):
     __tablename__ = "characters"
 
@@ -14,4 +15,9 @@ class Character(TimestampMixin, Base):
 
     character_images = relationship("CharacterImage", back_populates="character")
     product = relationship("Product", back_populates="characters")
-    user = relationship("User", secondary=Product.__tablename__, back_populates="characters", viewonly=True)
+    user = relationship(
+        "User",
+        secondary=Product.__tablename__,
+        back_populates="characters",
+        viewonly=True,
+    )
