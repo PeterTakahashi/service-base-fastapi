@@ -1,8 +1,8 @@
 import pytest
 from unittest.mock import AsyncMock
-from app.services.user_service import UserService
-from app.models.user import User
-from app.schemas.user import UserUpdate
+from app.v1.services.user_service import UserService
+from app.v1.models.user import User
+from app.v1.schemas.user import UserUpdate
 from uuid import uuid4
 
 pytestmark = pytest.mark.asyncio

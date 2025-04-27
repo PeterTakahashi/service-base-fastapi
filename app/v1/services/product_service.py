@@ -1,5 +1,5 @@
-from app.repositories.product_repository import ProductRepository
-from app.schemas.product import ProductCreate, ProductUpdate, ProductRead
+from app.v1.repositories.product_repository import ProductRepository
+from app.v1.schemas.product import ProductCreate, ProductUpdate, ProductRead
 from app.core.response_type import not_found_response_detail
 from fastapi import HTTPException
 from typing import List, Optional

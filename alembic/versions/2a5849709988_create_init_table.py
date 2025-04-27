@@ -11,8 +11,8 @@ from typing import Sequence, Union
 from alembic import op
 import sqlalchemy as sa
 import fastapi_users_db_sqlalchemy
-from app.models.types.enum_types import EnumIntegerType
-from app.models.page import StatusEnum
+from app.v1.models.types.enum_types import EnumIntegerType
+from app.v1.models.page import StatusEnum
 
 # revision identifiers, used by Alembic.
 revision: str = "2a5849709988"

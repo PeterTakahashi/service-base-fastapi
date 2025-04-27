@@ -1,12 +1,12 @@
 from fastapi import APIRouter, Depends
 from app.core.user_setup import current_active_user
-from app.schemas import UserRead, UserUpdate
-from app.models import User
+from app.v1.schemas import UserRead, UserUpdate
+from app.v1.models import User
 from app.core.response_type import unauthorized_response
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.session import get_async_session
-from app.repositories.user_repository import UserRepository
-from app.services.user_service import UserService
+from app.v1.repositories.user_repository import UserRepository
+from app.v1.services.user_service import UserService
 
 router = APIRouter()
 

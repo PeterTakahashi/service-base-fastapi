@@ -1,4 +1,4 @@
-from app.schemas.error import ErrorResponse
+from app.v1.schemas.error import ErrorResponse
 from app.lib.camel_to_snake import camel_to_snake
 
 unauthorized_response = {

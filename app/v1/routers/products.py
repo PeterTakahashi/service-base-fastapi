@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List, Optional
-from app.schemas.product import ProductRead, ProductCreate, ProductUpdate
+from app.v1.schemas.product import ProductRead, ProductCreate, ProductUpdate
 from app.core.user_setup import current_active_user
 from app.db.session import get_async_session
-from app.repositories.product_repository import ProductRepository
-from app.services.product_service import ProductService
+from app.v1.repositories.product_repository import ProductRepository
+from app.v1.services.product_service import ProductService
 
 router = APIRouter()
 

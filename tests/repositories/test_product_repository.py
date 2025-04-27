@@ -1,5 +1,5 @@
 import pytest
-from app.repositories.product_repository import ProductRepository
+from app.v1.repositories.product_repository import ProductRepository
 from app.db.session import get_async_session
 from tests.factories.product_factory import create_product
 from tests.factories.user_factory import create_user

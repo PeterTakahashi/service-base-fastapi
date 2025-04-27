@@ -1,6 +1,6 @@
-from app.repositories.user_repository import UserRepository
-from app.models import User
-from app.schemas.user import UserUpdate, UserRead
+from app.v1.repositories.user_repository import UserRepository
+from app.v1.models import User
+from app.v1.schemas.user import UserUpdate, UserRead
 
 
 class UserService:

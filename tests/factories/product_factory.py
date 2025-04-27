@@ -1,5 +1,5 @@
-from app.models.user import User
-from app.models.product import Product
+from app.v1.models.user import User
+from app.v1.models.product import Product
 
 
 async def create_product(session, user: User, title: str = "Test Product"):

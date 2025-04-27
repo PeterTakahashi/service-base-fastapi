@@ -1,8 +1,8 @@
 import pytest
 from unittest.mock import AsyncMock
-from app.services.product_service import ProductService
-from app.schemas.product import ProductCreate, ProductUpdate
-from app.models.product import Product
+from app.v1.services.product_service import ProductService
+from app.v1.schemas.product import ProductCreate, ProductUpdate
+from app.v1.models.product import Product
 from uuid import uuid4
 from datetime import datetime
 from fastapi import HTTPException

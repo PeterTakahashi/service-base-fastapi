@@ -1,5 +1,5 @@
 import uuid
-from app.models.user import User
+from app.v1.models.user import User
 
 
 async def create_user(session):
