@@ -6,7 +6,7 @@ from app.core.user_setup import current_active_user
 from app.db.session import get_async_session
 from app.v1.repositories.product_repository import ProductRepository
 from app.v1.services.product_service import ProductService
-from app.core.response_type import not_found_response, unauthorized_response
+from app.core.response_type import not_found_response
 from uuid import UUID
 
 router = APIRouter()

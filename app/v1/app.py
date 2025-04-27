@@ -1,9 +1,6 @@
-from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
+from fastapi import FastAPI
 from app.v1.routers import api as api_router
 from app.core.config import settings
-from app.core.response_type import unauthorized_detail, internal_server_error_detail
-from fastapi.exceptions import HTTPException
 from app.v1.openapi import custom_openapi
 from app.v1.exception_handlers import (
     http_exception_handler,
