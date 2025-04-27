@@ -60,17 +60,14 @@ async def test_create_product_duplicate_title(client: AsyncClient):
 
 async def test_create_product_empty_title(client: AsyncClient):
     access_token, _ = await get_access_token(client)
-    resp = await client.post(
+    response = await client.post(
         "/products/",
         json={"title": ""},
         headers={"Authorization": f"Bearer {access_token}"},
     )
-    assert resp.status_code == 422
-    data = resp.json()
-    assert any(
-        err["loc"] == ["body", "title"] and "at least 1 character" in err["msg"]
-        for err in data["detail"]
-    )
+    data = response.json()
+    assert response.status_code == 422
+    assert data == {'errors': [{'status': '422', 'code': 'validation_error', 'title': 'Validation Error', 'detail': 'String should have at least 1 character', 'source': {'pointer': '/title'}}]}
 
 
 async def test_create_product_title_too_long(client: AsyncClient):
@@ -83,10 +80,7 @@ async def test_create_product_title_too_long(client: AsyncClient):
     )
     assert resp.status_code == 422
     data = resp.json()
-    assert any(
-        err["loc"] == ["body", "title"] and "at most 100 characters" in err["msg"]
-        for err in data["detail"]
-    )
+    assert data == {'errors': [{'status': '422', 'code': 'validation_error', 'title': 'Validation Error', 'detail': 'String should have at most 100 characters', 'source': {'pointer': '/title'}}]}
 
 
 async def test_create_product_missing_title(client: AsyncClient):
@@ -98,7 +92,4 @@ async def test_create_product_missing_title(client: AsyncClient):
     )
     assert resp.status_code == 422
     data = resp.json()
-    assert any(
-        err["loc"] == ["body", "title"] and "field required" in err["msg"].lower()
-        for err in data["detail"]
-    )
+    assert data == {'errors': [{'status': '422', 'code': 'validation_error', 'title': 'Validation Error', 'detail': 'Field required', 'source': {'pointer': '/title'}}]}

@@ -113,15 +113,7 @@ async def test_register_too_short_password(client: AsyncClient):
         f"Expected 422, got {response.status_code}. Response: {response.text}"
     )
     response_data = response.json()
-    assert response_data["detail"] == [
-        {
-            "type": "string_too_short",
-            "loc": ["body", "password"],
-            "msg": "String should have at least 8 characters",
-            "input": "12",
-            "ctx": {"min_length": 8},
-        }
-    ]
+    assert response_data == {'errors': [{'status': '422', 'code': 'validation_error', 'title': 'Validation Error', 'detail': 'String should have at least 8 characters', 'source': {'pointer': '/password'}}]}
 
 
 async def test_register_missing_field(client: AsyncClient):
@@ -140,15 +132,4 @@ async def test_register_missing_field(client: AsyncClient):
         f"Expected 422, got {response.status_code}. Response: {response.text}"
     )
     response_data = response.json()
-    assert "detail" in response_data
-    assert isinstance(response_data["detail"], list)
-    assert len(response_data["detail"]) > 0
-    # Check if the error message relates to the missing 'email' field
-    email_error_found = any(
-        err.get("loc") == ["body", "email"]
-        and "field required" in err.get("msg", "").lower()
-        for err in response_data["detail"]
-    )
-    assert email_error_found, (
-        f"Validation error for missing email not found in {response_data['detail']}"
-    )
+    assert response_data == {'errors': [{'status': '422', 'code': 'validation_error', 'title': 'Validation Error', 'detail': 'Field required', 'source': {'pointer': '/email'}}]}

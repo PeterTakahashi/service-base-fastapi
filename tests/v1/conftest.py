@@ -5,7 +5,6 @@ from httpx._transports.asgi import ASGITransport
 
 BASE_URL = "/app/v1"
 
-
 @pytest_asyncio.fixture(scope="function")
 async def client() -> AsyncClient:
     transport = ASGITransport(app=app)

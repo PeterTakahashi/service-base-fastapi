@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, Path
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List, Optional
 from app.v1.schemas.product import ProductRead, ProductCreate, ProductUpdate
@@ -7,6 +7,7 @@ from app.db.session import get_async_session
 from app.v1.repositories.product_repository import ProductRepository
 from app.v1.services.product_service import ProductService
 from app.core.response_type import not_found_response, unauthorized_response
+from uuid import UUID
 
 router = APIRouter()
 
@@ -37,28 +38,28 @@ async def create_product(
     return await service.create_product(user.id, data)
 
 
-@router.get("/{product_id}", response_model=ProductRead, status_code=200, responses=not_found_response("Product", "/products/{product_id}"))
+@router.get("/{product_id}", response_model=ProductRead, status_code=200, responses=not_found_response("Product", "/product_id"))
 async def get_product(
-    product_id: str,
+    product_id: UUID = Path(...),
     user=Depends(current_active_user),
     service: ProductService = Depends(get_product_service),
 ):
     return await service.get_product(user.id, product_id)
 
 
-@router.put("/{product_id}", response_model=ProductRead, status_code=200, responses=not_found_response("Product", "/products/{product_id}"))
+@router.put("/{product_id}", response_model=ProductRead, status_code=200, responses=not_found_response("Product", "/product_id"))
 async def update_product(
     data: ProductUpdate,
-    product_id: str,
+    product_id: UUID = Path(...),
     user=Depends(current_active_user),
     service: ProductService = Depends(get_product_service),
 ):
     return await service.update_product(user.id, product_id, data)
 
 
-@router.delete("/{product_id}", status_code=204, responses=not_found_response("Product", "/products/{product_id}"))
+@router.delete("/{product_id}", status_code=204, responses=not_found_response("Product", "/product_id"))
 async def delete_product(
-    product_id: str,
+    product_id: UUID = Path(...),
     user=Depends(current_active_user),
     service: ProductService = Depends(get_product_service),
 ):
