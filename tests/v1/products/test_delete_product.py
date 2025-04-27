@@ -16,6 +16,7 @@ async def test_delete_product_success(client: AsyncClient):
         f"/products/{product['id']}", headers={"Authorization": f"Bearer {token}"}
     )
     assert delete_resp.status_code == 204
+    assert delete_resp.text == ""
 
     # Try to get the deleted product
     get_resp = await client.get(

@@ -64,4 +64,3 @@ async def delete_product(
     service: ProductService = Depends(get_product_service),
 ):
     await service.delete_product(user.id, product_id)
-    return None
