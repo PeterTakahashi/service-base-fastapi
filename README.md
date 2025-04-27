@@ -13,11 +13,29 @@ source .venv/bin/activate
 pytest
 ```
 
-db migrate
+create db migration file
+
+```bash
+alembic revision --autogenerate -m ""
 ```
+
+db migrate
+
+```bash
 alembic upgrade head
 ```
 
+reset table
+
+```bash
+docker compose down -v
+```
+
+create schema
+
+```bash
+python -m scripts.reset_table
+```
 
 #### OpenAPI
 

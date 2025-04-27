@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import relationship
 from app.db.base import Base, TimestampMixin
 from fastapi_users_db_sqlalchemy import generics
@@ -20,4 +20,8 @@ class Character(TimestampMixin, Base):
         secondary=Product.__tablename__,
         back_populates="characters",
         viewonly=True,
+    )
+
+    __table_args__ = (
+        UniqueConstraint("name", "product_id", name="uq_name_product_id"),
     )
