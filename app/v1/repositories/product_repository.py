@@ -1,6 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, exists
-from app.v1.models import Product, Episode
+from app.v1.models.product import Product
+from app.v1.models.episode import Episode
 from typing import Optional, List
 from datetime import datetime
 

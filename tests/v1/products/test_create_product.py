@@ -33,7 +33,7 @@ async def test_create_product_duplicate_title(client: AsyncClient):
 
     title = "Duplicate Product"
     # 1st creation
-    product = await create_product(client, access_token, title=title)
+    await create_product(client, access_token, title=title)
 
     # 2nd creation with the same title
     resp2 = await client.post(

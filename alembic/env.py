@@ -8,11 +8,10 @@ from app.db.base import Base
 
 from dotenv import load_dotenv
 
+from app.core.config import settings
+
 load_dotenv()
 
-from app.core.config import settings  # あなたの Settings クラスを使う
-
-# 非同期ドライバを同期用に変換
 sync_url = settings.DATABASE_URL.replace("+asyncpg", "")
 
 # this is the Alembic Config object, which provides

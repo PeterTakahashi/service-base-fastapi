@@ -1,5 +1,4 @@
 from fastapi_users.authentication import (
-    CookieTransport,
     AuthenticationBackend,
     BearerTransport,
     JWTStrategy,

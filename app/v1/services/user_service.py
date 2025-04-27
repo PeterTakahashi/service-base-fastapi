@@ -1,5 +1,5 @@
 from app.v1.repositories.user_repository import UserRepository
-from app.v1.models import User
+from app.v1.models.user import User
 from app.v1.schemas.user import UserUpdate, UserRead
 
 

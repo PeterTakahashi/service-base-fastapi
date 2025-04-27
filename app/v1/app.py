@@ -8,6 +8,9 @@ from app.v1.exception_handlers import (
     validation_exception_handler,
 )
 from app.core.i18n import load_messages
+from fastapi.exceptions import RequestValidationError
+from starlette.exceptions import HTTPException as StarletteHTTPException
+
 load_messages()
 
 v1_app = FastAPI(
@@ -17,9 +20,6 @@ v1_app = FastAPI(
 )
 
 v1_app.include_router(api_router.api_router)
-
-from fastapi.exceptions import RequestValidationError
-from starlette.exceptions import HTTPException as StarletteHTTPException
 
 v1_app.add_exception_handler(StarletteHTTPException, http_exception_handler)
 v1_app.add_exception_handler(Exception, server_exception_handler)
