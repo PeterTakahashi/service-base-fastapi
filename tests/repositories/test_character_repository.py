@@ -105,9 +105,6 @@ async def test_get_character():
 
 async def test_get_character_not_found():
     async for session in get_async_session():
-        user = await create_user(session)
-        product = await create_product(session, user)
-
         repo = CharacterRepository(session)
         fetched_character = await repo.get_character(character_id=99999)  # Nonexistent ID
 

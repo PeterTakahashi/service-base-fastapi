@@ -1,5 +1,4 @@
 import boto3
-import uuid
 from fastapi import UploadFile
 import os
 

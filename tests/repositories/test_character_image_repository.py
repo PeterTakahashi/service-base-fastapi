@@ -1,8 +1,6 @@
 import pytest
-from app.v1.repositories.character_repository import CharacterRepository
 from app.v1.repositories.character_image_repository import CharacterImageRepository
 from app.db.session import get_async_session
-from uuid import uuid4
 from tests.factories.product_factory import create_product
 from tests.factories.user_factory import create_user
 from tests.factories.character_factory import create_character
@@ -91,10 +89,6 @@ async def test_delete_character_image():
         break
 async def test_delete_character_image_not_found():
     async for session in get_async_session():
-        user = await create_user(session)
-        product = await create_product(session, user)
-        character = await create_character(session, product)
-
         repo = CharacterImageRepository(session)
         deleted = await repo.delete_character_image(character_image_id=99999)
 
