@@ -66,6 +66,20 @@ services:
     command: -c "minio server /data --address :9000 --console-address :9090;"
     networks:
       - manga-translator_default
+  minio-console:
+    image: minio/mc
+    container_name: manga-translator-mc
+    depends_on:
+      - minio
+    entrypoint: >
+      sh -c "
+      sleep 5 &&
+      mc alias set local http://manga-translator-minio:9000 admin password &&
+      mc mb local/manga-translator-dev &&
+      mc mb local/manga-translator-test
+      "
+    networks:
+      - manga-translator_default
 
   redis:
     image: redis:7.4.2

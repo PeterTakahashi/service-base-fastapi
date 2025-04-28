@@ -9,7 +9,7 @@ class Product(TimestampMixin, Base):
     __tablename__ = "products"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    display_id = Column(generics.GUID, index=True, nullable=False, default=uuid4)
+    display_id = Column(generics.GUID, index=True, nullable=False, default=uuid4, unique=True)
     title = Column(String(255), nullable=False)
     user_id = Column(generics.GUID, ForeignKey("users.id"), nullable=False, index=True)
 

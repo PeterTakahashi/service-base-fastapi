@@ -4,6 +4,7 @@ from app.db.base import Base, TimestampMixin
 from fastapi_users_db_sqlalchemy import generics
 from app.v1.models.types.enum_types import EnumIntegerType
 from enum import Enum
+from uuid import uuid4
 
 
 class StatusEnum(Enum):
@@ -23,12 +24,12 @@ class Page(TimestampMixin, Base):
     __tablename__ = "pages"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    display_id = Column(generics.GUID, index=True, nullable=False)
+    display_id = Column(generics.GUID, index=True, nullable=False, unique=True, default=uuid4)
     episode_id = Column(Integer, ForeignKey("episodes.id"), nullable=False, index=True)
     translation_status = Column(
         EnumIntegerType(StatusEnum), default=StatusEnum.DRAFT, nullable=False
     )
-    before_changed_image_url = Column(String(255), nullable=False)
-    after_changed_image_url = Column(String(255), nullable=False)
+    before_changed_image_storage_key = Column(String(255), nullable=False)
+    after_changed_image_storage_key = Column(String(255), nullable=False)
 
     episode = relationship("Episode", back_populates="pages")

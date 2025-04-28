@@ -10,7 +10,7 @@
 docker exec -it manga-translator-web bash
 source .venv/bin/activate
 
-pytest
+pytest --cov=app --cov-report=term-missing --cov-report=html
 ```
 
 create db migration file
