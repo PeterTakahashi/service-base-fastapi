@@ -3,13 +3,13 @@ from sqlalchemy.orm import relationship
 from app.db.base import Base, TimestampMixin
 from fastapi_users_db_sqlalchemy import generics
 from app.v1.models.product import Product
-
+from uuid import uuid4
 
 class Character(TimestampMixin, Base):
     __tablename__ = "characters"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    display_id = Column(generics.GUID, index=True, nullable=False)
+    display_id = Column(generics.GUID, index=True, nullable=False, default=uuid4)
     name = Column(String(255), index=True, nullable=False)
     product_id = Column(Integer, ForeignKey("products.id"), nullable=False, index=True)
 
