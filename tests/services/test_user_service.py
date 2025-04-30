@@ -4,7 +4,6 @@ from app.v1.services.user_service import UserService
 from app.v1.models.user import User
 from app.v1.schemas.user import UserUpdate
 from uuid import uuid4
-from tests.factories.user_factory import create_user
 
 pytestmark = pytest.mark.asyncio
 
