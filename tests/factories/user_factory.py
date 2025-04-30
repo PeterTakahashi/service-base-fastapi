@@ -1,7 +1,6 @@
 import uuid
 from app.v1.models.user import User
 
-
 async def create_user(session):
     user = User(
         id=uuid.uuid4(),
@@ -15,3 +14,4 @@ async def create_user(session):
     await session.commit()
     await session.refresh(user)
     return user
+

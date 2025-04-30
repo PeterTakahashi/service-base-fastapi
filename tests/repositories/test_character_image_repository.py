@@ -2,7 +2,6 @@ import pytest
 from app.v1.repositories.character_image_repository import CharacterImageRepository
 from app.db.session import get_async_session
 from tests.factories.product_factory import create_product
-from tests.factories.user_factory import create_user
 from tests.factories.character_factory import create_character
 from tests.factories.character_image_factory import create_character_image
 
@@ -10,8 +9,7 @@ pytestmark = pytest.mark.asyncio
 
 async def test_list_character_images_by_character():
     async for session in get_async_session():
-        user = await create_user(session)
-        product = await create_product(session, user)
+        product = await create_product(session)
         character = await create_character(session, product)
         await create_character_image(session, character)
 
@@ -23,8 +21,7 @@ async def test_list_character_images_by_character():
         break
 async def test_list_character_images_by_character_with_sorting():
     async for session in get_async_session():
-        user = await create_user(session)
-        product = await create_product(session, user)
+        product = await create_product(session)
         character = await create_character(session, product)
         # Create multiple character images
         for _ in range(3):
@@ -37,8 +34,7 @@ async def test_list_character_images_by_character_with_sorting():
         break
 async def test_character_image_create():
     async for session in get_async_session():
-        user = await create_user(session)
-        product = await create_product(session, user)
+        product = await create_product(session)
         character = await create_character(session, product)
 
         repo = CharacterImageRepository(session)
@@ -49,8 +45,7 @@ async def test_character_image_create():
         break
 async def test_character_image_exists():
     async for session in get_async_session():
-        user = await create_user(session)
-        product = await create_product(session, user)
+        product = await create_product(session)
         character = await create_character(session, product)
         image = await create_character_image(session, character)
 
@@ -61,8 +56,7 @@ async def test_character_image_exists():
         break
 async def test_get_character_image():
     async for session in get_async_session():
-        user = await create_user(session)
-        product = await create_product(session, user)
+        product = await create_product(session)
         character = await create_character(session, product)
         image = await create_character_image(session, character)
 
@@ -75,8 +69,7 @@ async def test_get_character_image():
 
 async def test_delete_character_image():
     async for session in get_async_session():
-        user = await create_user(session)
-        product = await create_product(session, user)
+        product = await create_product(session)
         character = await create_character(session, product)
         image = await create_character_image(session, character)
 

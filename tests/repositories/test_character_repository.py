@@ -2,7 +2,6 @@ import pytest
 from app.v1.repositories.character_repository import CharacterRepository
 from app.db.session import get_async_session
 from tests.factories.product_factory import create_product
-from tests.factories.user_factory import create_user
 from tests.factories.character_factory import create_character
 from uuid import uuid4
 
@@ -10,8 +9,7 @@ pytestmark = pytest.mark.asyncio
 
 async def test_list_characters_by_product():
     async for session in get_async_session():
-        user = await create_user(session)
-        product = await create_product(session, user)
+        product = await create_product(session)
         await create_character(session, product, name="Repository Test Character")
 
         repo = CharacterRepository(session)
@@ -24,8 +22,7 @@ async def test_list_characters_by_product():
 
 async def test_list_characters_by_product_with_name_filter():
     async for session in get_async_session():
-        user = await create_user(session)
-        product = await create_product(session, user)
+        product = await create_product(session)
         await create_character(session, product, name="Repository Test Character")
 
         repo = CharacterRepository(session)
@@ -38,8 +35,7 @@ async def test_list_characters_by_product_with_name_filter():
 
 async def test_list_characters_by_product_with_sorting():
     async for session in get_async_session():
-        user = await create_user(session)
-        product = await create_product(session, user)
+        product = await create_product(session)
         # Create multiple characters
         await create_character(session, product, name="A Character")
         await create_character(session, product, name="B Character")
@@ -55,8 +51,7 @@ async def test_list_characters_by_product_with_sorting():
 
 async def test_character_exists():
     async for session in get_async_session():
-        user = await create_user(session)
-        product = await create_product(session, user)
+        product = await create_product(session)
         character = await create_character(session, product, name="Repository Test Character")
 
         repo = CharacterRepository(session)
@@ -67,8 +62,7 @@ async def test_character_exists():
 
 async def test_character_not_exists():
     async for session in get_async_session():
-        user = await create_user(session)
-        product = await create_product(session, user)
+        product = await create_product(session)
 
         repo = CharacterRepository(session)
         exists = await repo.character_exists(product_id=product.id, name="Nonexistent Character")
@@ -78,8 +72,7 @@ async def test_character_not_exists():
 
 async def test_create_character():
     async for session in get_async_session():
-        user = await create_user(session)
-        product = await create_product(session, user)
+        product = await create_product(session)
 
         repo = CharacterRepository(session)
         character = await repo.create_character(name="New Character", product_id=product.id, display_id=str(uuid4()))
@@ -91,8 +84,7 @@ async def test_create_character():
 
 async def test_get_character():
     async for session in get_async_session():
-        user = await create_user(session)
-        product = await create_product(session, user)
+        product = await create_product(session)
         character = await create_character(session, product, name="Repository Test Character")
 
         repo = CharacterRepository(session)
@@ -113,8 +105,7 @@ async def test_get_character_not_found():
 
 async def test_update_character():
     async for session in get_async_session():
-        user = await create_user(session)
-        product = await create_product(session, user)
+        product = await create_product(session)
         character = await create_character(session, product, name="Repository Test Character")
 
         repo = CharacterRepository(session)
@@ -126,8 +117,7 @@ async def test_update_character():
 
 async def test_soft_delete_character():
     async for session in get_async_session():
-        user = await create_user(session)
-        product = await create_product(session, user)
+        product = await create_product(session)
         character = await create_character(session, product, name="Repository Test Character")
 
         repo = CharacterRepository(session)
