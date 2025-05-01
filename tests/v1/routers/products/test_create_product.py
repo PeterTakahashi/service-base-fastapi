@@ -10,7 +10,6 @@ async def test_create_product_success(client: AsyncClient, access_token):
     assert "updated_at" in product
     assert product["episodes_count"] == 0
 
-
 async def test_create_product_unauthorized(client: AsyncClient):
     response = await client.post("/products/", json={"title": "Unauthorized Product"})
     check_unauthorized_response(response)

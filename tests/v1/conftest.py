@@ -3,6 +3,7 @@ from main import app
 from httpx import AsyncClient
 from httpx._transports.asgi import ASGITransport
 from typing import AsyncGenerator
+from tests.v1.fixtures.auth_fixture import access_token
 
 BASE_URL = "/app/v1"
 

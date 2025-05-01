@@ -105,9 +105,14 @@ target-version = "py310"  # プロジェクトに合わせて (例: Python 3.10�
 fix = true
 unsafe-fixes = false
 
+
 [tool.ruff.format]
 quote-style = "double"  # 文字列はダブルクオート（好みで'single'でもOK）
 docstring-code-format = true
 
 [tool.mypy]
 files = ["app", "alembic", "tests", "scripts"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/conftest.py" = ["F401"]
+"tests/v1/conftest.py" = ["F401"]
