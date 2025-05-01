@@ -1,4 +1,3 @@
-import pytest
 import pytest_asyncio
 from app.v1.services.character_service import CharacterService
 

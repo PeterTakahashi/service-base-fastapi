@@ -2,7 +2,8 @@ from app.v1.repositories.character_repository import CharacterRepository
 from app.v1.repositories.product_repository import ProductRepository
 from app.v1.schemas.character import CharacterRead
 from typing import List, Optional
-
+from app.core.response_type import not_found_response_detail
+from fastapi import HTTPException
 
 class CharacterService:
     def __init__(self, product_repository: ProductRepository, character_repository: CharacterRepository):

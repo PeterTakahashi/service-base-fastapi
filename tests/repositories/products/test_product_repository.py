@@ -1,7 +1,3 @@
-import pytest
-import pytest_asyncio
-from tests.factories.user_factory import UserFactory
-from tests.factories.product_factory import ProductFactory
 from uuid import uuid4
 
 async def test_list_products(product_repository, product):

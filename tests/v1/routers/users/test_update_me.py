@@ -1,4 +1,3 @@
-import pytest
 from httpx import AsyncClient
 from tests.v1.common.unauthorized_response import check_unauthorized_response
 

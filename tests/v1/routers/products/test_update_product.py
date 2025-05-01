@@ -1,4 +1,3 @@
-import pytest
 from httpx import AsyncClient
 from tests.v1.modules.create_product import create_product
 from uuid import uuid4

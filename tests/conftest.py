@@ -4,8 +4,6 @@ import pytest_asyncio
 from app.core.startup import database
 from app.db.session import get_async_session
 from faker import Faker
-from tests.fixtures.model_fixture import *
-from tests.fixtures.repository_fixture import *
 
 @pytest.fixture(scope="session")
 def event_loop():

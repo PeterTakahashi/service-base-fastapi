@@ -1,4 +1,3 @@
-import pytest
 import pytest_asyncio
 from app.v1.repositories.character_repository import CharacterRepository
 from uuid import uuid4

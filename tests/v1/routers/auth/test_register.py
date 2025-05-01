@@ -1,5 +1,4 @@
 import pytest
-import pytest_asyncio
 from httpx import AsyncClient
 
 async def test_register_success(client: AsyncClient, faker):

@@ -1,8 +1,5 @@
-import pytest
 import pytest_asyncio
 from app.v1.repositories.user_repository import UserRepository
-from app.v1.models.user import User
-from tests.factories.user_factory import UserFactory
 
 @pytest_asyncio.fixture
 async def user_repository(async_session):
