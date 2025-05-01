@@ -2,7 +2,9 @@ import asyncio
 import pytest
 import pytest_asyncio
 from app.core.startup import database
-
+from app.db.session import get_async_session
+from tests.fixtures.model_fixture import *
+from tests.fixtures.repository_fixture import *
 
 @pytest.fixture(scope="session")
 def event_loop():
@@ -20,6 +22,10 @@ async def setup_database():
 
 @pytest_asyncio.fixture(autouse=True)
 async def clean_tables():
-    # テーブルの順番に注意（外部キー制約）
-    for table in ["pages", "users"]:
+    for table in ["pages", "episodes", "character_images", "characters", "products", "users"]:
         await database.execute(f"TRUNCATE TABLE {table} RESTART IDENTITY CASCADE")
+
+@pytest_asyncio.fixture
+async def async_session():
+    async for session in get_async_session():
+        yield session

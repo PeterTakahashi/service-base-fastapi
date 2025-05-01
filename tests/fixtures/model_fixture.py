@@ -1,0 +1,29 @@
+import pytest_asyncio
+from tests.factories.user_factory import UserFactory
+from tests.factories.product_factory import ProductFactory
+from tests.factories.character_factory import CharacterFactory
+from tests.factories.character_image_factory import CharacterImageFactory
+
+@pytest_asyncio.fixture
+async def user(async_session):
+    UserFactory._meta.session = async_session
+    user = await UserFactory.create()
+    return user
+
+@pytest_asyncio.fixture
+async def product(async_session, user):
+    ProductFactory._meta.session = async_session
+    product = await ProductFactory.create(user=user)
+    return product
+
+@pytest_asyncio.fixture
+async def character(async_session, product):
+    CharacterFactory._meta.session = async_session
+    character = await CharacterFactory.create(product=product)
+    return character
+
+@pytest_asyncio.fixture
+async def character_image(async_session, character):
+    CharacterImageFactory._meta.session = async_session
+    character_image = await CharacterImageFactory.create(character=character)
+    return character_image

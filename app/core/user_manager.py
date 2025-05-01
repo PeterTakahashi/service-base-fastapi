@@ -1,4 +1,4 @@
-from fastapi_users.db import SQLAlchemyUserDatabase
+from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase
 from fastapi_users import BaseUserManager, UUIDIDMixin, schemas, exceptions, models
 from app.v1.models.user import User
 from uuid import UUID

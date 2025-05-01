@@ -13,7 +13,7 @@ class ProductRead(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
-class ProductCreate(BaseModel):
+class ProductModify(BaseModel):
     title: str = Field(
         ...,
         min_length=1,
@@ -22,12 +22,9 @@ class ProductCreate(BaseModel):
         description="The title of the product.",
     )
 
+class ProductCreate(ProductModify):
+    pass
 
-class ProductUpdate(BaseModel):
-    title: str = Field(
-        ...,
-        min_length=1,
-        max_length=100,
-        json_schema_extra={"example": "My Product Title"},
-        description="The title of the product.",
-    )
+
+class ProductUpdate(ProductModify):
+    pass

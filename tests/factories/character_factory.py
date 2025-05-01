@@ -1,16 +1,11 @@
-from app.v1.models.product import Product
 from app.v1.models.character import Character
-from .product_factory import create_product
+from tests.factories.async_factory import AsyncSQLAlchemyModelFactory
+import factory
+from tests.factories.product_factory import ProductFactory
 
-async def create_character(session, product: Product = None, name: str = "Test Character"):
-    if product is None:
-        product = await create_product(session)
+class CharacterFactory(AsyncSQLAlchemyModelFactory):
+    class Meta:
+        model = Character
 
-    character = Character(
-        name=name,
-        product_id=product.id,
-    )
-    session.add(character)
-    await session.commit()
-    await session.refresh(character)
-    return character
+    name = factory.Faker("name")
+    product = factory.SubFactory(ProductFactory)

@@ -1,15 +1,10 @@
-from app.v1.models.character import Character
 from app.v1.models.character_image import CharacterImage
+from tests.factories.async_factory import AsyncSQLAlchemyModelFactory
+import factory
+from tests.factories.character_factory import CharacterFactory
 
+class CharacterImageFactory(AsyncSQLAlchemyModelFactory):
+    class Meta:
+        model = CharacterImage
 
-async def create_character_image(
-    session,
-    character: Character,
-) -> CharacterImage:
-    character_image = CharacterImage(
-        character_id=character.id,
-    )
-    session.add(character_image)
-    await session.commit()
-    await session.refresh(character_image)
-    return character_image
+    character = factory.SubFactory(CharacterFactory)

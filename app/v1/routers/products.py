@@ -17,7 +17,6 @@ def get_product_service(
     repository = ProductRepository(session)
     return ProductService(repository)
 
-
 @router.get("/", response_model=List[ProductRead])
 async def index_products(
     user=Depends(current_active_user),

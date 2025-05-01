@@ -1,17 +1,13 @@
-import uuid
 from app.v1.models.user import User
+from tests.factories.async_factory import AsyncSQLAlchemyModelFactory
+import factory
 
-async def create_user(session):
-    user = User(
-        id=uuid.uuid4(),
-        email=f"user_{uuid.uuid4()}@example.com",
-        hashed_password="fakehashedpassword",  # パスワードはテストなので適当でOK
-        is_active=True,
-        is_superuser=False,
-        is_verified=True,
-    )
-    session.add(user)
-    await session.commit()
-    await session.refresh(user)
-    return user
+class UserFactory(AsyncSQLAlchemyModelFactory):
+    class Meta:
+        model = User
 
+    email = factory.Faker("email")
+    hashed_password = "fakehashedpassword"
+    is_active = True
+    is_superuser = False
+    is_verified = True

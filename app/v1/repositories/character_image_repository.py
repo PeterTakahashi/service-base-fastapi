@@ -60,15 +60,6 @@ class CharacterImageRepository:
         result = await self.session.execute(stmt)
         return result.scalar_one_or_none()
 
-    async def delete_character_image(self, character_image_id: int) -> bool:
-        stmt = select(CharacterImage).where(
-            CharacterImage.id == character_image_id,
-            CharacterImage.deleted_at.is_(None),
-        )
-        result = await self.session.execute(stmt)
-        character_image = result.scalar_one_or_none()
-        if character_image:
-            character_image.deleted_at = datetime.utcnow()
-            await self.session.commit()
-            return True
-        return False
+    async def soft_delete_character_image(self, character_image: CharacterImage) -> None:
+        character_image.deleted_at = datetime.utcnow()
+        await self.session.commit()

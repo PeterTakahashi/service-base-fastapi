@@ -26,7 +26,41 @@ class ProductService:
         return products
 
     async def create_product(self, user_id: str, data: ProductCreate) -> ProductRead:
-        exists = await self.product_repository.product_exists(user_id, data.title)
+        await self.__check_product_exists(user_id, data.title)
+        product = await self.product_repository.create_product(
+            title=data.title, user_id=user_id
+        )
+        return ProductRead.model_validate(product)
+
+    async def get_product(self, user_id: str, product_id: str) -> ProductRead:
+        product = await self.__find_product(user_id, product_id)
+        return ProductRead.model_validate(product)
+
+    async def update_product(
+        self, user_id: str, product_id: str, data: ProductUpdate
+    ) -> ProductRead:
+        await self.__check_product_exists(user_id, data.title)
+        product = await self.__find_product(user_id, product_id)
+        updated_product = await self.product_repository.update_product(
+            product, data.model_dump(exclude_unset=True)
+        )
+        return ProductRead.model_validate(updated_product)
+
+    async def delete_product(self, user_id: str, product_id: str):
+        product = await self.__find_product(user_id, product_id)
+        await self.product_repository.soft_delete_product(product)
+
+    async def __find_product(self, user_id: str, product_id: str):
+        product = await self.product_repository.get_product(user_id, product_id)
+        if not product:
+            raise HTTPException(
+                status_code=404,
+                detail=not_found_response_detail("Product", "/product_id", product_id),
+            )
+        return product
+
+    async def __check_product_exists(self, user_id: str, title: str) -> bool:
+        exists = await self.product_repository.product_exists(user_id, title)
         if exists:
             raise HTTPException(
                 status_code=409,
@@ -36,45 +70,9 @@ class ProductService:
                             "status": "409",
                             "code": "product_already_exists",
                             "title": "Conflict",
-                            "detail": f"Product with title '{data.title}' already exists.",
+                            "detail": f"Product with title '{title}' already exists.",
                             "source": {"pointer": "/title"},
                         }
                     ]
                 },
             )
-        product = await self.product_repository.create_product(
-            title=data.title, user_id=user_id
-        )
-        return ProductRead.model_validate(product)
-
-    async def get_product(self, user_id: str, product_id: str) -> ProductRead:
-        product = await self.product_repository.get_product(user_id, product_id)
-        if not product:
-            raise HTTPException(
-                status_code=404,
-                detail=not_found_response_detail("Product", "/product_id", product_id),
-            )
-        return ProductRead.model_validate(product)
-
-    async def update_product(
-        self, user_id: str, product_id: str, data: ProductUpdate
-    ) -> ProductRead:
-        product = await self.product_repository.get_product(user_id, product_id)
-        if not product:
-            raise HTTPException(
-                status_code=404,
-                detail=not_found_response_detail("Product", "/product_id", product_id),
-            )
-        updated_product = await self.product_repository.update_product(
-            product, data.model_dump(exclude_unset=True)
-        )
-        return ProductRead.model_validate(updated_product)
-
-    async def delete_product(self, user_id: str, product_id: str):
-        product = await self.product_repository.get_product(user_id, product_id)
-        if not product:
-            raise HTTPException(
-                status_code=404,
-                detail=not_found_response_detail("Product", "/product_id", product_id),
-            )
-        await self.product_repository.soft_delete_product(product)

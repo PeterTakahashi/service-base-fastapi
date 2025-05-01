@@ -50,9 +50,9 @@ class ProductRepository:
         await self.session.refresh(product)
         return product
 
-    async def get_product(self, user_id: str, display_id: str) -> Optional[Product]:
+    async def get_product(self, user_id: str, product_display_id: str) -> Optional[Product]:
         stmt = select(Product).where(
-            Product.display_id == display_id,
+            Product.display_id == product_display_id,
             Product.user_id == user_id,
             Product.deleted_at.is_(None),
         )
