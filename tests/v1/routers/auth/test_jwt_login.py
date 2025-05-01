@@ -1,16 +1,15 @@
 import pytest
 from httpx import AsyncClient
-from faker import Faker
+
 
 pytestmark = pytest.mark.asyncio
-fake = Faker()
 
 
 @pytest.mark.asyncio
-async def test_login_success(client: AsyncClient):
+async def test_login_success(client: AsyncClient, faker):
     # 1. create a user
-    email = fake.unique.email()
-    password = fake.password(length=12)
+    email = faker.unique.email()
+    password = faker.password(length=12)
     await client.post(
         "/auth/register/register", json={"email": email, "password": password}
     )
@@ -36,9 +35,9 @@ async def test_login_success(client: AsyncClient):
 
 
 @pytest.mark.asyncio
-async def test_login_bad_credentials(client: AsyncClient):
-    email = fake.unique.email()
-    password = fake.password(length=12)
+async def test_login_bad_credentials(client: AsyncClient, faker):
+    email = faker.unique.email()
+    password = faker.password(length=12)
     await client.post(
         "/auth/register/register", json={"email": email, "password": password}
     )

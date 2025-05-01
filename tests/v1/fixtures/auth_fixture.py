@@ -1,12 +1,10 @@
+import pytest_asyncio
 from httpx import AsyncClient
-from faker import Faker
 
-fake = Faker()
-
-
-async def get_access_token(client: AsyncClient) -> tuple[str, str]:
-    email = fake.unique.email()
-    password = fake.password(length=12)
+@pytest_asyncio.fixture
+async def access_token(client: AsyncClient, faker) -> str:
+    email = faker.unique.email()
+    password = faker.password(length=12)
 
     # Register user
     await client.post(
@@ -20,5 +18,4 @@ async def get_access_token(client: AsyncClient) -> tuple[str, str]:
         headers={"Content-Type": "application/x-www-form-urlencoded"},
     )
 
-    access_token = response.json()["access_token"]
-    return access_token, email
+    return response.json()["access_token"]

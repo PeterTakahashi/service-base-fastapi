@@ -1,14 +1,10 @@
 import pytest
 from httpx import AsyncClient
-from tests.v1.modules.get_access_token import get_access_token
 from tests.v1.modules.create_product import create_product
-
-pytestmark = pytest.mark.asyncio
-
+from tests.v1.common.unauthorized_response import check_unauthorized_response
 
 @pytest.mark.asyncio
-async def test_index_products_authenticated(client: AsyncClient):
-    access_token, _ = await get_access_token(client)
+async def test_index_products_authenticated(client: AsyncClient, access_token):
     await create_product(client, access_token, title="Test Product")
 
     # Get product list
@@ -23,10 +19,7 @@ async def test_index_products_authenticated(client: AsyncClient):
 
 
 @pytest.mark.asyncio
-async def test_index_products_with_title_filter(client: AsyncClient):
-    access_token, _ = await get_access_token(client)
-
-    # Create multiple products
+async def test_index_products_with_title_filter(client: AsyncClient, access_token):
     await create_product(client, access_token, title="1st Test Product Filter")
     await create_product(client, access_token, title="2nd Test Product")
 
@@ -40,9 +33,7 @@ async def test_index_products_with_title_filter(client: AsyncClient):
 
 
 @pytest.mark.asyncio
-async def test_index_products_pagination(client: AsyncClient):
-    access_token, _ = await get_access_token(client)
-
+async def test_index_products_pagination(client: AsyncClient, access_token):
     # Create 5 products
     for i in range(5):
         await create_product(client, access_token, title=f"Paginated Product {i}")
@@ -73,17 +64,5 @@ async def test_index_products_pagination(client: AsyncClient):
 
 @pytest.mark.asyncio
 async def test_index_products_unauthenticated(client: AsyncClient):
-    resp = await client.get("/products/")
-    assert resp.status_code == 401
-    assert resp.json() == {
-        "errors": [
-            {
-                "code": "unauthorized",
-                "detail": (
-                    "Authentication credentials were not provided or are invalid."
-                ),
-                "status": "401",
-                "title": "Unauthorized",
-            }
-        ]
-    }
+    response = await client.get("/products/")
+    check_unauthorized_response(response)

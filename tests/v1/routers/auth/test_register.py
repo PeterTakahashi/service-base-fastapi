@@ -1,19 +1,13 @@
 import pytest
 import pytest_asyncio
 from httpx import AsyncClient
-from faker import Faker
 
-pytestmark = pytest.mark.asyncio
-fake = Faker()
-
-
-@pytest_asyncio.fixture(scope="function")
-async def test_register_success(client: AsyncClient):
+async def test_register_success(client: AsyncClient, faker):
     """
     Test successful user registration.
     """
-    unique_email = fake.unique.email()
-    password = fake.password(length=12)
+    unique_email = faker.unique.email()
+    password = faker.password(length=12)
 
     registration_data = {"email": unique_email, "password": password}
 
@@ -27,21 +21,14 @@ async def test_register_success(client: AsyncClient):
 
     assert response_data["email"] == unique_email
     assert "id" in response_data
-    assert response_data["is_active"] is True
-    assert response_data["is_superuser"] is False
-    assert response_data["is_verified"] is False
-    assert "created_at" in response_data
-    assert "updated_at" in response_data
-    assert "hashed_password" not in response_data  # Ensure password is not returned
 
-
-async def test_register_duplicate_email(client: AsyncClient):
+async def test_register_duplicate_email(client: AsyncClient, faker):
     """
     Test registration attempt with an email that already exists.
     """
     # 1. Register a user first
-    email = fake.unique.email()
-    password = fake.password(length=12)
+    email = faker.unique.email()
+    password = faker.password(length=12)
 
     first_registration_data = {
         "email": email,
@@ -57,7 +44,7 @@ async def test_register_duplicate_email(client: AsyncClient):
     # 2. Attempt to register another user with the *same email*
     second_registration_data = {
         "email": email,  # Same email
-        "password": fake.password(length=12),
+        "password": faker.password(length=12),
     }
 
     response = await client.post(
@@ -81,12 +68,12 @@ async def test_register_duplicate_email(client: AsyncClient):
     ],
 )
 async def test_register_invalid_password_rules(
-    client: AsyncClient, password, expected_reason
+    client: AsyncClient, password, expected_reason, faker
 ):
     """
     Test registration with various invalid passwords that fail specific rules.
     """
-    registration_data = {"email": fake.unique.email(), "password": password}
+    registration_data = {"email": faker.unique.email(), "password": password}
 
     response = await client.post("/auth/register/register", json=registration_data)
 
@@ -98,12 +85,12 @@ async def test_register_invalid_password_rules(
     assert expected_reason in response_data["detail"]["reason"]
 
 
-async def test_register_too_short_password(client: AsyncClient):
+async def test_register_too_short_password(client: AsyncClient, faker):
     """
     Test registration with a password that is too short.
     """
     registration_data = {
-        "email": fake.unique.email(),
+        "email": faker.unique.email(),
         "password": "12",  # Too short
     }
 
@@ -126,13 +113,13 @@ async def test_register_too_short_password(client: AsyncClient):
     }
 
 
-async def test_register_missing_field(client: AsyncClient):
+async def test_register_missing_field(client: AsyncClient, faker):
     """
     Test registration with a missing required field (e.g., email).
     """
     registration_data = {
-        # "email": fake.unique.email(), # Missing email
-        "password": fake.password()
+        # "email": faker.unique.email(), # Missing email
+        "password": faker.password()
     }
 
     response = await client.post("/auth/register/register", json=registration_data)

@@ -3,7 +3,6 @@ from faker import Faker
 
 fake = Faker()
 
-
 async def create_product(
     client: AsyncClient, token: str, title: str | None = None
 ) -> dict:
