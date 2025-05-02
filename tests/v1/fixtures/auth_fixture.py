@@ -1,8 +1,9 @@
 import pytest_asyncio
 from httpx import AsyncClient
+from faker import Faker
 
 @pytest_asyncio.fixture
-async def access_token(client: AsyncClient, faker) -> str:
+async def access_token(client: AsyncClient, faker: Faker) -> str:
     email = faker.unique.email()
     password = faker.password(length=12)
 

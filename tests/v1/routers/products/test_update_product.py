@@ -1,30 +1,20 @@
 from httpx import AsyncClient
-from tests.v1.modules.create_product import create_product
-from uuid import uuid4
 from tests.v1.common.unauthorized_response import check_unauthorized_response
 
-async def test_update_product_success(client: AsyncClient, access_token):
-    product = await create_product(client, access_token, title="Original Title")
-    product_id = product["id"]
-
-    # Update product
-    update_resp = await client.put(
+async def test_update_product_success(auth_client: AsyncClient, product_id: str):
+    update_resp = await auth_client.put(
         f"/products/{product_id}",
-        json={"title": "Updated Title"},
-        headers={"Authorization": f"Bearer {access_token}"},
+        json={"title": "Updated Title"}
     )
     assert update_resp.status_code == 200
     data = update_resp.json()
     assert data["id"] == product_id
     assert data["title"] == "Updated Title"
 
-async def test_update_product_not_found(client: AsyncClient, access_token):
-    invalid_id = str(uuid4())
-
-    update_resp = await client.put(
-        f"/products/{invalid_id}",
+async def test_update_product_not_found(auth_client: AsyncClient, fake_id: str):
+    update_resp = await auth_client.put(
+        f"/products/{fake_id}",
         json={"title": "New Title"},
-        headers={"Authorization": f"Bearer {access_token}"},
     )
     assert update_resp.status_code == 404
     assert update_resp.json()["detail"] == {
@@ -33,26 +23,21 @@ async def test_update_product_not_found(client: AsyncClient, access_token):
                 "status": "404",
                 "code": "product_not_found",
                 "title": "Not Found",
-                "detail": f"Product with id '{invalid_id}' not found.",
+                "detail": f"Product with id '{fake_id}' not found.",
                 "source": {"pointer": "/product_id"},
             }
         ]
     }
 
 
-async def test_update_product_unauthorized(client: AsyncClient):
-    product_id = str(uuid4())
-    resp = await client.put(f"/products/{product_id}", json={"title": "Unauthorized"})
+async def test_update_product_unauthorized(client: AsyncClient, fake_id: str):
+    resp = await client.put(f"/products/{fake_id}", json={"title": "Unauthorized"})
     check_unauthorized_response(resp)
 
-async def test_update_product_empty_title(client: AsyncClient, access_token):
-    product = await create_product(client, access_token, title="Before")
-    product_id = product["id"]
-
-    resp = await client.put(
+async def test_update_product_empty_title(auth_client: AsyncClient, product_id: str):
+    resp = await auth_client.put(
         f"/products/{product_id}",
         json={"title": ""},
-        headers={"Authorization": f"Bearer {access_token}"},
     )
     assert resp.status_code == 422
     data = resp.json()
@@ -69,15 +54,12 @@ async def test_update_product_empty_title(client: AsyncClient, access_token):
     }
 
 
-async def test_update_product_title_too_long(client: AsyncClient, access_token):
-    product = await create_product(client, access_token, title="Before")
-    product_id = product["id"]
+async def test_update_product_title_too_long(auth_client: AsyncClient, product_id: str):
     long_title = "A" * 256
 
-    resp = await client.put(
+    resp = await auth_client.put(
         f"/products/{product_id}",
         json={"title": long_title},
-        headers={"Authorization": f"Bearer {access_token}"},
     )
     assert resp.status_code == 422
     data = resp.json()
@@ -94,14 +76,10 @@ async def test_update_product_title_too_long(client: AsyncClient, access_token):
     }
 
 
-async def test_update_product_missing_title(client: AsyncClient, access_token):
-    product = await create_product(client, access_token, title="Before")
-    product_id = product["id"]
-
-    resp = await client.put(
+async def test_update_product_missing_title(auth_client: AsyncClient, product_id: str):
+    resp = await auth_client.put(
         f"/products/{product_id}",
         json={},  # no title provided
-        headers={"Authorization": f"Bearer {access_token}"},
     )
     assert resp.status_code == 422
     data = resp.json()
