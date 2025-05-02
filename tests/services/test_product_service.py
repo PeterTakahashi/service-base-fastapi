@@ -2,7 +2,6 @@ import pytest
 import pytest_asyncio
 from app.v1.services.product_service import ProductService
 from app.v1.schemas.product import ProductCreate, ProductUpdate
-from uuid import uuid4
 from fastapi import HTTPException
 from app.lib.convert_id import encode_id
 

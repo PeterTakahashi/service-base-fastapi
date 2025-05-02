@@ -1,6 +1,5 @@
 import pytest_asyncio
 from app.v1.repositories.character_repository import CharacterRepository
-from uuid import uuid4
 
 @pytest_asyncio.fixture
 async def character_repository(async_session):
