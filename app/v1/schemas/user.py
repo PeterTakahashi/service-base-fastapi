@@ -8,14 +8,7 @@ class UserRead(schemas.CreateUpdateDictModel, Generic[models.ID]):
 
     id: models.ID
     email: EmailStr
-
-    if schemas.PYDANTIC_V2:  # pragma: no cover
-        model_config = ConfigDict(from_attributes=True)  # type: ignore
-    else:  # pragma: no cover
-
-        class Config:
-            orm_mode = True
-
+    model_config = ConfigDict(from_attributes=True)
 
 class UserCreate(schemas.CreateUpdateDictModel):
     email: EmailStr = Field(

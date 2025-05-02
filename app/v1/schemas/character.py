@@ -1,12 +1,8 @@
-from pydantic import BaseModel, ConfigDict
 from datetime import datetime
+from app.v1.schemas.base import HasEncodedID
 
-
-class CharacterRead(BaseModel):
-    id: int
+class CharacterRead(HasEncodedID):
     name: str
     created_at: datetime
     updated_at: datetime
     product_id: int
-
-    model_config = ConfigDict(from_attributes=True)
