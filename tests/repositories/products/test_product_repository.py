@@ -1,7 +1,7 @@
 async def test_list_products(product_repository, product):
     products = await product_repository.list_products(user_id=str(product.user.id), limit=10, offset=0)
     assert len(products) >= 1
-    assert products[0][0].title == product.title
+    assert products[0].title == product.title
 
 async def test_product_exists_true(product_repository, product):
     exists = await product_repository.product_exists(

@@ -16,14 +16,10 @@ class ProductService:
         offset: int = 0,
         title: Optional[str] = None,
     ) -> List[ProductRead]:
-        results = await self.product_repository.list_products(
+        products = await self.product_repository.list_products(
             user_id, limit, offset, title
         )
-        products = []
-        for product, episode_count in results:
-            product_dict = {**product.__dict__, "episode_count": episode_count}
-            products.append(ProductRead.model_validate(product_dict))
-        return products
+        return [ProductRead.model_validate(product) for product in products]
 
     async def create_product(self, user_id: str, data: ProductCreate) -> ProductRead:
         await self.__check_product_exists(user_id, data.title)

@@ -16,10 +16,9 @@ class ProductRepository:
         limit: int = 10,
         offset: int = 0,
         title: Optional[str] = None,
-    ) -> List[tuple[Product, int]]:
+    ) -> List[Product]:
         stmt = (
-            select(Product, func.count(Episode.id).label("episode_count"))
-            .outerjoin(Episode, Episode.product_id == Product.id)
+            select(Product)
             .where(Product.user_id == user_id, Product.deleted_at.is_(None))
             .group_by(Product.id)
             .limit(limit)
@@ -30,7 +29,7 @@ class ProductRepository:
             stmt = stmt.where(Product.title.ilike(f"%{title}%"))
 
         result = await self.session.execute(stmt)
-        return result.all()
+        return result.scalars().all()
 
     async def product_exists(self, user_id: str, title: str) -> bool:
         stmt = select(

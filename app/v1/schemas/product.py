@@ -12,7 +12,6 @@ class ProductRead(HasEncodedID):
     )
     created_at: datetime
     updated_at: datetime
-    episode_count: int = Field(0, alias="episodes_count")
 
 class ProductModify(BaseModel):
     title: str = Field(
