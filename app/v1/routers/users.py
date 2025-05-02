@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from app.core.user_setup import current_active_user
 from app.v1.schemas.user import UserRead, UserUpdate
-from app.v1.models.user import User
+from app.models.user import User
 from app.core.response_type import unauthorized_response
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.session import get_async_session

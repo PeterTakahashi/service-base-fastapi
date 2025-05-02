@@ -1,8 +1,8 @@
-"""create initial tables
+"""init
 
-Revision ID: 7b1aaa04a92d
+Revision ID: e46fc1a8e8fd
 Revises: 
-Create Date: 2025-04-27 02:02:23.254763
+Create Date: 2025-05-02 01:23:07.839099
 
 """
 from typing import Sequence, Union
@@ -10,11 +10,11 @@ from typing import Sequence, Union
 from alembic import op
 import sqlalchemy as sa
 import fastapi_users_db_sqlalchemy
-from app.v1.models.types.enum_types import EnumIntegerType
-from app.v1.models.page import StatusEnum
+from app.models.types.enum_types import EnumIntegerType
+from app.models.page import StatusEnum
 
 # revision identifiers, used by Alembic.
-revision: str = '7b1aaa04a92d'
+revision: str = 'e46fc1a8e8fd'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -35,7 +35,6 @@ def upgrade() -> None:
     op.create_index(op.f('ix_users_email'), 'users', ['email'], unique=True)
     op.create_table('products',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
-    sa.Column('display_id', fastapi_users_db_sqlalchemy.generics.GUID(), nullable=False),
     sa.Column('title', sa.String(length=255), nullable=False),
     sa.Column('user_id', fastapi_users_db_sqlalchemy.generics.GUID(), nullable=False),
     sa.Column('deleted_at', sa.DateTime(timezone=True), nullable=True),
@@ -45,11 +44,9 @@ def upgrade() -> None:
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('title', 'user_id', name='uq_title_user_id')
     )
-    op.create_index(op.f('ix_products_display_id'), 'products', ['display_id'], unique=False)
     op.create_index(op.f('ix_products_user_id'), 'products', ['user_id'], unique=False)
     op.create_table('characters',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
-    sa.Column('display_id', fastapi_users_db_sqlalchemy.generics.GUID(), nullable=False),
     sa.Column('name', sa.String(length=255), nullable=False),
     sa.Column('product_id', sa.Integer(), nullable=False),
     sa.Column('deleted_at', sa.DateTime(timezone=True), nullable=True),
@@ -59,12 +56,10 @@ def upgrade() -> None:
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('name', 'product_id', name='uq_name_product_id')
     )
-    op.create_index(op.f('ix_characters_display_id'), 'characters', ['display_id'], unique=False)
     op.create_index(op.f('ix_characters_name'), 'characters', ['name'], unique=False)
     op.create_index(op.f('ix_characters_product_id'), 'characters', ['product_id'], unique=False)
     op.create_table('episodes',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
-    sa.Column('display_id', fastapi_users_db_sqlalchemy.generics.GUID(), nullable=False),
     sa.Column('title', sa.String(length=255), nullable=False),
     sa.Column('product_id', sa.Integer(), nullable=False),
     sa.Column('deleted_at', sa.DateTime(timezone=True), nullable=True),
@@ -74,14 +69,11 @@ def upgrade() -> None:
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('title', 'product_id', name='uq_title_product_id')
     )
-    op.create_index(op.f('ix_episodes_display_id'), 'episodes', ['display_id'], unique=False)
     op.create_index(op.f('ix_episodes_product_id'), 'episodes', ['product_id'], unique=False)
     op.create_index(op.f('ix_episodes_title'), 'episodes', ['title'], unique=False)
     op.create_table('character_images',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
-    sa.Column('display_id', fastapi_users_db_sqlalchemy.generics.GUID(), nullable=False),
     sa.Column('character_id', sa.Integer(), nullable=False),
-    sa.Column('image_url', sa.String(length=255), nullable=False),
     sa.Column('deleted_at', sa.DateTime(timezone=True), nullable=True),
     sa.Column('created_at', sa.DateTime(timezone=True), nullable=False),
     sa.Column('updated_at', sa.DateTime(timezone=True), nullable=False),
@@ -89,21 +81,18 @@ def upgrade() -> None:
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_character_images_character_id'), 'character_images', ['character_id'], unique=False)
-    op.create_index(op.f('ix_character_images_display_id'), 'character_images', ['display_id'], unique=False)
     op.create_table('pages',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
-    sa.Column('display_id', fastapi_users_db_sqlalchemy.generics.GUID(), nullable=False),
     sa.Column('episode_id', sa.Integer(), nullable=False),
     sa.Column('translation_status', EnumIntegerType(StatusEnum), nullable=False),
-    sa.Column('before_changed_image_url', sa.String(length=255), nullable=False),
-    sa.Column('after_changed_image_url', sa.String(length=255), nullable=False),
+    sa.Column('before_changed_image_storage_key', sa.String(length=255), nullable=False),
+    sa.Column('after_changed_image_storage_key', sa.String(length=255), nullable=False),
     sa.Column('deleted_at', sa.DateTime(timezone=True), nullable=True),
     sa.Column('created_at', sa.DateTime(timezone=True), nullable=False),
     sa.Column('updated_at', sa.DateTime(timezone=True), nullable=False),
     sa.ForeignKeyConstraint(['episode_id'], ['episodes.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_index(op.f('ix_pages_display_id'), 'pages', ['display_id'], unique=False)
     op.create_index(op.f('ix_pages_episode_id'), 'pages', ['episode_id'], unique=False)
     # ### end Alembic commands ###
 
@@ -112,21 +101,16 @@ def downgrade() -> None:
     """Downgrade schema."""
     # ### commands auto generated by Alembic - please adjust! ###
     op.drop_index(op.f('ix_pages_episode_id'), table_name='pages')
-    op.drop_index(op.f('ix_pages_display_id'), table_name='pages')
     op.drop_table('pages')
-    op.drop_index(op.f('ix_character_images_display_id'), table_name='character_images')
     op.drop_index(op.f('ix_character_images_character_id'), table_name='character_images')
     op.drop_table('character_images')
     op.drop_index(op.f('ix_episodes_title'), table_name='episodes')
     op.drop_index(op.f('ix_episodes_product_id'), table_name='episodes')
-    op.drop_index(op.f('ix_episodes_display_id'), table_name='episodes')
     op.drop_table('episodes')
     op.drop_index(op.f('ix_characters_product_id'), table_name='characters')
     op.drop_index(op.f('ix_characters_name'), table_name='characters')
-    op.drop_index(op.f('ix_characters_display_id'), table_name='characters')
     op.drop_table('characters')
     op.drop_index(op.f('ix_products_user_id'), table_name='products')
-    op.drop_index(op.f('ix_products_display_id'), table_name='products')
     op.drop_table('products')
     op.drop_index(op.f('ix_users_email'), table_name='users')
     op.drop_table('users')

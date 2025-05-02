@@ -34,7 +34,7 @@ docker compose down -v
 create schema
 
 ```bash
-python -m scripts.reset_table
+python -m scripts.create_schema
 ```
 
 #### OpenAPI

@@ -9,6 +9,7 @@ from app.db.base import Base
 from dotenv import load_dotenv
 
 from app.core.config import settings
+from app.models import *
 
 load_dotenv()
 

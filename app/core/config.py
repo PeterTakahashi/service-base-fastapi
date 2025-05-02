@@ -9,7 +9,6 @@ else:
     dotenv_path = f".env.{env}"
 load_dotenv(dotenv_path=dotenv_path, override=True)
 
-
 class Settings(BaseSettings):
     PROJECT_NAME: str = "Manga Translator"
     DATABASE_URL: str = os.getenv("DATABASE_URL", "postgresql+asyncpg://postgres:postgres@db:5432/manga_translator_dev")
@@ -18,7 +17,8 @@ class Settings(BaseSettings):
     RESET_PASSWORD_TOKEN_SECRET: str = "SECRET"
     VERIFICATION_TOKEN_SECRET: str = "SECRET"
     JWT_SECRET: str = "SECRET"
-
+    HASHIDS_MIN_LENGTH: int = 8
+    HASHIDS_SALT: str = os.getenv("HASHIDS_SALT", "SECRET")
 
 print("Loading environment variables...")
 print(f"DATABASE_URL: {os.getenv('DATABASE_URL')}")

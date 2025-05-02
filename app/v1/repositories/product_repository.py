@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, exists
-from app.v1.models.product import Product
-from app.v1.models.episode import Episode
+from app.models.product import Product
+from app.models.episode import Episode
 from typing import Optional, List
 from datetime import datetime
 
@@ -50,9 +50,9 @@ class ProductRepository:
         await self.session.refresh(product)
         return product
 
-    async def get_product(self, user_id: str, product_display_id: str) -> Optional[Product]:
+    async def get_product(self, user_id: str, product_id: int) -> Optional[Product]:
         stmt = select(Product).where(
-            Product.display_id == product_display_id,
+            Product.id == product_id,
             Product.user_id == user_id,
             Product.deleted_at.is_(None),
         )

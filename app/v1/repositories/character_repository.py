@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, exists
-from app.v1.models.character import Character
+from app.models.character import Character
 from typing import Optional, List
 from datetime import datetime
 
@@ -44,8 +44,8 @@ class CharacterRepository:
         result = await self.session.execute(stmt)
         return result.scalar()
 
-    async def create_character(self, name: str, product_id: int, display_id: str) -> Character:
-        character = Character(name=name, product_id=product_id, display_id=display_id)
+    async def create_character(self, name: str, product_id: int) -> Character:
+        character = Character(name=name, product_id=product_id)
         self.session.add(character)
         await self.session.commit()
         await self.session.refresh(character)

@@ -29,6 +29,7 @@ dependencies = [
     "fastapi-users[sqlalchemy]>=14.0.1",
     "freetype-py>=2.5.1",
     "groq>=0.23.1",
+    "hashids>=1.3.1",
     "httpx==0.27.2",
     "huggingface-hub>=0.30.2",
     "imagehash>=4.3.2",
@@ -116,3 +117,4 @@ files = ["app", "alembic", "tests", "scripts"]
 [tool.ruff.lint.per-file-ignores]
 "tests/conftest.py" = ["F401"]
 "tests/v1/conftest.py" = ["F401"]
+"alembic/env.py" = ["F401"]

@@ -13,7 +13,7 @@ class CharacterService:
     async def list_characters_by_product(
         self,
         user_id: str,
-        product_id: str,
+        product_id: int,
         limit: int = 10,
         offset: int = 0,
         name: Optional[str] = None,
@@ -26,7 +26,7 @@ class CharacterService:
         )
         return [CharacterRead.model_validate(character) for character in characters]
 
-    async def __find_product(self, user_id: str, product_id: str):
+    async def __find_product(self, user_id: str, product_id: int):
         product = await self.product_repository.get_product(user_id, product_id)
         if not product:
             raise HTTPException(

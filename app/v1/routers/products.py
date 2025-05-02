@@ -8,6 +8,7 @@ from app.v1.repositories.product_repository import ProductRepository
 from app.v1.services.product_service import ProductService
 from app.core.response_type import not_found_response
 from uuid import UUID
+from app.lib.convert_id import decode_id
 
 router = APIRouter()
 
@@ -27,7 +28,6 @@ async def index_products(
 ):
     return await service.list_products(user.id, limit, offset, title)
 
-
 @router.post("/", response_model=ProductRead, status_code=201)
 async def create_product(
     data: ProductCreate,
@@ -36,30 +36,28 @@ async def create_product(
 ):
     return await service.create_product(user.id, data)
 
-
 @router.get("/{product_id}", response_model=ProductRead, status_code=200, responses=not_found_response("Product", "/product_id"))
 async def get_product(
     product_id: str = Path(...),
     user=Depends(current_active_user),
     service: ProductService = Depends(get_product_service),
 ):
-    return await service.get_product(user.id, product_id)
-
+    return await service.get_product(user.id, decode_id(product_id))
 
 @router.put("/{product_id}", response_model=ProductRead, status_code=200, responses=not_found_response("Product", "/product_id"))
 async def update_product(
     data: ProductUpdate,
-    product_id: UUID = Path(...),
+    product_id: str = Path(...),
     user=Depends(current_active_user),
     service: ProductService = Depends(get_product_service),
 ):
-    return await service.update_product(user.id, product_id, data)
+    return await service.update_product(user.id, decode_id(product_id), data)
 
 
 @router.delete("/{product_id}", status_code=204, responses=not_found_response("Product", "/product_id"))
 async def delete_product(
-    product_id: UUID = Path(...),
+    product_id: str = Path(...),
     user=Depends(current_active_user),
     service: ProductService = Depends(get_product_service),
 ):
-    await service.delete_product(user.id, product_id)
+    await service.delete_product(user.id, decode_id(product_id))

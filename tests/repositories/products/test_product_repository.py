@@ -1,5 +1,3 @@
-from uuid import uuid4
-
 async def test_list_products(product_repository, product):
     products = await product_repository.list_products(user_id=str(product.user.id), limit=10, offset=0)
     assert len(products) >= 1
@@ -27,14 +25,14 @@ async def test_create_product(product_repository, user):
 
 async def test_get_product_success(product_repository, product):
     fetched_product = await product_repository.get_product(
-        user_id=str(product.user.id), product_display_id=str(product.display_id)
+        user_id=str(product.user.id), product_id=product.id
     )
 
     assert fetched_product is not None
     assert fetched_product.title == product.title
 
 async def test_get_product_not_found(product_repository, user):
-    fetched_product = await product_repository.get_product(user_id=str(user.id), product_display_id=str(uuid4()))
+    fetched_product = await product_repository.get_product(user_id=str(user.id), product_id=0)
 
     assert fetched_product is None
 
@@ -50,6 +48,6 @@ async def test_soft_delete_product(product_repository, product):
 
     # 削除後に通常取得するとNoneになるはず
     fetched_product = await product_repository.get_product(
-            user_id=str(product.user.id), product_display_id=str(product.display_id)
+            user_id=str(product.user.id), product_id=product.id
         )
     assert fetched_product is None

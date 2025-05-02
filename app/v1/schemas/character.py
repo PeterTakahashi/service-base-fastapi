@@ -4,10 +4,10 @@ from datetime import datetime
 
 
 class CharacterRead(BaseModel):
-    id: UUID = Field(..., validation_alias="display_id")
+    id: UUID
     name: str
     created_at: datetime
     updated_at: datetime
-    product_id: UUID = Field(..., validation_alias="product_display_id")
+    product_id: UUID
 
     model_config = ConfigDict(from_attributes=True)

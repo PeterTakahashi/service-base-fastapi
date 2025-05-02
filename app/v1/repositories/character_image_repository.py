@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, exists
-from app.v1.models.character_image import CharacterImage
+from app.models.character_image import CharacterImage
 from typing import Optional, List
 from datetime import datetime
 

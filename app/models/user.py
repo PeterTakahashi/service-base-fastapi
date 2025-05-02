@@ -1,7 +1,7 @@
 from sqlalchemy.orm import relationship
 from fastapi_users_db_sqlalchemy import SQLAlchemyBaseUserTableUUID
 from app.db.base import Base
-from app.v1.models.product import Product
+from app.models.product import Product
 
 
 class User(SQLAlchemyBaseUserTableUUID, Base):

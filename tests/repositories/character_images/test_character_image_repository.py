@@ -32,7 +32,6 @@ async def test_create_character_image(character_image_repository, character):
         character_id=character.id
     )
     assert character_image.character_id == character.id
-    assert character_image.display_id is not None
     assert character_image.created_at is not None
     assert character_image.updated_at is not None
 
@@ -43,7 +42,7 @@ async def test_get_character_image(character_image_repository, character_image):
 
     assert fetched_character_image is not None
     assert fetched_character_image.character_id == character_image.character.id
-    assert fetched_character_image.display_id == character_image.display_id
+    assert fetched_character_image.id == character_image.id
 
 async def test_get_character_image_not_found(character_image_repository):
     fetched_character_image = await character_image_repository.get_character_image(

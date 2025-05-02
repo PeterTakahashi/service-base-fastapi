@@ -32,10 +32,10 @@ async def test_character_not_exists(character_repository, character):
     assert exists is False
 
 async def test_create_character(character_repository, product):
-    character = await character_repository.create_character(name="New Character", product_id=product.id, display_id=str(uuid4()))
+    character = await character_repository.create_character(name="New Character", product_id=product.id)
     assert character.name == "New Character"
     assert character.product_id == product.id
-    assert character.display_id is not None
+    assert character.id is not None
 
 async def test_get_character(character_repository, character):
     fetched_character = await character_repository.get_character(character_id=character.id)

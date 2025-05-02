@@ -1449,6 +1449,15 @@ wheels = [
 ]
 
 [[package]]
+name = "hashids"
+version = "1.3.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/26/a2/6f38b1de47b41ad0420047ad03b0b8cd5d6572271a3e9c2ab70e373fe63a/hashids-1.3.1.tar.gz", hash = "sha256:6c3dc775e65efc2ce2c157a65acb776d634cb814598f406469abef00ae3f635c", size = 7884, upload_time = "2020-07-26T21:47:24.138Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/6e/46/ffdf25b1f6dbb1ce588ccb818e983df9e3d30594679f5a08c865a59cead7/hashids-1.3.1-py2.py3-none-any.whl", hash = "sha256:8bddd1acba501bfc9306e7e5a99a1667f4f2cacdc20cbd70bcc5ddfa5147c94c", size = 6556, upload_time = "2020-07-26T21:47:22.41Z" },
+]
+
+[[package]]
 name = "httpcore"
 version = "1.0.9"
 source = { registry = "https://pypi.org/simple" }
@@ -2016,6 +2025,7 @@ dependencies = [
     { name = "fastapi-users-db-sqlalchemy" },
     { name = "freetype-py" },
     { name = "groq" },
+    { name = "hashids" },
     { name = "httpx" },
     { name = "huggingface-hub" },
     { name = "imagehash" },
@@ -2105,6 +2115,7 @@ requires-dist = [
     { name = "fastapi-users-db-sqlalchemy", specifier = ">=7.0.0" },
     { name = "freetype-py", specifier = ">=2.5.1" },
     { name = "groq", specifier = ">=0.23.1" },
+    { name = "hashids", specifier = ">=1.3.1" },
     { name = "httpx", specifier = "==0.27.2" },
     { name = "huggingface-hub", specifier = ">=0.30.2" },
     { name = "imagehash", specifier = ">=4.3.2" },

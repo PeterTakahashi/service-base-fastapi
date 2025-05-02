@@ -8,7 +8,6 @@ class CharacterImage(TimestampMixin, Base):
     __tablename__ = "character_images"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    display_id = Column(generics.GUID, index=True, nullable=False, unique=True, default=uuid4)
     character_id = Column(
         Integer, ForeignKey("characters.id"), nullable=False, index=True
     )

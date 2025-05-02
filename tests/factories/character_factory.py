@@ -1,4 +1,4 @@
-from app.v1.models.character import Character
+from app.models.character import Character
 from tests.factories.async_factory import AsyncSQLAlchemyModelFactory
 import factory
 from tests.factories.product_factory import ProductFactory

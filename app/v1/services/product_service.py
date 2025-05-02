@@ -3,7 +3,7 @@ from app.v1.schemas.product import ProductCreate, ProductUpdate, ProductRead
 from app.core.response_type import not_found_response_detail
 from fastapi import HTTPException
 from typing import List, Optional
-
+from app.lib.convert_id import encode_id
 
 class ProductService:
     def __init__(self, product_repository: ProductRepository):
@@ -32,12 +32,12 @@ class ProductService:
         )
         return ProductRead.model_validate(product)
 
-    async def get_product(self, user_id: str, product_id: str) -> ProductRead:
+    async def get_product(self, user_id: str, product_id: int) -> ProductRead:
         product = await self.__find_product(user_id, product_id)
         return ProductRead.model_validate(product)
 
     async def update_product(
-        self, user_id: str, product_id: str, data: ProductUpdate
+        self, user_id: str, product_id: int, data: ProductUpdate
     ) -> ProductRead:
         await self.__check_product_exists(user_id, data.title)
         product = await self.__find_product(user_id, product_id)
@@ -46,16 +46,16 @@ class ProductService:
         )
         return ProductRead.model_validate(updated_product)
 
-    async def delete_product(self, user_id: str, product_id: str):
+    async def delete_product(self, user_id: str, product_id: int):
         product = await self.__find_product(user_id, product_id)
         await self.product_repository.soft_delete_product(product)
 
-    async def __find_product(self, user_id: str, product_id: str):
+    async def __find_product(self, user_id: str, product_id: int):
         product = await self.product_repository.get_product(user_id, product_id)
         if not product:
             raise HTTPException(
                 status_code=404,
-                detail=not_found_response_detail("Product", "/product_id", product_id),
+                detail=not_found_response_detail("Product", "/product_id", encode_id(product_id)),
             )
         return product
 
