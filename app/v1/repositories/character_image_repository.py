@@ -60,6 +60,13 @@ class CharacterImageRepository:
         result = await self.session.execute(stmt)
         return result.scalar_one_or_none()
 
+    async def update_character_image_storage_key(
+        self, character_image: CharacterImage, storage_key: str
+    ) -> CharacterImage:
+        character_image.storage_key = storage_key
+        await self.session.commit()
+        return character_image
+
     async def soft_delete_character_image(self, character_image: CharacterImage) -> None:
         character_image.deleted_at = datetime.utcnow()
         await self.session.commit()

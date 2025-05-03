@@ -51,6 +51,16 @@ async def test_get_character_image_not_found(character_image_repository):
 
     assert fetched_character_image is None
 
+async def test_update_character_image_storage_key(
+    character_image_repository, character_image
+):
+    updated_character_image = await character_image_repository.update_character_image_storage_key(
+        character_image=character_image, storage_key="new_storage_key"
+    )
+
+    assert updated_character_image.storage_key == "new_storage_key"
+    assert updated_character_image.updated_at is not None
+
 async def test_soft_delete_character_image(character_image_repository, character_image):
     await character_image_repository.soft_delete_character_image(character_image)
 

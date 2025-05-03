@@ -19,6 +19,10 @@ class Settings(BaseSettings):
     JWT_SECRET: str = "SECRET"
     HASHIDS_MIN_LENGTH: int = 8
     HASHIDS_SALT: str = os.getenv("HASHIDS_SALT", "SECRET")
+    S3_ENDPOINT: str = os.getenv("S3_ENDPOINT", "https://s3.amazonaws.com")
+    S3_ACCESS_KEY: str = os.getenv("S3_ACCESS_KEY", "admin")
+    S3_SECRET_KEY: str = os.getenv("S3_SECRET_KEY", "password")
+    S3_BUCKET_NAME: str = os.getenv("S3_BUCKET_NAME", "manga-translator-dev")
 
 print("Loading environment variables...")
 print(f"DATABASE_URL: {os.getenv('DATABASE_URL')}")
