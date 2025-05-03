@@ -6,7 +6,7 @@ from app.v1.repositories.character_image_repository import CharacterImageReposit
 from app.v1.schemas.character import CharacterRead
 from app.v1.schemas.character_image import CharacterImageRead
 from app.core.response_type import not_found_response_detail
-from app.core.s3 import generate_s3_object_key, upload_file_to_s3, generate_presigned_url
+from app.core.s3 import generate_s3_storage_key, upload_file_to_s3, generate_presigned_url
 from app.lib.convert_id import encode_id
 
 
@@ -106,7 +106,7 @@ class CharacterService:
             )
 
             # 2) S3にアップするためのオブジェクトキーを生成
-            object_key = generate_s3_object_key(
+            storage_key = generate_s3_storage_key(
                 "character_images",
                 encode_id(character_image.id),
                 "image",
@@ -114,12 +114,12 @@ class CharacterService:
             )
 
             # 3) S3へアップロード
-            upload_file_to_s3(file, object_key)
+            upload_file_to_s3(file, storage_key)
 
             # 4) character_image レコードを更新
-            await self.character_image_repository.update_character_image_storage_key(
-                character_image, object_key
+            character_image = await self.character_image_repository.update_character_image_storage_key(
+                character_image, storage_key
             )
-            character_image_read = CharacterImageRead.model_validate({ "id": character_image.id,"image_url": generate_presigned_url(object_key) })
+            character_image_read = CharacterImageRead.model_validate(character_image)
             character_read.character_images.append(character_image_read)
         return character_read
