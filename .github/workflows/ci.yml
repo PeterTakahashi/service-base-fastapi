@@ -5,6 +5,7 @@ on:
     branches: [main, develop]
   pull_request:
     branches: [main, develop]
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -21,13 +22,18 @@ jobs:
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
+
       minio:
         image: minio/minio
-        ports:
-          - 9000:9000
         env:
           MINIO_ROOT_USER: admin
           MINIO_ROOT_PASSWORD: password
+        ports:
+          - 9000:9000
+          - 9090:9090
+        options: >-
+          --entrypoint /bin/sh
+          -c "minio server /data --console-address :9090"
 
     steps:
       - uses: actions/checkout@v3
@@ -36,26 +42,10 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y curl g++ wget ffmpeg libsm6 libxext6 gimp libvulkan1 cargo libpq-dev
+          # (省略) ここ以降はすでにある手順
           curl -LsSf https://astral.sh/uv/install.sh | env UV_INSTALL_DIR="$HOME/.local/bin" sh
           echo "PATH=$HOME/.local/bin:$PATH" >> $GITHUB_ENV
-      - name: Init MinIO buckets
-        run: |
-          curl -O https://dl.min.io/client/mc/release/linux-amd64/mc
-          chmod +x mc
 
-          # MinIO の起動を待機
-          echo "Waiting for MinIO to be ready..."
-          for i in {1..10}; do
-            if curl -s http://localhost:9000/minio/health/ready > /dev/null; then
-              echo "MinIO is ready!"
-              break
-            fi
-            echo "Waiting for MinIO..."
-            sleep 3
-          done
-
-          ./mc alias set local http://localhost:9000 admin password
-          ./mc mb local/manga-translator-test
       - name: Install dependencies
         run: |
           uv python install 3.10.16
@@ -69,43 +59,69 @@ jobs:
             echo "Waiting for postgres..."
             sleep 1
           done
+
       - name: Execute init.sql
         run: |
           PGPASSWORD=postgres psql -h localhost -U postgres -f ./docker/init.sql
+
       - name: Load .env.ci
         run: |
           cp .env.ci .env.test
+
       - name: Run database migrations
         run: |
           ls -la
           echo "Running migrations..."
           source .venv/bin/activate
           ENV=test alembic upgrade head
+
+      - name: Wait for MinIO to be ready
+        run: |
+          until [ "$(curl -s -o /dev/null -w ''%{http_code}'' http://127.0.0.1:9000/minio/health/live)" = "200" ]; do
+            echo "Waiting for minio..."
+            sleep 1
+          done
+          echo "MinIO is ready!"
+
+      - name: Setup MinIO buckets
+        run: |
+          # mc (minio client) は Docker から単発で呼び出す例
+          # ※ もしローカルにインストール済なら適宜変更してください
+          docker run --network host --entrypoint sh --rm minio/mc -c "
+            mc alias set local http://127.0.0.1:9000 admin password &&
+            mc mb local/manga-translator-dev &&
+            mc mb local/manga-translator-test
+          "
+
       - name: Test with coverage
         run: |
           source .venv/bin/activate
           pytest --cov=app --cov-report=term-missing --cov-report=html
         timeout-minutes: 5
+
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: htmlcov/
+
       - name: Lint *.py files
+        if: always()
+        continue-on-error: true
         run: |
           source .venv/bin/activate
           pylint $(git ls-files '*.py')
-        if: always()
-        continue-on-error: true # to not fail CI on lint errors
+
       - name: Ruff *.py files
+        if: always()
+        continue-on-error: true
         run: |
           source .venv/bin/activate
           ruff check .
-        if: always()
-        continue-on-error: true # to not fail CI on lint errors
+
       - name: mypy
+        if: always()
+        continue-on-error: true
         run: |
           source .venv/bin/activate
           mypy --config-file mypy.ini .
-        if: always()
-        continue-on-error: true # to not fail CI on lint errors
