@@ -1,6 +1,16 @@
 import pytest_asyncio
+from app.v1.services.product_service import ProductService
+from app.v1.services.character_service import CharacterService
+from app.v1.services.user_service import UserService
 
 @pytest_asyncio.fixture
 async def character_service(product_repository, character_repository, character_image_repository):
-    from app.v1.services.character_service import CharacterService
     return CharacterService(product_repository, character_repository, character_image_repository)
+
+@pytest_asyncio.fixture
+async def product_service(product_repository):
+    return ProductService(product_repository)
+
+@pytest_asyncio.fixture
+async def user_service(user_repository):
+    return UserService(user_repository)
