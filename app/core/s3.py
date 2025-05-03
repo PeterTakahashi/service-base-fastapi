@@ -1,6 +1,5 @@
 import boto3
 from fastapi import UploadFile
-import os
 from app.core.config import settings
 
 s3 = boto3.client(
