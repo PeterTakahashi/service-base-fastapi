@@ -1,12 +1,14 @@
 from pydantic import BaseModel, Field, field_serializer, ConfigDict
 from app.lib.convert_id import encode_id
 
+IDField = Field(
+    ...,
+    json_schema_extra={"example": "jAg2Dqn1"},
+    description="The ID of the object",
+)
+
 class HasEncodedID(BaseModel):
-    id: int = Field(
-        ...,
-        json_schema_extra={"example": "jAg2Dqn1"},
-        description="The ID of the object",
-    )
+    id: int = IDField
 
     @field_serializer("id")
     def serialize_id(self, value: int) -> str:
