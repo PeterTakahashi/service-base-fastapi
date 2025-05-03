@@ -37,14 +37,14 @@ async def test_create_character(character_repository, product):
     assert character.id is not None
 
 async def test_get_character(character_repository, character):
-    fetched_character = await character_repository.get_character(character_id=character.id)
+    fetched_character = await character_repository.get_character(product_id=character.product.id, character_id=character.id)
 
     assert fetched_character is not None
     assert fetched_character.name == character.name
     assert fetched_character.product_id == character.product.id
 
 async def test_get_character_not_found(character_repository):
-    fetched_character = await character_repository.get_character(character_id=99999999)
+    fetched_character = await character_repository.get_character(product_id=9999999, character_id=99999999)
 
     assert fetched_character is None
 
@@ -57,5 +57,5 @@ async def test_update_character(character_repository, character):
 async def test_soft_delete_character(character_repository, character):
     await character_repository.soft_delete_character(character)
 
-    fetched_character = await character_repository.get_character(character_id=character.id)
+    fetched_character = await character_repository.get_character(product_id=character.product.id, character_id=character.id)
     assert fetched_character is None

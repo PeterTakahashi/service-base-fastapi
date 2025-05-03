@@ -23,6 +23,17 @@ async def character(async_session, product):
     return character
 
 @pytest_asyncio.fixture
+async def character_with_character_images(async_session, product):
+    CharacterFactory._meta.session = async_session
+    CharacterImageFactory._meta.session = async_session
+    character = await CharacterFactory.create(product=product)
+    character_image_1 = await CharacterImageFactory.create(character=character)
+    character_image_2 = await CharacterImageFactory.create(character=character)
+    # Explicitly load the relationship to avoid lazy loading
+    await async_session.refresh(character, ["character_images"])
+    return character
+
+@pytest_asyncio.fixture
 async def character_image(async_session, character):
     CharacterImageFactory._meta.session = async_session
     character_image = await CharacterImageFactory.create(character=character)

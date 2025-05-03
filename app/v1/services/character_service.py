@@ -5,6 +5,7 @@ from app.v1.repositories.product_repository import ProductRepository
 from app.v1.repositories.character_image_repository import CharacterImageRepository
 from app.v1.schemas.character import CharacterRead
 from app.v1.schemas.character_image import CharacterImageRead
+from app.models.character import Character
 from app.core.response_type import not_found_response_detail
 from app.core.s3 import generate_s3_storage_key, upload_file_to_s3, generate_presigned_url
 from app.lib.convert_id import encode_id
@@ -36,6 +37,10 @@ class CharacterService:
             product.id, limit, offset, name, sort_by, sort_order
         )
         return [CharacterRead.model_validate(character) for character in characters]
+
+    async def get_character(self, user_id: str, product_id: int, character_id: int) -> CharacterRead:
+        character = await self.__find_character(user_id, product_id, character_id)
+        return CharacterRead.model_validate(character)
 
     # ここから追加: キャラクター + 複数画像を一度に作成する例
     async def create_character(
@@ -95,6 +100,18 @@ class CharacterService:
                 detail=not_found_response_detail("Product", "/product_id", product_id),
             )
         return product
+
+    async def __find_character(
+        self, user_id: str, product_id: int, character_id: int
+    ) -> Character:
+        product = await self.__find_product(user_id, product_id)
+        character = await self.character_repository.get_character(product.id, character_id)
+        if not character:
+            raise HTTPException(
+                status_code=404,
+                detail=not_found_response_detail("Character", "/character_id", character_id),
+            )
+        return character
 
     async def __attach_images_to_character(
         self, character_read: CharacterRead, image_files: List[UploadFile]

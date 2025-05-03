@@ -9,4 +9,4 @@ class CharacterRead(HasEncodedID):
     created_at: datetime
     updated_at: datetime
     product_id: int
-    character_images: List[CharacterImageRead] = Field(default_factory=list)
+    character_images: List[CharacterImageRead]

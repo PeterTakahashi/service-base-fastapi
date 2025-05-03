@@ -3,6 +3,7 @@ from sqlalchemy import select, exists
 from app.models.character import Character
 from typing import Optional, List
 from datetime import datetime
+from sqlalchemy.orm import selectinload
 
 class CharacterRepository:
     def __init__(self, session: AsyncSession):
@@ -51,11 +52,12 @@ class CharacterRepository:
         await self.session.refresh(character)
         return character
 
-    async def get_character(self, character_id: int) -> Optional[Character]:
+    async def get_character(self, product_id: int, character_id: int) -> Optional[Character]:
         stmt = select(Character).where(
+            Character.product_id == product_id,
             Character.id == character_id,
             Character.deleted_at.is_(None),
-        )
+        ).options(selectinload(Character.character_images))
         result = await self.session.execute(stmt)
         return result.scalar_one_or_none()
 
