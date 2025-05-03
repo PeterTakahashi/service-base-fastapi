@@ -23,20 +23,25 @@ jobs:
           --health-timeout=5s
           --health-retries=5
 
-      minio:
-        image: minio/minio
-        env:
-          MINIO_ROOT_USER: admin
-          MINIO_ROOT_PASSWORD: password
-        ports:
-          - 9000:9000
-          - 9090:9090
-        options: >-
-          --entrypoint /bin/sh
-          -c "minio server /data --console-address :9090"
-
     steps:
       - uses: actions/checkout@v3
+      - name: Install MinIO
+        run: |
+          wget https://dl.min.io/server/minio/release/linux-amd64/minio
+          chmod +x minio
+          sudo mv minio /usr/local/bin
+
+      - name: Start MinIO in background
+        run: |
+          nohup minio server /tmp/minio-data --console-address ":9001" >minio.log 2>&1 &
+
+      - name: Wait for MinIO to be ready
+        run: |
+          until [ "$(curl -s -o /dev/null -w ''%{http_code}'' http://127.0.0.1:9000/minio/health/live)" = "200" ]; do
+            echo "Waiting for minio..."
+            sleep 1
+          done
+          echo "MinIO is ready!"
 
       - name: Setup environment
         run: |
