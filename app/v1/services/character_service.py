@@ -5,7 +5,6 @@ from app.v1.repositories.product_repository import ProductRepository
 from app.v1.repositories.character_image_repository import CharacterImageRepository
 from app.v1.schemas.character import CharacterRead
 from app.v1.schemas.character_image import CharacterImageRead
-from app.models.character import Character
 from app.core.response_type import not_found_response_detail
 from app.core.s3 import generate_s3_object_key, upload_file_to_s3, generate_presigned_url
 from app.lib.convert_id import encode_id
