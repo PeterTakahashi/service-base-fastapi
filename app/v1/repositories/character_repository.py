@@ -43,7 +43,7 @@ class CharacterRepository:
             )
         )
         result = await self.session.execute(stmt)
-        return result.scalar()
+        return bool(result.scalar())
 
     async def create_character(self, name: str, product_id: int) -> Character:
         character = Character(name=name, product_id=product_id)

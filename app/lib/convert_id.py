@@ -1,4 +1,4 @@
-from hashids import Hashids
+from hashids import Hashids # type: ignore[import]
 from app.core.config import settings
 
 hashids = Hashids(
@@ -17,6 +17,7 @@ def decode_id(hashid: str) -> int:
     Decode a hashid string to an integer ID.
     """
     decoded = hashids.decode(hashid)
-    if decoded:
+    if not decoded:
+        raise ValueError(f"Invalid hashid: {hashid}")
+    else:
         return decoded[0]
-    return None

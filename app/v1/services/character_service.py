@@ -95,7 +95,7 @@ class CharacterService:
             # 2) S3にアップするためのオブジェクトキーを生成
             storage_key = generate_s3_storage_key(
                 "character_images",
-                encode_id(character_image.id),
+                encode_id(int(character_image.id)),
                 "image",
                 extension=file.filename.split(".")[-1] if "." in file.filename else "jpg",
             )

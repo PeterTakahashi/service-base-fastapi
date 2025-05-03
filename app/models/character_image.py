@@ -1,6 +1,7 @@
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 from app.db.base import Base, TimestampMixin
+from typing import Optional
 
 class CharacterImage(TimestampMixin, Base):
     __tablename__ = "character_images"
@@ -9,6 +10,6 @@ class CharacterImage(TimestampMixin, Base):
     character_id = Column(
         Integer, ForeignKey("characters.id"), nullable=False, index=True
     )
-    storage_key = Column(String(255), nullable=True)
+    storage_key: Optional[str] = Column(String(255), nullable=True)
 
     character = relationship("Character", back_populates="character_images")

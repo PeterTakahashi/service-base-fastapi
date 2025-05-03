@@ -64,3 +64,5 @@ class ProductService:
                     "Product", "/title", title
                 ),
             )
+        else:
+            return False

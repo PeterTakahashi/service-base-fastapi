@@ -39,7 +39,7 @@ class ProductRepository:
             )
         )
         result = await self.session.execute(stmt)
-        return result.scalar()
+        return bool(result.scalar())
 
     async def create_product(self, title: str, user_id: str) -> Product:
         product = Product(title=title, user_id=user_id)
