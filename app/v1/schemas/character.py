@@ -2,7 +2,6 @@ from datetime import datetime
 from app.v1.schemas.base import HasEncodedID
 from .character_image import CharacterImageRead
 from typing import List
-from pydantic import Field
 
 class CharacterRead(HasEncodedID):
     name: str

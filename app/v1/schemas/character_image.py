@@ -1,6 +1,7 @@
 from typing import Optional
 from app.v1.schemas.base import HasEncodedID
 from pydantic import field_serializer
+from app.core.s3 import generate_presigned_url
 
 class CharacterImageRead(HasEncodedID):
     image_url: Optional[str] = ""

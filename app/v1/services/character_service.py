@@ -7,7 +7,7 @@ from app.v1.schemas.character import CharacterRead
 from app.v1.schemas.character_image import CharacterImageRead
 from app.models.character import Character
 from app.core.response_type import not_found_response_detail
-from app.core.s3 import generate_s3_storage_key, upload_file_to_s3, generate_presigned_url
+from app.core.s3 import generate_s3_storage_key, upload_file_to_s3
 from app.lib.convert_id import encode_id
 
 
@@ -48,7 +48,7 @@ class CharacterService:
         user_id: str,
         product_id: int,
         name: str,
-        image_files: List[UploadFile],  # 複数画像を受け取る
+        character_image_files: List[UploadFile],  # 複数画像を受け取る
     ) -> CharacterRead:
         # 1) user_id が所有する product が存在するかチェック
         product = await self.__find_product(user_id, product_id)
@@ -83,9 +83,9 @@ class CharacterService:
         )
 
         # 4) 複数画像を character_image として作成
-        if image_files:
+        if character_image_files:
             character_read = await self.__attach_images_to_character(
-                character_read, image_files
+                character_read, character_image_files
             )
 
         # 5) 最終的に作成した character を返す
@@ -114,9 +114,9 @@ class CharacterService:
         return character
 
     async def __attach_images_to_character(
-        self, character_read: CharacterRead, image_files: List[UploadFile]
+        self, character_read: CharacterRead, character_image_files: List[UploadFile]
     ) -> CharacterRead:
-        for file in image_files:
+        for file in character_image_files:
             # 1) character_image レコードを1件作成
             character_image = await self.character_image_repository.character_image_create(
                 character_read.id
