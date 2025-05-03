@@ -1,5 +1,6 @@
 import pytest
 from fastapi import HTTPException
+from app.lib.convert_id import encode_id
 
 async def test_get_character(character_service, product, character_with_character_images):
     character = character_with_character_images
@@ -32,7 +33,7 @@ async def test_get_character_not_found_by_product_id(character_service, user):
                 'status': '404',
                 'code': 'product_not_found',
                 'title': 'Not Found',
-                'detail': "Product with id '0' not found.",
+                'detail': f"Product with id '{encode_id(0)}' not found.",
                 'source': {
                     'pointer': '/product_id'
                 }
@@ -55,7 +56,7 @@ async def test_get_character_not_found_by_character_id(character_service, produc
                 'status': '404',
                 'code': 'character_not_found',
                 'title': 'Not Found',
-                'detail': "Character with id '0' not found.",
+                'detail': f"Character with id '{encode_id(0)}' not found.",
                 'source': {
                     'pointer': '/character_id'
                 }

@@ -60,21 +60,14 @@ class CharacterService:
             product_id=character.product_id,
             character_images=[]
         )
-
-        if character_image_files:
-            character_read = await self.__attach_images_to_character(
-                character_read, character_image_files
-            )
-
-        # 5) 最終的に作成した character を返す
-        return character_read
+        return await self.__attach_images_to_character(character_read, character_image_files)
 
     async def __find_product(self, user_id: str, product_id: int):
         product = await self.product_repository.get_product(user_id, product_id)
         if not product:
             raise HTTPException(
                 status_code=404,
-                detail=not_found_response_detail("Product", "/product_id", product_id),
+                detail=not_found_response_detail("Product", "/product_id", encode_id(product_id)),
             )
         return product
 
@@ -86,7 +79,7 @@ class CharacterService:
         if not character:
             raise HTTPException(
                 status_code=404,
-                detail=not_found_response_detail("Character", "/character_id", character_id),
+                detail=not_found_response_detail("Character", "/character_id", encode_id(character_id)),
             )
         return character
 
