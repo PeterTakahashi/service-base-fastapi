@@ -42,13 +42,12 @@ class CharacterService:
         character = await self.__find_character(user_id, product_id, character_id)
         return CharacterRead.model_validate(character)
 
-    # ここから追加: キャラクター + 複数画像を一度に作成する例
     async def create_character(
         self,
         user_id: str,
         product_id: int,
         name: str,
-        character_image_files: List[UploadFile],  # 複数画像を受け取る
+        character_image_files: List[UploadFile],
     ) -> CharacterRead:
         product = await self.__find_product(user_id, product_id)
         await self.__check_character_exists(product.id, name)
@@ -70,7 +69,6 @@ class CharacterService:
         # 5) 最終的に作成した character を返す
         return character_read
 
-    # product を探して存在しなければ404を返す共通処理 (既存)
     async def __find_product(self, user_id: str, product_id: int):
         product = await self.product_repository.get_product(user_id, product_id)
         if not product:

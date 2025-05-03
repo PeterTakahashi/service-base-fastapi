@@ -1,7 +1,6 @@
 import pytest_asyncio
 from httpx import AsyncClient
 from faker import Faker
-import os
 
 @pytest_asyncio.fixture
 async def character(auth_client: AsyncClient, product_id: str, faker: Faker) -> dict:

@@ -1,28 +1,6 @@
 from starlette.datastructures import UploadFile
-import pytest_asyncio
 import pytest
 from fastapi import HTTPException
-
-@pytest_asyncio.fixture
-async def character_service(product_repository, character_repository, character_image_repository):
-    from app.v1.services.character_service import CharacterService
-    return CharacterService(product_repository, character_repository, character_image_repository)
-
-async def test_get_character(character_service, product, character_with_character_images):
-    character = character_with_character_images
-    character_read = await character_service.get_character(
-        user_id=product.user_id,
-        product_id=product.id,
-        character_id=character.id,
-    )
-
-    assert character_read.id == character.id
-    assert character_read.name == character.name
-    assert character_read.product_id == product.id
-    assert character_read.character_images[0].id == character.character_images[0].id
-    assert character_read.character_images[0].image_url is not None
-    assert character_read.character_images[1].id == character.character_images[1].id
-    assert character_read.character_images[1].image_url is not None
 
 async def test_create_character_with_real_images(character_service, product, faker):
     name = faker.name()
