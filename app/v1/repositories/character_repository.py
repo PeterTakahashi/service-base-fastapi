@@ -15,18 +15,18 @@ class CharacterRepository:
         limit: int = 10,
         offset: int = 0,
         name: Optional[str] = None,
-        sort_by: Optional[str] = "id",
-        sort_order: Optional[str] = "asc",
+        sort_by: str = "id",
+        sort_order: str = "asc",
     ) -> List[Character]:
         stmt = select(Character).where(
             Character.product_id == product_id,
-            Character.deleted_at.is_(None),
+            Character.deleted_at == None # noqa: E711,
         ).limit(limit).offset(offset)
 
         if name:
             stmt = stmt.where(Character.name.ilike(f"%{name}%"))
 
-        if sort_order.lower() == "desc":
+        if sort_order == "desc":
             stmt = stmt.order_by(getattr(Character, sort_by).desc())
         else:
             stmt = stmt.order_by(getattr(Character, sort_by).asc())
@@ -39,7 +39,7 @@ class CharacterRepository:
             exists().where(
                 Character.product_id == product_id,
                 Character.name == name,
-                Character.deleted_at.is_(None),
+                Character.deleted_at == None # noqa: E711,
             )
         )
         result = await self.session.execute(stmt)
@@ -56,7 +56,7 @@ class CharacterRepository:
         stmt = select(Character).where(
             Character.product_id == product_id,
             Character.id == character_id,
-            Character.deleted_at.is_(None),
+            Character.deleted_at == None # noqa: E711,
         ).options(selectinload(Character.character_images))
         result = await self.session.execute(stmt)
         return result.scalar_one_or_none()

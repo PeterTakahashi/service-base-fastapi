@@ -1,5 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, exists
+from sqlalchemy.sql import and_
 from app.models.product import Product
 from typing import Optional, List
 from datetime import datetime
@@ -18,7 +19,12 @@ class ProductRepository:
     ) -> List[Product]:
         stmt = (
             select(Product)
-            .where(Product.user_id == user_id, Product.deleted_at.is_(None))
+            .where(
+                and_(
+                    Product.user_id == user_id,
+                    Product.deleted_at == None # noqa: E711
+                )
+            )
             .group_by(Product.id)
             .limit(limit)
             .offset(offset)
@@ -33,9 +39,11 @@ class ProductRepository:
     async def product_exists(self, user_id: str, title: str) -> bool:
         stmt = select(
             exists().where(
-                Product.user_id == user_id,
-                Product.title == title,
-                Product.deleted_at.is_(None),
+                and_(
+                    Product.user_id == user_id,
+                    Product.title == title,
+                    Product.deleted_at == None # noqa: E711
+                )
             )
         )
         result = await self.session.execute(stmt)
@@ -50,9 +58,11 @@ class ProductRepository:
 
     async def get_product(self, user_id: str, product_id: int) -> Optional[Product]:
         stmt = select(Product).where(
-            Product.id == product_id,
-            Product.user_id == user_id,
-            Product.deleted_at.is_(None),
+            and_(
+                Product.id == product_id,
+                Product.user_id == user_id,
+                Product.deleted_at == None # noqa: E711
+            )
         )
         result = await self.session.execute(stmt)
         return result.scalar_one_or_none()

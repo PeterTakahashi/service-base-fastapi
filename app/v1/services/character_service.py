@@ -29,8 +29,8 @@ class CharacterService:
         limit: int = 10,
         offset: int = 0,
         name: Optional[str] = None,
-        sort_by: Optional[str] = "id",
-        sort_order: Optional[str] = "asc",
+        sort_by: str = "id",
+        sort_order: str = "asc",
     ) -> List[CharacterRead]:
         product = await self.__find_product(user_id, product_id)
         characters = await self.character_repository.list_characters_by_product(
@@ -53,11 +53,11 @@ class CharacterService:
         await self.__check_character_exists(product.id, name)
         character = await self.character_repository.create_character(name, product.id)
         character_read = CharacterRead(
-            id=character.id,
-            name=character.name,
+            id=int(character.id),
+            name=str(character.name),
             created_at=character.created_at,
             updated_at=character.updated_at,
-            product_id=character.product_id,
+            product_id=int(character.product_id),
             character_images=[]
         )
         return await self.__attach_images_to_character(character_read, character_image_files)

@@ -88,6 +88,7 @@ packages = ["app", "alembic", "tests", "scripts", "docker"]
 
 [dependency-groups]
 dev = [
+    "boto3-stubs>=1.38.8",
     "faker>=37.1.0",
     "ipykernel==6.29.5",
     "pylint==3.3.0",

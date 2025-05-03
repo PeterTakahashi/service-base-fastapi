@@ -22,7 +22,7 @@ class CharacterImageRepository:
     async def get_character_image(self, character_image_id: int) -> Optional[CharacterImage]:
         stmt = select(CharacterImage).where(
             CharacterImage.id == character_image_id,
-            CharacterImage.deleted_at.is_(None),
+            CharacterImage.deleted_at == None # noqa: E711
         )
         result = await self.session.execute(stmt)
         return result.scalar_one_or_none()
