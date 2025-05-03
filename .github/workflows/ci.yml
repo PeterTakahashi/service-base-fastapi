@@ -28,12 +28,6 @@ jobs:
         env:
           MINIO_ROOT_USER: admin
           MINIO_ROOT_PASSWORD: password
-        command: ["server", "/data", "--address", ":9000", "--console-address", ":9090"]
-        options: >-
-          --health-cmd="curl -f http://localhost:9000/minio/health/ready || exit 1"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
 
     steps:
       - uses: actions/checkout@v3
