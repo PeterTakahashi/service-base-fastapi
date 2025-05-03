@@ -9,6 +9,4 @@ class CharacterImageRead(HasEncodedID):
 
     @field_serializer("image_url")
     def serialize_image_url(self, value: Optional[str]) -> str:
-        if self.storage_key is None:
-            return ""
         return generate_presigned_url(self.storage_key)

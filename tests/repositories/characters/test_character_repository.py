@@ -20,6 +20,13 @@ async def test_list_characters_by_product_with_name_filter(character_repository,
     assert characters[0].name == character.name
     assert characters[0].product_id == product.id
 
+async def test_list_characters_sorted_by_product(character_repository, product_with_characters):
+    characters = await character_repository.list_characters_by_product(product_id=product_with_characters.id, limit=10, offset=0, sort_by="created_at", sort_order="desc")
+
+    assert len(characters) >= 2
+    assert characters[0].created_at >= characters[1].created_at
+    assert characters[0].product_id == product_with_characters.id
+
 async def test_character_exists(character_repository, character):
     exists = await character_repository.character_exists(product_id=character.product.id, name=character.name)
 

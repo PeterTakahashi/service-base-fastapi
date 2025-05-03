@@ -17,6 +17,16 @@ async def product(async_session, user):
     return product
 
 @pytest_asyncio.fixture
+async def product_with_characters(async_session, user):
+    ProductFactory._meta.session = async_session
+    CharacterFactory._meta.session = async_session
+    product = await ProductFactory.create(user=user)
+    await CharacterFactory.create(product=product)
+    await CharacterFactory.create(product=product)
+    await async_session.refresh(product, ["characters"])
+    return product
+
+@pytest_asyncio.fixture
 async def character(async_session, product):
     CharacterFactory._meta.session = async_session
     character = await CharacterFactory.create(product=product)

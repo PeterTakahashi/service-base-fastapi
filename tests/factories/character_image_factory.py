@@ -8,3 +8,4 @@ class CharacterImageFactory(AsyncSQLAlchemyModelFactory):
         model = CharacterImage
 
     character = factory.SubFactory(CharacterFactory)
+    storage_key = factory.faker.Faker("uuid4")
