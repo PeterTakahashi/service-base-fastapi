@@ -25,16 +25,22 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+
+      # MinIO バイナリのインストール
       - name: Install MinIO
         run: |
           wget https://dl.min.io/server/minio/release/linux-amd64/minio
           chmod +x minio
           sudo mv minio /usr/local/bin
 
+      # MinIO の起動 (username/passwordを環境変数で指定)
       - name: Start MinIO in background
         run: |
+          export MINIO_ROOT_USER=admin
+          export MINIO_ROOT_PASSWORD=password
           nohup minio server /tmp/minio-data --console-address ":9001" >minio.log 2>&1 &
 
+      # MinIO のヘルスチェック
       - name: Wait for MinIO to be ready
         run: |
           until [ "$(curl -s -o /dev/null -w ''%{http_code}'' http://127.0.0.1:9000/minio/health/live)" = "200" ]; do
@@ -42,6 +48,15 @@ jobs:
             sleep 1
           done
           echo "MinIO is ready!"
+
+      # MinIO Client (mc) でバケットを作成
+      - name: Setup MinIO buckets
+        run: |
+          # mc (minio client) をDockerで単発実行する例
+          docker run --network host --entrypoint sh --rm minio/mc -c "
+            mc alias set local http://127.0.0.1:9000 admin password &&
+            mc mb local/manga-translator-test
+          "
 
       - name: Setup environment
         run: |
@@ -79,24 +94,6 @@ jobs:
           echo "Running migrations..."
           source .venv/bin/activate
           ENV=test alembic upgrade head
-
-      - name: Wait for MinIO to be ready
-        run: |
-          until [ "$(curl -s -o /dev/null -w ''%{http_code}'' http://127.0.0.1:9000/minio/health/live)" = "200" ]; do
-            echo "Waiting for minio..."
-            sleep 1
-          done
-          echo "MinIO is ready!"
-
-      - name: Setup MinIO buckets
-        run: |
-          # mc (minio client) は Docker から単発で呼び出す例
-          # ※ もしローカルにインストール済なら適宜変更してください
-          docker run --network host --entrypoint sh --rm minio/mc -c "
-            mc alias set local http://127.0.0.1:9000 admin password &&
-            mc mb local/manga-translator-dev &&
-            mc mb local/manga-translator-test
-          "
 
       - name: Test with coverage
         run: |
