@@ -7,7 +7,7 @@ from app.v1.repositories.product_repository import ProductRepository
 from app.v1.repositories.character_repository import CharacterRepository
 from app.v1.repositories.character_image_repository import CharacterImageRepository
 from app.v1.services.character_service import CharacterService
-from app.core.response_type import not_found_response
+from app.core.response_type import not_found_response, conflict_response
 from app.lib.convert_id import decode_id
 from typing import List
 
@@ -35,7 +35,7 @@ def get_character_service(
 # ):
 #     return await service.list_characters(user.id, limit, offset, title)
 
-@router.post("/", response_model=CharacterRead, status_code=201)
+@router.post("/", response_model=CharacterRead, status_code=201, responses=conflict_response("Character", "/name"))
 async def create_character(
     product_id: str = Path(...),
     name: str = Form(...),

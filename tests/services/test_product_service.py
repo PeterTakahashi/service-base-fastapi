@@ -66,7 +66,7 @@ async def test_create_product_already_exists(product_service, product):
                 "status": "409",
                 "code": "product_already_exists",
                 "title": "Conflict",
-                "detail": f"Product with title '{product.title}' already exists.",
+                "detail": f"Product with /title '{product.title}' already exists.",
                 "source": {"pointer": "/title"},
             }
         ]
@@ -121,7 +121,7 @@ async def test_update_product_already_exists(product_service, product):
                 "status": "409",
                 "code": "product_already_exists",
                 "title": "Conflict",
-                "detail": f"Product with title '{existing_product.title}' already exists.",
+                "detail": f"Product with /title '{existing_product.title}' already exists.",
                 "source": {"pointer": "/title"},
             }
         ]

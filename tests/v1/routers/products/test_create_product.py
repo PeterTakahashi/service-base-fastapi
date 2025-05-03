@@ -14,12 +14,12 @@ async def test_create_product_unauthorized(client: AsyncClient):
 async def test_create_product_duplicate_title(auth_client: AsyncClient, product: dict, product_id: str):
     title = product["title"]
 
-    resp2 = await auth_client.post(
+    response = await auth_client.post(
         "/products/",
         json={"title": title}
     )
-    assert resp2.status_code == 409
-    data = resp2.json()
+    assert response.status_code == 409
+    data = response.json()
     assert data == {
         "detail": {
             "errors": [
@@ -27,7 +27,7 @@ async def test_create_product_duplicate_title(auth_client: AsyncClient, product:
                     "status": "409",
                     "code": "product_already_exists",
                     "title": "Conflict",
-                    "detail": f"Product with title '{title}' already exists.",
+                    "detail": f"Product with /title '{title}' already exists.",
                     "source": {"pointer": "/title"},
                 }
             ]

@@ -45,7 +45,6 @@ def not_found_response(model_name: str, pointer: str):
         }
     }
 
-
 def not_found_response_detail(model_name: str, pointer: str, target_id: str):
     return {
         "errors": [
@@ -54,6 +53,36 @@ def not_found_response_detail(model_name: str, pointer: str, target_id: str):
                 "code": f"{camel_to_snake(model_name)}_not_found",
                 "title": "Not Found",
                 "detail": f"{model_name} with id '{target_id}' not found.",
+                "source": {"pointer": pointer},
+            }
+        ]
+    }
+
+def conflict_response(model_name: str, pointer: str):
+    return {
+        409: {
+            "description": f"{model_name} already exists.",
+            "model": ErrorResponse,
+            "content": {
+                "application/json": {
+                    "example": conflict_response_detail(
+                        model_name, pointer, "123e4567-e89b-12d3-a456-426614174000"
+                    ),
+                }
+            },
+        }
+    }
+
+def conflict_response_detail(
+    model_name: str, pointer: str, value: str
+):
+    return {
+        "errors": [
+            {
+                "status": "409",
+                "code": f"{camel_to_snake(model_name)}_already_exists",
+                "title": "Conflict",
+                "detail": f"{model_name} with {pointer} '{value}' already exists.",
                 "source": {"pointer": pointer},
             }
         ]

@@ -1,6 +1,6 @@
 from app.v1.repositories.product_repository import ProductRepository
 from app.v1.schemas.product import ProductCreate, ProductUpdate, ProductRead
-from app.core.response_type import not_found_response_detail
+from app.core.response_type import not_found_response_detail, conflict_response_detail
 from fastapi import HTTPException
 from typing import List, Optional
 from app.lib.convert_id import encode_id
@@ -60,15 +60,7 @@ class ProductService:
         if exists:
             raise HTTPException(
                 status_code=409,
-                detail={
-                    "errors": [
-                        {
-                            "status": "409",
-                            "code": "product_already_exists",
-                            "title": "Conflict",
-                            "detail": f"Product with title '{title}' already exists.",
-                            "source": {"pointer": "/title"},
-                        }
-                    ]
-                },
+                detail=conflict_response_detail(
+                    "Product", "/title", title
+                ),
             )

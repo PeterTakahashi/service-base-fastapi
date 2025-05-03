@@ -1,5 +1,7 @@
 from starlette.datastructures import UploadFile
 import pytest_asyncio
+import pytest
+from fastapi import HTTPException
 
 @pytest_asyncio.fixture
 async def character_service(product_repository, character_repository, character_image_repository):
@@ -54,3 +56,27 @@ async def test_create_character_with_real_images(character_service, product, fak
     assert character.character_images[0].image_url is not None
     assert character.character_images[1].id is not None
     assert character.character_images[1].image_url is not None
+
+async def test_create_character_already_exists(character_service, product, character_with_character_images):
+    name = character_with_character_images.name
+
+    with pytest.raises(HTTPException) as exc_info:
+        await character_service.create_character(
+            user_id=product.user_id,
+            product_id=product.id,
+            name=name,
+            character_image_files=[],
+        )
+
+    assert exc_info.value.status_code == 409
+    assert exc_info.value.detail == {
+        "errors": [
+            {
+                "status": "409",
+                "code": "character_already_exists",
+                "title": "Conflict",
+                "detail": f"Character with /name '{name}' already exists.",
+                "source": {"pointer": "/name"},
+            }
+        ]
+    }

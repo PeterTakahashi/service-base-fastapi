@@ -6,7 +6,7 @@ from app.v1.repositories.character_image_repository import CharacterImageReposit
 from app.v1.schemas.character import CharacterRead
 from app.v1.schemas.character_image import CharacterImageRead
 from app.models.character import Character
-from app.core.response_type import not_found_response_detail
+from app.core.response_type import not_found_response_detail, conflict_response_detail
 from app.core.s3 import generate_s3_storage_key, upload_file_to_s3
 from app.lib.convert_id import encode_id
 
@@ -50,29 +50,9 @@ class CharacterService:
         name: str,
         character_image_files: List[UploadFile],  # 複数画像を受け取る
     ) -> CharacterRead:
-        # 1) user_id が所有する product が存在するかチェック
         product = await self.__find_product(user_id, product_id)
-
-        # 2) キャラクター名の重複チェック（任意: 重複NGとする例）
-        if await self.character_repository.character_exists(product.id, name):
-            raise HTTPException(
-                status_code=409,
-                detail={
-                    "errors": [
-                        {
-                            "status": "409",
-                            "code": "character_already_exists",
-                            "title": "Conflict",
-                            "detail": f"Character '{name}' already exists.",
-                            "source": {"pointer": "/name"},
-                        }
-                    ]
-                },
-            )
-
-        # 3) CharacterRepositoryを用いてキャラクターを作成
+        await self.__check_character_exists(product.id, name)
         character = await self.character_repository.create_character(name, product.id)
-
         character_read = CharacterRead(
             id=character.id,
             name=character.name,
@@ -82,7 +62,6 @@ class CharacterService:
             character_images=[]
         )
 
-        # 4) 複数画像を character_image として作成
         if character_image_files:
             character_read = await self.__attach_images_to_character(
                 character_read, character_image_files
@@ -140,3 +119,13 @@ class CharacterService:
             character_image_read = CharacterImageRead.model_validate(character_image)
             character_read.character_images.append(character_image_read)
         return character_read
+
+    async def __check_character_exists(self, product_id: str, name: str) -> bool:
+        exists = await self.character_repository.character_exists(product_id, name)
+        if exists:
+            raise HTTPException(
+                status_code=409,
+                detail=conflict_response_detail(
+                    "Character", "/name", name
+                ),
+            )

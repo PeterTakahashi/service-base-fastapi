@@ -6,7 +6,7 @@ from app.core.user_setup import current_active_user
 from app.db.session import get_async_session
 from app.v1.repositories.product_repository import ProductRepository
 from app.v1.services.product_service import ProductService
-from app.core.response_type import not_found_response
+from app.core.response_type import not_found_response, conflict_response
 from app.lib.convert_id import decode_id
 
 router = APIRouter()
@@ -27,7 +27,7 @@ async def index_products(
 ):
     return await service.list_products(user.id, limit, offset, title)
 
-@router.post("/", response_model=ProductRead, status_code=201)
+@router.post("/", response_model=ProductRead, status_code=201, responses=conflict_response("Product", "/title"))
 async def create_product(
     data: ProductCreate,
     user=Depends(current_active_user),
@@ -43,7 +43,11 @@ async def get_product(
 ):
     return await service.get_product(user.id, decode_id(product_id))
 
-@router.put("/{product_id}", response_model=ProductRead, status_code=200, responses=not_found_response("Product", "/product_id"))
+@router.put("/{product_id}",
+  response_model=ProductRead,
+  status_code=200,
+  responses=(not_found_response("Product", "/product_id") | conflict_response("Product", "/title"))
+)
 async def update_product(
     data: ProductUpdate,
     product_id: str = Path(...),
