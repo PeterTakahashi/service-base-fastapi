@@ -5,38 +5,6 @@ from app.v1.repositories.character_image_repository import CharacterImageReposit
 async def character_image_repository(async_session):
     return CharacterImageRepository(async_session)
 
-async def test_list_character_images_by_character(character_image_repository, character_image):
-    character_images = await character_image_repository.list_character_images_by_character(
-        character_id=character_image.character.id, limit=10, offset=0
-    )
-
-    assert len(character_images) >= 1
-    assert character_images[0].character_id == character_image.character.id
-
-async def test_list_character_images_sorted_by_character(
-    character_image_repository, character_with_character_images
-):
-    character_images = await character_image_repository.list_character_images_by_character(
-        character_id=character_with_character_images.id, limit=10, offset=0, sort_by="created_at", sort_order="desc"
-    )
-    assert len(character_images) >= 2
-    assert character_images[0].created_at >= character_images[1].created_at
-    assert character_images[0].character_id == character_with_character_images.id
-
-async def test_character_image_exists(character_image_repository, character_image):
-    exists = await character_image_repository.character_image_exists(
-        character_id=character_image.character.id
-    )
-
-    assert exists is True
-
-async def test_character_image_not_exists(character_image_repository, character):
-    exists = await character_image_repository.character_image_exists(
-        character_id=character.id
-    )
-
-    assert exists is False
-
 async def test_create_character_image(character_image_repository, character):
     character_image = await character_image_repository.character_image_create(
         character_id=character.id

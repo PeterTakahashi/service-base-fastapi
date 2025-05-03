@@ -23,7 +23,7 @@ class Page(TimestampMixin, Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     episode_id = Column(Integer, ForeignKey("episodes.id"), nullable=False, index=True)
-    translation_status = Column(
+    translation_status: Column = Column(
         EnumIntegerType(StatusEnum), default=StatusEnum.DRAFT, nullable=False
     )
     before_changed_image_storage_key = Column(String(255), nullable=False)
