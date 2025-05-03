@@ -73,6 +73,26 @@ async def test_create_character_with_multiple_images(auth_client: AsyncClient, p
     assert resp_data["character_images"][0]["image_url"] != ""
     assert resp_data["character_images"][1]["image_url"] != ""
 
+async def test_create_character_with_no_images(auth_client: AsyncClient, product_id: str):
+    """
+    Test creating a character without any images.
+    """
+    data = {
+        "name": "NoImageCharacter"
+    }
+
+    response = await auth_client.post(
+        f"/products/{product_id}/characters/",
+        json=data,
+    )
+
+    assert response.status_code == 422, f"Expected 422, got {response.status_code}. Response: {response.text}"
+    resp_data = response.json()
+    assert resp_data == {'errors': [{
+        'status': '422', 'code': 'validation_error', 'title': 'Validation Error', 'detail': 'Field required', 'source': {'pointer': '/name'}},
+        {'status': '422', 'code': 'validation_error', 'title': 'Validation Error', 'detail': 'Field required', 'source': {'pointer': '/character_image_files'}
+    }]}
+
 async def test_create_character_unauthorized(client: AsyncClient, fake_id: str):
     """
     Test creating a character without authorization should return 401.

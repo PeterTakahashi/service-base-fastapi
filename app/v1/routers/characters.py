@@ -39,7 +39,7 @@ def get_character_service(
 async def create_character(
     product_id: str = Path(...),
     name: str = Form(...),
-    character_image_files: List[UploadFile] = File(...),
+    character_image_files: List[UploadFile] = File(..., description="List of character image files", max_items=10, min_items=1),
     user=Depends(current_active_user),
     service: CharacterService = Depends(get_character_service),
 ):
