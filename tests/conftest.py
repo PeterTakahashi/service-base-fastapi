@@ -12,6 +12,7 @@ from tests.fixtures.model_fixture import (
     product_with_characters,
     character,
     character_with_character_images,
+    character_with_soft_deleted_character_images,
     character_image,
 )
 from tests.fixtures.repository_fixture import (

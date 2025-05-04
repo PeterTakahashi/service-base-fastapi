@@ -43,3 +43,4 @@ class CharacterImageRepository:
     ) -> None:
         character_image.deleted_at = datetime.utcnow()
         await self.session.commit()
+        await self.session.refresh(character_image)

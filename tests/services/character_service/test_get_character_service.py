@@ -22,6 +22,17 @@ async def test_get_character(
     assert character_read.character_images[1].id == character.character_images[1].id
     assert character_read.character_images[1].image_url is not None
 
+async def test_get_character_and_no_image(
+    character_service, product, character_with_soft_deleted_character_images
+):
+    character = character_with_soft_deleted_character_images
+    character_read = await character_service.get_character(
+        user_id=product.user_id,
+        product_id=product.id,
+        character_id=character.id,
+    )
+
+    assert len(character_read.character_images) == 0
 
 async def test_get_character_not_found_by_product_id(character_service, user):
     with pytest.raises(HTTPException) as exc_info:

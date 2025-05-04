@@ -3,7 +3,7 @@ from tests.factories.user_factory import UserFactory
 from tests.factories.product_factory import ProductFactory
 from tests.factories.character_factory import CharacterFactory
 from tests.factories.character_image_factory import CharacterImageFactory
-
+from datetime import datetime
 
 @pytest_asyncio.fixture
 async def user(async_session):
@@ -44,6 +44,17 @@ async def character_with_character_images(async_session, product):
     character = await CharacterFactory.create(product=product)
     await CharacterImageFactory.create(character=character)
     await CharacterImageFactory.create(character=character)
+    # Explicitly load the relationship to avoid lazy loading
+    await async_session.refresh(character, ["character_images"])
+    return character
+
+@pytest_asyncio.fixture
+async def character_with_soft_deleted_character_images(async_session, product):
+    CharacterFactory._meta.session = async_session
+    CharacterImageFactory._meta.session = async_session
+    character = await CharacterFactory.create(product=product)
+    await CharacterImageFactory.create(character=character, deleted_at=datetime.utcnow())
+    await CharacterImageFactory.create(character=character, deleted_at=datetime.utcnow())
     # Explicitly load the relationship to avoid lazy loading
     await async_session.refresh(character, ["character_images"])
     return character
