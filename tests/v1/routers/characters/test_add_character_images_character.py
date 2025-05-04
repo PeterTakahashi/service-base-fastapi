@@ -29,12 +29,9 @@ async def test_add_character_images_character(
     """
     Test adding images to a character.
     """
-    # Prepare file & form data
-    data = {}
-
     response = await auth_client.put(
         f"/products/{product_id}/characters/{character_id}/add-character-images",
-        data=data,
+        data={},
         files=character_image_files,
     )
     # Close the files to avoid file descriptor leaks
@@ -60,11 +57,9 @@ async def test_add_character_images_with_no_images(
     """
     Test creating a character without any images.
     """
-    data = {}
-
     response = await auth_client.put(
         f"/products/{product_id}/characters/{character_id}/add-character-images",
-        data=data,
+        data={},
         files=[],
     )
     assert (
@@ -88,10 +83,9 @@ async def test_add_character_images_unauthorized(client: AsyncClient, fake_id: s
     """
     Test adding images to a character without authorization should return 401.
     """
-    data = {}
     response = await client.put(
         f"/products/{fake_id}/characters/{fake_id}/add-character-images",
-        data=data,
+        data={},
         files=[],
     )
 
@@ -104,10 +98,9 @@ async def test_add_character_images_not_found_product(
     """
     Test adding images to a character with a non-existent product should return 404.
     """
-    data = {}
     response = await auth_client.put(
         f"/products/{fake_id}/characters/{fake_id}/add-character-images",
-        data=data,
+        data={},
         files=character_image_files,
     )
     # Close the files to avoid file descriptor leaks
@@ -122,10 +115,9 @@ async def test_add_character_images_not_found_character(
     """
     Test adding images to a non-existent character should return 404.
     """
-    data = {}
     response = await auth_client.put(
         f"/products/{product_id}/characters/{fake_id}/add-character-images",
-        data=data,
+        data={},
         files=character_image_files,
     )
     # Close the files to avoid file descriptor leaks
@@ -143,12 +135,9 @@ async def test_add_character_images_over_max_images(
     """
     Test adding more than the maximum allowed images to a character.
     """
-    # Prepare file & form data
-    data = {}
-
     response = await auth_client.put(
         f"/products/{product_id}/characters/{character_id}/add-character-images",
-        data=data,
+        data={},
         files=over_max_character_image_files,
     )
     # Close the files to avoid file descriptor leaks
