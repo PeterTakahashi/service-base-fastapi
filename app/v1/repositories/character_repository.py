@@ -73,11 +73,7 @@ class CharacterRepository:
         result = await self.session.execute(stmt)
         return result.scalar_one_or_none()
 
-    async def update_character(
-        self,
-        character: Character,
-        data: dict
-    ) -> Character:
+    async def update_character(self, character: Character, data: dict) -> Character:
         for field, value in data.items():
             setattr(character, field, value)
         await self.session.commit()

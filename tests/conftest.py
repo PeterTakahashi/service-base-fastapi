@@ -1,3 +1,5 @@
+# pylint: disable=unused-import
+
 import asyncio
 import pytest
 import pytest_asyncio

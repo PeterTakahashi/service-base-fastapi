@@ -1,6 +1,7 @@
 import pytest
 from fastapi import HTTPException
 from app.lib.convert_id import encode_id
+from tests.common.check_error_response import check_not_found_status_code_and_detail
 
 
 async def test_get_character(
@@ -29,19 +30,13 @@ async def test_get_character_not_found_by_product_id(character_service, user):
             product_id=0,
             character_id=0,
         )
-
-    assert exc_info.value.status_code == 404
-    assert exc_info.value.detail == {
-        "errors": [
-            {
-                "status": "404",
-                "code": "product_not_found",
-                "title": "Not Found",
-                "detail": f"Product with id '{encode_id(0)}' not found.",
-                "source": {"pointer": "/product_id"},
-            }
-        ]
-    }
+    check_not_found_status_code_and_detail(
+        exc_info.value.status_code,
+        exc_info.value.detail,
+        "Product",
+        "/product_id",
+        encode_id(0),
+    )
 
 
 async def test_get_character_not_found_by_character_id(character_service, product):
@@ -51,16 +46,10 @@ async def test_get_character_not_found_by_character_id(character_service, produc
             product_id=product.id,
             character_id=0,
         )
-
-    assert exc_info.value.status_code == 404
-    assert exc_info.value.detail == {
-        "errors": [
-            {
-                "status": "404",
-                "code": "character_not_found",
-                "title": "Not Found",
-                "detail": f"Character with id '{encode_id(0)}' not found.",
-                "source": {"pointer": "/character_id"},
-            }
-        ]
-    }
+    check_not_found_status_code_and_detail(
+        exc_info.value.status_code,
+        exc_info.value.detail,
+        "Character",
+        "/character_id",
+        encode_id(0),
+    )

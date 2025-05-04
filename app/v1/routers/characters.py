@@ -45,14 +45,13 @@ def get_character_service(
     responses=conflict_response("Character", "/name"),
 )
 async def create_character(
-        product_id: str = Path(...),
-        name: str = Form(...),
-        character_image_files: List[UploadFile] = File(...,
-                                                       description="List of character image files",
-                                                       max_items=10,
-                                                       min_items=1),
-        user=Depends(current_active_user),
-        service: CharacterService = Depends(get_character_service)
+    product_id: str = Path(...),
+    name: str = Form(...),
+    character_image_files: List[UploadFile] = File(
+        ..., description="List of character image files", max_items=10, min_items=1
+    ),
+    user=Depends(current_active_user),
+    service: CharacterService = Depends(get_character_service),
 ):
     return await service.create_character(
         user.id, decode_id(product_id), name, character_image_files

@@ -55,11 +55,7 @@ class ProductRepository:
         await self.session.refresh(product)
         return product
 
-    async def get_product(
-        self,
-        user_id: str,
-        product_id: int
-    ) -> Optional[Product]:
+    async def get_product(self, user_id: str, product_id: int) -> Optional[Product]:
         stmt = select(Product).where(
             and_(
                 Product.id == product_id,

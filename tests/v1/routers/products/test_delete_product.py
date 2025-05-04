@@ -1,5 +1,8 @@
 from httpx import AsyncClient
-from tests.v1.common.unauthorized_response import check_unauthorized_response
+from tests.common.check_error_response import (
+    check_unauthorized_response,
+    check_not_found_response,
+)
 
 
 async def test_delete_product_success(auth_client: AsyncClient, product_id: str):
@@ -16,8 +19,7 @@ async def test_delete_product_success(auth_client: AsyncClient, product_id: str)
 
 async def test_delete_product_not_found(auth_client: AsyncClient, fake_id: str):
     response = await auth_client.delete(f"/products/{fake_id}")
-    assert response.status_code == 404
-    assert response.json()["detail"]["errors"][0]["code"] == "product_not_found"
+    check_not_found_response(response, "Product", "/product_id", fake_id)
 
 
 async def test_delete_product_unauthorized(client: AsyncClient, fake_id: str):

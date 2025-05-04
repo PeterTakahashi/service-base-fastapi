@@ -1,5 +1,5 @@
 from httpx import AsyncClient
-from tests.v1.common.unauthorized_response import check_unauthorized_response
+from tests.common.check_error_response import check_unauthorized_response
 
 
 async def test_get_me_authenticated(auth_client: AsyncClient):

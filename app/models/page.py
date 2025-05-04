@@ -22,11 +22,7 @@ class Page(TimestampMixin, Base):
     __tablename__ = "pages"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    episode_id = Column(
-        Integer,
-        ForeignKey("episodes.id"),
-        nullable=False,
-        index=True)
+    episode_id = Column(Integer, ForeignKey("episodes.id"), nullable=False, index=True)
     translation_status: Column = Column(
         EnumIntegerType(StatusEnum), default=StatusEnum.DRAFT, nullable=False
     )

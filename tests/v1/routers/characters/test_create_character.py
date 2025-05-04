@@ -1,5 +1,8 @@
 from httpx import AsyncClient
-from tests.v1.common.unauthorized_response import check_unauthorized_response
+from tests.common.check_error_response import (
+    check_unauthorized_response,
+    check_not_found_response,
+)
 
 
 async def test_create_character_with_single_image(
@@ -117,6 +120,16 @@ async def test_create_character_with_no_images(
             },
         ]
     }
+
+
+async def test_create_character_product_not_found(
+    auth_client: AsyncClient, fake_id: str
+):
+    """
+    Test that trying to get a character from a non-existent product returns 404.
+    """
+    response = await auth_client.get(f"/products/{fake_id}/characters/{fake_id}")
+    check_not_found_response(response, "Product", "/product_id", fake_id)
 
 
 async def test_create_character_unauthorized(client: AsyncClient, fake_id: str):

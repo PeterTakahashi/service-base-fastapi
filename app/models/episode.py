@@ -9,11 +9,7 @@ class Episode(TimestampMixin, Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     title = Column(String(255), index=True, nullable=False)
-    product_id = Column(
-        Integer,
-        ForeignKey("products.id"),
-        nullable=False,
-        index=True)
+    product_id = Column(Integer, ForeignKey("products.id"), nullable=False, index=True)
 
     pages = relationship("Page", back_populates="episode")
     product = relationship("Product", back_populates="episodes")

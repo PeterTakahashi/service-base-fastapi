@@ -11,9 +11,7 @@ from app.v1.services.user_service import UserService
 router = APIRouter()
 
 
-def get_user_service(
-    session: AsyncSession = Depends(get_async_session)
-) -> UserService:
+def get_user_service(session: AsyncSession = Depends(get_async_session)) -> UserService:
     repo = UserRepository(session)
     return UserService(repo)
 

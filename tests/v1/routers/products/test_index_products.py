@@ -1,7 +1,7 @@
 import pytest
 from httpx import AsyncClient
 from tests.v1.modules.create_product import create_product
-from tests.v1.common.unauthorized_response import check_unauthorized_response
+from tests.common.check_error_response import check_unauthorized_response
 
 
 @pytest.mark.asyncio

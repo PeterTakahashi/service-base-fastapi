@@ -9,10 +9,8 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
 
     products = relationship("Product", back_populates="user")
     episodes = relationship(
-        "Episode",
-        secondary=Product.__tablename__,
-        back_populates="user",
-        viewonly=True)
+        "Episode", secondary=Product.__tablename__, back_populates="user", viewonly=True
+    )
     characters = relationship(
         "Character",
         secondary=Product.__tablename__,

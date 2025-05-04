@@ -16,7 +16,9 @@ unauthorized_detail = {
             "code": "unauthorized",
             "title": "Unauthorized",
             "detail": "Authentication credentials were not provided or are invalid.",
-        }]}
+        }
+    ]
+}
 
 internal_server_error_detail = {
     "errors": [
@@ -38,11 +40,12 @@ def not_found_response(model_name: str, pointer: str):
             "content": {
                 "application/json": {
                     "example": not_found_response_detail(
-                        model_name,
-                        pointer,
-                        "123e4567-e89b-12d3-a456-426614174000"),
-                }},
-        }}
+                        model_name, pointer, "123e4567-e89b-12d3-a456-426614174000"
+                    ),
+                }
+            },
+        }
+    }
 
 
 def not_found_response_detail(model_name: str, pointer: str, target_id: str):
@@ -67,11 +70,12 @@ def conflict_response(model_name: str, pointer: str):
             "content": {
                 "application/json": {
                     "example": conflict_response_detail(
-                        model_name,
-                        pointer,
-                        "123e4567-e89b-12d3-a456-426614174000"),
-                }},
-        }}
+                        model_name, pointer, "123e4567-e89b-12d3-a456-426614174000"
+                    ),
+                }
+            },
+        }
+    }
 
 
 def conflict_response_detail(model_name: str, pointer: str, value: str):
@@ -82,6 +86,7 @@ def conflict_response_detail(model_name: str, pointer: str, value: str):
                 "code": f"{camel_to_snake(model_name)}_already_exists",
                 "title": "Conflict",
                 "detail": f"{model_name} with {pointer} '{value}' already exists.",
-                "source": {
-                    "pointer": pointer},
-            }]}
+                "source": {"pointer": pointer},
+            }
+        ]
+    }

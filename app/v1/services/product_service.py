@@ -22,11 +22,7 @@ class ProductService:
         )
         return [ProductRead.model_validate(product) for product in products]
 
-    async def create_product(
-        self,
-        user_id: str,
-        data: ProductCreate
-    ) -> ProductRead:
+    async def create_product(self, user_id: str, data: ProductCreate) -> ProductRead:
         await self.__check_product_exists(user_id, data.title)
         product = await self.product_repository.create_product(
             title=data.title, user_id=user_id

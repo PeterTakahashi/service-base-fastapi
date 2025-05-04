@@ -37,9 +37,7 @@ class CharacterService:
         characters = await self.character_repository.list_characters_by_product(
             product.id, limit, offset, name, sort_by, sort_order
         )
-        return [
-            CharacterRead.model_validate(character) for character in characters
-        ]
+        return [CharacterRead.model_validate(character) for character in characters]
 
     async def get_character(
         self, user_id: str, product_id: int, character_id: int
@@ -97,9 +95,8 @@ class CharacterService:
         return character
 
     async def __attach_images_to_character(
-            self,
-            character_read: CharacterRead,
-            character_image_files: List[UploadFile]) -> CharacterRead:
+        self, character_read: CharacterRead, character_image_files: List[UploadFile]
+    ) -> CharacterRead:
         for file in character_image_files:
             # 1) character_image レコードを1件作成
             character_image = (
@@ -123,13 +120,11 @@ class CharacterService:
             character_image = await self.character_image_repository.update_character_image_storage_key(
                 character_image, storage_key
             )
-            character_image_read = CharacterImageRead.model_validate(
-                character_image)
+            character_image_read = CharacterImageRead.model_validate(character_image)
             character_read.character_images.append(character_image_read)
         return character_read
 
-    async def __check_character_exists(
-            self, product_id: int, name: str) -> bool:
+    async def __check_character_exists(self, product_id: int, name: str) -> bool:
         exists = await self.character_repository.character_exists(product_id, name)
         if exists:
             raise HTTPException(

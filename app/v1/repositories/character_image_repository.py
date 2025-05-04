@@ -9,9 +9,7 @@ class CharacterImageRepository:
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def character_image_create(
-        self, character_id: int
-    ) -> CharacterImage:
+    async def character_image_create(self, character_id: int) -> CharacterImage:
         character_image = CharacterImage(
             character_id=character_id,
         )

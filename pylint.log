@@ -1,423 +1,217 @@
+************* Module tests.v1.fixtures.client_fixture
+tests/v1/fixtures/client_fixture.py:33:0: C0304: Final newline missing (missing-final-newline)
+tests/v1/fixtures/client_fixture.py:27:22: W0621: Redefining name 'client' from outer scope (line 15) (redefined-outer-name)
+
+-----------------------------------
+Your code has been rated at 8.57/10
+
+(myapp) root@02c850a716ce:/myapp# pylint tests/v1/fixtures/client_fixture.py
+************* Module tests.v1.fixtures.client_fixture
+tests/v1/fixtures/client_fixture.py:27:22: W0621: Redefining name 'client' from outer scope (line 15) (redefined-outer-name)
+
+------------------------------------------------------------------
+Your code has been rated at 9.29/10 (previous run: 8.57/10, +0.71)
+
+(myapp) root@02c850a716ce:/myapp#  pylint $(git ls-files '*.py')
 ************* Module env
-alembic/env.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-alembic/env.py:12:0: W0401: Wildcard import app.models (wildcard-import)
-alembic/env.py:20:9: E1101: Module 'alembic.context' has no 'config' member (no-member)
-alembic/env.py:53:4: E1101: Module 'alembic.context' has no 'configure' member (no-member)
-alembic/env.py:60:9: E1101: Module 'alembic.context' has no 'begin_transaction' member (no-member)
-alembic/env.py:61:8: E1101: Module 'alembic.context' has no 'run_migrations' member (no-member)
-alembic/env.py:78:8: E1101: Module 'alembic.context' has no 'configure' member (no-member)
-alembic/env.py:80:13: E1101: Module 'alembic.context' has no 'begin_transaction' member (no-member)
-alembic/env.py:81:12: E1101: Module 'alembic.context' has no 'run_migrations' member (no-member)
-alembic/env.py:84:3: E1101: Module 'alembic.context' has no 'is_offline_mode' member (no-member)
-alembic/env.py:9:0: C0411: third party import "dotenv.load_dotenv" should be placed before first party imports "alembic.context", "app.db.base.Base"  (wrong-import-order)
-alembic/env.py:11:0: C0412: Imports from package app are not grouped (ungrouped-imports)
-alembic/env.py:12:0: W0614: Unused import(s) User, Page, Episode, Character, Product and CharacterImage from wildcard import of app.models (unused-wildcard-import)
-************* Module versions.672090702e56_add_storage_key
-alembic/versions/672090702e56_add_storage_key.py:1:0: C0103: Module name "672090702e56_add_storage_key" doesn't conform to snake_case naming style (invalid-name)
-alembic/versions/672090702e56_add_storage_key.py:11:0: C0411: third party import "sqlalchemy" should be placed before first party import "alembic.op"  (wrong-import-order)
+alembic/env.py:17:0: W0611: Unused Character imported from app.models (unused-import)
+alembic/env.py:17:0: W0611: Unused CharacterImage imported from app.models (unused-import)
+alembic/env.py:17:0: W0611: Unused Episode imported from app.models (unused-import)
+alembic/env.py:17:0: W0611: Unused Page imported from app.models (unused-import)
+alembic/env.py:17:0: W0611: Unused Product imported from app.models (unused-import)
+alembic/env.py:17:0: W0611: Unused User imported from app.models (unused-import)
 ************* Module versions.e46fc1a8e8fd_init
-alembic/versions/e46fc1a8e8fd_init.py:11:0: C0411: third party import "sqlalchemy" should be placed before first party import "alembic.op"  (wrong-import-order)
-alembic/versions/e46fc1a8e8fd_init.py:12:0: C0411: third party import "fastapi_users_db_sqlalchemy" should be placed before first party import "alembic.op"  (wrong-import-order)
-************* Module app.core.auth
-app/core/auth.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+alembic/versions/e46fc1a8e8fd_init.py:13:0: C0411: third party import "sqlalchemy" should be placed before first party import "alembic.op"  (wrong-import-order)
 ************* Module app.core.config
-app/core/config.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 app/core/config.py:7:4: C0103: Constant name "dotenv_path" doesn't conform to UPPER_CASE naming style (invalid-name)
 app/core/config.py:9:4: C0103: Constant name "dotenv_path" doesn't conform to UPPER_CASE naming style (invalid-name)
-app/core/config.py:12:0: C0115: Missing class docstring (missing-class-docstring)
 app/core/config.py:2:0: C0411: standard import "os" should be placed before third party import "pydantic_settings.BaseSettings" (wrong-import-order)
 ************* Module app.core.i18n
-app/core/i18n.py:25:0: C0304: Final newline missing (missing-final-newline)
-app/core/i18n.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-app/core/i18n.py:8:4: W0602: Using global for 'messages' but no assignment is done (global-variable-not-assigned)
+app/core/i18n.py:9:4: W0602: Using global for 'messages' but no assignment is done (global-variable-not-assigned)
 app/core/i18n.py:3:0: C0411: standard import "pathlib.Path" should be placed before third party import "fastapi.Request" (wrong-import-order)
-************* Module app.core.redis
-app/core/redis.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 ************* Module app.core.response_type
-app/core/response_type.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 app/core/response_type.py:3:0: C0411: standard import "typing.Any" should be placed before first party imports "app.v1.schemas.error.ErrorResponse", "app.lib.camel_to_snake.camel_to_snake"  (wrong-import-order)
 ************* Module app.core.s3
-app/core/s3.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-app/core/s3.py:30:0: R1711: Useless return at end of function or method (useless-return)
-************* Module app.core.startup
-app/core/startup.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-************* Module app.core.user_manager
-app/core/user_manager.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-app/core/user_manager.py:12:0: C0115: Missing class docstring (missing-class-docstring)
-app/core/user_manager.py:4:0: C0411: standard import "uuid.UUID" should be placed before third party imports "fastapi_users_db_sqlalchemy.SQLAlchemyUserDatabase", "fastapi_users.BaseUserManager" and first party import "app.models.user.User"  (wrong-import-order)
-app/core/user_manager.py:6:0: C0411: third party import "fastapi.Depends" should be placed before first party imports "app.models.user.User", "app.core.config.settings"  (wrong-import-order)
-app/core/user_manager.py:8:0: C0411: standard import "typing.Union" should be placed before third party imports "fastapi_users_db_sqlalchemy.SQLAlchemyUserDatabase", "fastapi_users.BaseUserManager", "fastapi.Depends" and first party imports "app.models.user.User", "app.core.config.settings", "app.db.session.get_async_session"  (wrong-import-order)
-app/core/user_manager.py:9:0: C0411: third party import "sqlalchemy.ext.asyncio.AsyncSession" should be placed before first party imports "app.models.user.User", "app.core.config.settings", "app.db.session.get_async_session"  (wrong-import-order)
-app/core/user_manager.py:7:0: C0412: Imports from package app are not grouped (ungrouped-imports)
+app/core/s3.py:35:0: R1711: Useless return at end of function or method (useless-return)
 ************* Module app.core.user_setup
-app/core/user_setup.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 app/core/user_setup.py:5:0: C0411: standard import "uuid.UUID" should be placed before third party import "fastapi_users.FastAPIUsers" and first party imports "app.models.user.User", "app.core.auth.auth_backend", "app.core.user_manager.get_user_manager"  (wrong-import-order)
 ************* Module app.db.base
-app/db/base.py:19:0: C0304: Final newline missing (missing-final-newline)
-app/db/base.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-app/db/base.py:7:0: C0115: Missing class docstring (missing-class-docstring)
-app/db/base.py:7:0: R0903: Too few public methods (0/2) (too-few-public-methods)
+app/db/base.py:8:0: R0903: Too few public methods (0/2) (too-few-public-methods)
 app/db/base.py:3:0: C0411: standard import "datetime.datetime" should be placed before third party imports "sqlalchemy.orm.declarative_base", "sqlalchemy.DateTime" (wrong-import-order)
-************* Module app.db.session
-app/db/session.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-************* Module camel_to_snake
-app/lib/camel_to_snake.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 ************* Module convert_id
-app/lib/convert_id.py:23:0: C0304: Final newline missing (missing-final-newline)
-app/lib/convert_id.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-app/lib/convert_id.py:9:14: W0622: Redefining built-in 'id' (redefined-builtin)
-app/lib/convert_id.py:20:4: R1720: Unnecessary "else" after "raise", remove the "else" and de-indent the code inside it (no-else-raise)
-************* Module get_file_extension
-app/lib/get_file_extension.py:8:0: C0304: Final newline missing (missing-final-newline)
-app/lib/get_file_extension.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-************* Module app.models
-app/models/__init__.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+app/lib/convert_id.py:7:14: W0622: Redefining built-in 'id' (redefined-builtin)
 ************* Module app.models.character
-app/models/character.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-app/models/character.py:6:0: C0115: Missing class docstring (missing-class-docstring)
-app/models/character.py:6:0: R0903: Too few public methods (0/2) (too-few-public-methods)
+app/models/character.py:7:0: R0903: Too few public methods (0/2) (too-few-public-methods)
 ************* Module app.models.character_image
-app/models/character_image.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-app/models/character_image.py:6:0: C0115: Missing class docstring (missing-class-docstring)
-app/models/character_image.py:6:0: R0903: Too few public methods (0/2) (too-few-public-methods)
+app/models/character_image.py:7:0: R0903: Too few public methods (0/2) (too-few-public-methods)
 app/models/character_image.py:4:0: C0411: standard import "typing.Optional" should be placed before third party imports "sqlalchemy.Column", "sqlalchemy.orm.Mapped" and first party import "app.db.base.Base"  (wrong-import-order)
 ************* Module app.models.episode
-app/models/episode.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-app/models/episode.py:6:0: C0115: Missing class docstring (missing-class-docstring)
-app/models/episode.py:6:0: R0903: Too few public methods (0/2) (too-few-public-methods)
+app/models/episode.py:7:0: R0903: Too few public methods (0/2) (too-few-public-methods)
 ************* Module app.models.page
-app/models/page.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-app/models/page.py:8:0: C0115: Missing class docstring (missing-class-docstring)
-app/models/page.py:21:0: C0115: Missing class docstring (missing-class-docstring)
 app/models/page.py:21:0: R0903: Too few public methods (0/2) (too-few-public-methods)
 app/models/page.py:5:0: C0411: standard import "enum.Enum" should be placed before third party imports "sqlalchemy.Column", "sqlalchemy.orm.relationship" and first party imports "app.db.base.Base", "app.models.types.enum_types.EnumIntegerType"  (wrong-import-order)
 ************* Module app.models.product
-app/models/product.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-app/models/product.py:6:0: C0115: Missing class docstring (missing-class-docstring)
-app/models/product.py:6:0: R0903: Too few public methods (0/2) (too-few-public-methods)
+app/models/product.py:7:0: R0903: Too few public methods (0/2) (too-few-public-methods)
 app/models/product.py:4:0: C0411: third party import "fastapi_users_db_sqlalchemy.generics" should be placed before first party import "app.db.base.Base"  (wrong-import-order)
 ************* Module app.models.types.enum_types
-app/models/types/enum_types.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-app/models/types/enum_types.py:5:0: C0115: Missing class docstring (missing-class-docstring)
 app/models/types/enum_types.py:5:0: W0223: Method 'process_literal_param' is abstract in class 'TypeDecorator' but is not overridden in child class 'EnumIntegerType' (abstract-method)
 app/models/types/enum_types.py:5:0: W0223: Method 'python_type' is abstract in class 'TypeEngine' but is not overridden in child class 'EnumIntegerType' (abstract-method)
 app/models/types/enum_types.py:5:0: R0901: Too many ancestors (8/7) (too-many-ancestors)
 app/models/types/enum_types.py:14:8: R1705: Unnecessary "elif" after "return", remove the leading "el" from "elif" (no-else-return)
 app/models/types/enum_types.py:2:0: C0411: standard import "enum.Enum" should be placed before third party import "sqlalchemy.types.TypeDecorator" (wrong-import-order)
 ************* Module app.models.user
-app/models/user.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-app/models/user.py:7:0: C0115: Missing class docstring (missing-class-docstring)
 app/models/user.py:7:0: R0903: Too few public methods (0/2) (too-few-public-methods)
 ************* Module app
-app/v1/app.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 app/v1/app.py:11:0: C0411: third party import "fastapi.exceptions.RequestValidationError" should be placed before first party imports "app.v1.routers.api", "app.core.config.settings", "app.v1.openapi.custom_openapi", "app.v1.exception_handlers.http_exception_handler", "app.core.i18n.load_messages"  (wrong-import-order)
 app/v1/app.py:12:0: C0411: third party import "starlette.exceptions.HTTPException" should be placed before first party imports "app.v1.routers.api", "app.core.config.settings", "app.v1.openapi.custom_openapi", "app.v1.exception_handlers.http_exception_handler", "app.core.i18n.load_messages"  (wrong-import-order)
 app/v1/app.py:11:0: C0412: Imports from package fastapi are not grouped (ungrouped-imports)
 ************* Module exception_handlers
-app/v1/exception_handlers.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-app/v1/exception_handlers.py:29:53: W0613: Unused argument 'exc' (unused-argument)
-************* Module openapi
-app/v1/openapi.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+app/v1/exception_handlers.py:36:53: W0613: Unused argument 'exc' (unused-argument)
 ************* Module repositories.character_image_repository
-app/v1/repositories/character_image_repository.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-app/v1/repositories/character_image_repository.py:7:0: C0115: Missing class docstring (missing-class-docstring)
-app/v1/repositories/character_image_repository.py:25:12: C0121: Comparison 'CharacterImage.deleted_at == None' should be 'CharacterImage.deleted_at is None' (singleton-comparison)
+app/v1/repositories/character_image_repository.py:28:12: C0121: Comparison 'CharacterImage.deleted_at == None' should be 'CharacterImage.deleted_at is None' (singleton-comparison)
 app/v1/repositories/character_image_repository.py:4:0: C0411: standard import "typing.Optional" should be placed before third party imports "sqlalchemy.ext.asyncio.AsyncSession", "sqlalchemy.select" and first party import "app.models.character_image.CharacterImage"  (wrong-import-order)
 app/v1/repositories/character_image_repository.py:5:0: C0411: standard import "datetime.datetime" should be placed before third party imports "sqlalchemy.ext.asyncio.AsyncSession", "sqlalchemy.select" and first party import "app.models.character_image.CharacterImage"  (wrong-import-order)
 ************* Module repositories.character_repository
-app/v1/repositories/character_repository.py:73:0: C0304: Final newline missing (missing-final-newline)
-app/v1/repositories/character_repository.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-app/v1/repositories/character_repository.py:8:0: C0115: Missing class docstring (missing-class-docstring)
-app/v1/repositories/character_repository.py:12:4: R0913: Too many arguments (7/5) (too-many-arguments)
-app/v1/repositories/character_repository.py:12:4: R0917: Too many positional arguments (7/5) (too-many-positional-arguments)
-app/v1/repositories/character_repository.py:23:12: C0121: Comparison 'Character.deleted_at == None' should be 'Character.deleted_at is None' (singleton-comparison)
-app/v1/repositories/character_repository.py:42:16: C0121: Comparison 'Character.deleted_at == None' should be 'Character.deleted_at is None' (singleton-comparison)
-app/v1/repositories/character_repository.py:59:12: C0121: Comparison 'Character.deleted_at == None' should be 'Character.deleted_at is None' (singleton-comparison)
+app/v1/repositories/character_repository.py:13:4: R0913: Too many arguments (7/5) (too-many-arguments)
+app/v1/repositories/character_repository.py:13:4: R0917: Too many positional arguments (7/5) (too-many-positional-arguments)
+app/v1/repositories/character_repository.py:26:16: C0121: Comparison 'Character.deleted_at == None' should be 'Character.deleted_at is None' (singleton-comparison)
+app/v1/repositories/character_repository.py:48:16: C0121: Comparison 'Character.deleted_at == None' should be 'Character.deleted_at is None' (singleton-comparison)
+app/v1/repositories/character_repository.py:69:16: C0121: Comparison 'Character.deleted_at == None' should be 'Character.deleted_at is None' (singleton-comparison)
 app/v1/repositories/character_repository.py:4:0: C0411: standard import "typing.Optional" should be placed before third party imports "sqlalchemy.ext.asyncio.AsyncSession", "sqlalchemy.select" and first party import "app.models.character.Character"  (wrong-import-order)
 app/v1/repositories/character_repository.py:5:0: C0411: standard import "datetime.datetime" should be placed before third party imports "sqlalchemy.ext.asyncio.AsyncSession", "sqlalchemy.select" and first party import "app.models.character.Character"  (wrong-import-order)
 app/v1/repositories/character_repository.py:6:0: C0411: third party import "sqlalchemy.orm.selectinload" should be placed before first party import "app.models.character.Character"  (wrong-import-order)
 app/v1/repositories/character_repository.py:6:0: C0412: Imports from package sqlalchemy are not grouped (ungrouped-imports)
 ************* Module repositories.product_repository
-app/v1/repositories/product_repository.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-app/v1/repositories/product_repository.py:9:0: C0115: Missing class docstring (missing-class-docstring)
-app/v1/repositories/product_repository.py:25:20: C0121: Comparison 'Product.deleted_at == None' should be 'Product.deleted_at is None' (singleton-comparison)
-app/v1/repositories/product_repository.py:45:20: C0121: Comparison 'Product.deleted_at == None' should be 'Product.deleted_at is None' (singleton-comparison)
-app/v1/repositories/product_repository.py:64:16: C0121: Comparison 'Product.deleted_at == None' should be 'Product.deleted_at is None' (singleton-comparison)
+app/v1/repositories/product_repository.py:24:48: C0121: Comparison 'Product.deleted_at == None' should be 'Product.deleted_at is None' (singleton-comparison)
+app/v1/repositories/product_repository.py:44:20: C0121: Comparison 'Product.deleted_at == None' should be 'Product.deleted_at is None' (singleton-comparison)
+app/v1/repositories/product_repository.py:67:16: C0121: Comparison 'Product.deleted_at == None' should be 'Product.deleted_at is None' (singleton-comparison)
 app/v1/repositories/product_repository.py:5:0: C0411: standard import "typing.Optional" should be placed before third party imports "sqlalchemy.ext.asyncio.AsyncSession", "sqlalchemy.select", "sqlalchemy.sql.and_" and first party import "app.models.product.Product"  (wrong-import-order)
 app/v1/repositories/product_repository.py:6:0: C0411: standard import "datetime.datetime" should be placed before third party imports "sqlalchemy.ext.asyncio.AsyncSession", "sqlalchemy.select", "sqlalchemy.sql.and_" and first party import "app.models.product.Product"  (wrong-import-order)
 ************* Module repositories.user_repository
-app/v1/repositories/user_repository.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-app/v1/repositories/user_repository.py:5:0: C0115: Missing class docstring (missing-class-docstring)
 app/v1/repositories/user_repository.py:5:0: R0903: Too few public methods (1/2) (too-few-public-methods)
-************* Module routers.api
-app/v1/routers/api.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-************* Module routers.auth
-app/v1/routers/auth.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 ************* Module routers.characters
-app/v1/routers/characters.py:42:0: C0301: Line too long (128/120) (line-too-long)
-app/v1/routers/characters.py:48:0: C0301: Line too long (137/120) (line-too-long)
-app/v1/routers/characters.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 app/v1/routers/characters.py:12:0: C0411: standard import "typing.List" should be placed before third party imports "fastapi.APIRouter", "sqlalchemy.ext.asyncio.AsyncSession" and first party imports "app.v1.schemas.character.CharacterRead", "app.core.user_setup.current_active_user", "app.db.session.get_async_session" (...) "app.v1.services.character_service.CharacterService", "app.core.response_type.not_found_response", "app.lib.convert_id.decode_id"  (wrong-import-order)
 ************* Module routers.products
-app/v1/routers/products.py:38:0: C0301: Line too long (129/120) (line-too-long)
-app/v1/routers/products.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 app/v1/routers/products.py:3:0: C0411: standard import "typing.List" should be placed before third party imports "fastapi.APIRouter", "sqlalchemy.ext.asyncio.AsyncSession" (wrong-import-order)
 ************* Module routers.users
-app/v1/routers/users.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 app/v1/routers/users.py:6:0: C0411: third party import "sqlalchemy.ext.asyncio.AsyncSession" should be placed before first party imports "app.core.user_setup.current_active_user", "app.v1.schemas.user.UserRead", "app.models.user.User", "app.core.response_type.unauthorized_response"  (wrong-import-order)
 app/v1/routers/users.py:7:0: C0412: Imports from package app are not grouped (ungrouped-imports)
-************* Module schemas.base
-app/v1/schemas/base.py:17:0: C0304: Final newline missing (missing-final-newline)
-app/v1/schemas/base.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-app/v1/schemas/base.py:10:0: C0115: Missing class docstring (missing-class-docstring)
 ************* Module schemas.character
-app/v1/schemas/character.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-app/v1/schemas/character.py:8:0: C0115: Missing class docstring (missing-class-docstring)
 app/v1/schemas/character.py:4:0: C0411: standard import "typing.List" should be placed before first party import "app.v1.schemas.base.HasEncodedID" and local import "character_image.CharacterImageRead" (wrong-import-order)
 app/v1/schemas/character.py:5:0: C0411: first party import "app.lib.convert_id.encode_id" should be placed before local import "character_image.CharacterImageRead" (wrong-import-order)
 app/v1/schemas/character.py:6:0: C0411: third party import "pydantic.field_serializer" should be placed before first party imports "app.v1.schemas.base.HasEncodedID", "app.lib.convert_id.encode_id" and local import "character_image.CharacterImageRead" (wrong-import-order)
 ************* Module schemas.character_image
-app/v1/schemas/character_image.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-app/v1/schemas/character_image.py:6:0: C0115: Missing class docstring (missing-class-docstring)
-app/v1/schemas/character_image.py:11:34: W0613: Unused argument 'value' (unused-argument)
-************* Module schemas.episode
-app/v1/schemas/episode.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-app/v1/schemas/episode.py:4:0: C0115: Missing class docstring (missing-class-docstring)
+app/v1/schemas/character_image.py:12:34: W0613: Unused argument 'value' (unused-argument)
 ************* Module schemas.error
-app/v1/schemas/error.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-app/v1/schemas/error.py:5:0: C0115: Missing class docstring (missing-class-docstring)
-app/v1/schemas/error.py:9:0: C0115: Missing class docstring (missing-class-docstring)
-app/v1/schemas/error.py:17:0: C0115: Missing class docstring (missing-class-docstring)
 app/v1/schemas/error.py:2:0: C0411: standard import "typing.List" should be placed before third party import "pydantic.BaseModel" (wrong-import-order)
 ************* Module schemas.product
-app/v1/schemas/product.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-app/v1/schemas/product.py:5:0: C0115: Missing class docstring (missing-class-docstring)
-app/v1/schemas/product.py:16:0: C0115: Missing class docstring (missing-class-docstring)
-app/v1/schemas/product.py:25:0: C0115: Missing class docstring (missing-class-docstring)
-app/v1/schemas/product.py:29:0: C0115: Missing class docstring (missing-class-docstring)
 app/v1/schemas/product.py:2:0: C0411: standard import "datetime.datetime" should be placed before third party import "pydantic.BaseModel" (wrong-import-order)
 ************* Module schemas.user
-app/v1/schemas/user.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-app/v1/schemas/user.py:12:0: C0115: Missing class docstring (missing-class-docstring)
-app/v1/schemas/user.py:31:0: C0115: Missing class docstring (missing-class-docstring)
 app/v1/schemas/user.py:3:0: C0411: standard import "typing.Optional" should be placed before third party imports "fastapi_users.schemas", "pydantic.EmailStr" (wrong-import-order)
 ************* Module services.character_service
-app/v1/services/character_service.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-app/v1/services/character_service.py:14:0: C0115: Missing class docstring (missing-class-docstring)
-app/v1/services/character_service.py:25:4: R0913: Too many arguments (8/5) (too-many-arguments)
-app/v1/services/character_service.py:25:4: R0917: Too many positional arguments (8/5) (too-many-positional-arguments)
-app/v1/services/character_service.py:116:8: R1720: Unnecessary "else" after "raise", remove the "else" and de-indent the code inside it (no-else-raise)
+app/v1/services/character_service.py:26:4: R0913: Too many arguments (8/5) (too-many-arguments)
+app/v1/services/character_service.py:26:4: R0917: Too many positional arguments (8/5) (too-many-positional-arguments)
+app/v1/services/character_service.py:134:8: R1720: Unnecessary "else" after "raise", remove the "else" and de-indent the code inside it (no-else-raise)
 ************* Module services.product_service
-app/v1/services/product_service.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-app/v1/services/product_service.py:8:0: C0115: Missing class docstring (missing-class-docstring)
-app/v1/services/product_service.py:60:8: R1720: Unnecessary "else" after "raise", remove the "else" and de-indent the code inside it (no-else-raise)
+app/v1/services/product_service.py:67:8: R1720: Unnecessary "else" after "raise", remove the "else" and de-indent the code inside it (no-else-raise)
 app/v1/services/product_service.py:4:0: C0411: third party import "fastapi.HTTPException" should be placed before first party imports "app.v1.repositories.product_repository.ProductRepository", "app.v1.schemas.product.ProductCreate", "app.core.response_type.not_found_response_detail"  (wrong-import-order)
 app/v1/services/product_service.py:5:0: C0411: standard import "typing.List" should be placed before third party import "fastapi.HTTPException" and first party imports "app.v1.repositories.product_repository.ProductRepository", "app.v1.schemas.product.ProductCreate", "app.core.response_type.not_found_response_detail"  (wrong-import-order)
 app/v1/services/product_service.py:6:0: C0412: Imports from package app are not grouped (ungrouped-imports)
-************* Module services.user_service
-app/v1/services/user_service.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-app/v1/services/user_service.py:6:0: C0115: Missing class docstring (missing-class-docstring)
-************* Module main
-main.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-************* Module create_schema
-scripts/create_schema.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-scripts/create_schema.py:19:4: R1722: Consider using 'sys.exit' instead (consider-using-sys-exit)
-scripts/create_schema.py:26:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
-scripts/create_schema.py:36:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
-scripts/create_schema.py:39:20: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
-scripts/create_schema.py:62:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module scripts.create_schema
+scripts/create_schema.py:27:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+scripts/create_schema.py:37:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+scripts/create_schema.py:40:20: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+scripts/create_schema.py:63:11: W0718: Catching too general exception Exception (broad-exception-caught)
 ************* Module tests.conftest
-tests/conftest.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-tests/conftest.py:7:0: W0401: Wildcard import tests.fixtures.model_fixture (wildcard-import)
-tests/conftest.py:8:0: W0401: Wildcard import tests.fixtures.repository_fixture (wildcard-import)
-tests/conftest.py:9:0: W0401: Wildcard import tests.fixtures.service_fixture (wildcard-import)
-tests/conftest.py:6:0: C0411: third party import "faker.Faker" should be placed before first party imports "app.core.startup.database", "app.db.session.get_async_session"  (wrong-import-order)
-tests/conftest.py:7:0: W0614: Unused import(s) user, product, product_with_characters, character, character_with_character_images, character_image, UserFactory, ProductFactory, CharacterFactory and CharacterImageFactory from wildcard import of tests.fixtures.model_fixture (unused-wildcard-import)
-tests/conftest.py:8:0: W0614: Unused import(s) product_repository, user_repository, character_repository, character_image_repository, ProductRepository, UserRepository, CharacterRepository and CharacterImageRepository from wildcard import of tests.fixtures.repository_fixture (unused-wildcard-import)
-tests/conftest.py:9:0: W0614: Unused import(s) character_service, product_service, user_service, ProductService, CharacterService and UserService from wildcard import of tests.fixtures.service_fixture (unused-wildcard-import)
+tests/conftest.py:8:0: C0411: third party import "faker.Faker" should be placed before first party imports "app.core.startup.database", "app.db.session.get_async_session"  (wrong-import-order)
 ************* Module tests.factories.async_factory
-tests/factories/async_factory.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-tests/factories/async_factory.py:8:4: C0115: Missing class docstring (missing-class-docstring)
-tests/factories/async_factory.py:8:4: R0903: Too few public methods (0/2) (too-few-public-methods)
-tests/factories/async_factory.py:14:4: W0236: Method '_create' was expected to be 'non-async', found it instead as 'async' (invalid-overridden-method)
+tests/factories/async_factory.py:10:4: R0903: Too few public methods (0/2) (too-few-public-methods)
+tests/factories/async_factory.py:16:4: W0236: Method '_create' was expected to be 'non-async', found it instead as 'async' (invalid-overridden-method)
 ************* Module tests.factories.character_factory
-tests/factories/character_factory.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-tests/factories/character_factory.py:6:0: C0115: Missing class docstring (missing-class-docstring)
-tests/factories/character_factory.py:7:4: C0115: Missing class docstring (missing-class-docstring)
-tests/factories/character_factory.py:7:4: R0903: Too few public methods (0/2) (too-few-public-methods)
+tests/factories/character_factory.py:8:4: R0903: Too few public methods (0/2) (too-few-public-methods)
 tests/factories/character_factory.py:3:0: C0411: third party import "factory" should be placed before first party imports "app.models.character.Character", "tests.factories.async_factory.AsyncSQLAlchemyModelFactory"  (wrong-import-order)
 tests/factories/character_factory.py:4:0: C0412: Imports from package tests are not grouped (ungrouped-imports)
 ************* Module tests.factories.character_image_factory
-tests/factories/character_image_factory.py:11:0: C0304: Final newline missing (missing-final-newline)
-tests/factories/character_image_factory.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-tests/factories/character_image_factory.py:6:0: C0115: Missing class docstring (missing-class-docstring)
-tests/factories/character_image_factory.py:7:4: C0115: Missing class docstring (missing-class-docstring)
-tests/factories/character_image_factory.py:7:4: R0903: Too few public methods (0/2) (too-few-public-methods)
+tests/factories/character_image_factory.py:8:4: R0903: Too few public methods (0/2) (too-few-public-methods)
 tests/factories/character_image_factory.py:3:0: C0411: third party import "factory" should be placed before first party imports "app.models.character_image.CharacterImage", "tests.factories.async_factory.AsyncSQLAlchemyModelFactory"  (wrong-import-order)
 tests/factories/character_image_factory.py:4:0: C0412: Imports from package tests are not grouped (ungrouped-imports)
 ************* Module tests.factories.product_factory
-tests/factories/product_factory.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-tests/factories/product_factory.py:6:0: C0115: Missing class docstring (missing-class-docstring)
-tests/factories/product_factory.py:7:4: C0115: Missing class docstring (missing-class-docstring)
-tests/factories/product_factory.py:7:4: R0903: Too few public methods (0/2) (too-few-public-methods)
+tests/factories/product_factory.py:8:4: R0903: Too few public methods (0/2) (too-few-public-methods)
 tests/factories/product_factory.py:4:0: C0411: third party import "factory" should be placed before first party imports "app.models.product.Product", "tests.factories.async_factory.AsyncSQLAlchemyModelFactory", "tests.factories.user_factory.UserFactory"  (wrong-import-order)
 ************* Module tests.factories.user_factory
-tests/factories/user_factory.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-tests/factories/user_factory.py:5:0: C0115: Missing class docstring (missing-class-docstring)
-tests/factories/user_factory.py:6:4: C0115: Missing class docstring (missing-class-docstring)
-tests/factories/user_factory.py:6:4: R0903: Too few public methods (0/2) (too-few-public-methods)
+tests/factories/user_factory.py:7:4: R0903: Too few public methods (0/2) (too-few-public-methods)
 tests/factories/user_factory.py:3:0: C0411: third party import "factory" should be placed before first party imports "app.models.user.User", "tests.factories.async_factory.AsyncSQLAlchemyModelFactory"  (wrong-import-order)
 ************* Module tests.fixtures.model_fixture
-tests/fixtures/model_fixture.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-tests/fixtures/model_fixture.py:10:4: W0621: Redefining name 'user' from outer scope (line 8) (redefined-outer-name)
-tests/fixtures/model_fixture.py:9:4: W0212: Access to a protected member _meta of a client class (protected-access)
-tests/fixtures/model_fixture.py:14:33: W0621: Redefining name 'user' from outer scope (line 8) (redefined-outer-name)
-tests/fixtures/model_fixture.py:16:4: W0621: Redefining name 'product' from outer scope (line 14) (redefined-outer-name)
-tests/fixtures/model_fixture.py:15:4: W0212: Access to a protected member _meta of a client class (protected-access)
-tests/fixtures/model_fixture.py:20:49: W0621: Redefining name 'user' from outer scope (line 8) (redefined-outer-name)
-tests/fixtures/model_fixture.py:23:4: W0621: Redefining name 'product' from outer scope (line 14) (redefined-outer-name)
-tests/fixtures/model_fixture.py:21:4: W0212: Access to a protected member _meta of a client class (protected-access)
-tests/fixtures/model_fixture.py:22:4: W0212: Access to a protected member _meta of a client class (protected-access)
-tests/fixtures/model_fixture.py:30:35: W0621: Redefining name 'product' from outer scope (line 14) (redefined-outer-name)
-tests/fixtures/model_fixture.py:32:4: W0621: Redefining name 'character' from outer scope (line 30) (redefined-outer-name)
-tests/fixtures/model_fixture.py:31:4: W0212: Access to a protected member _meta of a client class (protected-access)
-tests/fixtures/model_fixture.py:36:57: W0621: Redefining name 'product' from outer scope (line 14) (redefined-outer-name)
-tests/fixtures/model_fixture.py:39:4: W0621: Redefining name 'character' from outer scope (line 30) (redefined-outer-name)
-tests/fixtures/model_fixture.py:37:4: W0212: Access to a protected member _meta of a client class (protected-access)
-tests/fixtures/model_fixture.py:38:4: W0212: Access to a protected member _meta of a client class (protected-access)
-tests/fixtures/model_fixture.py:47:41: W0621: Redefining name 'character' from outer scope (line 30) (redefined-outer-name)
-tests/fixtures/model_fixture.py:49:4: W0621: Redefining name 'character_image' from outer scope (line 47) (redefined-outer-name)
-tests/fixtures/model_fixture.py:48:4: W0212: Access to a protected member _meta of a client class (protected-access)
-************* Module tests.fixtures.repository_fixture
-tests/fixtures/repository_fixture.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-************* Module tests.fixtures.service_fixture
-tests/fixtures/service_fixture.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-tests/lib/camel_to_snake.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-tests/lib/convert_id.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+tests/fixtures/model_fixture.py:11:4: W0621: Redefining name 'user' from outer scope (line 9) (redefined-outer-name)
+tests/fixtures/model_fixture.py:10:4: W0212: Access to a protected member _meta of a client class (protected-access)
+tests/fixtures/model_fixture.py:16:33: W0621: Redefining name 'user' from outer scope (line 9) (redefined-outer-name)
+tests/fixtures/model_fixture.py:18:4: W0621: Redefining name 'product' from outer scope (line 16) (redefined-outer-name)
+tests/fixtures/model_fixture.py:17:4: W0212: Access to a protected member _meta of a client class (protected-access)
+tests/fixtures/model_fixture.py:23:49: W0621: Redefining name 'user' from outer scope (line 9) (redefined-outer-name)
+tests/fixtures/model_fixture.py:26:4: W0621: Redefining name 'product' from outer scope (line 16) (redefined-outer-name)
+tests/fixtures/model_fixture.py:24:4: W0212: Access to a protected member _meta of a client class (protected-access)
+tests/fixtures/model_fixture.py:25:4: W0212: Access to a protected member _meta of a client class (protected-access)
+tests/fixtures/model_fixture.py:34:35: W0621: Redefining name 'product' from outer scope (line 16) (redefined-outer-name)
+tests/fixtures/model_fixture.py:36:4: W0621: Redefining name 'character' from outer scope (line 34) (redefined-outer-name)
+tests/fixtures/model_fixture.py:35:4: W0212: Access to a protected member _meta of a client class (protected-access)
+tests/fixtures/model_fixture.py:41:57: W0621: Redefining name 'product' from outer scope (line 16) (redefined-outer-name)
+tests/fixtures/model_fixture.py:44:4: W0621: Redefining name 'character' from outer scope (line 34) (redefined-outer-name)
+tests/fixtures/model_fixture.py:42:4: W0212: Access to a protected member _meta of a client class (protected-access)
+tests/fixtures/model_fixture.py:43:4: W0212: Access to a protected member _meta of a client class (protected-access)
+tests/fixtures/model_fixture.py:53:41: W0621: Redefining name 'character' from outer scope (line 34) (redefined-outer-name)
+tests/fixtures/model_fixture.py:55:4: W0621: Redefining name 'character_image' from outer scope (line 53) (redefined-outer-name)
+tests/fixtures/model_fixture.py:54:4: W0212: Access to a protected member _meta of a client class (protected-access)
 ************* Module test_character_image_repository
-tests/repositories/character_images/test_character_image_repository.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-tests/repositories/character_images/test_character_image_repository.py:8:38: W0621: Redefining name 'character_image_repository' from outer scope (line 5) (redefined-outer-name)
-tests/repositories/character_images/test_character_image_repository.py:16:35: W0621: Redefining name 'character_image_repository' from outer scope (line 5) (redefined-outer-name)
-tests/repositories/character_images/test_character_image_repository.py:25:45: W0621: Redefining name 'character_image_repository' from outer scope (line 5) (redefined-outer-name)
-tests/repositories/character_images/test_character_image_repository.py:33:4: W0621: Redefining name 'character_image_repository' from outer scope (line 5) (redefined-outer-name)
-tests/repositories/character_images/test_character_image_repository.py:42:43: W0621: Redefining name 'character_image_repository' from outer scope (line 5) (redefined-outer-name)
+tests/repositories/character_images/test_character_image_repository.py:10:38: W0621: Redefining name 'character_image_repository' from outer scope (line 6) (redefined-outer-name)
+tests/repositories/character_images/test_character_image_repository.py:19:35: W0621: Redefining name 'character_image_repository' from outer scope (line 6) (redefined-outer-name)
+tests/repositories/character_images/test_character_image_repository.py:29:45: W0621: Redefining name 'character_image_repository' from outer scope (line 6) (redefined-outer-name)
+tests/repositories/character_images/test_character_image_repository.py:38:4: W0621: Redefining name 'character_image_repository' from outer scope (line 6) (redefined-outer-name)
+tests/repositories/character_images/test_character_image_repository.py:50:43: W0621: Redefining name 'character_image_repository' from outer scope (line 6) (redefined-outer-name)
 ************* Module test_character_repository
-tests/repositories/characters/test_character_repository.py:9:0: C0301: Line too long (123/120) (line-too-long)
-tests/repositories/characters/test_character_repository.py:17:0: C0301: Line too long (134/120) (line-too-long)
-tests/repositories/characters/test_character_repository.py:24:0: C0301: Line too long (170/120) (line-too-long)
-tests/repositories/characters/test_character_repository.py:47:0: C0301: Line too long (124/120) (line-too-long)
-tests/repositories/characters/test_character_repository.py:59:0: C0301: Line too long (124/120) (line-too-long)
-tests/repositories/characters/test_character_repository.py:67:0: C0301: Line too long (124/120) (line-too-long)
-tests/repositories/characters/test_character_repository.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-tests/repositories/characters/test_character_repository.py:8:42: W0621: Redefining name 'character_repository' from outer scope (line 5) (redefined-outer-name)
-tests/repositories/characters/test_character_repository.py:15:59: W0621: Redefining name 'character_repository' from outer scope (line 5) (redefined-outer-name)
-tests/repositories/characters/test_character_repository.py:23:49: W0621: Redefining name 'character_repository' from outer scope (line 5) (redefined-outer-name)
-tests/repositories/characters/test_character_repository.py:30:32: W0621: Redefining name 'character_repository' from outer scope (line 5) (redefined-outer-name)
-tests/repositories/characters/test_character_repository.py:35:36: W0621: Redefining name 'character_repository' from outer scope (line 5) (redefined-outer-name)
-tests/repositories/characters/test_character_repository.py:40:32: W0621: Redefining name 'character_repository' from outer scope (line 5) (redefined-outer-name)
-tests/repositories/characters/test_character_repository.py:46:29: W0621: Redefining name 'character_repository' from outer scope (line 5) (redefined-outer-name)
-tests/repositories/characters/test_character_repository.py:53:39: W0621: Redefining name 'character_repository' from outer scope (line 5) (redefined-outer-name)
-tests/repositories/characters/test_character_repository.py:58:32: W0621: Redefining name 'character_repository' from outer scope (line 5) (redefined-outer-name)
-tests/repositories/characters/test_character_repository.py:64:37: W0621: Redefining name 'character_repository' from outer scope (line 5) (redefined-outer-name)
-************* Module test_product_repository
-tests/repositories/products/test_product_repository.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+tests/repositories/characters/test_character_repository.py:10:42: W0621: Redefining name 'character_repository' from outer scope (line 6) (redefined-outer-name)
+tests/repositories/characters/test_character_repository.py:21:4: W0621: Redefining name 'character_repository' from outer scope (line 6) (redefined-outer-name)
+tests/repositories/characters/test_character_repository.py:34:4: W0621: Redefining name 'character_repository' from outer scope (line 6) (redefined-outer-name)
+tests/repositories/characters/test_character_repository.py:49:32: W0621: Redefining name 'character_repository' from outer scope (line 6) (redefined-outer-name)
+tests/repositories/characters/test_character_repository.py:57:36: W0621: Redefining name 'character_repository' from outer scope (line 6) (redefined-outer-name)
+tests/repositories/characters/test_character_repository.py:65:32: W0621: Redefining name 'character_repository' from outer scope (line 6) (redefined-outer-name)
+tests/repositories/characters/test_character_repository.py:74:29: W0621: Redefining name 'character_repository' from outer scope (line 6) (redefined-outer-name)
+tests/repositories/characters/test_character_repository.py:84:39: W0621: Redefining name 'character_repository' from outer scope (line 6) (redefined-outer-name)
+tests/repositories/characters/test_character_repository.py:92:32: W0621: Redefining name 'character_repository' from outer scope (line 6) (redefined-outer-name)
+tests/repositories/characters/test_character_repository.py:101:37: W0621: Redefining name 'character_repository' from outer scope (line 6) (redefined-outer-name)
 ************* Module test_user_repository
-tests/repositories/users/test_user_repository.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-tests/repositories/users/test_user_repository.py:8:35: W0621: Redefining name 'user_repository' from outer scope (line 5) (redefined-outer-name)
+tests/repositories/users/test_user_repository.py:10:35: W0621: Redefining name 'user_repository' from outer scope (line 6) (redefined-outer-name)
 ************* Module test_create_character_service
-tests/services/character_service/test_create_character_service.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-tests/services/character_service/test_create_character_service.py:16:57: C0207: Use path.rsplit('/', maxsplit=1)[-1] instead (use-maxsplit-arg)
-************* Module test_get_character_service
-tests/services/character_service/test_get_character_service.py:65:0: C0304: Final newline missing (missing-final-newline)
-tests/services/character_service/test_get_character_service.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+tests/services/character_service/test_create_character_service.py:18:32: C0207: Use path.rsplit('/', maxsplit=1)[-1] instead (use-maxsplit-arg)
 ************* Module test_create_product_service
-tests/services/product_service/test_create_product_service.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 tests/services/product_service/test_create_product_service.py:3:0: C0411: third party import "fastapi.HTTPException" should be placed before first party import "app.v1.schemas.product.ProductCreate"  (wrong-import-order)
-************* Module test_delete_product_service
-tests/services/product_service/test_delete_product_service.py:47:0: C0304: Final newline missing (missing-final-newline)
-tests/services/product_service/test_delete_product_service.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-************* Module test_get_product_service
-tests/services/product_service/test_get_product_service.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-************* Module test_index_product_service
-tests/services/product_service/test_index_product_service.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 ************* Module test_update_product_service
-tests/services/product_service/test_update_product_service.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 tests/services/product_service/test_update_product_service.py:3:0: C0411: third party import "fastapi.HTTPException" should be placed before first party import "app.v1.schemas.product.ProductCreate"  (wrong-import-order)
 tests/services/product_service/test_update_product_service.py:4:0: C0412: Imports from package app are not grouped (ungrouped-imports)
-************* Module test_get_user_service
-tests/services/user_service/test_get_user_service.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-************* Module test_update_user_service
-tests/services/user_service/test_update_user_service.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-************* Module unauthorized_response
-tests/v1/common/unauthorized_response.py:14:0: C0304: Final newline missing (missing-final-newline)
-tests/v1/common/unauthorized_response.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-************* Module tests.v1.conftest
-tests/v1/conftest.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-tests/v1/conftest.py:2:0: W0611: Unused access_token imported from tests.v1.fixtures.auth_fixture (unused-import)
-tests/v1/conftest.py:3:0: W0611: Unused client imported from tests.v1.fixtures.client_fixture (unused-import)
-tests/v1/conftest.py:3:0: W0611: Unused auth_client imported from tests.v1.fixtures.client_fixture (unused-import)
-tests/v1/conftest.py:4:0: W0611: Unused product imported from tests.v1.fixtures.product_fixture (unused-import)
-tests/v1/conftest.py:4:0: W0611: Unused product_id imported from tests.v1.fixtures.product_fixture (unused-import)
-tests/v1/conftest.py:5:0: W0611: Unused character imported from tests.v1.fixtures.character_fixture (unused-import)
-************* Module tests.v1.fixtures.auth_fixture
-tests/v1/fixtures/auth_fixture.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 ************* Module tests.v1.fixtures.character_fixture
-tests/v1/fixtures/character_fixture.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-tests/v1/fixtures/character_fixture.py:10:22: R1732: Consider using 'with' for resource-allocating operations (consider-using-with)
-tests/v1/fixtures/character_fixture.py:14:22: R1732: Consider using 'with' for resource-allocating operations (consider-using-with)
-tests/v1/fixtures/character_fixture.py:28:8: E1101: Instance of 'str' has no 'close' member (no-member)
-tests/v1/fixtures/character_fixture.py:27:12: W0612: Unused variable 'filename' (unused-variable)
-tests/v1/fixtures/character_fixture.py:27:32: W0612: Unused variable 'mime_type' (unused-variable)
+tests/v1/fixtures/character_fixture.py:11:22: R1732: Consider using 'with' for resource-allocating operations (consider-using-with)
+tests/v1/fixtures/character_fixture.py:15:22: R1732: Consider using 'with' for resource-allocating operations (consider-using-with)
+tests/v1/fixtures/character_fixture.py:29:8: E1101: Instance of 'str' has no 'close' member (no-member)
+tests/v1/fixtures/character_fixture.py:28:12: W0612: Unused variable 'filename' (unused-variable)
+tests/v1/fixtures/character_fixture.py:28:32: W0612: Unused variable 'mime_type' (unused-variable)
 ************* Module tests.v1.fixtures.client_fixture
-tests/v1/fixtures/client_fixture.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-tests/v1/fixtures/client_fixture.py:18:22: W0621: Redefining name 'client' from outer scope (line 10) (redefined-outer-name)
-tests/v1/fixtures/client_fixture.py:3:0: C0411: third party import "httpx.AsyncClient" should be placed before first party import "main.app"  (wrong-import-order)
-tests/v1/fixtures/client_fixture.py:4:0: C0411: third party import "httpx._transports.asgi.ASGITransport" should be placed before first party import "main.app"  (wrong-import-order)
-tests/v1/fixtures/client_fixture.py:5:0: C0411: standard import "typing.AsyncGenerator" should be placed before third party imports "pytest_asyncio", "httpx.AsyncClient", "httpx._transports.asgi.ASGITransport" and first party import "main.app"  (wrong-import-order)
+tests/v1/fixtures/client_fixture.py:27:22: W0621: Redefining name 'client' from outer scope (line 15) (redefined-outer-name)
 ************* Module tests.v1.fixtures.product_fixture
-tests/v1/fixtures/product_fixture.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-tests/v1/fixtures/product_fixture.py:15:21: W0621: Redefining name 'product' from outer scope (line 6) (redefined-outer-name)
-************* Module create_product
-tests/v1/modules/create_product.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-************* Module auth.test_jwt_login
-tests/v1/routers/auth/test_jwt_login.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-************* Module auth.test_jwt_logout
-tests/v1/routers/auth/test_jwt_logout.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-************* Module auth.test_register
-tests/v1/routers/auth/test_register.py:141:0: C0304: Final newline missing (missing-final-newline)
-tests/v1/routers/auth/test_register.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+tests/v1/fixtures/product_fixture.py:17:21: W0621: Redefining name 'product' from outer scope (line 7) (redefined-outer-name)
 ************* Module characters.test_create_character
-tests/v1/routers/characters/test_create_character.py:91:0: C0301: Line too long (142/120) (line-too-long)
-tests/v1/routers/characters/test_create_character.py:92:0: C0301: Line too long (158/120) (line-too-long)
-tests/v1/routers/characters/test_create_character.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-tests/v1/routers/characters/test_create_character.py:11:43: R1732: Consider using 'with' for resource-allocating operations (consider-using-with)
-tests/v1/routers/characters/test_create_character.py:43:22: R1732: Consider using 'with' for resource-allocating operations (consider-using-with)
-tests/v1/routers/characters/test_create_character.py:47:22: R1732: Consider using 'with' for resource-allocating operations (consider-using-with)
-tests/v1/routers/characters/test_create_character.py:61:8: E1101: Instance of 'str' has no 'close' member (no-member)
-tests/v1/routers/characters/test_create_character.py:60:12: W0612: Unused variable 'filename' (unused-variable)
-tests/v1/routers/characters/test_create_character.py:60:32: W0612: Unused variable 'mime_type' (unused-variable)
-tests/v1/routers/characters/test_create_character.py:101:43: R1732: Consider using 'with' for resource-allocating operations (consider-using-with)
-************* Module characters.test_get_character
-tests/v1/routers/characters/test_get_character.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+tests/v1/routers/characters/test_create_character.py:16:12: R1732: Consider using 'with' for resource-allocating operations (consider-using-with)
+tests/v1/routers/characters/test_create_character.py:52:22: R1732: Consider using 'with' for resource-allocating operations (consider-using-with)
+tests/v1/routers/characters/test_create_character.py:56:22: R1732: Consider using 'with' for resource-allocating operations (consider-using-with)
+tests/v1/routers/characters/test_create_character.py:68:8: E1101: Instance of 'str' has no 'close' member (no-member)
+tests/v1/routers/characters/test_create_character.py:67:12: W0612: Unused variable 'filename' (unused-variable)
+tests/v1/routers/characters/test_create_character.py:67:32: W0612: Unused variable 'mime_type' (unused-variable)
+tests/v1/routers/characters/test_create_character.py:130:12: R1732: Consider using 'with' for resource-allocating operations (consider-using-with)
 ************* Module products.test_create_product
-tests/v1/routers/products/test_create_product.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-tests/v1/routers/products/test_create_product.py:4:38: W0613: Unused argument 'auth_client' (unused-argument)
-tests/v1/routers/products/test_create_product.py:14:87: W0613: Unused argument 'product_id' (unused-argument)
-************* Module products.test_delete_product
-tests/v1/routers/products/test_delete_product.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-************* Module products.test_get_product
-tests/v1/routers/products/test_get_product.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-************* Module products.test_index_products
-tests/v1/routers/products/test_index_products.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-************* Module products.test_update_product
-tests/v1/routers/products/test_update_product.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-************* Module users.test_get_me
-tests/v1/routers/users/test_get_me.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+tests/v1/routers/products/test_create_product.py:5:38: W0613: Unused argument 'auth_client' (unused-argument)
+tests/v1/routers/products/test_create_product.py:18:45: W0613: Unused argument 'product_id' (unused-argument)
 ************* Module users.test_update_me
 tests/v1/routers/users/test_update_me.py:1:0: R0801: Similar lines in 2 files
-==test_delete_product_service:[32:47]
-==test_get_product_service:[19:34]
-            user_id=str(user.id), product_id=product_id
+==test_delete_product_service:[35:49]
+==test_update_product_service:[24:41]
         )
 
     assert exc_info.value.status_code == 404
@@ -433,10 +227,27 @@ tests/v1/routers/users/test_update_me.py:1:0: R0801: Similar lines in 2 files
         ]
     } (duplicate-code)
 tests/v1/routers/users/test_update_me.py:1:0: R0801: Similar lines in 2 files
-==test_delete_product_service:[33:47]
-==test_update_product_service:[22:38]
-        )
+==products.test_create_product:[46:61]
+==products.test_update_product:[45:61]
+    assert data == {
+        "errors": [
+            {
+                "status": "422",
+                "code": "validation_error",
+                "title": "Validation Error",
+                "detail": "String should have at least 1 character",
+                "source": {"pointer": "/title"},
+            }
+        ]
+    }
 
+
+async def test_update_product_title_too_long(auth_client: AsyncClient, product_id: str):
+    long_title = "A" * 256
+ (duplicate-code)
+tests/v1/routers/users/test_update_me.py:1:0: R0801: Similar lines in 2 files
+==test_delete_product_service:[37:49]
+==test_get_product_service:[22:34]
     assert exc_info.value.status_code == 404
     assert exc_info.value.detail == {
         "errors": [
@@ -448,26 +259,10 @@ tests/v1/routers/users/test_update_me.py:1:0: R0801: Similar lines in 2 files
                 "source": {"pointer": "/product_id"},
             }
         ]
-    }
-
-async def test_update_product_already_exists(product_service, product): (duplicate-code)
-tests/v1/routers/users/test_update_me.py:1:0: R0801: Similar lines in 2 files
-==characters.test_create_character:[39:50]
-==tests.v1.fixtures.character_fixture:[6:17]
-    files = [
-        (
-            "character_image_files",
-            ("1.png", open("tests/files/character_image/1.png", "rb"), "image/png"),
-        ),
-        (
-            "character_image_files",
-            ("2.png", open("tests/files/character_image/2.png", "rb"), "image/png"),
-        ),
-    ]
-    data = { (duplicate-code)
+    } (duplicate-code)
 tests/v1/routers/users/test_update_me.py:1:0: R0801: Similar lines in 2 files
 ==products.test_get_product:[17:30]
-==products.test_update_product:[20:33]
+==products.test_update_product:[21:34]
         "errors": [
             {
                 "status": "404",
@@ -482,34 +277,8 @@ tests/v1/routers/users/test_update_me.py:1:0: R0801: Similar lines in 2 files
 
 async def test_update_product_unauthorized(client: AsyncClient, fake_id: str): (duplicate-code)
 tests/v1/routers/users/test_update_me.py:1:0: R0801: Similar lines in 2 files
-==products.test_create_product:[82:91]
-==products.test_update_product:[62:71]
-    )
-    assert resp.status_code == 422
-    data = resp.json()
-    assert data == {
-        'errors': [
-            {
-                'status': '422',
-                'code': 'validation_error',
-                'title': 'Validation Error', (duplicate-code)
-tests/v1/routers/users/test_update_me.py:1:0: R0801: Similar lines in 2 files
-==products.test_create_product:[62:71]
-==products.test_update_product:[40:49]
-    )
-    assert resp.status_code == 422
-    data = resp.json()
-    assert data == {
-        'errors': [
-            {
-                'status': '422',
-                'code': 'validation_error',
-                'title': 'Validation Error', (duplicate-code)
-tests/v1/routers/users/test_update_me.py:1:0: R0801: Similar lines in 2 files
-==characters.test_create_character:[51:63]
-==tests.v1.fixtures.character_fixture:[18:30]
-    }
-
+==characters.test_create_character:[60:72]
+==tests.v1.fixtures.character_fixture:[21:33]
     response = await auth_client.post(
         f"/products/{product_id}/characters/",
         data=data,
@@ -519,10 +288,77 @@ tests/v1/routers/users/test_update_me.py:1:0: R0801: Similar lines in 2 files
     for _, (filename, file_obj, mime_type) in files:
         file_obj.close()
 
-    assert response.status_code == 201, f"Expected 201, got {response.status_code}. Response: {response.text}" (duplicate-code)
+    assert (
+        response.status_code == 201
+    ), f"Expected 201, got {response.status_code}. Response: {response.text}" (duplicate-code)
 tests/v1/routers/users/test_update_me.py:1:0: R0801: Similar lines in 2 files
-==test_delete_product_service:[13:22]
-==test_get_product_service:[20:29]
+==characters.test_create_character:[48:58]
+==tests.v1.fixtures.character_fixture:[7:17]
+    files = [
+        (
+            "character_image_files",
+            ("1.png", open("tests/files/character_image/1.png", "rb"), "image/png"),
+        ),
+        (
+            "character_image_files",
+            ("2.png", open("tests/files/character_image/2.png", "rb"), "image/png"),
+        ),
+    ] (duplicate-code)
+tests/v1/routers/users/test_update_me.py:1:0: R0801: Similar lines in 2 files
+==products.test_create_product:[84:93]
+==products.test_update_product:[64:73]
+    )
+    assert resp.status_code == 422
+    data = resp.json()
+    assert data == {
+        "errors": [
+            {
+                "status": "422",
+                "code": "validation_error",
+                "title": "Validation Error", (duplicate-code)
+tests/v1/routers/users/test_update_me.py:1:0: R0801: Similar lines in 2 files
+==products.test_create_product:[64:73]
+==products.test_update_product:[42:51]
+    )
+    assert resp.status_code == 422
+    data = resp.json()
+    assert data == {
+        "errors": [
+            {
+                "status": "422",
+                "code": "validation_error",
+                "title": "Validation Error", (duplicate-code)
+tests/v1/routers/users/test_update_me.py:1:0: R0801: Similar lines in 2 files
+==services.character_service:[72:85]
+==services.product_service:[54:65]
+        product = await self.product_repository.get_product(user_id, product_id)
+        if not product:
+            raise HTTPException(
+                status_code=404,
+                detail=not_found_response_detail(
+                    "Product", "/product_id", encode_id(product_id)
+                ),
+            )
+        return product
+
+    async def __find_character(
+        self, user_id: str, product_id: int, character_id: int
+    ) -> Character: (duplicate-code)
+tests/v1/routers/users/test_update_me.py:1:0: R0801: Similar lines in 2 files
+==app.core.response_type:[21:33]
+==openapi:[77:86]
+                                "errors": [
+                                    {
+                                        "status": "500",
+                                        "code": "internal_server_error",
+                                        "title": "Internal Server Error",
+                                        "detail": "An unexpected error occurred. Please try again later.",
+                                    }
+                                ]
+                            } (duplicate-code)
+tests/v1/routers/users/test_update_me.py:1:0: R0801: Similar lines in 2 files
+==test_delete_product_service:[14:23]
+==test_get_character_service:[30:39]
         )
 
     assert exc_info.value.status_code == 404
@@ -533,18 +369,8 @@ tests/v1/routers/users/test_update_me.py:1:0: R0801: Similar lines in 2 files
                 "code": "product_not_found",
                 "title": "Not Found", (duplicate-code)
 tests/v1/routers/users/test_update_me.py:1:0: R0801: Similar lines in 2 files
-==products.test_create_product:[44:51]
-==products.test_update_product:[43:50]
-    assert data == {
-        'errors': [
-            {
-                'status': '422',
-                'code': 'validation_error',
-                'title': 'Validation Error',
-                'detail': 'String should have at least 1 character', (duplicate-code)
-tests/v1/routers/users/test_update_me.py:1:0: R0801: Similar lines in 2 files
-==test_create_product_service:[18:25]
-==test_update_product_service:[47:54]
+==test_create_product_service:[20:27]
+==test_update_product_service:[50:57]
     assert exc_info.value.status_code == 409
     assert exc_info.value.detail == {
         "errors": [
@@ -553,36 +379,51 @@ tests/v1/routers/users/test_update_me.py:1:0: R0801: Similar lines in 2 files
                 "code": "product_already_exists",
                 "title": "Conflict", (duplicate-code)
 tests/v1/routers/users/test_update_me.py:1:0: R0801: Similar lines in 2 files
-==services.character_service:[65:76]
-==services.product_service:[49:58]
-        product = await self.product_repository.get_product(user_id, product_id)
-        if not product:
-            raise HTTPException(
-                status_code=404,
-                detail=not_found_response_detail("Product", "/product_id", encode_id(product_id)),
-            )
-        return product
-
-    async def __check_product_exists(self, user_id: str, title: str) -> bool: (duplicate-code)
+==test_get_character_service:[32:39]
+==test_get_product_service:[22:29]
+    assert exc_info.value.status_code == 404
+    assert exc_info.value.detail == {
+        "errors": [
+            {
+                "status": "404",
+                "code": "product_not_found",
+                "title": "Not Found", (duplicate-code)
 tests/v1/routers/users/test_update_me.py:1:0: R0801: Similar lines in 2 files
-==products.test_create_product:[44:50]
-==products.test_update_product:[65:71]
+==products.test_create_product:[46:52]
+==products.test_update_product:[67:73]
     assert data == {
-        'errors': [
+        "errors": [
             {
-                'status': '422',
-                'code': 'validation_error',
-                'title': 'Validation Error', (duplicate-code)
+                "status": "422",
+                "code": "validation_error",
+                "title": "Validation Error", (duplicate-code)
 tests/v1/routers/users/test_update_me.py:1:0: R0801: Similar lines in 2 files
-==auth.test_register:[131:137]
-==products.test_create_product:[86:92]
-        'errors': [
+==auth.test_register:[133:139]
+==characters.test_create_character:[102:108]
+        "errors": [
             {
-                'status': '422',
-                'code': 'validation_error',
-                'title': 'Validation Error',
-                'detail': 'Field required', (duplicate-code)
+                "status": "422",
+                "code": "validation_error",
+                "title": "Validation Error",
+                "detail": "Field required", (duplicate-code)
+tests/v1/routers/users/test_update_me.py:1:0: R0801: Similar lines in 2 files
+==app.core.response_type:[12:18]
+==openapi:[56:62]
+                                    "errors": [
+                                        {
+                                            "status": "401",
+                                            "code": "unauthorized",
+                                            "title": "Unauthorized",
+                                            "detail": "Authentication credentials were not provided or are invalid.", (duplicate-code)
+tests/v1/routers/users/test_update_me.py:1:0: R0801: Similar lines in 2 files
+==app.models.character:[11:17]
+==app.models.episode:[11:17]
+    product_id = Column(
+        Integer,
+        ForeignKey("products.id"),
+        nullable=False,
+        index=True)
+ (duplicate-code)
 
 ------------------------------------------------------------------
-Your code has been rated at 7.63/10 (previous run: 7.61/10, +0.03)
-
+Your code has been rated at 8.94/10 (previous run: 8.00/10, +0.94)

@@ -9,19 +9,10 @@ class Product(TimestampMixin, Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     title = Column(String(255), nullable=False)
-    user_id = Column(
-        generics.GUID,
-        ForeignKey("users.id"),
-        nullable=False,
-        index=True)
+    user_id = Column(generics.GUID, ForeignKey("users.id"), nullable=False, index=True)
 
     user = relationship("User", back_populates="products")
     episodes = relationship("Episode", back_populates="product")
     characters = relationship("Character", back_populates="product")
 
-    __table_args__ = (
-        UniqueConstraint(
-            "title",
-            "user_id",
-            name="uq_title_user_id"),
-    )
+    __table_args__ = (UniqueConstraint("title", "user_id", name="uq_title_user_id"),)

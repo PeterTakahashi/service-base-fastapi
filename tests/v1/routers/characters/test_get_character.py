@@ -1,5 +1,8 @@
 from httpx import AsyncClient
-from tests.v1.common.unauthorized_response import check_unauthorized_response
+from tests.common.check_error_response import (
+    check_unauthorized_response,
+    check_not_found_response,
+)
 
 
 async def test_get_character_success(
@@ -18,17 +21,22 @@ async def test_get_character_success(
     assert len(fetched_character["character_images"]) == 2
 
 
+async def test_get_character_product_not_found(auth_client: AsyncClient, fake_id: str):
+    """
+    Test that trying to get a character from a non-existent product returns 404.
+    """
+    response = await auth_client.get(f"/products/{fake_id}/characters/{fake_id}")
+    check_not_found_response(response, "Product", "/product_id", fake_id)
+
+
 async def test_get_character_not_found(
     auth_client: AsyncClient, product_id: str, fake_id: str
 ):
     """
     Test that trying to get a non-existent character returns 404.
     """
-    resp = await auth_client.get(f"/products/{product_id}/characters/{fake_id}")
-    assert resp.status_code == 404
-    body = resp.json()
-    assert body["detail"]["errors"][0]["code"] == "character_not_found"
-    assert "Not Found" in body["detail"]["errors"][0]["title"]
+    response = await auth_client.get(f"/products/{product_id}/characters/{fake_id}")
+    check_not_found_response(response, "Character", "/character_id", fake_id)
 
 
 async def test_get_character_unauthorized(client: AsyncClient, fake_id: str):

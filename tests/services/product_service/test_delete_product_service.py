@@ -1,6 +1,7 @@
 import pytest
 from fastapi import HTTPException
 from app.lib.convert_id import encode_id
+from tests.common.check_error_response import check_not_found_status_code_and_detail
 
 
 async def test_delete_product(product_service, product):
@@ -26,6 +27,13 @@ async def test_delete_product(product_service, product):
             }
         ]
     }
+    check_not_found_status_code_and_detail(
+        exc_info.value.status_code,
+        exc_info.value.detail,
+        "Product",
+        "/product_id",
+        encode_id(product.id),
+    )
 
 
 async def test_delete_product_not_found(product_service, user):
@@ -34,16 +42,10 @@ async def test_delete_product_not_found(product_service, user):
         await product_service.delete_product(
             user_id=str(user.id), product_id=product_id
         )
-
-    assert exc_info.value.status_code == 404
-    assert exc_info.value.detail == {
-        "errors": [
-            {
-                "status": "404",
-                "code": "product_not_found",
-                "title": "Not Found",
-                "detail": f"Product with id '{encode_id(product_id)}' not found.",
-                "source": {"pointer": "/product_id"},
-            }
-        ]
-    }
+    check_not_found_status_code_and_detail(
+        exc_info.value.status_code,
+        exc_info.value.detail,
+        "Product",
+        "/product_id",
+        encode_id(product_id),
+    )
