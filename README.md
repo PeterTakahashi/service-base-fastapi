@@ -37,6 +37,12 @@ create schema
 python -m scripts.create_schema
 ```
 
+code formatter
+```
+black .
+ruff check . --fix
+```
+
 #### OpenAPI
 
 html
