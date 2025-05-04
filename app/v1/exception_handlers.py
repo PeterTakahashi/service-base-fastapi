@@ -1,9 +1,9 @@
-
 from fastapi import Request
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from app.core.i18n import get_locale, get_message
+
 
 async def http_exception_handler(request: Request, exc: StarletteHTTPException):
     locale = get_locale(request)
@@ -26,6 +26,7 @@ async def http_exception_handler(request: Request, exc: StarletteHTTPException):
         content={"detail": exc.detail},
     )
 
+
 async def server_exception_handler(request: Request, exc: Exception):
     locale = get_locale(request)
     return JSONResponse(
@@ -42,6 +43,7 @@ async def server_exception_handler(request: Request, exc: Exception):
         },
     )
 
+
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
     locale = get_locale(request)
     errors = []
@@ -49,12 +51,14 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
     for e in exc.errors():
         pointer = "/" + "/".join(str(loc) for loc in e["loc"] if loc != "body")
 
-        errors.append({
-            "status": "422",
-            "code": "validation_error",
-            "title": get_message(locale, "validation_error", "title"),
-            "detail": e["msg"],
-            "source": {"pointer": pointer}
-        })
+        errors.append(
+            {
+                "status": "422",
+                "code": "validation_error",
+                "title": get_message(locale, "validation_error", "title"),
+                "detail": e["msg"],
+                "source": {"pointer": pointer},
+            }
+        )
 
     return JSONResponse(status_code=422, content={"errors": errors})

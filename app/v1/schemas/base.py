@@ -7,6 +7,7 @@ IDField = Field(
     description="The ID of the object",
 )
 
+
 class HasEncodedID(BaseModel):
     id: int = IDField
 

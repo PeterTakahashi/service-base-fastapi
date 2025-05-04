@@ -1,6 +1,7 @@
 import pytest
 from httpx import AsyncClient
 
+
 async def test_register_success(client: AsyncClient, faker):
     """
     Test successful user registration.
@@ -13,13 +14,14 @@ async def test_register_success(client: AsyncClient, faker):
     response = await client.post("/auth/register/register", json=registration_data)
 
     # Assertions
-    assert response.status_code == 201, (
-        f"Expected 201, got {response.status_code}. Response: {response.text}"
-    )
+    assert (
+        response.status_code == 201
+    ), f"Expected 201, got {response.status_code}. Response: {response.text}"
     response_data = response.json()
 
     assert response_data["email"] == unique_email
     assert "id" in response_data
+
 
 async def test_register_duplicate_email(client: AsyncClient, faker):
     """
@@ -36,9 +38,9 @@ async def test_register_duplicate_email(client: AsyncClient, faker):
     reg_response = await client.post(
         "/auth/register/register", json=first_registration_data
     )
-    assert reg_response.status_code == 201, (
-        f"Setup failed: Could not register initial user. Response: {reg_response.text}"
-    )
+    assert (
+        reg_response.status_code == 201
+    ), f"Setup failed: Could not register initial user. Response: {reg_response.text}"
 
     # 2. Attempt to register another user with the *same email*
     second_registration_data = {
@@ -51,9 +53,9 @@ async def test_register_duplicate_email(client: AsyncClient, faker):
     )
 
     # Assertions
-    assert response.status_code == 400, (
-        f"Expected 400, got {response.status_code}. Response: {response.text}"
-    )
+    assert (
+        response.status_code == 400
+    ), f"Expected 400, got {response.status_code}. Response: {response.text}"
     response_data = response.json()
     assert response_data["detail"] == "REGISTER_USER_ALREADY_EXISTS"
 
@@ -76,9 +78,9 @@ async def test_register_invalid_password_rules(
 
     response = await client.post("/auth/register/register", json=registration_data)
 
-    assert response.status_code == 400, (
-        f"Expected 400, got {response.status_code}. Response: {response.text}"
-    )
+    assert (
+        response.status_code == 400
+    ), f"Expected 400, got {response.status_code}. Response: {response.text}"
     response_data = response.json()
     assert response_data["detail"]["code"] == "REGISTER_INVALID_PASSWORD"
     assert expected_reason in response_data["detail"]["reason"]
@@ -95,18 +97,18 @@ async def test_register_too_short_password(client: AsyncClient, faker):
 
     response = await client.post("/auth/register/register", json=registration_data)
 
-    assert response.status_code == 422, (
-        f"Expected 422, got {response.status_code}. Response: {response.text}"
-    )
+    assert (
+        response.status_code == 422
+    ), f"Expected 422, got {response.status_code}. Response: {response.text}"
     response_data = response.json()
     assert response_data == {
-        'errors': [
+        "errors": [
             {
-                'status': '422',
-                'code': 'validation_error',
-                'title': 'Validation Error',
-                'detail': 'String should have at least 8 characters',
-                'source': {'pointer': '/password'}
+                "status": "422",
+                "code": "validation_error",
+                "title": "Validation Error",
+                "detail": "String should have at least 8 characters",
+                "source": {"pointer": "/password"},
             }
         ]
     }
@@ -124,18 +126,18 @@ async def test_register_missing_field(client: AsyncClient, faker):
     response = await client.post("/auth/register/register", json=registration_data)
 
     # Assertions for validation error
-    assert response.status_code == 422, (
-        f"Expected 422, got {response.status_code}. Response: {response.text}"
-    )
+    assert (
+        response.status_code == 422
+    ), f"Expected 422, got {response.status_code}. Response: {response.text}"
     response_data = response.json()
     assert response_data == {
-        'errors': [
+        "errors": [
             {
-                'status': '422',
-                'code': 'validation_error',
-                'title': 'Validation Error',
-                'detail': 'Field required',
-                'source': {'pointer': '/email'}
+                "status": "422",
+                "code": "validation_error",
+                "title": "Validation Error",
+                "detail": "Field required",
+                "source": {"pointer": "/email"},
             }
         ]
     }

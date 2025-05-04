@@ -20,6 +20,7 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, UUID]):
     UserManager handles user-related operations such as password validation
     and token management.
     """
+
     reset_password_token_secret = settings.RESET_PASSWORD_TOKEN_SECRET
     verification_token_secret = settings.VERIFICATION_TOKEN_SECRET
 

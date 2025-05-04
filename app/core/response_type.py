@@ -5,11 +5,7 @@ from typing import Any, Dict
 unauthorized_response: Dict[int | str, Dict[str, Any]] = {
     401: {
         "description": "Unauthorized",
-        "content": {
-            "application/json": {
-                "example": {"detail": "Not authenticated"}
-            }
-        },
+        "content": {"application/json": {"example": {"detail": "Not authenticated"}}},
     }
 }
 
@@ -35,6 +31,7 @@ internal_server_error_detail = {
     ]
 }
 
+
 def not_found_response(model_name: str, pointer: str):
     return {
         404: {
@@ -50,6 +47,7 @@ def not_found_response(model_name: str, pointer: str):
         }
     }
 
+
 def not_found_response_detail(model_name: str, pointer: str, target_id: str):
     return {
         "errors": [
@@ -62,6 +60,7 @@ def not_found_response_detail(model_name: str, pointer: str, target_id: str):
             }
         ]
     }
+
 
 def conflict_response(model_name: str, pointer: str):
     return {
@@ -78,9 +77,8 @@ def conflict_response(model_name: str, pointer: str):
         }
     }
 
-def conflict_response_detail(
-    model_name: str, pointer: str, value: str
-):
+
+def conflict_response_detail(model_name: str, pointer: str, value: str):
     return {
         "errors": [
             {

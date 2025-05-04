@@ -1,4 +1,3 @@
-
 def get_file_extension(filename: str | None) -> str:
     """
     Get the file extension from the filename.

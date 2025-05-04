@@ -3,9 +3,8 @@ from faker import Faker
 
 fake = Faker()
 
-async def create_product(
-    auth_client: AsyncClient, title: str | None = None
-) -> dict:
+
+async def create_product(auth_client: AsyncClient, title: str | None = None) -> dict:
     if title is None:
         title = fake.unique.sentence(nb_words=3)
 

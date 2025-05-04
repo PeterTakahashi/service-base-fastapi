@@ -21,8 +21,7 @@ class ProductRepository:
             select(Product)
             .where(
                 and_(
-                    Product.user_id == user_id,
-                    Product.deleted_at == None # noqa: E711
+                    Product.user_id == user_id, Product.deleted_at == None  # noqa: E711
                 )
             )
             .group_by(Product.id)
@@ -42,7 +41,7 @@ class ProductRepository:
                 and_(
                     Product.user_id == user_id,
                     Product.title == title,
-                    Product.deleted_at == None # noqa: E711
+                    Product.deleted_at == None,  # noqa: E711
                 )
             )
         )
@@ -56,12 +55,16 @@ class ProductRepository:
         await self.session.refresh(product)
         return product
 
-    async def get_product(self, user_id: str, product_id: int) -> Optional[Product]:
+    async def get_product(
+        self,
+        user_id: str,
+        product_id: int
+    ) -> Optional[Product]:
         stmt = select(Product).where(
             and_(
                 Product.id == product_id,
                 Product.user_id == user_id,
-                Product.deleted_at == None # noqa: E711
+                Product.deleted_at == None,  # noqa: E711
             )
         )
         result = await self.session.execute(stmt)

@@ -3,6 +3,7 @@ from pydantic import Field, field_serializer
 from app.v1.schemas.base import HasEncodedID
 from app.core.s3 import generate_presigned_url
 
+
 class CharacterImageRead(HasEncodedID):
     image_url: str = ""
     storage_key: Optional[str] = Field(default=None, exclude=True)

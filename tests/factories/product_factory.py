@@ -3,6 +3,7 @@ from tests.factories.async_factory import AsyncSQLAlchemyModelFactory
 from tests.factories.user_factory import UserFactory
 import factory
 
+
 class ProductFactory(AsyncSQLAlchemyModelFactory):
     class Meta:
         model = Product

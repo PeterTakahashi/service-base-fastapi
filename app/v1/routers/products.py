@@ -11,11 +11,13 @@ from app.lib.convert_id import decode_id
 
 router = APIRouter()
 
+
 def get_product_service(
     session: AsyncSession = Depends(get_async_session),
 ) -> ProductService:
     repository = ProductRepository(session)
     return ProductService(repository)
+
 
 @router.get("/", response_model=List[ProductRead])
 async def index_products(
@@ -27,7 +29,13 @@ async def index_products(
 ):
     return await service.list_products(user.id, limit, offset, title)
 
-@router.post("/", response_model=ProductRead, status_code=201, responses=conflict_response("Product", "/title"))
+
+@router.post(
+    "/",
+    response_model=ProductRead,
+    status_code=201,
+    responses=conflict_response("Product", "/title"),
+)
 async def create_product(
     data: ProductCreate,
     user=Depends(current_active_user),
@@ -35,7 +43,13 @@ async def create_product(
 ):
     return await service.create_product(user.id, data)
 
-@router.get("/{product_id}", response_model=ProductRead, status_code=200, responses=not_found_response("Product", "/product_id"))
+
+@router.get(
+    "/{product_id}",
+    response_model=ProductRead,
+    status_code=200,
+    responses=not_found_response("Product", "/product_id"),
+)
 async def get_product(
     product_id: str = Path(...),
     user=Depends(current_active_user),
@@ -43,10 +57,15 @@ async def get_product(
 ):
     return await service.get_product(user.id, decode_id(product_id))
 
-@router.put("/{product_id}",
-  response_model=ProductRead,
-  status_code=200,
-  responses=(not_found_response("Product", "/product_id") | conflict_response("Product", "/title"))
+
+@router.put(
+    "/{product_id}",
+    response_model=ProductRead,
+    status_code=200,
+    responses=(
+        not_found_response("Product", "/product_id")
+        | conflict_response("Product", "/title")
+    ),
 )
 async def update_product(
     data: ProductUpdate,
@@ -57,7 +76,11 @@ async def update_product(
     return await service.update_product(user.id, decode_id(product_id), data)
 
 
-@router.delete("/{product_id}", status_code=204, responses=not_found_response("Product", "/product_id"))
+@router.delete(
+    "/{product_id}",
+    status_code=204,
+    responses=not_found_response("Product", "/product_id"),
+)
 async def delete_product(
     product_id: str = Path(...),
     user=Depends(current_active_user),

@@ -3,6 +3,7 @@ from httpx import AsyncClient
 from tests.v1.modules.create_product import create_product
 from tests.v1.common.unauthorized_response import check_unauthorized_response
 
+
 @pytest.mark.asyncio
 async def test_index_products_authenticated(auth_client: AsyncClient, product: dict):
     resp = await auth_client.get("/products/")
@@ -24,6 +25,7 @@ async def test_index_products_with_title_filter(auth_client: AsyncClient):
     results = resp.json()
     assert all("Filter" in p["title"] for p in results)
 
+
 @pytest.mark.asyncio
 async def test_index_products_pagination(auth_client: AsyncClient):
     # Create 5 products
@@ -31,17 +33,13 @@ async def test_index_products_pagination(auth_client: AsyncClient):
         await create_product(auth_client, title=f"Paginated Product {i}")
 
     # Get first 2
-    resp1 = await auth_client.get(
-        "/products/?limit=2&offset=0"
-    )
+    resp1 = await auth_client.get("/products/?limit=2&offset=0")
     assert resp1.status_code == 200
     results1 = resp1.json()
     assert len(results1) == 2
 
     # Get next 2
-    resp2 = await auth_client.get(
-        "/products/?limit=2&offset=2"
-    )
+    resp2 = await auth_client.get("/products/?limit=2&offset=2")
     assert resp2.status_code == 200
     results2 = resp2.json()
     assert len(results2) == 2
@@ -50,6 +48,7 @@ async def test_index_products_pagination(auth_client: AsyncClient):
     ids_page1 = {item["id"] for item in results1}
     ids_page2 = {item["id"] for item in results2}
     assert ids_page1.isdisjoint(ids_page2)
+
 
 @pytest.mark.asyncio
 async def test_index_products_unauthenticated(client: AsyncClient):

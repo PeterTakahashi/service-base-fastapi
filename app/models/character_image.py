@@ -3,6 +3,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db.base import Base, TimestampMixin
 from typing import Optional
 
+
 class CharacterImage(TimestampMixin, Base):
     __tablename__ = "character_images"
 

@@ -5,6 +5,7 @@ from typing import Optional, List, cast
 from datetime import datetime
 from sqlalchemy.orm import selectinload
 
+
 class CharacterRepository:
     def __init__(self, session: AsyncSession):
         self.session = session
@@ -18,10 +19,15 @@ class CharacterRepository:
         sort_by: str = "id",
         sort_order: str = "asc",
     ) -> List[Character]:
-        stmt = select(Character).where(
-            Character.product_id == product_id,
-            Character.deleted_at == None # noqa: E711,
-        ).limit(limit).offset(offset)
+        stmt = (
+            select(Character)
+            .where(
+                Character.product_id == product_id,
+                Character.deleted_at == None,  # noqa: E711,
+            )
+            .limit(limit)
+            .offset(offset)
+        )
 
         if name:
             stmt = stmt.where(Character.name.ilike(f"%{name}%"))
@@ -39,7 +45,7 @@ class CharacterRepository:
             exists().where(
                 Character.product_id == product_id,
                 Character.name == name,
-                Character.deleted_at == None # noqa: E711,
+                Character.deleted_at == None,  # noqa: E711,
             )
         )
         result = await self.session.execute(stmt)
@@ -52,16 +58,26 @@ class CharacterRepository:
         await self.session.refresh(character)
         return character
 
-    async def get_character(self, product_id: int, character_id: int) -> Optional[Character]:
-        stmt = select(Character).where(
-            Character.product_id == product_id,
-            Character.id == character_id,
-            Character.deleted_at == None # noqa: E711,
-        ).options(selectinload(Character.character_images))
+    async def get_character(
+        self, product_id: int, character_id: int
+    ) -> Optional[Character]:
+        stmt = (
+            select(Character)
+            .where(
+                Character.product_id == product_id,
+                Character.id == character_id,
+                Character.deleted_at == None,  # noqa: E711,
+            )
+            .options(selectinload(Character.character_images))
+        )
         result = await self.session.execute(stmt)
         return result.scalar_one_or_none()
 
-    async def update_character(self, character: Character, data: dict) -> Character:
+    async def update_character(
+        self,
+        character: Character,
+        data: dict
+    ) -> Character:
         for field, value in data.items():
             setattr(character, field, value)
         await self.session.commit()

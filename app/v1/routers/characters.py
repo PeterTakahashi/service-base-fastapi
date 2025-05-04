@@ -13,6 +13,7 @@ from typing import List
 
 router = APIRouter()
 
+
 def get_character_service(
     session: AsyncSession = Depends(get_async_session),
 ) -> CharacterService:
@@ -25,6 +26,7 @@ def get_character_service(
         character_image_repository=character_image_repository,
     )
 
+
 # @router.get("/", response_model=List[CharacterRead])
 # async def index_characters(
 #     user=Depends(current_active_user),
@@ -35,21 +37,40 @@ def get_character_service(
 # ):
 #     return await service.list_characters(user.id, limit, offset, title)
 
-@router.post("/", response_model=CharacterRead, status_code=201, responses=conflict_response("Character", "/name"))
-async def create_character(
-    product_id: str = Path(...),
-    name: str = Form(...),
-    character_image_files: List[UploadFile] = File(..., description="List of character image files", max_items=10, min_items=1),
-    user=Depends(current_active_user),
-    service: CharacterService = Depends(get_character_service),
-):
-    return await service.create_character(user.id, decode_id(product_id), name, character_image_files)
 
-@router.get("/{character_id}", response_model=CharacterRead, status_code=200, responses=not_found_response("Character", "/character_id"))
+@router.post(
+    "/",
+    response_model=CharacterRead,
+    status_code=201,
+    responses=conflict_response("Character", "/name"),
+)
+async def create_character(
+        product_id: str = Path(...),
+        name: str = Form(...),
+        character_image_files: List[UploadFile] = File(...,
+                                                       description="List of character image files",
+                                                       max_items=10,
+                                                       min_items=1),
+        user=Depends(current_active_user),
+        service: CharacterService = Depends(get_character_service)
+):
+    return await service.create_character(
+        user.id, decode_id(product_id), name, character_image_files
+    )
+
+
+@router.get(
+    "/{character_id}",
+    response_model=CharacterRead,
+    status_code=200,
+    responses=not_found_response("Character", "/character_id"),
+)
 async def get_character(
     product_id: str = Path(...),
     character_id: str = Path(...),
     user=Depends(current_active_user),
     service: CharacterService = Depends(get_character_service),
 ):
-    return await service.get_character(user.id, decode_id(product_id), decode_id(character_id))
+    return await service.get_character(
+        user.id, decode_id(product_id), decode_id(character_id)
+    )

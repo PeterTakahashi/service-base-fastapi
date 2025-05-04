@@ -1,6 +1,7 @@
 import pytest
 from httpx import AsyncClient
 
+
 @pytest.mark.asyncio
 async def test_logout_success(client: AsyncClient, access_token):
     logout_resp = await client.post(
@@ -11,9 +12,8 @@ async def test_logout_success(client: AsyncClient, access_token):
     me = await client.get(
         "/users/me", headers={"Authorization": f"Bearer {access_token}"}
     )
-    assert (
-        me.status_code == 200
-    )
+    assert me.status_code == 200
+
 
 async def test_logout_unauthorized(client: AsyncClient):
     # Authorization ヘッダーなしでログアウトを試みる
@@ -24,12 +24,12 @@ async def test_logout_unauthorized(client: AsyncClient):
     resp_json = logout_resp.json()
     print(resp_json)
     assert resp_json == {
-        'errors': [
+        "errors": [
             {
-                'code': 'unauthorized',
-                'detail': 'Authentication credentials were not provided or are invalid.',
-                'status': '401',
-                'title': 'Unauthorized'
+                "code": "unauthorized",
+                "detail": "Authentication credentials were not provided or are invalid.",
+                "status": "401",
+                "title": "Unauthorized",
             }
         ]
     }

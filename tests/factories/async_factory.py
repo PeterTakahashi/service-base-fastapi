@@ -1,10 +1,12 @@
 import factory
 
+
 class AsyncSQLAlchemyModelFactory(factory.alchemy.SQLAlchemyModelFactory):
     """
     SQLAlchemyModelFactory の非同期版
     factory
     """
+
     class Meta:
         abstract = True
         sqlalchemy_session = None

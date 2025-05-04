@@ -3,6 +3,7 @@ from sqlalchemy.orm import relationship
 from app.db.base import Base, TimestampMixin
 from fastapi_users_db_sqlalchemy import generics
 
+
 class Product(TimestampMixin, Base):
     __tablename__ = "products"
 
@@ -14,6 +15,4 @@ class Product(TimestampMixin, Base):
     episodes = relationship("Episode", back_populates="product")
     characters = relationship("Character", back_populates="product")
 
-    __table_args__ = (
-        UniqueConstraint("title", "user_id", name="uq_title_user_id"),
-    )
+    __table_args__ = (UniqueConstraint("title", "user_id", name="uq_title_user_id"),)

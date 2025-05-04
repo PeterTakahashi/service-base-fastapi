@@ -3,6 +3,7 @@ from app.v1.schemas.product import ProductCreate, ProductUpdate
 from fastapi import HTTPException
 from app.lib.convert_id import encode_id
 
+
 async def test_update_product(product_service, product):
     data = ProductUpdate(title="Updated Product")
     updated_product = await product_service.update_product(
@@ -13,6 +14,7 @@ async def test_update_product(product_service, product):
     assert updated_product.id == product.id
     assert updated_product.created_at == product.created_at
     assert updated_product.updated_at is not None
+
 
 async def test_update_product_not_found(product_service, user):
     data = ProductUpdate(title="Updated Product")
@@ -34,6 +36,7 @@ async def test_update_product_not_found(product_service, user):
             }
         ]
     }
+
 
 async def test_update_product_already_exists(product_service, product):
     existing_product = await product_service.create_product(

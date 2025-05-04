@@ -24,6 +24,7 @@ from tests.fixtures.service_fixture import (
     user_service,
 )
 
+
 @pytest.fixture(scope="session")
 def event_loop():
     loop = asyncio.get_event_loop()
@@ -40,13 +41,22 @@ async def setup_database():
 
 @pytest_asyncio.fixture(autouse=True)
 async def clean_tables():
-    for table in ["pages", "episodes", "character_images", "characters", "products", "users"]:
+    for table in [
+        "pages",
+        "episodes",
+        "character_images",
+        "characters",
+        "products",
+        "users",
+    ]:
         await database.execute(f"TRUNCATE TABLE {table} RESTART IDENTITY CASCADE")
+
 
 @pytest_asyncio.fixture
 async def async_session():
     async for session in get_async_session():
         yield session
+
 
 @pytest_asyncio.fixture
 def faker():

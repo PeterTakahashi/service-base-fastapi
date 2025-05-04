@@ -5,6 +5,7 @@ skip_adding_401 = {
     ("/auth/register/register", "post"),
 }
 
+
 def custom_openapi(app):
     if app.openapi_schema:
         return app.openapi_schema
@@ -15,11 +16,7 @@ def custom_openapi(app):
         description=app.description,
         routes=app.routes,
     )
-    openapi_schema["servers"] = [
-        {
-            "url": "/app/v1"
-        }
-    ]
+    openapi_schema["servers"] = [{"url": "/app/v1"}]
 
     accept_language_header = {
         "name": "Accept-Language",
@@ -50,41 +47,47 @@ def custom_openapi(app):
                 }
                 parameters.append(authorization_language_header)
 
-                responses.setdefault("401", {
-                    "description": "Unauthorized",
+                responses.setdefault(
+                    "401",
+                    {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errors": [
+                                        {
+                                            "status": "401",
+                                            "code": "unauthorized",
+                                            "title": "Unauthorized",
+                                            "detail": "Authentication credentials were not provided or are invalid.",
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                    },
+                )
+
+            responses.setdefault(
+                "500",
+                {
+                    "description": "Internal Server Error",
                     "content": {
                         "application/json": {
                             "example": {
                                 "errors": [
                                     {
-                                        "status": "401",
-                                        "code": "unauthorized",
-                                        "title": "Unauthorized",
-                                        "detail": "Authentication credentials were not provided or are invalid."
+                                        "status": "500",
+                                        "code": "internal_server_error",
+                                        "title": "Internal Server Error",
+                                        "detail": "An unexpected error occurred. Please try again later.",
                                     }
                                 ]
                             }
                         }
                     },
-                })
-
-            responses.setdefault("500", {
-                "description": "Internal Server Error",
-                "content": {
-                    "application/json": {
-                        "example": {
-                            "errors": [
-                                {
-                                    "status": "500",
-                                    "code": "internal_server_error",
-                                    "title": "Internal Server Error",
-                                    "detail": "An unexpected error occurred. Please try again later."
-                                }
-                            ]
-                        }
-                    }
                 },
-            })
+            )
 
             if "422" in responses:
                 responses["422"] = {
@@ -98,14 +101,12 @@ def custom_openapi(app):
                                         "code": "validation_error",
                                         "title": "Validation Error",
                                         "detail": "The field 'title' is required.",
-                                        "source": {
-                                            "pointer": "/title"
-                                        }
+                                        "source": {"pointer": "/title"},
                                     }
                                 ]
                             }
                         }
-                    }
+                    },
                 }
 
     app.openapi_schema = openapi_schema

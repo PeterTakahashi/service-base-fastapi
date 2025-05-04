@@ -5,6 +5,7 @@ from fastapi import HTTPException
 from typing import List, Optional
 from app.lib.convert_id import encode_id
 
+
 class ProductService:
     def __init__(self, product_repository: ProductRepository):
         self.product_repository = product_repository
@@ -51,7 +52,9 @@ class ProductService:
         if not product:
             raise HTTPException(
                 status_code=404,
-                detail=not_found_response_detail("Product", "/product_id", encode_id(product_id)),
+                detail=not_found_response_detail(
+                    "Product", "/product_id", encode_id(product_id)
+                ),
             )
         return product
 
@@ -60,9 +63,7 @@ class ProductService:
         if exists:
             raise HTTPException(
                 status_code=409,
-                detail=conflict_response_detail(
-                    "Product", "/title", title
-                ),
+                detail=conflict_response_detail("Product", "/title", title),
             )
         else:
             return False

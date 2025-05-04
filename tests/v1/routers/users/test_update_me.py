@@ -1,6 +1,7 @@
 from httpx import AsyncClient
 from tests.v1.common.unauthorized_response import check_unauthorized_response
 
+
 async def test_update_me_email(auth_client: AsyncClient, faker):
     new_email = faker.unique.email()
 
@@ -11,6 +12,7 @@ async def test_update_me_email(auth_client: AsyncClient, faker):
 
     assert response.status_code == 200
     assert response.json()["email"] == new_email
+
 
 async def test_update_me_unauthenticated(client: AsyncClient):
     response = await client.patch("/users/me", json={"email": "test@test.com"})

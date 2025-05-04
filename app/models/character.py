@@ -3,6 +3,7 @@ from sqlalchemy.orm import relationship
 from app.db.base import Base, TimestampMixin
 from app.models.product import Product
 
+
 class Character(TimestampMixin, Base):
     __tablename__ = "characters"
 

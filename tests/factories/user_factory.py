@@ -2,6 +2,7 @@ from app.models.user import User
 from tests.factories.async_factory import AsyncSQLAlchemyModelFactory
 import factory
 
+
 class UserFactory(AsyncSQLAlchemyModelFactory):
     class Meta:
         model = User

@@ -2,6 +2,7 @@ import pytest
 from fastapi import HTTPException
 from app.lib.convert_id import encode_id
 
+
 async def test_delete_product(product_service, product):
     await product_service.delete_product(
         user_id=str(product.user.id), product_id=product.id
@@ -25,6 +26,7 @@ async def test_delete_product(product_service, product):
             }
         ]
     }
+
 
 async def test_delete_product_not_found(product_service, user):
     product_id = 0

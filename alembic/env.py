@@ -2,6 +2,8 @@
 Alembic environment configuration for database migrations.
 This script configures the Alembic context for both offline and online migrations.
 """
+
+# pylint: disable=no-member
 from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config, pool
@@ -12,14 +14,7 @@ from dotenv import load_dotenv
 from alembic import context
 from app.db.base import Base
 from app.core.config import settings
-from app.models import (
-    Character,
-    CharacterImage,
-    Episode,
-    Page,
-    Product,
-    User
-)
+from app.models import Character, CharacterImage, Episode, Page, Product, User
 
 load_dotenv()
 

@@ -5,9 +5,11 @@ from typing import Optional
 
 class UserRead(schemas.BaseUser):
     """Base User model."""
+
     is_active: bool = Field(deprecated=True, default=True)
     is_superuser: bool = Field(deprecated=True, default=False)
     model_config = ConfigDict(from_attributes=True)
+
 
 class UserCreate(schemas.BaseUserCreate):
     email: EmailStr = Field(

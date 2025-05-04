@@ -11,6 +11,7 @@ from app.core.s3 import generate_s3_storage_key, upload_file_to_s3
 from app.lib.convert_id import encode_id
 from app.lib.get_file_extension import get_file_extension
 
+
 class CharacterService:
     def __init__(
         self,
@@ -38,7 +39,9 @@ class CharacterService:
         )
         return [CharacterRead.model_validate(character) for character in characters]
 
-    async def get_character(self, user_id: str, product_id: int, character_id: int) -> CharacterRead:
+    async def get_character(
+        self, user_id: str, product_id: int, character_id: int
+    ) -> CharacterRead:
         character = await self.__find_character(user_id, product_id, character_id)
         return CharacterRead.model_validate(character)
 
@@ -58,16 +61,20 @@ class CharacterService:
             created_at=character.created_at,
             updated_at=character.updated_at,
             product_id=int(character.product_id),
-            character_images=[]
+            character_images=[],
         )
-        return await self.__attach_images_to_character(character_read, character_image_files)
+        return await self.__attach_images_to_character(
+            character_read, character_image_files
+        )
 
     async def __find_product(self, user_id: str, product_id: int):
         product = await self.product_repository.get_product(user_id, product_id)
         if not product:
             raise HTTPException(
                 status_code=404,
-                detail=not_found_response_detail("Product", "/product_id", encode_id(product_id)),
+                detail=not_found_response_detail(
+                    "Product", "/product_id", encode_id(product_id)
+                ),
             )
         return product
 
@@ -75,11 +82,15 @@ class CharacterService:
         self, user_id: str, product_id: int, character_id: int
     ) -> Character:
         product = await self.__find_product(user_id, product_id)
-        character = await self.character_repository.get_character(product.id, character_id)
+        character = await self.character_repository.get_character(
+            product.id, character_id
+        )
         if not character:
             raise HTTPException(
                 status_code=404,
-                detail=not_found_response_detail("Character", "/character_id", encode_id(character_id)),
+                detail=not_found_response_detail(
+                    "Character", "/character_id", encode_id(character_id)
+                ),
             )
         return character
 
@@ -88,8 +99,10 @@ class CharacterService:
     ) -> CharacterRead:
         for file in character_image_files:
             # 1) character_image レコードを1件作成
-            character_image = await self.character_image_repository.character_image_create(
-                character_read.id
+            character_image = (
+                await self.character_image_repository.character_image_create(
+                    character_read.id
+                )
             )
 
             # 2) S3にアップするためのオブジェクトキーを生成
@@ -116,9 +129,7 @@ class CharacterService:
         if exists:
             raise HTTPException(
                 status_code=409,
-                detail=conflict_response_detail(
-                    "Character", "/name", name
-                ),
+                detail=conflict_response_detail("Character", "/name", name),
             )
         else:
             return False

@@ -2,6 +2,7 @@ import pytest_asyncio
 from httpx import AsyncClient
 from faker import Faker
 
+
 @pytest_asyncio.fixture
 async def character(auth_client: AsyncClient, product_id: str, faker: Faker) -> dict:
     files = [
@@ -27,5 +28,7 @@ async def character(auth_client: AsyncClient, product_id: str, faker: Faker) -> 
     for _, (filename, file_obj, mime_type) in files:
         file_obj.close()
 
-    assert response.status_code == 201, f"Expected 201, got {response.status_code}. Response: {response.text}"
+    assert (
+        response.status_code == 201
+    ), f"Expected 201, got {response.status_code}. Response: {response.text}"
     return response.json()
