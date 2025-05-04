@@ -5,6 +5,7 @@ from tests.common.check_error_response import (
     check_not_found_response,
 )
 
+
 @pytest_asyncio.fixture
 async def character_image_files():
     """
@@ -20,6 +21,7 @@ async def character_image_files():
             ("4.png", open("tests/files/character_image/4.png", "rb"), "image/png"),
         ),
     ]
+
 
 async def test_add_character_images_character(
     auth_client: AsyncClient, product_id: str, character_id: str, character_image_files
@@ -51,6 +53,7 @@ async def test_add_character_images_character(
     assert "character_images" in resp_data
     assert len(resp_data["character_images"]) == 4
 
+
 async def test_add_character_images_with_no_images(
     auth_client: AsyncClient, product_id: str, character_id: str
 ):
@@ -80,9 +83,8 @@ async def test_add_character_images_with_no_images(
         ]
     }
 
-async def test_add_character_images_unauthorized(
-    client: AsyncClient, fake_id: str
-):
+
+async def test_add_character_images_unauthorized(client: AsyncClient, fake_id: str):
     """
     Test adding images to a character without authorization should return 401.
     """
@@ -94,6 +96,7 @@ async def test_add_character_images_unauthorized(
     )
 
     check_unauthorized_response(response)
+
 
 async def test_add_character_images_not_found_product(
     auth_client: AsyncClient, fake_id: str, character_image_files
@@ -112,6 +115,7 @@ async def test_add_character_images_not_found_product(
         file[1].close()
     check_not_found_response(response, "Product", "product_id", fake_id)
 
+
 async def test_add_character_images_not_found_character(
     auth_client: AsyncClient, product_id: str, fake_id: str, character_image_files
 ):
@@ -129,8 +133,12 @@ async def test_add_character_images_not_found_character(
         file[1].close()
     check_not_found_response(response, "Character", "character_id", fake_id)
 
+
 async def test_add_character_images_over_max_images(
-    auth_client: AsyncClient, product_id: str, character_id: str, over_max_character_image_files: list
+    auth_client: AsyncClient,
+    product_id: str,
+    character_id: str,
+    over_max_character_image_files: list,
 ):
     """
     Test adding more than the maximum allowed images to a character.
@@ -151,7 +159,7 @@ async def test_add_character_images_over_max_images(
         response.status_code == 422
     ), f"Expected 422, got {response.status_code}. Response: {response.text}"
     resp_data = response.json()
-    assert resp_data['detail'] == {
+    assert resp_data["detail"] == {
         "errors": [
             {
                 "status": "422",

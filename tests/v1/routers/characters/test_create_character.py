@@ -106,6 +106,7 @@ async def test_create_character_unauthorized(client: AsyncClient, fake_id: str):
 
     check_unauthorized_response(response)
 
+
 async def test_create_character_over_max_character_image_files(
     auth_client: AsyncClient, product_id: str, over_max_character_image_files: list
 ):
@@ -126,7 +127,7 @@ async def test_create_character_over_max_character_image_files(
         response.status_code == 422
     ), f"Expected 422, got {response.status_code}. Response: {response.text}"
     resp_data = response.json()
-    assert resp_data['detail'] == {
+    assert resp_data["detail"] == {
         "errors": [
             {
                 "status": "422",

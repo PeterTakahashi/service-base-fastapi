@@ -89,11 +89,10 @@ async def test_add_character_images_not_found_character(
         encode_id(0),
     )
 
+
 async def test_add_character_images_over_max_images(
     character_service, product, character_with_character_images
 ):
-    name = character_with_character_images.name
-
     # ファイルを開いて UploadFile に変換
     file_paths = []
     for i in range(11):

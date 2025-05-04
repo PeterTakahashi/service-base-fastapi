@@ -10,7 +10,6 @@ from app.v1.services.character_service import CharacterService
 from app.core.response_type import not_found_response, conflict_response
 from app.lib.convert_id import decode_id
 from typing import List
-from app.core.config import settings
 
 router = APIRouter()
 
@@ -26,6 +25,7 @@ def get_character_service(
         character_repository=character_repository,
         character_image_repository=character_image_repository,
     )
+
 
 @router.post(
     "/",
@@ -64,6 +64,7 @@ async def get_character(
         user.id, decode_id(product_id), decode_id(character_id)
     )
 
+
 @router.put(
     "/{character_id}/add-character-images",
     response_model=CharacterRead,
@@ -74,8 +75,7 @@ async def add_character_images(
     product_id: str = Path(...),
     character_id: str = Path(...),
     character_image_files: List[UploadFile] = File(
-        ...,
-        description="List of character image files"
+        ..., description="List of character image files"
     ),
     user=Depends(current_active_user),
     service: CharacterService = Depends(get_character_service),

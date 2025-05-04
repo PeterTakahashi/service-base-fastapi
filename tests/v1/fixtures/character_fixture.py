@@ -2,6 +2,7 @@ import pytest_asyncio
 from httpx import AsyncClient
 from faker import Faker
 
+
 @pytest_asyncio.fixture
 async def init_character_image_files():
     """
@@ -18,6 +19,7 @@ async def init_character_image_files():
         ),
     ]
 
+
 @pytest_asyncio.fixture
 async def over_max_character_image_files():
     """
@@ -28,13 +30,20 @@ async def over_max_character_image_files():
         files.append(
             (
                 "character_image_files",
-                (f"{i}.png", open(f"tests/files/character_image/{i}.png", "rb"), "image/png"),
+                (
+                    f"{i}.png",
+                    open(f"tests/files/character_image/{i}.png", "rb"),
+                    "image/png",
+                ),
             )
         )
     return files
 
+
 @pytest_asyncio.fixture
-async def character(auth_client: AsyncClient, product_id: str, faker: Faker, init_character_image_files) -> dict:
+async def character(
+    auth_client: AsyncClient, product_id: str, faker: Faker, init_character_image_files
+) -> dict:
     data = {
         "name": faker.name(),
     }
@@ -52,6 +61,7 @@ async def character(auth_client: AsyncClient, product_id: str, faker: Faker, ini
         response.status_code == 201
     ), f"Expected 201, got {response.status_code}. Response: {response.text}"
     return response.json()
+
 
 @pytest_asyncio.fixture
 async def character_id(character: dict) -> str:
