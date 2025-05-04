@@ -11,6 +11,8 @@ class CharacterImage(TimestampMixin, Base):
     character_id = Column(
         Integer, ForeignKey("characters.id"), nullable=False, index=True
     )
-    storage_key: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    storage_key: Mapped[Optional[str]] = mapped_column(
+        String(255), nullable=True
+    )
 
     character = relationship("Character", back_populates="character_images")

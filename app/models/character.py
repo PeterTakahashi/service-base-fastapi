@@ -9,9 +9,15 @@ class Character(TimestampMixin, Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(255), index=True, nullable=False)
-    product_id = Column(Integer, ForeignKey("products.id"), nullable=False, index=True)
+    product_id = Column(
+        Integer,
+        ForeignKey("products.id"),
+        nullable=False,
+        index=True)
 
-    character_images = relationship("CharacterImage", back_populates="character")
+    character_images = relationship(
+        "CharacterImage", back_populates="character"
+    )
     product = relationship("Product", back_populates="characters")
     user = relationship(
         "User",

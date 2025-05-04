@@ -5,7 +5,9 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 from app.core.i18n import get_locale, get_message
 
 
-async def http_exception_handler(request: Request, exc: StarletteHTTPException):
+async def http_exception_handler(
+        request: Request,
+        exc: StarletteHTTPException):
     locale = get_locale(request)
     if exc.status_code == 401:
         return JSONResponse(
@@ -15,11 +17,15 @@ async def http_exception_handler(request: Request, exc: StarletteHTTPException):
                     {
                         "status": "401",
                         "code": "unauthorized",
-                        "title": get_message(locale, "unauthorized", "title"),
-                        "detail": get_message(locale, "unauthorized", "detail"),
-                    }
-                ]
-            },
+                        "title": get_message(
+                            locale,
+                            "unauthorized",
+                            "title"),
+                        "detail": get_message(
+                            locale,
+                            "unauthorized",
+                            "detail"),
+                    }]},
         )
     return JSONResponse(
         status_code=exc.status_code,
@@ -36,15 +42,21 @@ async def server_exception_handler(request: Request, exc: Exception):
                 {
                     "status": "500",
                     "code": "internal_server_error",
-                    "title": get_message(locale, "internal_server_error", "title"),
-                    "detail": get_message(locale, "internal_server_error", "detail"),
-                }
-            ]
-        },
+                    "title": get_message(
+                        locale,
+                        "internal_server_error",
+                        "title"),
+                    "detail": get_message(
+                        locale,
+                        "internal_server_error",
+                        "detail"),
+                }]},
     )
 
 
-async def validation_exception_handler(request: Request, exc: RequestValidationError):
+async def validation_exception_handler(
+        request: Request,
+        exc: RequestValidationError):
     locale = get_locale(request)
     errors = []
 
