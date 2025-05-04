@@ -4,9 +4,25 @@ import pytest_asyncio
 from app.core.startup import database
 from app.db.session import get_async_session
 from faker import Faker
-from tests.fixtures.model_fixture import *
-from tests.fixtures.repository_fixture import *
-from tests.fixtures.service_fixture import *
+from tests.fixtures.model_fixture import (
+    user,
+    product,
+    product_with_characters,
+    character,
+    character_with_character_images,
+    character_image,
+)
+from tests.fixtures.repository_fixture import (
+    character_repository,
+    product_repository,
+    character_image_repository,
+    user_repository,
+)
+from tests.fixtures.service_fixture import (
+    character_service,
+    product_service,
+    user_service,
+)
 
 @pytest.fixture(scope="session")
 def event_loop():

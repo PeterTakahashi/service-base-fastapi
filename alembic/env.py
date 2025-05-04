@@ -1,15 +1,25 @@
+"""
+Alembic environment configuration for database migrations.
+This script configures the Alembic context for both offline and online migrations.
+"""
 from logging.config import fileConfig
 
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
+from sqlalchemy import engine_from_config, pool
 
-from alembic import context
-from app.db.base import Base
 
 from dotenv import load_dotenv
 
+from alembic import context
+from app.db.base import Base
 from app.core.config import settings
-from app.models import *
+from app.models import (
+    Character,
+    CharacterImage,
+    Episode,
+    Page,
+    Product,
+    User
+)
 
 load_dotenv()
 
@@ -17,7 +27,7 @@ sync_url = settings.DATABASE_URL.replace("+asyncpg", "")
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
-config = context.config
+config = context.config  # pylint: disable=no-member
 
 config.set_main_option("sqlalchemy.url", sync_url)
 # Interpret the config file for Python logging.

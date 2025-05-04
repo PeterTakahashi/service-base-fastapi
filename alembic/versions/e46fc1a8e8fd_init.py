@@ -6,10 +6,10 @@ Create Date: 2025-05-02 01:23:07.839099
 
 """
 from typing import Sequence, Union
+import fastapi_users_db_sqlalchemy
 
 from alembic import op
 import sqlalchemy as sa
-import fastapi_users_db_sqlalchemy
 from app.models.types.enum_types import EnumIntegerType
 from app.models.page import StatusEnum
 
