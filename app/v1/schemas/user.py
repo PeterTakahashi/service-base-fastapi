@@ -1,16 +1,15 @@
-from fastapi_users import schemas, models
+from fastapi_users import schemas
 from pydantic import EmailStr, ConfigDict, Field
-from typing import Optional, Generic
+from typing import Optional
 
 
-class UserRead(schemas.CreateUpdateDictModel, Generic[models.ID]):
+class UserRead(schemas.BaseUser):
     """Base User model."""
-
-    id: models.ID
-    email: EmailStr
+    is_active: bool = Field(deprecated=True, default=True)
+    is_superuser: bool = Field(deprecated=True, default=False)
     model_config = ConfigDict(from_attributes=True)
 
-class UserCreate(schemas.CreateUpdateDictModel):
+class UserCreate(schemas.BaseUserCreate):
     email: EmailStr = Field(
         ...,
         max_length=320,
@@ -24,9 +23,12 @@ class UserCreate(schemas.CreateUpdateDictModel):
         json_schema_extra={"example": "password123%"},
         description="The password of the user.",
     )
+    is_active: bool = Field(deprecated=True, default=True)
+    is_superuser: bool = Field(deprecated=True, default=False)
+    is_verified: bool = Field(deprecated=True, default=False)
 
 
-class UserUpdate(schemas.CreateUpdateDictModel):
+class UserUpdate(schemas.BaseUserUpdate):
     email: Optional[EmailStr] = Field(
         None,
         max_length=320,
@@ -40,3 +42,6 @@ class UserUpdate(schemas.CreateUpdateDictModel):
         json_schema_extra={"example": "password123%"},
         description="The password of the user.",
     )
+    is_active: bool = Field(deprecated=True, default=True)
+    is_superuser: bool = Field(deprecated=True, default=False)
+    is_verified: bool = Field(deprecated=True, default=False)
