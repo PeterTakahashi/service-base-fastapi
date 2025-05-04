@@ -107,23 +107,19 @@ jobs:
           name: coverage-report
           path: htmlcov/
 
+      - name: Ruff *.py files
+        run: |
+          source .venv/bin/activate
+          ruff check .
+
+      - name: mypy
+        run: |
+          source .venv/bin/activate
+          mypy --config-file mypy.ini .
+
       - name: Lint *.py files
         if: always()
         continue-on-error: true
         run: |
           source .venv/bin/activate
           pylint $(git ls-files '*.py')
-
-      - name: Ruff *.py files
-        if: always()
-        continue-on-error: true
-        run: |
-          source .venv/bin/activate
-          ruff check .
-
-      - name: mypy
-        if: always()
-        continue-on-error: true
-        run: |
-          source .venv/bin/activate
-          mypy --config-file mypy.ini .
