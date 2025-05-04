@@ -9,7 +9,7 @@ from app.models.character import Character
 from app.core.response_type import not_found_response_detail, conflict_response_detail
 from app.core.s3 import generate_s3_storage_key, upload_file_to_s3
 from app.lib.convert_id import encode_id
-
+from app.lib.get_file_extension import get_file_extension
 
 class CharacterService:
     def __init__(
@@ -97,7 +97,7 @@ class CharacterService:
                 "character_images",
                 encode_id(int(character_image.id)),
                 "image",
-                extension=file.filename.split(".")[-1] if "." in file.filename else "jpg",
+                extension=get_file_extension(file.filename),
             )
 
             # 3) S3へアップロード

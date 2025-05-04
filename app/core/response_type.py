@@ -2,15 +2,15 @@ from app.v1.schemas.error import ErrorResponse
 from app.lib.camel_to_snake import camel_to_snake
 from typing import Any, Dict
 
-unauthorized_response: Dict[int, Dict[str, Any]] = {
+unauthorized_response: Dict[int | str, Dict[str, Any]] = {
     401: {
         "description": "Unauthorized",
         "content": {
             "application/json": {
-                "example": {"detail": "Unauthorized"}
+                "example": {"detail": "Not authenticated"}
             }
         },
-    },
+    }
 }
 
 unauthorized_detail = {
