@@ -40,7 +40,7 @@ def not_found_response(model_name: str, parameter: str):
             "content": {
                 "application/json": {
                     "example": not_found_response_detail(
-                        model_name, parameter, "123e4567-e89b-12d3-a456-426614174000"
+                        model_name, parameter, "123e4567e89b"
                     ),
                 }
             },

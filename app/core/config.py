@@ -21,7 +21,7 @@ class Settings(BaseSettings):
     RESET_PASSWORD_TOKEN_SECRET: str = "SECRET"
     VERIFICATION_TOKEN_SECRET: str = "SECRET"
     JWT_SECRET: str = "SECRET"
-    HASHIDS_MIN_LENGTH: int = 8
+    HASHIDS_MIN_LENGTH: int = 12
     HASHIDS_SALT: str = os.getenv("HASHIDS_SALT", "SECRET")
     S3_ENDPOINT: str = os.getenv("S3_ENDPOINT", "https://s3.amazonaws.com")
     S3_ACCESS_KEY: str = os.getenv("S3_ACCESS_KEY", "admin")

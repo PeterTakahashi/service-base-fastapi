@@ -3,7 +3,7 @@ from app.lib.convert_id import encode_id
 
 IDField = Field(
     ...,
-    json_schema_extra={"example": "jAg2Dqn1"},
+    json_schema_extra={"example": "abcd1234xyzc"},
     description="The ID of the object",
 )
 
