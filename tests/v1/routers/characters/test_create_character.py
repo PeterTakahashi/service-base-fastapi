@@ -5,69 +5,21 @@ from tests.common.check_error_response import (
 )
 
 
-async def test_create_character_with_single_image(
-    auth_client: AsyncClient, product_id: str
-):
-    """
-    Test creating a character with a single image upload.
-    """
-    # Prepare file & form data
-    files = {
-        # "character_image_files" must match the parameter name in the route function
-        "character_image_files": (
-            "1.png",
-            open("tests/files/character_image/1.png", "rb"),
-            "image/png",
-        )
-    }
-    data = {"name": "SingleImageCharacter"}
-
-    response = await auth_client.post(
-        f"/products/{product_id}/characters/",
-        data=data,
-        files=files,
-    )
-    # Close the file to avoid file descriptor leaks
-    files["character_image_files"][1].close()
-
-    assert (
-        response.status_code == 201
-    ), f"Expected 201, got {response.status_code}. Response: {response.text}"
-    resp_data = response.json()
-
-    # Basic assertions
-    assert resp_data["name"] == "SingleImageCharacter"
-    assert "character_images" in resp_data
-    assert len(resp_data["character_images"]) == 1
-    assert resp_data["character_images"][0]["image_url"] != ""
-
-
 async def test_create_character_with_multiple_images(
-    auth_client: AsyncClient, product_id: str
+    auth_client: AsyncClient, product_id: str, init_character_image_files: list
 ):
     """
     Test creating a character with multiple images uploaded at once.
     """
-    # For multiple file uploads, pass each file under the same form field name (`character_image_files`)
-    files = [
-        (
-            "character_image_files",
-            ("1.png", open("tests/files/character_image/1.png", "rb"), "image/png"),
-        ),
-        (
-            "character_image_files",
-            ("2.png", open("tests/files/character_image/2.png", "rb"), "image/png"),
-        ),
-    ]
     data = {"name": "MultiImageCharacter"}
 
     response = await auth_client.post(
         f"/products/{product_id}/characters/",
         data=data,
-        files=files,
+        files=init_character_image_files,
     )
     # Close the files after the request
-    for _, (filename, file_obj, mime_type) in files:
+    for _, (filename, file_obj, mime_type) in init_character_image_files:
         file_obj.close()
 
     assert (
@@ -153,3 +105,35 @@ async def test_create_character_unauthorized(client: AsyncClient, fake_id: str):
     files["character_image_files"][1].close()
 
     check_unauthorized_response(response)
+
+async def test_create_character_over_max_character_image_files(
+    auth_client: AsyncClient, product_id: str, over_max_character_image_files: list
+):
+    """
+    Test creating a character with more than the maximum allowed images.
+    """
+    data = {"name": "OverMaxImageCharacter"}
+    response = await auth_client.post(
+        f"/products/{product_id}/characters/",
+        data=data,
+        files=over_max_character_image_files,
+    )
+    # Close the files after the request
+    for _, (filename, file_obj, mime_type) in over_max_character_image_files:
+        file_obj.close()
+
+    assert (
+        response.status_code == 422
+    ), f"Expected 422, got {response.status_code}. Response: {response.text}"
+    resp_data = response.json()
+    assert resp_data['detail'] == {
+        "errors": [
+            {
+                "status": "422",
+                "code": "invalid_request",
+                "title": "Unprocessable Entity",
+                "detail": "Character image count must be between 1 and 10.",
+                "source": {"parameter": "character_image_files"},
+            }
+        ]
+    }

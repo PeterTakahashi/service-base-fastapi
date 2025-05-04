@@ -62,6 +62,20 @@ def not_found_response_detail(model_name: str, parameter: str, target_id: str):
     }
 
 
+def invalid_request_response_detail(parameter: str, message: str):
+    return {
+        "errors": [
+            {
+                "status": "422",
+                "code": "invalid_request",
+                "title": "Unprocessable Entity",
+                "detail": message,
+                "source": {"parameter": parameter},
+            }
+        ]
+    }
+
+
 def conflict_response(model_name: str, parameter: str):
     return {
         409: {

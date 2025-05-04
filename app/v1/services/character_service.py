@@ -6,10 +6,15 @@ from app.v1.repositories.character_image_repository import CharacterImageReposit
 from app.v1.schemas.character import CharacterRead
 from app.v1.schemas.character_image import CharacterImageRead
 from app.models.character import Character
-from app.core.response_type import not_found_response_detail, conflict_response_detail
+from app.core.response_type import (
+    not_found_response_detail,
+    conflict_response_detail,
+    invalid_request_response_detail,
+)
 from app.core.s3 import generate_s3_storage_key, upload_file_to_s3
 from app.lib.convert_id import encode_id
 from app.lib.get_file_extension import get_file_extension
+from app.core.config import settings
 
 
 class CharacterService:
@@ -67,6 +72,36 @@ class CharacterService:
             character_read, character_image_files
         )
 
+    async def add_character_images(
+        self,
+        user_id: str,
+        product_id: int,
+        character_id: int,
+        character_image_files: List[UploadFile],
+    ) -> CharacterRead:
+        character = await self.__find_character(user_id, product_id, character_id)
+        character_read = CharacterRead.model_validate(character)
+        return await self.__attach_images_to_character(
+            character_read, character_image_files
+        )
+
+    async def __validate_attach_images_to_character(
+        self,
+        character_read: CharacterRead,
+        character_image_files: List[UploadFile],
+    ) -> None:
+        if (
+            len(character_read.character_images) + len(character_image_files)
+            > settings.MAX_CHARACTER_IMAGES_COUNT
+        ):
+            raise HTTPException(
+                status_code=422,
+                detail=invalid_request_response_detail(
+                    "character_image_files",
+                    f"Character image count must be between 1 and {settings.MAX_CHARACTER_IMAGES_COUNT}.",
+                ),
+            )
+
     async def __find_product(self, user_id: str, product_id: int):
         product = await self.product_repository.get_product(user_id, product_id)
         if not product:
@@ -89,7 +124,7 @@ class CharacterService:
             raise HTTPException(
                 status_code=404,
                 detail=not_found_response_detail(
-                    "Character", "/character_id", encode_id(character_id)
+                    "Character", "character_id", encode_id(character_id)
                 ),
             )
         return character
@@ -97,6 +132,9 @@ class CharacterService:
     async def __attach_images_to_character(
         self, character_read: CharacterRead, character_image_files: List[UploadFile]
     ) -> CharacterRead:
+        await self.__validate_attach_images_to_character(
+            character_read, character_image_files
+        )
         for file in character_image_files:
             # 1) character_image レコードを1件作成
             character_image = (

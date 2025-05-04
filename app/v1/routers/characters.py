@@ -10,6 +10,7 @@ from app.v1.services.character_service import CharacterService
 from app.core.response_type import not_found_response, conflict_response
 from app.lib.convert_id import decode_id
 from typing import List
+from app.core.config import settings
 
 router = APIRouter()
 
@@ -26,18 +27,6 @@ def get_character_service(
         character_image_repository=character_image_repository,
     )
 
-
-# @router.get("/", response_model=List[CharacterRead])
-# async def index_characters(
-#     user=Depends(current_active_user),
-#     limit: int = Query(10, ge=1, le=100),
-#     offset: int = Query(0, ge=0),
-#     title: Optional[str] = Query(None),
-#     service: CharacterService = Depends(get_character_service),
-# ):
-#     return await service.list_characters(user.id, limit, offset, title)
-
-
 @router.post(
     "/",
     response_model=CharacterRead,
@@ -48,7 +37,8 @@ async def create_character(
     product_id: str = Path(...),
     name: str = Form(...),
     character_image_files: List[UploadFile] = File(
-        ..., description="List of character image files", max_items=10, min_items=1
+        ...,
+        description="List of character image files",
     ),
     user=Depends(current_active_user),
     service: CharacterService = Depends(get_character_service),
@@ -72,4 +62,24 @@ async def get_character(
 ):
     return await service.get_character(
         user.id, decode_id(product_id), decode_id(character_id)
+    )
+
+@router.put(
+    "/{character_id}/add-character-images",
+    response_model=CharacterRead,
+    status_code=200,
+    responses=not_found_response("Character", "/character_id"),
+)
+async def add_character_images(
+    product_id: str = Path(...),
+    character_id: str = Path(...),
+    character_image_files: List[UploadFile] = File(
+        ...,
+        description="List of character image files"
+    ),
+    user=Depends(current_active_user),
+    service: CharacterService = Depends(get_character_service),
+):
+    return await service.add_character_images(
+        user.id, decode_id(product_id), decode_id(character_id), character_image_files
     )

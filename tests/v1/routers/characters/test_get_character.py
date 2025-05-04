@@ -36,7 +36,7 @@ async def test_get_character_not_found(
     Test that trying to get a non-existent character returns 404.
     """
     response = await auth_client.get(f"/products/{product_id}/characters/{fake_id}")
-    check_not_found_response(response, "Character", "/character_id", fake_id)
+    check_not_found_response(response, "Character", "character_id", fake_id)
 
 
 async def test_get_character_unauthorized(client: AsyncClient, fake_id: str):

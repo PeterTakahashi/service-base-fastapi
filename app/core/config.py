@@ -27,6 +27,7 @@ class Settings(BaseSettings):
     S3_ACCESS_KEY: str = os.getenv("S3_ACCESS_KEY", "admin")
     S3_SECRET_KEY: str = os.getenv("S3_SECRET_KEY", "password")
     S3_BUCKET_NAME: str = os.getenv("S3_BUCKET_NAME", "manga-translator-dev")
+    MAX_CHARACTER_IMAGES_COUNT: int = 10
 
 
 print("Loading environment variables...")
