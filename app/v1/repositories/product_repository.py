@@ -2,7 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, exists
 from sqlalchemy.sql import and_
 from app.models.product import Product
-from typing import Optional, List
+from typing import Optional, List, cast
 from datetime import datetime
 
 
@@ -34,7 +34,7 @@ class ProductRepository:
             stmt = stmt.where(Product.title.ilike(f"%{title}%"))
 
         result = await self.session.execute(stmt)
-        return result.scalars().all()
+        return cast(List[Product], result.scalars().all())
 
     async def product_exists(self, user_id: str, title: str) -> bool:
         stmt = select(

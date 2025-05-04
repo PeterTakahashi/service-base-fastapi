@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, exists
 from app.models.character import Character
-from typing import Optional, List
+from typing import Optional, List, cast
 from datetime import datetime
 from sqlalchemy.orm import selectinload
 
@@ -32,7 +32,7 @@ class CharacterRepository:
             stmt = stmt.order_by(getattr(Character, sort_by).asc())
 
         result = await self.session.execute(stmt)
-        return result.scalars().all()
+        return cast(List[Character], result.scalars().all())
 
     async def character_exists(self, product_id: int, name: str) -> bool:
         stmt = select(

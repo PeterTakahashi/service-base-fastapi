@@ -111,7 +111,7 @@ class CharacterService:
             character_read.character_images.append(character_image_read)
         return character_read
 
-    async def __check_character_exists(self, product_id: str, name: str) -> bool:
+    async def __check_character_exists(self, product_id: int, name: str) -> bool:
         exists = await self.character_repository.character_exists(product_id, name)
         if exists:
             raise HTTPException(
@@ -120,3 +120,5 @@ class CharacterService:
                     "Character", "/name", name
                 ),
             )
+        else:
+            return False
