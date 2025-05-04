@@ -21,8 +21,8 @@ v1_app = FastAPI(
 
 v1_app.include_router(api_router.api_router)
 
-v1_app.add_exception_handler(StarletteHTTPException, http_exception_handler)
-v1_app.add_exception_handler(Exception, server_exception_handler)
-v1_app.add_exception_handler(RequestValidationError, validation_exception_handler)
+v1_app.add_exception_handler(StarletteHTTPException, http_exception_handler) # type: ignore
+v1_app.add_exception_handler(Exception, server_exception_handler) # type: ignore
+v1_app.add_exception_handler(RequestValidationError, validation_exception_handler) # type: ignore
 
-v1_app.openapi = lambda: custom_openapi(v1_app)
+v1_app.openapi = lambda: custom_openapi(v1_app) # type: ignore

@@ -1,2 +1,9 @@
 [MESSAGES CONTROL]
 disable=missing-function-docstring
+
+[FORMAT]
+max-line-length=120
+
+[TYPECHECK]
+ignored-modules=alembic.op
+ignored-classes=alembic.op
