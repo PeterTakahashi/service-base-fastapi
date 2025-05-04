@@ -42,7 +42,7 @@ def get_character_service(
     "/",
     response_model=CharacterRead,
     status_code=201,
-    responses=conflict_response("Character", "/name"),
+    responses=conflict_response("Character", "name"),
 )
 async def create_character(
     product_id: str = Path(...),

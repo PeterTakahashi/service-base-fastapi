@@ -28,7 +28,7 @@ async def test_update_product_not_found(product_service, user):
         exc_info.value.status_code,
         exc_info.value.detail,
         "Product",
-        "/product_id",
+        "product_id",
         encode_id(product_id),
     )
 
@@ -50,8 +50,8 @@ async def test_update_product_already_exists(product_service, product):
                 "status": "409",
                 "code": "product_already_exists",
                 "title": "Conflict",
-                "detail": f"Product with /title '{existing_product.title}' already exists.",
-                "source": {"pointer": "/title"},
+                "detail": f"Product with title '{existing_product.title}' already exists.",
+                "source": {"parameter": "title"},
             }
         ]
     }

@@ -34,7 +34,7 @@ async def index_products(
     "/",
     response_model=ProductRead,
     status_code=201,
-    responses=conflict_response("Product", "/title"),
+    responses=conflict_response("Product", "title"),
 )
 async def create_product(
     data: ProductCreate,
@@ -48,7 +48,7 @@ async def create_product(
     "/{product_id}",
     response_model=ProductRead,
     status_code=200,
-    responses=not_found_response("Product", "/product_id"),
+    responses=not_found_response("Product", "product_id"),
 )
 async def get_product(
     product_id: str = Path(...),
@@ -63,8 +63,8 @@ async def get_product(
     response_model=ProductRead,
     status_code=200,
     responses=(
-        not_found_response("Product", "/product_id")
-        | conflict_response("Product", "/title")
+        not_found_response("Product", "product_id")
+        | conflict_response("Product", "title")
     ),
 )
 async def update_product(
@@ -79,7 +79,7 @@ async def update_product(
 @router.delete(
     "/{product_id}",
     status_code=204,
-    responses=not_found_response("Product", "/product_id"),
+    responses=not_found_response("Product", "product_id"),
 )
 async def delete_product(
     product_id: str = Path(...),

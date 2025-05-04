@@ -101,7 +101,7 @@ def custom_openapi(app):
                                         "code": "validation_error",
                                         "title": "Validation Error",
                                         "detail": "The field 'title' is required.",
-                                        "source": {"pointer": "/title"},
+                                        "source": {"parameter": "title"},
                                     }
                                 ]
                             }

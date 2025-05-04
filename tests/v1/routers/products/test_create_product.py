@@ -29,8 +29,8 @@ async def test_create_product_duplicate_title(
                     "status": "409",
                     "code": "product_already_exists",
                     "title": "Conflict",
-                    "detail": f"Product with /title '{title}' already exists.",
-                    "source": {"pointer": "/title"},
+                    "detail": f"Product with title '{title}' already exists.",
+                    "source": {"parameter": "title"},
                 }
             ]
         }
@@ -51,7 +51,7 @@ async def test_create_product_empty_title(auth_client: AsyncClient):
                 "code": "validation_error",
                 "title": "Validation Error",
                 "detail": "String should have at least 1 character",
-                "source": {"pointer": "/title"},
+                "source": {"parameter": "title"},
             }
         ]
     }
@@ -72,7 +72,7 @@ async def test_create_product_title_too_long(auth_client: AsyncClient):
                 "code": "validation_error",
                 "title": "Validation Error",
                 "detail": "String should have at most 100 characters",
-                "source": {"pointer": "/title"},
+                "source": {"parameter": "title"},
             }
         ]
     }
@@ -92,7 +92,7 @@ async def test_create_product_missing_title(auth_client: AsyncClient):
                 "code": "validation_error",
                 "title": "Validation Error",
                 "detail": "Field required",
-                "source": {"pointer": "/title"},
+                "source": {"parameter": "title"},
             }
         ]
     }

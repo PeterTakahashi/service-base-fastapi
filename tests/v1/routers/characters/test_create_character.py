@@ -109,14 +109,14 @@ async def test_create_character_with_no_images(
                 "code": "validation_error",
                 "title": "Validation Error",
                 "detail": "Field required",
-                "source": {"pointer": "/name"},
+                "source": {"parameter": "name"},
             },
             {
                 "status": "422",
                 "code": "validation_error",
                 "title": "Validation Error",
                 "detail": "Field required",
-                "source": {"pointer": "/character_image_files"},
+                "source": {"parameter": "character_image_files"},
             },
         ]
     }
@@ -129,7 +129,7 @@ async def test_create_character_product_not_found(
     Test that trying to get a character from a non-existent product returns 404.
     """
     response = await auth_client.get(f"/products/{fake_id}/characters/{fake_id}")
-    check_not_found_response(response, "Product", "/product_id", fake_id)
+    check_not_found_response(response, "Product", "product_id", fake_id)
 
 
 async def test_create_character_unauthorized(client: AsyncClient, fake_id: str):

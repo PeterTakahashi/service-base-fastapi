@@ -73,7 +73,7 @@ class CharacterService:
             raise HTTPException(
                 status_code=404,
                 detail=not_found_response_detail(
-                    "Product", "/product_id", encode_id(product_id)
+                    "Product", "product_id", encode_id(product_id)
                 ),
             )
         return product
@@ -129,7 +129,7 @@ class CharacterService:
         if exists:
             raise HTTPException(
                 status_code=409,
-                detail=conflict_response_detail("Character", "/name", name),
+                detail=conflict_response_detail("Character", "name", name),
             )
         else:
             return False

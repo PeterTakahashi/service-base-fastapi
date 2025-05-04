@@ -23,7 +23,7 @@ async def test_delete_product(product_service, product):
                 "code": "product_not_found",
                 "title": "Not Found",
                 "detail": f"Product with id '{encode_id(product.id)}' not found.",
-                "source": {"pointer": "/product_id"},
+                "source": {"parameter": "product_id"},
             }
         ]
     }
@@ -31,7 +31,7 @@ async def test_delete_product(product_service, product):
         exc_info.value.status_code,
         exc_info.value.detail,
         "Product",
-        "/product_id",
+        "product_id",
         encode_id(product.id),
     )
 
@@ -46,6 +46,6 @@ async def test_delete_product_not_found(product_service, user):
         exc_info.value.status_code,
         exc_info.value.detail,
         "Product",
-        "/product_id",
+        "product_id",
         encode_id(product_id),
     )

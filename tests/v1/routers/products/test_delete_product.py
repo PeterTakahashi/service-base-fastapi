@@ -19,7 +19,7 @@ async def test_delete_product_success(auth_client: AsyncClient, product_id: str)
 
 async def test_delete_product_not_found(auth_client: AsyncClient, fake_id: str):
     response = await auth_client.delete(f"/products/{fake_id}")
-    check_not_found_response(response, "Product", "/product_id", fake_id)
+    check_not_found_response(response, "Product", "product_id", fake_id)
 
 
 async def test_delete_product_unauthorized(client: AsyncClient, fake_id: str):

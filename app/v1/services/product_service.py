@@ -53,7 +53,7 @@ class ProductService:
             raise HTTPException(
                 status_code=404,
                 detail=not_found_response_detail(
-                    "Product", "/product_id", encode_id(product_id)
+                    "Product", "product_id", encode_id(product_id)
                 ),
             )
         return product
@@ -63,7 +63,7 @@ class ProductService:
         if exists:
             raise HTTPException(
                 status_code=409,
-                detail=conflict_response_detail("Product", "/title", title),
+                detail=conflict_response_detail("Product", "title", title),
             )
         else:
             return False

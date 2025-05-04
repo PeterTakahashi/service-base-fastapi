@@ -26,7 +26,7 @@ async def test_get_character_product_not_found(auth_client: AsyncClient, fake_id
     Test that trying to get a character from a non-existent product returns 404.
     """
     response = await auth_client.get(f"/products/{fake_id}/characters/{fake_id}")
-    check_not_found_response(response, "Product", "/product_id", fake_id)
+    check_not_found_response(response, "Product", "product_id", fake_id)
 
 
 async def test_get_character_not_found(

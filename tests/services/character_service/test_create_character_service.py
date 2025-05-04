@@ -59,8 +59,8 @@ async def test_create_character_already_exists(
                 "status": "409",
                 "code": "character_already_exists",
                 "title": "Conflict",
-                "detail": f"Character with /name '{name}' already exists.",
-                "source": {"pointer": "/name"},
+                "detail": f"Character with name '{name}' already exists.",
+                "source": {"parameter": "name"},
             }
         ]
     }

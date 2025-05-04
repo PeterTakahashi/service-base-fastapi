@@ -49,7 +49,7 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
     errors = []
 
     for e in exc.errors():
-        pointer = "/" + "/".join(str(loc) for loc in e["loc"] if loc != "body")
+        parameter = "/".join(str(loc) for loc in e["loc"] if loc != "body")
 
         errors.append(
             {
@@ -57,7 +57,7 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
                 "code": "validation_error",
                 "title": get_message(locale, "validation_error", "title"),
                 "detail": e["msg"],
-                "source": {"pointer": pointer},
+                "source": {"parameter": parameter},
             }
         )
 

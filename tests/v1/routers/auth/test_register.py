@@ -108,7 +108,7 @@ async def test_register_too_short_password(client: AsyncClient, faker):
                 "code": "validation_error",
                 "title": "Validation Error",
                 "detail": "String should have at least 8 characters",
-                "source": {"pointer": "/password"},
+                "source": {"parameter": "password"},
             }
         ]
     }
@@ -137,7 +137,7 @@ async def test_register_missing_field(client: AsyncClient, faker):
                 "code": "validation_error",
                 "title": "Validation Error",
                 "detail": "Field required",
-                "source": {"pointer": "/email"},
+                "source": {"parameter": "email"},
             }
         ]
     }

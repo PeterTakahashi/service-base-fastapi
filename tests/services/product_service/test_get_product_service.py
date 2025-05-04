@@ -25,6 +25,6 @@ async def test_get_product_not_found(product_service, user):
         exc_info.value.status_code,
         exc_info.value.detail,
         "Product",
-        "/product_id",
+        "product_id",
         encode_id(product_id),
     )

@@ -20,7 +20,7 @@ async def test_update_product_not_found(auth_client: AsyncClient, fake_id: str):
         f"/products/{fake_id}",
         json={"title": "New Title"},
     )
-    check_not_found_response(response, "Product", "/product_id", fake_id)
+    check_not_found_response(response, "Product", "product_id", fake_id)
 
 
 async def test_update_product_unauthorized(client: AsyncClient, fake_id: str):
@@ -42,7 +42,7 @@ async def test_update_product_empty_title(auth_client: AsyncClient, product_id: 
                 "code": "validation_error",
                 "title": "Validation Error",
                 "detail": "String should have at least 1 character",
-                "source": {"pointer": "/title"},
+                "source": {"parameter": "title"},
             }
         ]
     }
@@ -64,7 +64,7 @@ async def test_update_product_title_too_long(auth_client: AsyncClient, product_i
                 "code": "validation_error",
                 "title": "Validation Error",
                 "detail": "String should have at most 100 characters",
-                "source": {"pointer": "/title"},
+                "source": {"parameter": "title"},
             }
         ]
     }
@@ -84,7 +84,7 @@ async def test_update_product_missing_title(auth_client: AsyncClient, product_id
                 "code": "validation_error",
                 "title": "Validation Error",
                 "detail": "Field required",
-                "source": {"pointer": "/title"},
+                "source": {"parameter": "title"},
             }
         ]
     }

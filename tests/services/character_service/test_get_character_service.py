@@ -34,7 +34,7 @@ async def test_get_character_not_found_by_product_id(character_service, user):
         exc_info.value.status_code,
         exc_info.value.detail,
         "Product",
-        "/product_id",
+        "product_id",
         encode_id(0),
     )
 

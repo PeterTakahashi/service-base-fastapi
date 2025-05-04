@@ -32,7 +32,7 @@ internal_server_error_detail = {
 }
 
 
-def not_found_response(model_name: str, pointer: str):
+def not_found_response(model_name: str, parameter: str):
     return {
         404: {
             "description": f"{model_name} not found.",
@@ -40,7 +40,7 @@ def not_found_response(model_name: str, pointer: str):
             "content": {
                 "application/json": {
                     "example": not_found_response_detail(
-                        model_name, pointer, "123e4567-e89b-12d3-a456-426614174000"
+                        model_name, parameter, "123e4567-e89b-12d3-a456-426614174000"
                     ),
                 }
             },
@@ -48,7 +48,7 @@ def not_found_response(model_name: str, pointer: str):
     }
 
 
-def not_found_response_detail(model_name: str, pointer: str, target_id: str):
+def not_found_response_detail(model_name: str, parameter: str, target_id: str):
     return {
         "errors": [
             {
@@ -56,13 +56,13 @@ def not_found_response_detail(model_name: str, pointer: str, target_id: str):
                 "code": f"{camel_to_snake(model_name)}_not_found",
                 "title": "Not Found",
                 "detail": f"{model_name} with id '{target_id}' not found.",
-                "source": {"pointer": pointer},
+                "source": {"parameter": parameter},
             }
         ]
     }
 
 
-def conflict_response(model_name: str, pointer: str):
+def conflict_response(model_name: str, parameter: str):
     return {
         409: {
             "description": f"{model_name} already exists.",
@@ -70,7 +70,7 @@ def conflict_response(model_name: str, pointer: str):
             "content": {
                 "application/json": {
                     "example": conflict_response_detail(
-                        model_name, pointer, "123e4567-e89b-12d3-a456-426614174000"
+                        model_name, parameter, "123e4567-e89b-12d3-a456-426614174000"
                     ),
                 }
             },
@@ -78,15 +78,15 @@ def conflict_response(model_name: str, pointer: str):
     }
 
 
-def conflict_response_detail(model_name: str, pointer: str, value: str):
+def conflict_response_detail(model_name: str, parameter: str, value: str):
     return {
         "errors": [
             {
                 "status": "409",
                 "code": f"{camel_to_snake(model_name)}_already_exists",
                 "title": "Conflict",
-                "detail": f"{model_name} with {pointer} '{value}' already exists.",
-                "source": {"pointer": pointer},
+                "detail": f"{model_name} with {parameter} '{value}' already exists.",
+                "source": {"parameter": parameter},
             }
         ]
     }
