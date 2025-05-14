@@ -7,7 +7,7 @@ from app.v1.app import v1_app
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
-    description="A FastAPI server for manga translation",
+    description="A FastAPI server for the project.",
     version="1.0.0",
 )
 
@@ -25,7 +25,7 @@ app.add_event_handler("shutdown", shutdown)
 
 @app.get("/")
 def root():
-    return {"message": "Welcome to the Manga Translator API!"}
+    return {"message": "Welcome to the  FastAPI Applicatoin!"}
 
 
 @app.get("/up")

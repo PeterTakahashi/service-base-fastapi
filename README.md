@@ -1,4 +1,4 @@
-# Image/Manga Translator
+# Service Base FastAPI
 
 ## Installation
 

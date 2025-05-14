@@ -15,7 +15,7 @@ load_messages()
 
 v1_app = FastAPI(
     title=settings.PROJECT_NAME,
-    description="Version 1 of the Manga Translator API",
+    description="Version 1 of the  FastAPI Applicatoin",
     version="1.0.0",
 )
 
