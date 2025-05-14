@@ -68,6 +68,7 @@ dependencies = [
     "sentencepiece>=0.2.0",
     "shapely>=2.1.0",
     "sqlalchemy>=2.0.40",
+    "stripe>=12.1.0",
     "tensorboardx>=2.6.2.2",
     "timm>=1.0.15",
     "torch>=2.7.0",
