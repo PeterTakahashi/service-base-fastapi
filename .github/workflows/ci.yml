@@ -55,7 +55,7 @@ jobs:
           # mc (minio client) をDockerで単発実行する例
           docker run --network host --entrypoint sh --rm minio/mc -c "
             mc alias set local http://127.0.0.1:9000 admin password &&
-            mc mb local/manga-translator-test
+            mc mb local/fastapi-app-test
           "
 
       - name: Setup environment

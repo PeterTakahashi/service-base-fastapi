@@ -1,5 +1,5 @@
 [project]
-name = "manga-translator-fastapi"
+name = "service-base-fastapi"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"

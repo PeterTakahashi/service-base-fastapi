@@ -2070,7 +2070,7 @@ wheels = [
 ]
 
 [[package]]
-name = "manga-translator-fastapi"
+name = "service-base-fastapi"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [

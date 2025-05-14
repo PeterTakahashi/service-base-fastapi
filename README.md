@@ -7,7 +7,7 @@
 #### Docker
 
 ```bash
-docker exec -it manga-translator-web bash
+docker exec -it service-base-web bash
 source .venv/bin/activate
 
 pytest --cov=app --cov-report=term-missing --cov-report=html
@@ -38,12 +38,14 @@ python -m scripts.create_schema
 ```
 
 #### code formatter
+
 ```
 black .
 ruff check . --fix
 ```
 
 #### code checker
+
 ```
 ruff check .
 mypy --config-file mypy.ini .

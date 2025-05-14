@@ -26,7 +26,7 @@ class Settings(BaseSettings):
     S3_ENDPOINT: str = os.getenv("S3_ENDPOINT", "https://s3.amazonaws.com")
     S3_ACCESS_KEY: str = os.getenv("S3_ACCESS_KEY", "admin")
     S3_SECRET_KEY: str = os.getenv("S3_SECRET_KEY", "password")
-    S3_BUCKET_NAME: str = os.getenv("S3_BUCKET_NAME", "manga-translator-dev")
+    S3_BUCKET_NAME: str = os.getenv("S3_BUCKET_NAME", "fastapi-app-dev")
     MAX_CHARACTER_IMAGES_COUNT: int = 5
 
 

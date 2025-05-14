@@ -1,7 +1,7 @@
 services:
   db:
     image: postgres:17
-    container_name: manga-translator-db
+    container_name: service-base-db
     ports:
       - "5432:5432"
     environment:
@@ -10,11 +10,11 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
-      - manga-translator_default
+      - service-base_default
 
   pgadmin:
     image: dpage/pgadmin4
-    container_name: manga-translator-pgadmin
+    container_name: service-base-pgadmin
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@example.com
       PGADMIN_DEFAULT_PASSWORD: admin
@@ -26,13 +26,13 @@ services:
     depends_on:
       - db
     networks:
-      - manga-translator_default
+      - service-base_default
     volumes:
       - pgadmin-data:/var/lib/pgadmin
 
   web:
     build: .
-    container_name: manga-translator-web
+    container_name: service-base-web
     command: >
       bash -c "uv venv &&
       uv pip install . &&
@@ -49,11 +49,11 @@ services:
       - db
       - minio
     networks:
-      - manga-translator_default
+      - service-base_default
 
   minio:
     image: minio/minio
-    container_name: manga-translator-minio
+    container_name: service-base-minio
     ports:
       - "9000:9000"
       - "9090:9090"
@@ -65,29 +65,29 @@ services:
       - minio-volume:/data
     command: -c "minio server /data --address :9000 --console-address :9090;"
     networks:
-      - manga-translator_default
+      - service-base_default
   minio-console:
     image: minio/mc
-    container_name: manga-translator-mc
+    container_name: service-base-mc
     depends_on:
       - minio
     entrypoint: >
       sh -c "
       sleep 5 &&
-      mc alias set local http://manga-translator-minio:9000 admin password &&
-      mc mb local/manga-translator-dev &&
-      mc mb local/manga-translator-test
+      mc alias set local http://service-base-minio:9000 admin password &&
+      mc mb local/fastapi-app-dev &&
+      mc mb local/fastapi-app-test
       "
     networks:
-      - manga-translator_default
+      - service-base_default
 
   redis:
     image: redis:7.4.2
-    container_name: manga-translator-redis
+    container_name: service-base-redis
     ports:
       - "6379:6379"
     networks:
-      - manga-translator_default
+      - service-base_default
 
 volumes:
   postgres_data:
@@ -95,5 +95,5 @@ volumes:
   pgadmin-data:
 
 networks:
-  manga-translator_default:
+  service-base_default:
     external: true
