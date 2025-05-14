@@ -11,9 +11,9 @@ ENV PATH="/root/.local/bin:$PATH"
 
 COPY . /myapp
 
-RUN uv python install 3.10.16
+RUN uv python install 3.11.11
 
-RUN uv venv --python 3.10.16 \
+RUN uv venv --python 3.11.11 \
     && uv pip install . \
     && uv pip install --group dev
 

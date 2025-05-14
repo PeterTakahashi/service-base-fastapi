@@ -68,7 +68,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          uv python install 3.10.16
+          uv python install 3.11.11
           uv venv
           uv pip install .
           uv pip install --group dev
