@@ -25,9 +25,5 @@ async def user_service(user_repository):
 
 
 @pytest_asyncio.fixture
-async def character_image_service(
-    product_repository, character_repository, character_image_repository
-):
-    return CharacterImageService(
-        product_repository, character_repository, character_image_repository
-    )
+async def character_image_service(character_image_repository):
+    return CharacterImageService(character_image_repository)

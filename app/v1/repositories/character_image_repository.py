@@ -1,8 +1,10 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from app.models.character_image import CharacterImage
+from app.models.character import Character
 from typing import Optional
 from datetime import datetime
+from sqlalchemy.orm import joinedload
 
 
 class CharacterImageRepository:
@@ -19,13 +21,22 @@ class CharacterImageRepository:
         return character_image
 
     async def get_character_image(
-        self, character_id: int, character_image_id: int
+        self,
+        character_image_id: int,
+        load_character: bool = False,
+        load_product: bool = False,
     ) -> Optional[CharacterImage]:
         stmt = select(CharacterImage).where(
-            CharacterImage.character_id == character_id,
             CharacterImage.id == character_image_id,
             CharacterImage.deleted_at == None,  # noqa: E711
         )
+        if load_character:
+            stmt = stmt.options(joinedload(CharacterImage.character))
+        if load_product:
+            stmt = stmt.options(
+                joinedload(CharacterImage.character).joinedload(Character.product)
+            )
+
         result = await self.session.execute(stmt)
         return result.scalar_one_or_none()
 

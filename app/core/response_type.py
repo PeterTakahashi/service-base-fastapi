@@ -20,6 +20,17 @@ unauthorized_detail = {
     ]
 }
 
+forbidden_detail = {
+    "errors": [
+        {
+            "status": "403",
+            "code": "forbidden",
+            "title": "Forbidden",
+            "detail": "You do not have permission to perform this action.",
+        }
+    ]
+}
+
 internal_server_error_detail = {
     "errors": [
         {

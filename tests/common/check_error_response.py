@@ -1,4 +1,5 @@
 from app.core.response_type import not_found_response_detail
+from app.core.response_type import forbidden_detail
 
 
 def check_unauthorized_response(response):
@@ -34,3 +35,8 @@ def check_not_found_status_code_and_detail(
     assert detail == not_found_response_detail(
         model_name=model_name, parameter=parameter, target_id=target_id
     )
+
+
+def check_forbidden_response(response):
+    assert response.status_code == 403
+    assert response.json()["detail"] == forbidden_detail

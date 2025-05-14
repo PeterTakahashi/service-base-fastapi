@@ -16,11 +16,9 @@ async def test_create_character_image(character_image_repository, character):
     assert character_image.updated_at is not None
 
 
-async def test_get_character_image(
-    character_image_repository, character, character_image
-):
+async def test_get_character_image(character_image_repository, character_image):
     fetched_character_image = await character_image_repository.get_character_image(
-        character_id=character.id, character_image_id=character_image.id
+        character_image_id=character_image.id
     )
 
     assert fetched_character_image is not None
@@ -30,7 +28,7 @@ async def test_get_character_image(
 
 async def test_get_character_image_not_found(character_image_repository):
     fetched_character_image = await character_image_repository.get_character_image(
-        character_id=99999999, character_image_id=99999999
+        character_image_id=99999999
     )
 
     assert fetched_character_image is None
@@ -55,7 +53,7 @@ async def test_soft_delete_character_image(
     await character_image_repository.soft_delete_character_image(character_image)
 
     fetched_character_image = await character_image_repository.get_character_image(
-        character_id=character.id, character_image_id=character_image.id
+        character_image_id=character_image.id
     )
 
     assert fetched_character_image is None
