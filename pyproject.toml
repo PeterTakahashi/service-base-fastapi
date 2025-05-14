@@ -30,7 +30,7 @@ dependencies = [
     "networkx>=3.4.2",
     "protobuf>=3.20.2",
     "psycopg2>=2.9.10",
-    "py3langid==0.2.2",
+    "py3langid==0.3.0",
     "pydantic>=2.11.3",
     "pydantic-settings>=2.9.1",
     "pytest-factoryboy>=2.7.0",
