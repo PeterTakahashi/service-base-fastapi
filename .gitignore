@@ -4,8 +4,6 @@ result
 *.onnx
 __pycache__
 ocrs
-Manga
-Manga-translated
 /models
 .env
 *.local
@@ -49,3 +47,4 @@ coverage.txt
 .coverage
 .pytest_cache
 .mypy_cache
+htmlcov
