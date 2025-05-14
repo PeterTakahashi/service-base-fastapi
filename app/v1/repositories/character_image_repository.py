@@ -19,9 +19,10 @@ class CharacterImageRepository:
         return character_image
 
     async def get_character_image(
-        self, character_image_id: int
+        self, character_id: int, character_image_id: int
     ) -> Optional[CharacterImage]:
         stmt = select(CharacterImage).where(
+            CharacterImage.character_id == character_id,
             CharacterImage.id == character_image_id,
             CharacterImage.deleted_at == None,  # noqa: E711
         )

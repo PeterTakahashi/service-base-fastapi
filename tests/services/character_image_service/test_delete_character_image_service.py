@@ -5,22 +5,35 @@ from app.lib.convert_id import encode_id
 
 
 @pytest.mark.asyncio
-async def test_delete_character_image_success(character_image_service, character_image):
-    await character_image_service.delete_character_image(character_image.id)
+async def test_delete_character_image_success(
+    character_image_service, user, product, character, character_image
+):
+    await character_image_service.delete_character_image(
+        user_id=user.id,
+        product_id=product.id,
+        character_id=character.id,
+        character_image_id=character_image.id,
+    )
     # Check if the character image is soft deleted
     deleted_character_image = (
         await character_image_service.character_image_repository.get_character_image(
-            character_image.id
+            character_id=character.id,
+            character_image_id=character_image.id,
         )
     )
     assert deleted_character_image is None, "Character image should be soft deleted"
 
 
-async def test_delete_character_image_not_found(character_image_service, user):
+async def test_delete_character_image_not_found(
+    character_image_service, user, product, character
+):
     character_image_id = 0
     with pytest.raises(HTTPException) as exc_info:
         await character_image_service.delete_character_image(
-            character_image_id=character_image_id
+            user_id=user.id,
+            product_id=product.id,
+            character_id=character.id,
+            character_image_id=character_image_id,
         )
     check_not_found_status_code_and_detail(
         exc_info.value.status_code,

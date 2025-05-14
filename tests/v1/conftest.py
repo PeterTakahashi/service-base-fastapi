@@ -10,6 +10,9 @@ from tests.v1.fixtures.character_fixture import (
     init_character_image_files,
     over_max_character_image_files,
 )
+from tests.v1.fixtures.character_image_fixture import (
+    character_image_id,
+)
 from app.lib.convert_id import encode_id
 
 
