@@ -1,0 +1,15 @@
+{
+  "unauthorized": {
+    "title": "Unauthorized",
+    "detail": "Authentication credentials were not provided or are invalid."
+  },
+  "validation_error": {
+    "title": "Validation Error",
+    "required": "The field '{field}' is required.",
+    "max_length": "The field '{field}' must be at most {max_length} characters."
+  },
+  "internal_server_error": {
+    "title": "Internal Server Error",
+    "detail": "An unexpected error occurred. Please try again later."
+  }
+}

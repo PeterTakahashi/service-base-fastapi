@@ -1,0 +1,4 @@
+CREATE DATABASE manga_translator_dev;
+CREATE DATABASE manga_translator_test;
+CREATE DATABASE manga_translator_prod;
+CREATE DATABASE manga_translator_staging;

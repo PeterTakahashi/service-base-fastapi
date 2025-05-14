@@ -1,0 +1,244 @@
+{
+  "alembic_version": [
+    {
+      "name": "version_num",
+      "type": "VARCHAR(32)",
+      "nullable": false,
+      "default": "None"
+    }
+  ],
+  "users": [
+    {
+      "name": "id",
+      "type": "UUID",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "email",
+      "type": "VARCHAR(320)",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "hashed_password",
+      "type": "VARCHAR(1024)",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "is_active",
+      "type": "BOOLEAN",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "is_superuser",
+      "type": "BOOLEAN",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "is_verified",
+      "type": "BOOLEAN",
+      "nullable": false,
+      "default": "None"
+    }
+  ],
+  "products": [
+    {
+      "name": "id",
+      "type": "INTEGER",
+      "nullable": false,
+      "default": "nextval('products_id_seq'::regclass)"
+    },
+    {
+      "name": "title",
+      "type": "VARCHAR(255)",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "user_id",
+      "type": "UUID",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "deleted_at",
+      "type": "TIMESTAMP",
+      "nullable": true,
+      "default": "None"
+    },
+    {
+      "name": "created_at",
+      "type": "TIMESTAMP",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "updated_at",
+      "type": "TIMESTAMP",
+      "nullable": false,
+      "default": "None"
+    }
+  ],
+  "characters": [
+    {
+      "name": "id",
+      "type": "INTEGER",
+      "nullable": false,
+      "default": "nextval('characters_id_seq'::regclass)"
+    },
+    {
+      "name": "name",
+      "type": "VARCHAR(255)",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "product_id",
+      "type": "INTEGER",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "deleted_at",
+      "type": "TIMESTAMP",
+      "nullable": true,
+      "default": "None"
+    },
+    {
+      "name": "created_at",
+      "type": "TIMESTAMP",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "updated_at",
+      "type": "TIMESTAMP",
+      "nullable": false,
+      "default": "None"
+    }
+  ],
+  "episodes": [
+    {
+      "name": "id",
+      "type": "INTEGER",
+      "nullable": false,
+      "default": "nextval('episodes_id_seq'::regclass)"
+    },
+    {
+      "name": "title",
+      "type": "VARCHAR(255)",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "product_id",
+      "type": "INTEGER",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "deleted_at",
+      "type": "TIMESTAMP",
+      "nullable": true,
+      "default": "None"
+    },
+    {
+      "name": "created_at",
+      "type": "TIMESTAMP",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "updated_at",
+      "type": "TIMESTAMP",
+      "nullable": false,
+      "default": "None"
+    }
+  ],
+  "character_images": [
+    {
+      "name": "id",
+      "type": "INTEGER",
+      "nullable": false,
+      "default": "nextval('character_images_id_seq'::regclass)"
+    },
+    {
+      "name": "character_id",
+      "type": "INTEGER",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "deleted_at",
+      "type": "TIMESTAMP",
+      "nullable": true,
+      "default": "None"
+    },
+    {
+      "name": "created_at",
+      "type": "TIMESTAMP",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "updated_at",
+      "type": "TIMESTAMP",
+      "nullable": false,
+      "default": "None"
+    }
+  ],
+  "pages": [
+    {
+      "name": "id",
+      "type": "INTEGER",
+      "nullable": false,
+      "default": "nextval('pages_id_seq'::regclass)"
+    },
+    {
+      "name": "episode_id",
+      "type": "INTEGER",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "translation_status",
+      "type": "INTEGER",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "before_changed_image_storage_key",
+      "type": "VARCHAR(255)",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "after_changed_image_storage_key",
+      "type": "VARCHAR(255)",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "deleted_at",
+      "type": "TIMESTAMP",
+      "nullable": true,
+      "default": "None"
+    },
+    {
+      "name": "created_at",
+      "type": "TIMESTAMP",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "updated_at",
+      "type": "TIMESTAMP",
+      "nullable": false,
+      "default": "None"
+    }
+  ]
+}
