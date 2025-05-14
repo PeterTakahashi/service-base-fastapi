@@ -3,7 +3,7 @@ from tests.common.check_error_response import (
     check_unauthorized_response,
     check_not_found_response,
 )
-
+from app.core.config import settings
 
 async def test_create_character_with_multiple_images(
     auth_client: AsyncClient, product_id: str, init_character_image_files: list
@@ -133,7 +133,7 @@ async def test_create_character_over_max_character_image_files(
                 "status": "422",
                 "code": "invalid_request",
                 "title": "Unprocessable Entity",
-                "detail": "Character image count must be between 1 and 10.",
+                "detail": f"Character image count must be between 1 and {settings.MAX_CHARACTER_IMAGES_COUNT}.",
                 "source": {"parameter": "character_image_files"},
             }
         ]
