@@ -13,34 +13,40 @@ source .venv/bin/activate
 pytest --cov=app --cov-report=term-missing --cov-report=html
 ```
 
-create db migration file
+#### create db migration file
 
 ```bash
 alembic revision --autogenerate -m ""
 ```
 
-db migrate
+#### db migrate
 
 ```bash
 alembic upgrade head
 ```
 
-reset table
+#### reset table
 
 ```bash
 docker compose down -v
 ```
 
-create schema
+#### create schema
 
 ```bash
 python -m scripts.create_schema
 ```
 
-code formatter
+#### code formatter
 ```
 black .
 ruff check . --fix
+```
+
+#### code checker
+```
+ruff check .
+mypy --config-file mypy.ini .
 ```
 
 #### OpenAPI

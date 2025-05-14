@@ -5,6 +5,7 @@ from tests.common.check_error_response import (
 )
 from app.core.config import settings
 
+
 async def test_create_character_with_multiple_images(
     auth_client: AsyncClient, product_id: str, init_character_image_files: list
 ):

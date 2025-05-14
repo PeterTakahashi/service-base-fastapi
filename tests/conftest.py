@@ -25,6 +25,7 @@ from tests.fixtures.service_fixture import (
     character_service,
     product_service,
     user_service,
+    character_image_service,
 )
 
 
