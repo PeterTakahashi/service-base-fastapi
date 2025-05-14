@@ -10,7 +10,7 @@ Manga-translated
 .env
 *.local
 *.local.*
-manga_translator_test/testdata
+service_base_test/testdata
 .idea
 pyvenv.cfg
 include

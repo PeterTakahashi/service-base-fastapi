@@ -11,6 +11,7 @@ docker exec -it service-base-web bash
 source .venv/bin/activate
 
 pytest --cov=app --cov-report=term-missing --cov-report=html
+open htmlcov/index.html # if you wanna see cov report
 ```
 
 #### create db migration file

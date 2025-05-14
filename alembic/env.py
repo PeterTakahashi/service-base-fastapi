@@ -14,7 +14,7 @@ from dotenv import load_dotenv
 from alembic import context
 from app.db.base import Base
 from app.core.config import settings
-from app.models import Character, CharacterImage, Episode, Page, Product, User
+from app.models import User
 
 load_dotenv()
 

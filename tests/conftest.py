@@ -6,26 +6,12 @@ import pytest_asyncio
 from app.core.startup import database
 from app.db.session import get_async_session
 from faker import Faker
-from tests.fixtures.model_fixture import (
-    user,
-    product,
-    product_with_characters,
-    character,
-    character_with_character_images,
-    character_with_soft_deleted_character_images,
-    character_image,
-)
+from tests.fixtures.model_fixture import user
 from tests.fixtures.repository_fixture import (
-    character_repository,
-    product_repository,
-    character_image_repository,
     user_repository,
 )
 from tests.fixtures.service_fixture import (
-    character_service,
-    product_service,
     user_service,
-    character_image_service,
 )
 
 
@@ -46,11 +32,6 @@ async def setup_database():
 @pytest_asyncio.fixture(autouse=True)
 async def clean_tables():
     for table in [
-        "pages",
-        "episodes",
-        "character_images",
-        "characters",
-        "products",
         "users",
     ]:
         await database.execute(f"TRUNCATE TABLE {table} RESTART IDENTITY CASCADE")

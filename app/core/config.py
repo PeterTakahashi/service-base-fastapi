@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     PROJECT_NAME: str = "Manga Translator"
     DATABASE_URL: str = os.getenv(
         "DATABASE_URL",
-        "postgresql+asyncpg://postgres:postgres@db:5432/manga_translator_dev",
+        "postgresql+asyncpg://postgres:postgres@db:5432/service_base_dev",
     )
     DEEPSEEK_API_KEY: str = os.getenv("DEEPSEEK_API_KEY", "SECRET")
     DEEPL_AUTH_KEY: str = os.getenv("DEEPL_AUTH_KEY", "SECRET")
@@ -27,7 +27,6 @@ class Settings(BaseSettings):
     S3_ACCESS_KEY: str = os.getenv("S3_ACCESS_KEY", "admin")
     S3_SECRET_KEY: str = os.getenv("S3_SECRET_KEY", "password")
     S3_BUCKET_NAME: str = os.getenv("S3_BUCKET_NAME", "fastapi-app-dev")
-    MAX_CHARACTER_IMAGES_COUNT: int = 5
 
 
 print("Loading environment variables...")
