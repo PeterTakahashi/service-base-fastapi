@@ -26,6 +26,24 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Sendria を起動
+      - name: Start Sendria in background
+        run: |
+          docker run -d \
+            --name sendria \
+            -p 1025:1025 \
+            -p 1080:1080 \
+            msztolcman/sendria:v2.2.2.0
+
+      # Sendria のヘルスチェック (ポート応答確認)
+      - name: Wait for Sendria to be ready
+        run: |
+          until curl -s http://localhost:1080 > /dev/null; do
+            echo "Waiting for Sendria..."
+            sleep 1
+          done
+          echo "Sendria is ready!"
+
       # MinIO バイナリのインストール
       - name: Install MinIO
         run: |
