@@ -3,7 +3,7 @@ from tests.common.mailer import (
     get_latest_mail_source_by_recipient,
     get_password_reset_token_from_email_source,
 )
-import time
+
 
 async def test_reset_password_success(client: AsyncClient, faker):
     # 1. create a user

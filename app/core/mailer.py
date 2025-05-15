@@ -3,6 +3,7 @@ from pathlib import Path
 from app.core.config import settings
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+TEMPLATE_FOLDER = Path(BASE_DIR / "templates")
 
 mailer_config = ConnectionConfig(
     MAIL_USERNAME=settings.MAIL_USERNAME,
@@ -14,6 +15,6 @@ mailer_config = ConnectionConfig(
     MAIL_SSL_TLS=False,
     USE_CREDENTIALS=settings.USE_CREDENTIALS,
     VALIDATE_CERTS=settings.VALIDATE_CERTS,
-    TEMPLATE_FOLDER=str(BASE_DIR / "templates"),
+    TEMPLATE_FOLDER=TEMPLATE_FOLDER,
 )
 mailer = FastMail(mailer_config)
