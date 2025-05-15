@@ -11,7 +11,7 @@ load_dotenv(dotenv_path=dotenv_path, override=True)
 
 
 class Settings(BaseSettings):
-    PROJECT_NAME: str = "Manga Translator"
+    PROJECT_NAME: str = "Service Base FastAPI"
     DATABASE_URL: str = os.getenv(
         "DATABASE_URL",
         "postgresql+asyncpg://postgres:postgres@db:5432/service_base_dev",
