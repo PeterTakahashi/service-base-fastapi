@@ -44,7 +44,8 @@ services:
     volumes:
       - .:/myapp
     ports:
-      - "8000:8000"
+      - "8000:8000" # for fastapi
+      - "8888:8888" # for jupyter notebook when debugging
     depends_on:
       - db
       - minio
@@ -86,6 +87,15 @@ services:
     container_name: service-base-redis
     ports:
       - "6379:6379"
+    networks:
+      - service-base_default
+
+  sendria:
+    image: msztolcman/sendria:v2.2.2.0
+    container_name: service-base-sendria
+    ports:
+      - "1025:1025" # SMTP
+      - "1080:1080" # Web UI
     networks:
       - service-base_default
 

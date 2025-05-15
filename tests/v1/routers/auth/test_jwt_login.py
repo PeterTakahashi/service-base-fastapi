@@ -1,11 +1,6 @@
-import pytest
 from httpx import AsyncClient
 
 
-pytestmark = pytest.mark.asyncio
-
-
-@pytest.mark.asyncio
 async def test_login_success(client: AsyncClient, faker):
     # 1. create a user
     email = faker.unique.email()
@@ -34,7 +29,6 @@ async def test_login_success(client: AsyncClient, faker):
     assert me.json()["email"] == email
 
 
-@pytest.mark.asyncio
 async def test_login_bad_credentials(client: AsyncClient, faker):
     email = faker.unique.email()
     password = faker.password(length=12)

@@ -25,7 +25,7 @@ app.add_event_handler("shutdown", shutdown)
 
 @app.get("/")
 def root():
-    return {"message": "Welcome to the  FastAPI Applicatoin!"}
+    return {"message": "Welcome to the FastAPI Applicatoin!"}
 
 
 @app.get("/up")

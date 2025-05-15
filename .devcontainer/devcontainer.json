@@ -1,5 +1,5 @@
 {
-  "name": "Manga Translator Dev",
+  "name": "Service Base FastAPI Dev",
   "context": "..",
   "dockerComposeFile": "../compose.yaml",
   "service": "web",

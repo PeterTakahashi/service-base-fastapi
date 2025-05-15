@@ -5,14 +5,19 @@ This module defines the UserManager class and utility functions for managing use
 from uuid import UUID  # Standard library imports
 from typing import Union
 
-from fastapi import Depends  # Third-party imports
+from fastapi import Depends, Request
+from typing import Optional
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase
 from fastapi_users import BaseUserManager, UUIDIDMixin, schemas, exceptions, models
 
+
 from app.models.user import User  # First-party imports
 from app.core.config import settings
 from app.db.session import get_async_session
+
+from app.core.mailer import mailer
+from fastapi_mail import MessageSchema, MessageType
 
 
 class UserManager(UUIDIDMixin, BaseUserManager[User, UUID]):
@@ -23,6 +28,23 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, UUID]):
 
     reset_password_token_secret = settings.RESET_PASSWORD_TOKEN_SECRET
     verification_token_secret = settings.VERIFICATION_TOKEN_SECRET
+
+    async def on_after_request_verify(
+        self, user: User, token: str, request: Optional[Request] = None
+    ):
+        print(f"Verification requested for user {user.id}. Verification token: {token}")
+
+    async def on_after_forgot_password(
+        self, user: User, token: str, request: Optional[Request] = None
+    ):
+        url = f"{settings.FRONTEND_URL}/reset-password?token={token}"
+        message = MessageSchema(
+            subject="Password Reset Request",
+            recipients=[user.email],
+            template_body={"user_id": str(user.id), "url": url},
+            subtype=MessageType.html,
+        )
+        await mailer.send_message(message, template_name="email/reset_password.html")
 
     async def validate_password(
         self, password: str, user: Union[schemas.UC, models.UP]
