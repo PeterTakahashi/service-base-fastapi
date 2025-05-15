@@ -3,6 +3,8 @@ from fastapi.openapi.utils import get_openapi
 skip_adding_401 = {
     ("/auth/jwt/login", "post"),
     ("/auth/register/register", "post"),
+    ("/auth/forgot-password", "post"),
+    ("/auth/reset-password", "post"),
 }
 
 

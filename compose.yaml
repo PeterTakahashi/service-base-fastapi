@@ -44,7 +44,8 @@ services:
     volumes:
       - .:/myapp
     ports:
-      - "8000:8000"
+      - "8000:8000" # for fastapi
+      - "8888:8888" # for jupyter notebook when debugging
     depends_on:
       - db
       - minio
