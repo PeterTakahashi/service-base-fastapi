@@ -23,9 +23,12 @@ def get_password_reset_token_from_email_source(source: str) -> str:
         raise ValueError("Token not found")
     return token_match.group(1)
 
-
-def get_latest_mail_source():
+def get_latest_mail_source_by_recipient(target_email: str) -> str:
     url = f"http://{settings.MAIL_SERVER}:{settings.MAIL_WEB_PORT}/api/messages/?page=1"
-    response = httpx.get(url)
-    response = response.json()
-    return response["data"][0]["source"]
+    response = httpx.get(url).json()
+
+    for message in response["data"]:
+        if target_email in message.get("raw", "") or target_email in message.get("source", ""):
+            return message["source"]
+
+    raise ValueError(f"No email found for recipient: {target_email}")
