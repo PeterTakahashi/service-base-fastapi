@@ -1,8 +1,6 @@
-import pytest
 from httpx import AsyncClient
 
 
-@pytest.mark.asyncio
 async def test_logout_success(client: AsyncClient, access_token):
     logout_resp = await client.post(
         "/auth/jwt/logout", headers={"Authorization": f"Bearer {access_token}"}

@@ -16,3 +16,13 @@ router.include_router(
     prefix="/register",
     tags=["auth"],
 )
+
+router.include_router(
+    fastapi_users.get_reset_password_router(),
+    tags=["auth"],
+)
+
+router.include_router(
+    fastapi_users.get_verify_router(UserRead),
+    tags=["auth"],
+)

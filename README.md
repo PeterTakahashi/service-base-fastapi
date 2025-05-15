@@ -12,6 +12,10 @@ source .venv/bin/activate
 
 pytest --cov=app --cov-report=term-missing --cov-report=html
 open htmlcov/index.html # if you wanna see cov report
+
+open http://localhost:1080 # open mail log
+open http://127.0.0.1:8000/app/v1/docs # open api docs
+
 ```
 
 #### create db migration file
