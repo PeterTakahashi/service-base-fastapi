@@ -6,8 +6,6 @@ from typing import Optional
 class UserRead(schemas.BaseUser):
     """Base User model."""
 
-    is_active: bool = Field(deprecated=True, default=True)
-    is_superuser: bool = Field(deprecated=True, default=False)
     model_config = ConfigDict(from_attributes=True)
 
 
@@ -25,8 +23,6 @@ class UserCreate(schemas.BaseUserCreate):
         json_schema_extra={"example": "password123%"},
         description="The password of the user.",
     )
-    is_active: bool = Field(deprecated=True, default=True)
-    is_superuser: bool = Field(deprecated=True, default=False)
     is_verified: bool = Field(deprecated=True, default=False)
 
 
@@ -44,6 +40,3 @@ class UserUpdate(schemas.BaseUserUpdate):
         json_schema_extra={"example": "password123%"},
         description="The password of the user.",
     )
-    is_active: bool = Field(deprecated=True, default=True)
-    is_superuser: bool = Field(deprecated=True, default=False)
-    is_verified: bool = Field(deprecated=True, default=False)

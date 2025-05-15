@@ -32,7 +32,14 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, UUID]):
     async def on_after_request_verify(
         self, user: User, token: str, request: Optional[Request] = None
     ):
-        print(f"Verification requested for user {user.id}. Verification token: {token}")
+        url = f"{settings.FRONTEND_URL}/verify?token={token}"
+        message = MessageSchema(
+            subject="Email Verification",
+            recipients=[user.email],
+            template_body={"url": url},
+            subtype=MessageType.html,
+        )
+        await mailer.send_message(message, template_name="email/verify_email.html")
 
     async def on_after_forgot_password(
         self, user: User, token: str, request: Optional[Request] = None

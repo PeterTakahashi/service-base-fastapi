@@ -4,8 +4,16 @@ from faker import Faker
 
 
 @pytest_asyncio.fixture
-async def access_token(client: AsyncClient, faker: Faker) -> str:
-    email = faker.unique.email()
+def fake_email(faker: Faker) -> str:
+    """
+    Generate a fake email address.
+    """
+    return faker.unique.email()
+
+
+@pytest_asyncio.fixture
+async def access_token(client: AsyncClient, faker: Faker, fake_email: str) -> str:
+    email = fake_email
     password = faker.password(length=12)
 
     # Register user
