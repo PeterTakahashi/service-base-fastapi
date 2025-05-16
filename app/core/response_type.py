@@ -1,9 +1,10 @@
+from fastapi import status
 from app.v1.schemas.error import ErrorResponse
 from app.lib.camel_to_snake import camel_to_snake
 from typing import Any, Dict
 
 unauthorized_response: Dict[int | str, Dict[str, Any]] = {
-    401: {
+    status.HTTP_401_UNAUTHORIZED: {
         "description": "Unauthorized",
         "content": {"application/json": {"example": {"detail": "Not authenticated"}}},
     }
@@ -45,7 +46,7 @@ internal_server_error_detail = {
 
 def not_found_response(model_name: str, parameter: str):
     return {
-        404: {
+        status.HTTP_404_NOT_FOUND: {
             "description": f"{model_name} not found.",
             "model": ErrorResponse,
             "content": {
@@ -89,7 +90,7 @@ def invalid_request_response_detail(parameter: str, message: str):
 
 def conflict_response(model_name: str, parameter: str):
     return {
-        409: {
+        status.HTTP_409_CONFLICT: {
             "description": f"{model_name} already exists.",
             "model": ErrorResponse,
             "content": {

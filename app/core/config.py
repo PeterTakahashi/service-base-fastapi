@@ -31,8 +31,8 @@ class Settings(BaseSettings):
     MAIL_USERNAME: str = os.getenv("MAIL_USERNAME", "")
     MAIL_PASSWORD: SecretStr = SecretStr(os.getenv("MAIL_PASSWORD", ""))
     MAIL_FROM: EmailStr = os.getenv("MAIL_FROM", "dev@example.com")
-    MAIL_PORT: int = int(os.getenv("MAIL_PORT", 1025))
-    MAIL_WEB_PORT: int = int(os.getenv("MAIL_WEB_PORT", 1080))
+    MAIL_PORT: int = int(os.getenv("MAIL_PORT", "1025"))
+    MAIL_WEB_PORT: int = int(os.getenv("MAIL_WEB_PORT", "1080"))
     MAIL_SERVER: str = os.getenv("MAIL_SERVER", "service-base-sendria")
     MAIL_STARTTLS: bool = env == "prod"
     USE_CREDENTIALS: bool = env == "prod"
