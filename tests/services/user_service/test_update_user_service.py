@@ -7,7 +7,6 @@ from app.models.user import User
 from app.v1.repositories.user_repository import UserRepository
 from fastapi_users import exceptions
 from fastapi_users.router.common import ErrorCode
-from starlette.responses import Response
 
 @pytest.mark.asyncio
 async def test_update_me_success():
