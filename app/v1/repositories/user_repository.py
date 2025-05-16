@@ -6,6 +6,7 @@ class UserRepository:
     def __init__(self, session: AsyncSession):
         self.session = session
 
+    # NOTE: it's not used yet
     async def update_user(self, user: User, update_data: dict) -> User:
         for field, value in update_data.items():
             setattr(user, field, value)
