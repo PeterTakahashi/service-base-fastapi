@@ -12,7 +12,7 @@ router.include_router(
 )
 
 router.include_router(
-    fastapi_users.get_register_router(UserRead, UserCreate),
+    fastapi_users.get_register_router(UserRead, UserCreate),  # type: ignore
     prefix="/register",
     tags=["auth"],
 )
@@ -23,6 +23,6 @@ router.include_router(
 )
 
 router.include_router(
-    fastapi_users.get_verify_router(UserRead),
+    fastapi_users.get_verify_router(UserRead),  # type: ignore
     tags=["auth"],
 )

@@ -1,20 +1,16 @@
 from fastapi_users import schemas
 from pydantic import EmailStr, ConfigDict, Field
-from typing import Any, Generic, Optional, TypeVar
+from typing import Generic
 from fastapi_users import models
 
-class BaseUser(schemas.CreateUpdateDictModel, Generic[models.ID]):
-    """Base User model."""
 
+class UserRead(schemas.CreateUpdateDictModel, Generic[models.ID]):
     id: models.ID
     email: EmailStr
     is_verified: bool = False
 
     model_config = ConfigDict(from_attributes=True)
 
-
-class UserRead(BaseUser):
-    pass
 
 class UserCreate(schemas.CreateUpdateDictModel):
     email: EmailStr = Field(
@@ -30,6 +26,7 @@ class UserCreate(schemas.CreateUpdateDictModel):
         json_schema_extra={"example": "password123%"},
         description="The password of the user.",
     )
+
 
 class UserUpdate(schemas.CreateUpdateDictModel):
     email: EmailStr = Field(
