@@ -20,7 +20,9 @@ async def test_reset_password_success(client: AsyncClient, faker):
     )
     # 3. get the latest email
     email_source = get_latest_mail_source_by_recipient(email)
-    token = get_password_reset_token_from_email_source(email_source)
+    token = get_password_reset_token_from_email_source(
+        prefix="/reset-password/", source=email_source
+    )
 
     # 4. reset the password
     new_password = faker.password(length=12)

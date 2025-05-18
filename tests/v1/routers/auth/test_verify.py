@@ -15,7 +15,9 @@ async def test_verify_token_success(
     )
 
     email_source = get_latest_mail_source_by_recipient(fake_email)
-    token = get_password_reset_token_from_email_source(email_source)
+    token = get_password_reset_token_from_email_source(
+        prefix="/verify-token/", source=email_source
+    )
 
     # 2. Verify the token
     response = await auth_client.post(

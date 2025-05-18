@@ -16,9 +16,9 @@ def email_decode(source: str) -> str:
     return decoded_bytes.decode("utf-8")
 
 
-def get_password_reset_token_from_email_source(source: str) -> str:
+def get_password_reset_token_from_email_source(prefix: str, source: str) -> str:
     email_decoded = email_decode(source)
-    token_match = re.search(r"token=([A-Za-z0-9\-._~]+)", email_decoded)
+    token_match = re.search(rf"{re.escape(prefix)}([A-Za-z0-9\-._~]+)", email_decoded)
     if not token_match:
         raise ValueError("Token not found")
     return token_match.group(1)
