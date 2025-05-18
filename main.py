@@ -12,7 +12,7 @@ app = FastAPI(
 )
 
 origins = [
-    "http://localhost:5173",
+    settings.FRONTEND_URL
 ]
 
 app.add_middleware(

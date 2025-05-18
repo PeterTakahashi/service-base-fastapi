@@ -17,7 +17,7 @@ class Settings(BaseSettings):
         "DATABASE_URL",
         "postgresql+asyncpg://postgres:postgres@db:5432/service_base_dev",
     )
-    FRONTEND_URL: str = os.getenv("FRONTEND_URL", "http://localhost:3000")
+    FRONTEND_URL: str = os.getenv("FRONTEND_URL", "http://localhost:5173")
     RESET_PASSWORD_TOKEN_SECRET: str = "SECRET"
     VERIFICATION_TOKEN_SECRET: str = "SECRET"
     JWT_SECRET: str = "SECRET"

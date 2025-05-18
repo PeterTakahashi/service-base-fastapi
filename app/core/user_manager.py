@@ -32,7 +32,7 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, UUID]):
     async def on_after_request_verify(
         self, user: User, token: str, request: Optional[Request] = None
     ):
-        url = f"{settings.FRONTEND_URL}/verify?token={token}"
+        url = f"{settings.FRONTEND_URL}/verify-token/{token}"
         message = MessageSchema(
             subject="Email Verification",
             recipients=[user.email],
@@ -44,7 +44,7 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, UUID]):
     async def on_after_forgot_password(
         self, user: User, token: str, request: Optional[Request] = None
     ):
-        url = f"{settings.FRONTEND_URL}/reset-password?token={token}"
+        url = f"{settings.FRONTEND_URL}/reset-password/{token}"
         message = MessageSchema(
             subject="Password Reset Request",
             recipients=[user.email],
