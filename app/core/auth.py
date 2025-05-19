@@ -4,6 +4,7 @@ from fastapi_users.authentication import (
     JWTStrategy,
     CookieTransport,
 )
+from app.lib.fastapi_users.custom_cookie_transport import CustomCookieTransport
 from app.core.config import settings
 from httpx_oauth.clients.google import GoogleOAuth2
 from httpx_oauth.clients.github import GitHubOAuth2
@@ -34,6 +35,13 @@ auth_backend = AuthenticationBackend(
     get_strategy=get_jwt_strategy,
 )
 
+oauth_cookie_transport = CustomCookieTransport(
+    cookie_name="access_token",
+    cookie_max_age=access_token_expires,  # 1 week
+    cookie_secure=settings.SECURE_COOKIES,
+    cookie_httponly=True,
+)
+
 cookie_transport = CookieTransport(
     cookie_name="access_token",
     cookie_max_age=access_token_expires,  # 1 week
@@ -51,5 +59,11 @@ def get_cookie_jwt_strategy() -> JWTStrategy:
 cookie_auth_backend = AuthenticationBackend(
     name="cookie",
     transport=cookie_transport,
+    get_strategy=get_cookie_jwt_strategy,
+)
+
+cookie_auth_backend_oauth = AuthenticationBackend(
+    name="cookie_oauth",
+    transport=oauth_cookie_transport,
     get_strategy=get_cookie_jwt_strategy,
 )
