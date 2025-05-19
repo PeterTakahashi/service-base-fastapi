@@ -5,6 +5,13 @@ skip_adding_401 = {
     ("/auth/register/register", "post"),
     ("/auth/forgot-password", "post"),
     ("/auth/reset-password", "post"),
+    ("/auth/google/authorize", "get"),
+    ("/auth/github/authorize", "get"),
+    ("/auth/google/callback", "get"),
+    ("/auth/github/callback", "get"),
+    ("/auth/jwt/verify", "post"),
+    ("/auth/cookie/login", "post"),
+    ("/auth/cookie/logout", "post"),
 }
 
 
