@@ -1,13 +1,19 @@
 from fastapi import APIRouter
 from app.v1.schemas.user import UserRead, UserCreate
 from app.core.user_setup import fastapi_users
-from app.core.auth import auth_backend
+from app.core.auth import auth_backend, cookie_auth_backend
 
 router = APIRouter()
 
 router.include_router(
     fastapi_users.get_auth_router(auth_backend),
     prefix="/jwt",
+    tags=["auth"],
+)
+
+router.include_router(
+    fastapi_users.get_auth_router(cookie_auth_backend),
+    prefix="/cookie",
     tags=["auth"],
 )
 

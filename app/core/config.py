@@ -37,6 +37,7 @@ class Settings(BaseSettings):
     MAIL_STARTTLS: bool = env == "prod"
     USE_CREDENTIALS: bool = env == "prod"
     VALIDATE_CERTS: bool = env == "prod"
+    SECURE_COOKIES: bool = env == "prod"
 
 
 print("Loading environment variables...")
