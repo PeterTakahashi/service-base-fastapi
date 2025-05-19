@@ -25,7 +25,7 @@ class UserService:
     ) -> UserRead:
         try:
             user = await user_manager.update(
-                user_update, user, safe=True, request=request # type: ignore
+                user_update, user, safe=True, request=request  # type: ignore
             )
             return UserRead.model_validate(user)
         except exceptions.InvalidPasswordException as e:

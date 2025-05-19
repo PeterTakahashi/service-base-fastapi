@@ -9,8 +9,12 @@ from app.core.config import settings
 bearer_transport = BearerTransport(tokenUrl="auth/jwt/login")
 access_token_expires = 3600 * 24 * 7  # 1 week
 
+
 def get_jwt_strategy() -> JWTStrategy:
-    return JWTStrategy(secret=settings.JWT_SECRET, lifetime_seconds=access_token_expires)
+    return JWTStrategy(
+        secret=settings.JWT_SECRET, lifetime_seconds=access_token_expires
+    )
+
 
 auth_backend = AuthenticationBackend(
     name="jwt",
@@ -25,8 +29,12 @@ cookie_transport = CookieTransport(
     cookie_httponly=True,
 )
 
+
 def get_cookie_jwt_strategy() -> JWTStrategy:
-    return JWTStrategy(secret=settings.JWT_SECRET, lifetime_seconds=access_token_expires)
+    return JWTStrategy(
+        secret=settings.JWT_SECRET, lifetime_seconds=access_token_expires
+    )
+
 
 cookie_auth_backend = AuthenticationBackend(
     name="cookie",

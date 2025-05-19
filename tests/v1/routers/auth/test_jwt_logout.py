@@ -1,7 +1,7 @@
 from httpx import AsyncClient
 
 
-async def test_logout_success(client: AsyncClient, access_token):
+async def test_jwt_logout_success(client: AsyncClient, access_token):
     logout_resp = await client.post(
         "/auth/jwt/logout", headers={"Authorization": f"Bearer {access_token}"}
     )
@@ -13,11 +13,9 @@ async def test_logout_success(client: AsyncClient, access_token):
     assert me.status_code == 200
 
 
-async def test_logout_unauthorized(client: AsyncClient):
-    # Authorization ヘッダーなしでログアウトを試みる
+async def test_jwtlogout_unauthorized(client: AsyncClient):
     logout_resp = await client.post("/auth/jwt/logout")
 
-    # 401 Unauthorized を期待
     assert logout_resp.status_code == 401
     resp_json = logout_resp.json()
     assert resp_json == {

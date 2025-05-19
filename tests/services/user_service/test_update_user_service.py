@@ -8,6 +8,7 @@ from app.v1.repositories.user_repository import UserRepository
 from fastapi_users import exceptions
 from fastapi_users.router.common import ErrorCode
 
+
 @pytest.mark.asyncio
 async def test_update_me_success():
     # -- 1) UserRepository自体が必要ならモック (純粋に使わないなら None でもOK)
@@ -55,6 +56,7 @@ async def test_update_me_success():
         user_update, existing_user, safe=True, request=request_mock
     )
 
+
 @pytest.mark.asyncio
 async def test_update_me_already_exists():
     """
@@ -85,6 +87,7 @@ async def test_update_me_already_exists():
     # のでそれを確認
     assert exc_info.value.status_code == 400
     assert exc_info.value.detail == ErrorCode.UPDATE_USER_EMAIL_ALREADY_EXISTS
+
 
 @pytest.mark.asyncio
 async def test_update_me_password_invalid():

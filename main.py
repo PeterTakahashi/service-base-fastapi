@@ -11,9 +11,7 @@ app = FastAPI(
     version="1.0.0",
 )
 
-origins = [
-    settings.FRONTEND_URL
-]
+origins = [settings.FRONTEND_URL]
 
 app.add_middleware(
     CORSMiddleware,
