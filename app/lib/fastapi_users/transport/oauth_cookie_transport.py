@@ -1,10 +1,9 @@
-from fastapi_users.authentication import (
-    CookieTransport
-)
+from fastapi_users.authentication import CookieTransport
 from fastapi import status
 from fastapi.responses import RedirectResponse, Response
 from app.core.config import settings
 from fastapi_users.openapi import OpenAPIResponseType
+
 
 class OAuthCookieTransport(CookieTransport):
     async def get_login_response(self, token: str) -> Response:
@@ -21,11 +20,9 @@ class OAuthCookieTransport(CookieTransport):
                 "description": "Redirect after successful login",
                 "content": {
                     "application/json": {
-                        "example": {
-                            "detail": "Redirecting to the frontend..."
-                        }
+                        "example": {"detail": "Redirecting to the frontend..."}
                     }
-                }
+                },
             }
         }
 

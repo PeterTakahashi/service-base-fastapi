@@ -18,13 +18,15 @@ class Settings(BaseSettings):
         "postgresql+asyncpg://postgres:postgres@db:5432/service_base_dev",
     )
     FRONTEND_URL: str = os.getenv("FRONTEND_URL", "http://127.0.0.1:5173")
-    BACKEND_API_V1_URL: str = os.getenv("BACKEND_API_V1_URL", "http://127.0.0.1:8000/app/v1")
+    BACKEND_API_V1_URL: str = os.getenv(
+        "BACKEND_API_V1_URL", "http://127.0.0.1:8000/app/v1"
+    )
     RESET_PASSWORD_TOKEN_SECRET: str = "SECRET"
     VERIFICATION_TOKEN_SECRET: str = "SECRET"
     JWT_SECRET: str = "SECRET"
     HASHIDS_MIN_LENGTH: int = 12
     HASHIDS_SALT: str = os.getenv("HASHIDS_SALT", "SECRET")
-    ACCESS_TOKEN_EXPIRED_SECONDS: int = 3600 * 24 * 7 # 1 week
+    ACCESS_TOKEN_EXPIRED_SECONDS: int = 3600 * 24 * 7  # 1 week
 
     GITHUB_CLIENT_ID: str = os.getenv("GITHUB_CLIENT_ID", "")
     GITHUB_CLIENT_SECRET: str = os.getenv("GITHUB_CLIENT_SECRET", "")
