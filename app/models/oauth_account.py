@@ -5,5 +5,5 @@ from sqlalchemy import Uuid
 
 class OAuthAccount(SQLAlchemyBaseOAuthAccountTable[int], Base):
     __tablename__ = "oauth_accounts"
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    id: int = Column(Integer, primary_key=True, autoincrement=True) # type: ignore
     user_id = Column(Uuid, ForeignKey("users.id", ondelete="cascade"), nullable=False)
