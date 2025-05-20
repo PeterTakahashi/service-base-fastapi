@@ -49,6 +49,8 @@ class Settings(BaseSettings):
     VALIDATE_CERTS: bool = env == "prod"
     SECURE_COOKIES: bool = env == "prod"
 
+    AUTHENTICATE_MAX_FAILED_ATTEMPTS: int = 5
+
 
 print("Loading environment variables...")
 print(f"DATABASE_URL: {os.getenv('DATABASE_URL')}")
