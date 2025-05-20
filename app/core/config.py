@@ -18,11 +18,18 @@ class Settings(BaseSettings):
         "postgresql+asyncpg://postgres:postgres@db:5432/service_base_dev",
     )
     FRONTEND_URL: str = os.getenv("FRONTEND_URL", "http://127.0.0.1:5173")
+    BACKEND_API_V1_URL: str = os.getenv("BACKEND_API_V1_URL", "http://127.0.0.1:8000/app/v1")
     RESET_PASSWORD_TOKEN_SECRET: str = "SECRET"
     VERIFICATION_TOKEN_SECRET: str = "SECRET"
     JWT_SECRET: str = "SECRET"
     HASHIDS_MIN_LENGTH: int = 12
     HASHIDS_SALT: str = os.getenv("HASHIDS_SALT", "SECRET")
+
+    GITHUB_CLIENT_ID: str = os.getenv("GITHUB_CLIENT_ID", "")
+    GITHUB_CLIENT_SECRET: str = os.getenv("GITHUB_CLIENT_SECRET", "")
+    GOOGLE_CLIENT_ID: str = os.getenv("GOOGLE_CLIENT_ID", "")
+    GOOGLE_CLIENT_SECRET: str = os.getenv("GOOGLE_CLIENT_SECRET", "")
+
     S3_ENDPOINT: str = os.getenv("S3_ENDPOINT", "https://s3.amazonaws.com")
     S3_ACCESS_KEY: str = os.getenv("S3_ACCESS_KEY", "admin")
     S3_SECRET_KEY: str = os.getenv("S3_SECRET_KEY", "password")

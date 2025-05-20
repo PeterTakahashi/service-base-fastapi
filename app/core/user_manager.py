@@ -12,7 +12,9 @@ from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase
 from fastapi_users import BaseUserManager, UUIDIDMixin, schemas, exceptions, models
 
 
-from app.models.user import User  # First-party imports
+
+from app.models.user import User
+from app.models.oauth_account import OAuthAccount
 from app.core.config import settings
 from app.db.session import get_async_session
 
@@ -96,7 +98,7 @@ async def get_user_db(
     Yields:
         SQLAlchemyUserDatabase: The user database instance.
     """
-    yield SQLAlchemyUserDatabase(session, User)
+    yield SQLAlchemyUserDatabase(session, User, OAuthAccount)
 
 
 async def get_user_manager(user_db=Depends(get_user_db)):

@@ -5,6 +5,12 @@ skip_adding_401 = {
     ("/auth/register/register", "post"),
     ("/auth/forgot-password", "post"),
     ("/auth/reset-password", "post"),
+    ("/auth/cookie/google/authorize", "get"),
+    ("/auth/cookie/github/authorize", "get"),
+    ("/auth/cookie/google/callback", "get"),
+    ("/auth/github/callback", "get"),
+    ("/auth/cookie/login", "post"),
+    ("/auth/cookie/logout", "post"),
 }
 
 
@@ -41,7 +47,7 @@ def custom_openapi(app):
                     "name": "Authorization",
                     "in": "header",
                     "description": "Bearer token for authentication",
-                    "required": True,
+                    "required": False,
                     "schema": {
                         "type": "string",
                         "example": "Bearer <token>",
