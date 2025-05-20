@@ -93,7 +93,7 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, UUID]):
                 reason="Password must contain at least one special character"
             )
 
-    async def authenticate(
+    async def authenticate(  # type: ignore[override]
         self, credentials: OAuth2PasswordRequestForm
     ) -> Optional[models.UP]:
         """
@@ -103,10 +103,13 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, UUID]):
         If already locked, raises HTTP 423 or unlocks if enough time has passed.
         Returns None if authentication fails, or the user instance on success.
         """
-        user = await self._get_user_or_none(credentials.username, credentials.password)
-        if not user:
+        try:
+            user = await self.get_by_email(credentials.username)
+        except exceptions.UserNotExists:
+            # Run the hasher to mitigate timing attack
+            # Inspired from Django: https://code.djangoproject.com/ticket/20760
+            self.password_helper.hash(credentials.password)
             return None
-
         # Check if the user is currently locked and possibly unlock
         if not await self._handle_lock_state(user):
             # Still locked
@@ -131,20 +134,6 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, UUID]):
         # Successful login => reset lock state
         await self._reset_failures_and_unlock(user)
         return user
-
-    async def _get_user_or_none(
-        self, email: str, raw_password: str
-    ) -> Optional[models.UP]:
-        """
-        Retrieve user by email. If not found, perform a dummy hash to mitigate timing attacks,
-        then return None.
-        """
-        try:
-            return await self.get_by_email(email)
-        except exceptions.UserNotExists:
-            # Dummy hash to mitigate timing attacks
-            self.password_helper.hash(raw_password)
-            return None
 
     async def _handle_lock_state(self, user: User) -> bool:
         """
