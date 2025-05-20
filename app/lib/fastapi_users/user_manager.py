@@ -97,9 +97,9 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, UUID]):
         self, credentials: OAuth2PasswordRequestForm
     ) -> Optional[models.UP]:
         """
-        Authenticates a user based on email + password credentials.  
-        If the login fails, increments the failed_attempts counter.  
-        When the failed attempts exceed a threshold, locks the account.  
+        Authenticates a user based on email + password credentials.
+        If the login fails, increments the failed_attempts counter.
+        When the failed attempts exceed a threshold, locks the account.
         If already locked, raises HTTP 423 or unlocks if enough time has passed.
         Returns None if authentication fails, or the user instance on success.
         """

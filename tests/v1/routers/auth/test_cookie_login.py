@@ -114,7 +114,9 @@ async def test_cookie_login_lockout_reached(client: AsyncClient, faker):
     assert me_resp.status_code == 401
 
 
-async def test_cookie_login_failed_attempts_reset_after_time(client: AsyncClient, faker):
+async def test_cookie_login_failed_attempts_reset_after_time(
+    client: AsyncClient, faker
+):
     """
     Test that failed_attempts are reset after more than 30 minutes have passed since the last failed login.
     """
@@ -167,7 +169,7 @@ async def test_cookie_login_failed_attempts_reset_after_time(client: AsyncClient
 
 async def test_cookie_login_unlock_after_time(client: AsyncClient, faker):
     """
-    Test that once the account is locked due to too many failures, waiting more than 30 minutes 
+    Test that once the account is locked due to too many failures, waiting more than 30 minutes
     allows the user to log in successfully with the correct password (lock is lifted).
     """
     email = faker.unique.email()
