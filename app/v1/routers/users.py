@@ -10,7 +10,7 @@ from app.models.user import User
 from app.db.session import get_async_session
 from app.v1.repositories.user_repository import UserRepository
 from app.v1.services.user_service import UserService
-from app.core.user_manager import get_user_manager
+from app.lib.fastapi_users.user_manager import get_user_manager
 
 router = APIRouter()
 
