@@ -4,7 +4,7 @@ from fastapi_users.manager import BaseUserManager
 from fastapi_users.router.common import ErrorCode, ErrorModel
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.user_setup import current_active_user
+from app.lib.fastapi_users.user_setup import current_active_user
 from app.v1.schemas.user import UserRead, UserUpdate
 from app.models.user import User
 from app.db.session import get_async_session

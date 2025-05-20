@@ -6,7 +6,7 @@ from fastapi_users.router.common import ErrorCode
 from app.v1.repositories.user_repository import UserRepository
 from app.models.user import User
 from app.v1.schemas.user import UserUpdate, UserRead
-from app.core.user_setup import current_active_user
+from app.lib.fastapi_users.user_setup import current_active_user
 
 
 class UserService:

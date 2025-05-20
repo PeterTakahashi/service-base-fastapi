@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from app.v1.schemas.user import UserRead, UserCreate
-from app.core.user_setup import fastapi_users
+from app.lib.fastapi_users.user_setup import fastapi_users
 from app.core.auth import jwt_auth_backend, cookie_auth_backend, github_oauth_client, google_oauth_client, cookie_auth_backend_oauth
 from app.core.config import settings
 
