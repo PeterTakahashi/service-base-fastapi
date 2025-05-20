@@ -24,6 +24,7 @@ class Settings(BaseSettings):
     JWT_SECRET: str = "SECRET"
     HASHIDS_MIN_LENGTH: int = 12
     HASHIDS_SALT: str = os.getenv("HASHIDS_SALT", "SECRET")
+    ACCESS_TOKEN_EXPIRED_SECONDS: int = 3600 * 24 * 7 # 1 week
 
     GITHUB_CLIENT_ID: str = os.getenv("GITHUB_CLIENT_ID", "")
     GITHUB_CLIENT_SECRET: str = os.getenv("GITHUB_CLIENT_SECRET", "")

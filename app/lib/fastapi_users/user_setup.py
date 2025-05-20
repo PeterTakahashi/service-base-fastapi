@@ -1,6 +1,6 @@
 from fastapi_users import FastAPIUsers
 from app.models.user import User
-from app.core.auth import jwt_auth_backend, cookie_auth_backend
+from app.lib.fastapi_users.auth_backend import jwt_auth_backend, cookie_auth_backend
 from app.lib.fastapi_users.user_manager import get_user_manager
 from uuid import UUID
 
