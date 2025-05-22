@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgres:17
+    image: postgres:15
     container_name: service-base-db
     ports:
       - "5432:5432"
@@ -30,7 +30,6 @@ services:
       - "8888:8888" # for jupyter notebook when debugging
     depends_on:
       - db
-      - minio
     networks:
       - service-base_default
 

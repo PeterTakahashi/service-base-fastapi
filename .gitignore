@@ -52,3 +52,5 @@ htmlcov
 infra/.terraform
 infra/terraform.tfstate.backup
 infra/terraform.tfstate
+infra/.terraform.lock.hcl
+infra/.terraform.tfstate.lock.info

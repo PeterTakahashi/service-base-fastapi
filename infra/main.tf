@@ -70,6 +70,22 @@ resource "google_container_cluster" "primary" {
   }
 }
 
+resource "google_compute_global_address" "private_ip_range" {
+  name          = "private-ip-range"
+  project       = var.project_id
+  purpose       = "VPC_PEERING"
+  address_type  = "INTERNAL"
+  prefix_length = 16
+  network       = "projects/${var.project_id}/global/networks/default"
+}
+
+# (2) VPC と GCPサービス (Service Networking) をピアリングする
+resource "google_service_networking_connection" "default" {
+  network                 = "projects/${var.project_id}/global/networks/default"
+  service                 = "servicenetworking.googleapis.com"
+  reserved_peering_ranges = [google_compute_global_address.private_ip_range.name]
+}
+
 
 #
 # 3. Cloud SQL (PostgreSQL)
@@ -79,6 +95,9 @@ resource "google_sql_database_instance" "default" {
   project          = var.project_id
   database_version = "POSTGRES_15"
   region           = var.region
+  depends_on = [
+    google_service_networking_connection.default
+  ]
 
   settings {
     tier = "db-f1-micro"
@@ -101,6 +120,10 @@ resource "google_sql_user" "users" {
   instance = google_sql_database_instance.default.name
   project  = var.project_id
   password = var.db_password
+
+  depends_on = [
+    google_sql_database_instance.default
+  ]
 }
 
 # Create database (if needed)
@@ -108,4 +131,8 @@ resource "google_sql_database" "appdb" {
   name     = "fastapi_${var.env}"
   instance = google_sql_database_instance.default.name
   project  = var.project_id
+
+  depends_on = [
+    google_sql_database_instance.default
+  ]
 }
