@@ -48,3 +48,5 @@ coverage.txt
 .pytest_cache
 .mypy_cache
 htmlcov
+
+infra/.terraform

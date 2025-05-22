@@ -18,3 +18,8 @@ variable "db_password" {
   description = "PostgreSQL password"
   sensitive   = true
 }
+
+variable "env" {
+  type    = string
+  default = "production"
+}
