@@ -4,7 +4,7 @@ RUN mkdir /myapp
 WORKDIR /myapp
 
 RUN apt update --yes \
-    && apt install -y curl g++ wget ffmpeg libsm6 libxext6 gimp libvulkan1 cargo libpq-dev git
+    && apt install -y curl g++ cargo libpq-dev git
 
 RUN curl -LsSf https://astral.sh/uv/install.sh | env UV_INSTALL_DIR="/root/.local/bin" sh
 ENV PATH="/root/.local/bin:$PATH"

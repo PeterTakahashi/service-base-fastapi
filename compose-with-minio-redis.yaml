@@ -34,6 +34,44 @@ services:
     networks:
       - service-base_default
 
+  minio:
+    image: minio/minio
+    container_name: service-base-minio
+    ports:
+      - "9000:9000"
+      - "9090:9090"
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: password
+    entrypoint: sh
+    volumes:
+      - minio-volume:/data
+    command: -c "minio server /data --address :9000 --console-address :9090;"
+    networks:
+      - service-base_default
+  minio-console:
+    image: minio/mc
+    container_name: service-base-mc
+    depends_on:
+      - minio
+    entrypoint: >
+      sh -c "
+      sleep 5 &&
+      mc alias set local http://service-base-minio:9000 admin password &&
+      mc mb local/fastapi-app-dev &&
+      mc mb local/fastapi-app-test
+      "
+    networks:
+      - service-base_default
+
+  redis:
+    image: redis:7.4.2
+    container_name: service-base-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - service-base_default
+
   sendria:
     image: msztolcman/sendria:v2.2.2.0
     container_name: service-base-sendria
@@ -45,6 +83,7 @@ services:
 
 volumes:
   postgres_data:
+  minio-volume:
   pgadmin-data:
 
 networks:
