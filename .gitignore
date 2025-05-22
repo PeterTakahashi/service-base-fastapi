@@ -50,4 +50,5 @@ coverage.txt
 htmlcov
 
 infra/.terraform
-terraform.tfstate.backup
+infra/terraform.tfstate.backup
+infra/terraform.tfstate
