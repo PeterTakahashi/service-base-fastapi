@@ -75,7 +75,7 @@ resource "google_container_cluster" "primary" {
 # 3. Cloud SQL (PostgreSQL)
 #
 resource "google_sql_database_instance" "default" {
-  name             = "service-base-auth-postgres"
+  name             = "service-base-auth-${var.env}-postgres"
   project          = var.project_id
   database_version = "POSTGRES_15"
   region           = var.region
