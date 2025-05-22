@@ -24,7 +24,6 @@ resource "google_project_service" "enable_apis" {
     "container.googleapis.com",
     # VPC やロードバランサなどインフラまわりで必要 (特にPrivate IPの設定時)
     "compute.googleapis.com",
-
     # --- Cloud SQL 関連 ---
     # Cloud SQL for PostgreSQL/MySQL/SQL Server を扱うため
     "sqladmin.googleapis.com",
@@ -50,6 +49,7 @@ resource "google_project_service" "enable_apis" {
 
   disable_on_destroy = false
 }
+
 
 # Enable other APIs as needed
 
@@ -85,6 +85,7 @@ resource "google_sql_database_instance" "default" {
 
     ip_configuration {
       ipv4_enabled    = false
+      private_network = "projects/${var.project_id}/global/networks/default"
     }
 
     backup_configuration {
