@@ -59,6 +59,9 @@ jobs:
           docker tag $IMAGE_NAME:$SHORT_SHA $IMAGE_NAME:latest
           docker push $IMAGE_NAME:latest
 
+      - name: Set up Helm
+        uses: azure/setup-helm@v3
+
       # GKEへkubectl apply
       - name: Get GKE Credentials
         uses: google-github-actions/get-gke-credentials@v1
@@ -72,9 +75,14 @@ jobs:
           # 例: namespaceなどを先に作成
           kubectl apply -f k8s/namespace.yaml
 
-          # cert-managerのインストールは初回だけ必要 (Helm等でデプロイでもOK)
-          # kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.11.0/cert-manager.yaml
-          # kubectl apply -f k8s/cert-manager/cluster-issuer.yaml
+          # cert-manager を Helm でインストール（初回のみ installCRDs=true)
+          # helm repo add jetstack https://charts.jetstack.io
+          # helm repo update
+          # helm upgrade --install cert-manager jetstack/cert-manager \
+          #   --namespace cert-manager \
+          #   --create-namespace \
+          #   --set installCRDs=true \
+          #   --version v1.11.0
 
           # DBパスワードなどをSecretに書き込む (環境変数を使うなど色々方法はあります)
           kubectl apply -f k8s/fastapi/secret-db.yaml --namespace production
