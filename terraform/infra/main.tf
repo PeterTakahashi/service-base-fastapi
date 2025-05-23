@@ -51,6 +51,10 @@ resource "google_container_cluster" "primary" {
     environment = var.env
     team        = "infra"
   }
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "google_compute_global_address" "private_ip_range" {
@@ -94,6 +98,10 @@ resource "google_sql_database_instance" "default" {
       enabled    = true
       start_time = "03:00"
     }
+  }
+
+  lifecycle {
+    prevent_destroy = true
   }
 }
 
