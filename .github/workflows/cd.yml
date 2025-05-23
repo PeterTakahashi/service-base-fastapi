@@ -34,11 +34,15 @@ jobs:
 
       - name: Terraform Plan
         working-directory: ./terraform/infra
-        run: terraform plan -var "project_id=${{ secrets.GCP_PROJECT_ID }}" -var "db_password=${{ secrets.DB_PASSWORD }}"
+        run: terraform plan \
+          -var "project_id=${{ secrets.GCP_PROJECT_ID }}" \
+          -var "db_password=${{ secrets.DB_PASSWORD }}"
 
       - name: Terraform Apply
         working-directory: ./terraform/infra
-        run: terraform apply -auto-approve -var "project_id=${{ secrets.GCP_PROJECT_ID }}" -var "db_password=${{ secrets.DB_PASSWORD }}"
+        run: terraform apply -auto-approve \
+          -var "project_id=${{ secrets.GCP_PROJECT_ID }}" \
+          -var "db_password=${{ secrets.DB_PASSWORD }}"
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
@@ -56,3 +60,28 @@ jobs:
           docker push $IMAGE_NAME:$SHORT_SHA
           docker tag $IMAGE_NAME:$SHORT_SHA $IMAGE_NAME:latest
           docker push $IMAGE_NAME:latest
+
+      # GKEへkubectl apply
+      - name: Get GKE Credentials
+        uses: google-github-actions/get-gke-credentials@v1
+        with:
+          cluster_name: "service-base-auth-${{ secrets.ENV_NAME }}-ap-cluster"
+          location: ${{ secrets.GCP_REGION }}
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+
+      - name: Deploy to GKE
+        run: |
+          # 例: namespaceなどを先に作成
+          kubectl apply -f k8s/namespace.yaml
+
+          # cert-managerのインストールは初回だけ必要 (Helm等でデプロイでもOK)
+          # kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.11.0/cert-manager.yaml
+          # kubectl apply -f k8s/cert-manager/cluster-issuer.yaml
+
+          # DBパスワードなどをSecretに書き込む (環境変数を使うなど色々方法はあります)
+          kubectl apply -f k8s/fastapi/secret-db.yaml --namespace production
+
+          # FastAPIデプロイ
+          kubectl apply -f k8s/fastapi/deployment.yaml --namespace production
+          kubectl apply -f k8s/fastapi/service.yaml --namespace production
+          kubectl apply -f k8s/fastapi/ingress.yaml --namespace production
