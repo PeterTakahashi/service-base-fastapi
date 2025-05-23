@@ -86,6 +86,7 @@ jobs:
           envsubst < k8s/fastapi/deployment.yaml.template > k8s/fastapi/deployment.yaml
 
           # FastAPIデプロイ
+          kubectl apply -f k8s/fastapi/managed-cert.yaml --namespace production
           kubectl apply -f k8s/fastapi/service-account.yaml --namespace production
           kubectl apply -f k8s/fastapi/deployment.yaml --namespace production
           kubectl apply -f k8s/fastapi/service.yaml --namespace production

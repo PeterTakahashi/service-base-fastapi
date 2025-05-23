@@ -5,12 +5,8 @@ metadata:
   namespace: production
   annotations:
     kubernetes.io/ingress.class: "gce"
-    networking.gke.io/managed-certificates: fastapi-managed-cert
+    networking.gke.io/managed-certificates: "fastapi-managed-cert"
 spec:
-  tls:
-  - hosts:
-    - service-base-auth.baltoon.jp
-    secretName: fastapi-tls-secret
   rules:
     - host: service-base-auth.baltoon.jp
       http:
