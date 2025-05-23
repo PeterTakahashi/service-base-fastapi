@@ -50,11 +50,12 @@ spec:
               memory: "512Mi"
 
         - name: cloud-sql-proxy
-          image: us-docker.pkg.dev/cloudsql-docker/gce-proxy:1.33.0 # for production
-          command:
-            - "/cloud_sql_proxy"
-            - "-instances=aiproject-460606:us-central1:service-base-auth-production-postgres=tcp:0.0.0.0:5432"
-            - "-term_timeout=10s"
+          image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.10.1
+          args:
+            - "--structured-logs"
+            - "--private-ip"
+            - "--port=5432"
+            - "aiproject-460606:us-central1:service-base-auth-production-postgres"
           ports:
             - containerPort: 5432
           resources:
