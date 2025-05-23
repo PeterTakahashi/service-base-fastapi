@@ -119,17 +119,12 @@ export GOOGLE_APPLICATION_CREDENTIALS=./service-account-key.json
 gsutil mb -p $GCP_PROJECT_ID -l us-central1 gs://aiproject-terraform-state/
 ```
 
-### halm
+### kubectl apply at only first
 
 ```sh
-helm repo add jetstack https://charts.jetstack.io
-helm repo update
-
-helm upgrade --install cert-manager jetstack/cert-manager \
-  --namespace cert-manager \
-  --create-namespace \
-  --set installCRDs=true \
-  --version v1.11.0
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.10.0/deploy/static/provider/cloud/deploy.yaml
+kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.12.4/cert-manager.crds.yaml
+kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.12.4/cert-manager.yaml
 ```
 
 #### change resource

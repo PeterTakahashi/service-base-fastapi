@@ -4,8 +4,7 @@ metadata:
   name: fastapi-ingress
   namespace: production
   annotations:
-    # kubernetes.io/ingress.class: "nginx"
-    # kubernetes.io/ingress.class: "gce"
+    kubernetes.io/ingress.class: "nginx"
     cert-manager.io/cluster-issuer: "letsencrypt-http01"
 spec:
   tls:
