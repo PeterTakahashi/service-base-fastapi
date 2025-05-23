@@ -34,15 +34,11 @@ jobs:
 
       - name: Terraform Plan
         working-directory: ./terraform/infra
-        run: terraform plan \
-          -var "project_id=${{ secrets.GCP_PROJECT_ID }}" \
-          -var "db_password=${{ secrets.DB_PASSWORD }}"
+        run: terraform plan -var "project_id=${{ secrets.GCP_PROJECT_ID }}" -var "db_password=${{ secrets.DB_PASSWORD }}"
 
       - name: Terraform Apply
         working-directory: ./terraform/infra
-        run: terraform apply -auto-approve \
-          -var "project_id=${{ secrets.GCP_PROJECT_ID }}" \
-          -var "db_password=${{ secrets.DB_PASSWORD }}"
+        run: terraform apply -auto-approve -var "project_id=${{ secrets.GCP_PROJECT_ID }}" -var "db_password=${{ secrets.DB_PASSWORD }}"
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
