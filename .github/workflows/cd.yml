@@ -83,8 +83,6 @@ jobs:
           # DBパスワードなどをSecretに書き込む (環境変数を使うなど色々方法はあります)
           # kubectl apply -f k8s/fastapi/secret-db.yaml --namespace production
 
-          kubectl apply -f k8s/cert-manager/cluster-issuer.yaml
-
           envsubst < k8s/fastapi/deployment.yaml.template > k8s/fastapi/deployment.yaml
 
           # FastAPIデプロイ

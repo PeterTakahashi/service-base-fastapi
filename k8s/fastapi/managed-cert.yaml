@@ -1,0 +1,8 @@
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: fastapi-managed-cert
+  namespace: production
+spec:
+  domains:
+    - service-base-auth.baltoon.jp
