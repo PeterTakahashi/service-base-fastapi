@@ -33,14 +33,12 @@ jobs:
         run: terraform init
 
       - name: Terraform Plan
-        run: terraform -chdir=./infra plan \
-          -var "project_id=${{ secrets.GCP_PROJECT_ID }}" \
-          -var "db_password=${{ secrets.DB_PASSWORD }}"
+        working-directory: ./infra
+        run: terraform plan -var "project_id=${{ secrets.GCP_PROJECT_ID }}" -var "db_password=${{ secrets.DB_PASSWORD }}"
 
       - name: Terraform Apply
-        run: terraform -chdir=./infra apply -auto-approve \
-          -var "project_id=${{ secrets.GCP_PROJECT_ID }}" \
-          -var "db_password=${{ secrets.DB_PASSWORD }}"
+        working-directory: ./infra
+        run: terraform apply -auto-approve -var "project_id=${{ secrets.GCP_PROJECT_ID }}" -var "db_password=${{ secrets.DB_PASSWORD }}"
 
       # (2) Dockerイメージをビルド & Push
       - name: Log in to Docker Hub
