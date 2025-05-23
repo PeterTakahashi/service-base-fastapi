@@ -91,5 +91,5 @@ jobs:
           kubectl apply -f k8s/fastapi/service.yaml --namespace production
           kubectl apply -f k8s/fastapi/ingress.yaml --namespace production
 
-          # kubectl apply -f k8s/cert-manager/cluster-issuer.yaml
+          kubectl apply -f k8s/cert-manager/cluster-issuer.yaml
           # kubectl rollout status deployment/fastapi-app -n production
