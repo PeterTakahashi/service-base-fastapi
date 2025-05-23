@@ -1,4 +1,5 @@
 # Service Base FastAPI
+
 ## Installation
 
 ### Local setup
@@ -116,14 +117,6 @@ export GOOGLE_APPLICATION_CREDENTIALS=./service-account-key.json
 
 ```sh
 gsutil mb -p $GCP_PROJECT_ID -l us-central1 gs://aiproject-terraform-state/
-```
-
-### kubectl apply at only first
-
-```sh
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.10.0/deploy/static/provider/cloud/deploy.yaml
-kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.12.4/cert-manager.crds.yaml
-kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.12.4/cert-manager.yaml
 ```
 
 #### change resource
