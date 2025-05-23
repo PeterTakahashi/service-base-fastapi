@@ -94,6 +94,8 @@ ROLES=(
   "roles/compute.networkAdmin"
   "roles/cloudsql.admin"
   "roles/storage.admin"
+  "roles/cloudsql.client"
+  "roles/cloudsql.viewer"
 )
 
 GCP_PROJECT_ID="aiproject-460606"
