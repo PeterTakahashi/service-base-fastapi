@@ -93,6 +93,7 @@ ROLES=(
   "roles/servicenetworking.networksAdmin"
   "roles/compute.networkAdmin"
   "roles/cloudsql.admin"
+  "roles/storage.admin"
 )
 
 GCP_PROJECT_ID="aiproject-460606"
@@ -108,6 +109,12 @@ done
 gcloud iam service-accounts keys create service-account-key.json \
   --iam-account="$SERVICE_ACCOUNT_EMAIL"
 export GOOGLE_APPLICATION_CREDENTIALS=./service-account-key.json
+```
+
+### bucket create for remaining terraform state
+
+```sh
+gsutil mb -p $GCP_PROJECT_ID -l us-central1 gs://aiproject-terraform-state/
 ```
 
 #### change resource
