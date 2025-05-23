@@ -13,6 +13,8 @@ spec:
       labels:
         app: fastapi
     spec:
+      imagePullSecrets:
+        - name: regcred
       containers:
         - name: fastapi
           image: takahashiseiya/service-base-fastapi-web:latest
@@ -48,10 +50,10 @@ spec:
               memory: "512Mi"
 
         - name: cloud-sql-proxy
-          image: us-docker.pkg.dev/cloudsql-docker/gce-proxy:1.33.0
+          image: us-docker.pkg.dev/cloudsql-docker/gce-proxy:1.33.0 # for production
           command:
             - "/cloud_sql_proxy"
-            - "-instances=<PROJECT_ID>:<REGION>:<DB_INSTANCE_NAME>=tcp:0.0.0.0:5432"
+            - "-instances=aiproject-460606:us-central1:service-base-auth-production-postgres=tcp:0.0.0.0:5432"
             - "-term_timeout=10s"
           ports:
             - containerPort: 5432

@@ -127,3 +127,11 @@ terraform init
 terraform plan
 terraform apply
 ```
+
+### add context to kubernetes CLI
+
+```
+gcloud container clusters get-credentials service-base-auth-production-ap-cluster \
+  --region us-central1 \
+  --project aiproject-460606
+```
