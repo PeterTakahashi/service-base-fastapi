@@ -83,14 +83,7 @@ jobs:
           # 例: namespaceなどを先に作成
           kubectl apply -f k8s/namespace.yaml
 
-          # cert-manager を Helm でインストール（初回のみ installCRDs=true)
-          # helm repo add jetstack https://charts.jetstack.io
-          # helm repo update
-          # helm upgrade --install cert-manager jetstack/cert-manager \
-          #   --namespace cert-manager \
-          #   --create-namespace \
-          #   --set installCRDs=true \
-          #   --version v1.11.0
+          kubectl apply -f k8s/cert-manager/cluster-issuer.yaml
 
           # DBパスワードなどをSecretに書き込む (環境変数を使うなど色々方法はあります)
           # kubectl apply -f k8s/fastapi/secret-db.yaml --namespace production
@@ -102,3 +95,4 @@ jobs:
           kubectl apply -f k8s/fastapi/deployment.yaml --namespace production
           kubectl apply -f k8s/fastapi/service.yaml --namespace production
           kubectl apply -f k8s/fastapi/ingress.yaml --namespace production
+          kubectl rollout status deployment/fastapi-app -n production
