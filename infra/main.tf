@@ -61,6 +61,8 @@ locals {
     "roles/compute.viewer",
     "roles/iam.serviceAccountUser",
     "roles/container.clusterViewer",
+    "roles/iam.serviceAccountAdmin",
+    "roles/container.admin",
   ]
 }
 

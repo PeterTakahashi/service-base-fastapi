@@ -80,4 +80,5 @@ terraform apply
 ```
 gcloud iam service-accounts keys create service-account-key.json \
   --iam-account=service-base-deployment-user@{PROJECT_ID}.iam.gserviceaccount.com
+export GOOGLE_APPLICATION_CREDENTIALS=./service-account-key.json
 ```
