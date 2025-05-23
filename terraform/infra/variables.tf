@@ -23,9 +23,3 @@ variable "env" {
   type    = string
   default = "production"
 }
-
-variable "service_account_id" {
-  type        = string
-  description = "Service account ID"
-  default = "service-base-deployment-user@aiproject-460606.iam.gserviceaccount.com"
-}
