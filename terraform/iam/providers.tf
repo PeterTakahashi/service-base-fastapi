@@ -3,13 +3,13 @@ terraform {
   required_providers {
     google = {
       source  = "hashicorp/google"
-      version = "~> 4.61" # 適宜最新
+      version = "~> 4.61"
     }
   }
 }
 
 provider "google" {
-  # credentials = file("~/.config/gcloud/application_default_credentials.json")
+  credentials = file("~/.config/gcloud/application_default_credentials.json")
   project     = var.project_id
   region      = var.region
   zone        = var.zone

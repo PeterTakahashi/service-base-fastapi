@@ -68,6 +68,18 @@ http://0.0.0.0:8000/app/v1/openapi.json
 
 ### terraform
 
+#### create iam
+
+```sh
+export TF_VAR_project_id=""
+cd terraform/iam
+terraform init
+terraform plan
+terraform apply
+```
+
+#### change resource
+
 ```
 export TF_VAR_project_id=""
 export TF_VAR_db_password=""

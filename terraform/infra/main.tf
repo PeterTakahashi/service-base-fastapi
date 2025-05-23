@@ -19,62 +19,20 @@ resource "google_project_service" "enable_iam" {
 resource "google_project_service" "enable_apis" {
   project  = var.project_id
   for_each = toset([
-    # --- Compute/GKE 関連 ---
-    # GKEクラスタ本体 (container.googleapis.com は必須)
     "container.googleapis.com",
-    # VPC やロードバランサなどインフラまわりで必要 (特にPrivate IPの設定時)
     "compute.googleapis.com",
-    # --- Cloud SQL 関連 ---
-    # Cloud SQL for PostgreSQL/MySQL/SQL Server を扱うため
     "sqladmin.googleapis.com",
-    # Private IP 接続などで VPC ピアリングを行う際に必要
     "servicenetworking.googleapis.com",
-
-    # --- IAM 関連 ---
-    # サービスアカウント、ロールの管理
     "iam.googleapis.com",
-    # Cloud Resource Manager API (追加でロールバインディングなど行う場合に必要)
     "cloudresourcemanager.googleapis.com",
-
-    # --- ログ・モニタリング ---
-    # Stackdriver Logging, Cloud Monitoring
     "logging.googleapis.com",
     "monitoring.googleapis.com",
-
-    # --- DNS  ---
-    # Cloud DNS を使って独自ドメイン運用するなら必要
     "dns.googleapis.com",
   ])
   service = each.key
 
   disable_on_destroy = false
 }
-
-resource "google_service_account" "ci_user" {
-  account_id   = "service-base-deployment-user"
-  display_name = "Service Account for CI deployment"
-}
-
-locals {
-  ci_roles = [
-    "roles/container.developer",
-    "roles/compute.viewer",
-    "roles/iam.serviceAccountUser",
-    "roles/container.clusterViewer",
-    "roles/iam.serviceAccountAdmin",
-    "roles/container.admin",
-  ]
-}
-
-resource "google_project_iam_member" "ci_roles" {
-  for_each = toset(local.ci_roles)
-
-  project = var.project_id
-  role    = each.key
-  member  = "serviceAccount:${google_service_account.ci_user.email}"
-}
-
-
 
 # Enable other APIs as needed
 

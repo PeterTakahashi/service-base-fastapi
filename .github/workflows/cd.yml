@@ -29,11 +29,11 @@ jobs:
         uses: hashicorp/setup-terraform@v2
 
       - name: Terraform Init
-        working-directory: ./infra
+        working-directory: ./terraform/infra
         run: terraform init
 
       - name: Terraform Plan
-        working-directory: ./infra
+        working-directory: ./terraform/infra
         run: terraform plan -var "project_id=${{ secrets.GCP_PROJECT_ID }}" -var "db_password=${{ secrets.DB_PASSWORD }}"
 
       - name: Terraform Apply
