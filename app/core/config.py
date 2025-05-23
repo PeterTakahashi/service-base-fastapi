@@ -51,7 +51,7 @@ class Settings(BaseSettings):
 
     AUTHENTICATE_MAX_FAILED_ATTEMPTS: int = 5
 
+settings = Settings()
 
 print("Loading environment variables...")
 print(f"DATABASE_URL: {settings.DATABASE_URL}")
-settings = Settings()
