@@ -1,5 +1,4 @@
 # Service Base FastAPI
-
 ## Installation
 
 ### Local setup
