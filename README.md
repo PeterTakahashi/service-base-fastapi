@@ -119,6 +119,19 @@ export GOOGLE_APPLICATION_CREDENTIALS=./service-account-key.json
 gsutil mb -p $GCP_PROJECT_ID -l us-central1 gs://aiproject-terraform-state/
 ```
 
+### halm
+
+```sh
+helm repo add jetstack https://charts.jetstack.io
+helm repo update
+
+helm upgrade --install cert-manager jetstack/cert-manager \
+  --namespace cert-manager \
+  --create-namespace \
+  --set installCRDs=true \
+  --version v1.11.0
+```
+
 #### change resource
 
 ```sh
