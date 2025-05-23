@@ -11,7 +11,7 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     env:
-      ENV_NAME: ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
+      ENV_NAME: "production"
     steps:
       - name: Check out
         uses: actions/checkout@v3
