@@ -39,7 +39,6 @@ jobs:
           -var "db_password=${{ secrets.DB_PASSWORD }}"
 
       - name: Terraform Apply
-        if: always()
         working-directory: ./infra
         run: terraform apply -auto-approve \
           -var "project_id=${{ secrets.GCP_PROJECT_ID }}" \

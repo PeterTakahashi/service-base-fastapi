@@ -9,3 +9,7 @@ output "gke_cluster_location" {
 output "cloud_sql_instance_connection_name" {
   value = google_sql_database_instance.default.connection_name
 }
+
+output "google_service_account_ci_user" {
+  value = google_service_account.ci_user.email
+}

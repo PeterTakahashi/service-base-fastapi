@@ -63,3 +63,21 @@ http://0.0.0.0:8000/app/v1/docs#/
 
 json
 http://0.0.0.0:8000/app/v1/openapi.json
+
+## deployment
+
+### terraform
+
+```
+export TF_VAR_project_id=""
+export TF_VAR_db_password=""
+
+terraform init
+terraform plan
+terraform apply
+```
+
+```
+gcloud iam service-accounts keys create service-account-key.json \
+  --iam-account=service-base-deployment-user@{PROJECT_ID}.iam.gserviceaccount.com
+```

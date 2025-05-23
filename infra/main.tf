@@ -50,6 +50,29 @@ resource "google_project_service" "enable_apis" {
   disable_on_destroy = false
 }
 
+resource "google_service_account" "ci_user" {
+  account_id   = "service-base-deployment-user"
+  display_name = "Service Account for CI deployment"
+}
+
+locals {
+  ci_roles = [
+    "roles/container.developer",
+    "roles/compute.viewer",
+    "roles/iam.serviceAccountUser",
+    "roles/container.clusterViewer",
+  ]
+}
+
+resource "google_project_iam_member" "ci_roles" {
+  for_each = toset(local.ci_roles)
+
+  project = var.project_id
+  role    = each.key
+  member  = "serviceAccount:${google_service_account.ci_user.email}"
+}
+
+
 
 # Enable other APIs as needed
 
