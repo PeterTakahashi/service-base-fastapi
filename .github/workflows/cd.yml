@@ -72,6 +72,7 @@ jobs:
 
       - name: Deploy to GKE
         run: |
+          export IMAGE_TAG=$(echo "${{ github.sha }}" | cut -c1-7)
           # 例: namespaceなどを先に作成
           kubectl apply -f k8s/namespace.yaml
 
@@ -86,6 +87,9 @@ jobs:
 
           # DBパスワードなどをSecretに書き込む (環境変数を使うなど色々方法はあります)
           kubectl apply -f k8s/fastapi/secret-db.yaml --namespace production
+
+          envsubst < k8s/fastapi/deployment.yaml.template > k8s/fastapi/deployment.yaml
+          kubectl apply -f k8s/fastapi/deployment.yaml --namespace production
 
           # FastAPIデプロイ
           kubectl apply -f k8s/fastapi/deployment.yaml --namespace production

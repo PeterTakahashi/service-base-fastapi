@@ -17,7 +17,7 @@ spec:
         - name: regcred
       containers:
         - name: fastapi
-          image: takahashiseiya/service-base-fastapi-web:latest
+          image: takahashiseiya/service-base-fastapi-web:${IMAGE_TAG}
           imagePullPolicy: Always
           ports:
             - containerPort: 8000
