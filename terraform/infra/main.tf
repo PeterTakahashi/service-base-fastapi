@@ -34,6 +34,12 @@ resource "google_project_service" "enable_apis" {
   disable_on_destroy = false
 }
 
+resource "google_service_account_iam_member" "fastapi_wi" {
+  service_account_id = var.service_account_id
+  role               = "roles/iam.workloadIdentityUser"
+  member             = "serviceAccount:${var.project_id}.svc.id.goog[production/fastapi]"
+}
+
 # Enable other APIs as needed
 
 #
