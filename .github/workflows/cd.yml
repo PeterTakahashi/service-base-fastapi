@@ -10,6 +10,8 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    env:
+      ENV_NAME: ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
     steps:
       - name: Check out
         uses: actions/checkout@v3
@@ -61,7 +63,7 @@ jobs:
       - name: Get GKE Credentials
         uses: google-github-actions/get-gke-credentials@v1
         with:
-          cluster_name: "service-base-auth-${{ secrets.ENV_NAME }}-ap-cluster"
+          cluster_name: "service-base-auth-${{ env.ENV_NAME }}-ap-cluster"
           location: ${{ secrets.GCP_REGION }}
           project_id: ${{ secrets.GCP_PROJECT_ID }}
 
