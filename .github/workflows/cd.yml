@@ -70,6 +70,13 @@ jobs:
           location: ${{ secrets.GCP_REGION }}
           project_id: ${{ secrets.GCP_PROJECT_ID }}
 
+      - name: Create DATABASE_URL Secret
+        run: |
+          kubectl delete secret db-url --namespace production --ignore-not-found
+          kubectl create secret generic db-url \
+            --from-literal=DATABASE_URL="postgresql+asyncpg://postgres:${{ secrets.DB_PASSWORD }}@127.0.0.1:5432/fastapi_production" \
+            --namespace production
+
       - name: Deploy to GKE
         run: |
           export IMAGE_TAG=$(echo "${{ github.sha }}" | cut -c1-7)

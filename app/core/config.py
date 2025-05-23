@@ -53,5 +53,5 @@ class Settings(BaseSettings):
 
 
 print("Loading environment variables...")
-print(f"DATABASE_URL: {os.getenv('DATABASE_URL')}")
+print(f"DATABASE_URL: {settings.DATABASE_URL}")
 settings = Settings()
