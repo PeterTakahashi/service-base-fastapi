@@ -90,6 +90,7 @@ jobs:
           kubectl apply -f k8s/fastapi/service-account.yaml --namespace production
           kubectl apply -f k8s/fastapi/deployment.yaml --namespace production
           kubectl apply -f k8s/fastapi/service.yaml --namespace production
+          kubectl apply -f k8s/fastapi/frontendconfig.yaml
           kubectl apply -f k8s/fastapi/ingress.yaml --namespace production
 
           # kubectl rollout status deployment/fastapi-app -n production
