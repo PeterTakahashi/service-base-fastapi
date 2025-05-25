@@ -109,7 +109,7 @@ jobs:
           kubectl apply -f k8s/fastapi/service-account.yaml --namespace $NAMESPACE
           kubectl apply -f k8s/fastapi/deployment.yaml --namespace $NAMESPACE
           kubectl apply -f k8s/fastapi/service.yaml --namespace $NAMESPACE
-          kubectl apply -f k8s/fastapi/horizontal-pod-autoscaler.yaml --namespace $NAMESPACE
+          kubectl delete -f k8s/fastapi/horizontal-pod-autoscaler.yaml --namespace $NAMESPACE
 
           envsubst < k8s/fastapi/managed-cert.yaml.template > k8s/fastapi/managed-cert.yaml
           kubectl apply -f k8s/fastapi/managed-cert.yaml --namespace $NAMESPACE
