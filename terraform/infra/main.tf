@@ -179,7 +179,7 @@ resource "kubernetes_secret" "docker_registry" {
   type = "kubernetes.io/dockerconfigjson"
 
   data = {
-    ".dockerconfigjson" = base64encode(jsonencode({
+    ".dockerconfigjson" = jsonencode({
       auths = {
         "https://index.docker.io/v1/" = {
           username = var.docker_username
@@ -188,6 +188,6 @@ resource "kubernetes_secret" "docker_registry" {
           auth     = base64encode("${var.docker_username}:${var.docker_password}")
         }
       }
-    }))
+    })
   }
 }
