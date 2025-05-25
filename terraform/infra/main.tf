@@ -134,3 +134,38 @@ resource "google_sql_database" "appdb" {
     google_sql_database_instance.default
   ]
 }
+
+resource "kubernetes_secret" "db_url" {
+  metadata {
+    name      = "db-url"
+    namespace = var.env
+  }
+
+  data = {
+    DATABASE_URL = base64encode("postgresql+asyncpg://postgres:${var.db_password}@db-host:5432/fastapi_${var.env}")
+  }
+}
+
+resource "kubernetes_secret" "github_oauth" {
+  metadata {
+    name      = "github-oauth"
+    namespace = var.env
+  }
+
+  data = {
+    GITHUB_OAUTH_CLIENT_ID     = base64encode(var.github_oauth_client_id)
+    GITHUB_OAUTH_CLIENT_SECRET = base64encode(var.github_oauth_client_secret)
+  }
+}
+
+resource "kubernetes_secret" "google_oauth" {
+  metadata {
+    name      = "google-oauth"
+    namespace = var.env
+  }
+
+  data = {
+    GOOGLE_OAUTH_CLIENT_ID     = base64encode(var.google_oauth_client_id)
+    GOOGLE_OAUTH_CLIENT_SECRET = base64encode(var.google_oauth_client_secret)
+  }
+}

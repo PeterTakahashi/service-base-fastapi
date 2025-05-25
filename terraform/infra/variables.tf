@@ -23,3 +23,25 @@ variable "env" {
   type    = string
   default = "production"
 }
+
+variable "github_oauth_client_id" {
+  type        = string
+  description = "GitHub OAuth Client ID"
+}
+
+variable "github_oauth_client_secret" {
+  type        = string
+  description = "GitHub OAuth Client Secret"
+  sensitive   = true
+}
+
+variable "google_oauth_client_id" {
+  type        = string
+  description = "Google OAuth Client ID"
+}
+
+variable "google_oauth_client_secret" {
+  type        = string
+  description = "Google OAuth Client Secret"
+  sensitive   = true
+}
