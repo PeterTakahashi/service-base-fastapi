@@ -45,3 +45,17 @@ variable "google_oauth_client_secret" {
   description = "Google OAuth Client Secret"
   sensitive   = true
 }
+
+variable "docker_username" {
+  type        = string
+  description = "Docker registry username"
+}
+variable "docker_password" {
+  type        = string
+  description = "Docker registry password"
+  sensitive   = true
+}
+variable "docker_email" {
+  type        = string
+  description = "Docker registry email"
+}

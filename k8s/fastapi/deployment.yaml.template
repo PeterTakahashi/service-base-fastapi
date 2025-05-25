@@ -15,7 +15,7 @@ spec:
     spec:
       serviceAccountName: fastapi
       imagePullSecrets:
-        - name: regcred
+        - name: dockerhub-credentials
       containers:
         - name: fastapi
           image: takahashiseiya/service-base-fastapi-web:${IMAGE_TAG}

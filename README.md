@@ -128,6 +128,9 @@ export TF_VAR_github_oauth_client_id=""
 export TF_VAR_github_oauth_client_secret=""
 export TF_VAR_google_oauth_client_id=""
 export TF_VAR_google_oauth_client_secret=""
+export TF_VAR_docker_username=""
+export TF_VAR_docker_password=""
+export TF_VAR_docker_email=""
 
 gcloud container clusters get-credentials service-base-auth-production-ap-cluster \
   --region us-central1 \
@@ -136,15 +139,4 @@ gcloud container clusters get-credentials service-base-auth-production-ap-cluste
 terraform init
 terraform plan
 terraform apply
-```
-
-#### kubectl create sercret
-
-```sh
-kubectl create secret docker-registry regcred \
-    --docker-server=docker.io \
-  --docker-username=takahashiseiya \
-  --docker-password=xxxxxx \
-  --docker-email=xxxxxx \
-  --namespace=production
 ```
