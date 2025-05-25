@@ -54,7 +54,7 @@ jobs:
           TF_VAR_docker_username: ${{ secrets.DOCKERHUB_USERNAME }}
           TF_VAR_docker_password: ${{ secrets.DOCKERHUB_TOKEN }}
           TF_VAR_docker_email: ${{ secrets.DOCKERHUB_EMAIL }}
-        run: terraform plan
+        run: terraform plan -lock=false
 
       - name: Terraform Apply
         working-directory: ./terraform/infra
@@ -69,7 +69,7 @@ jobs:
           TF_VAR_docker_username: ${{ secrets.DOCKERHUB_USERNAME }}
           TF_VAR_docker_password: ${{ secrets.DOCKERHUB_TOKEN }}
           TF_VAR_docker_email: ${{ secrets.DOCKERHUB_EMAIL }}
-        run: terraform apply -auto-approve
+        run: terraform apply -auto-approve -lock=false
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
@@ -90,19 +90,21 @@ jobs:
 
       - name: Deploy to GKE
         run: |
-          export IMAGE_TAG=$(echo "${{ github.sha }}" | cut -c1-7)
+          IMAGE_TAG=$(echo "${{ github.sha }}" | cut -c1-7)
+          NAMESPACE=${ENV_NAME}
+
           kubectl apply -f k8s/namespace.yaml
-          kubectl apply -f k8s/fastapi/frontendconfig.yaml --namespace production
-          kubectl apply -f k8s/fastapi/ingress.yaml --namespace production
+          kubectl apply -f k8s/fastapi/frontendconfig.yaml --namespace $NAMESPACE
+          kubectl apply -f k8s/fastapi/ingress.yaml --namespace $NAMESPACE
 
           envsubst < k8s/fastapi/deployment.yaml.template > k8s/fastapi/deployment.yaml
 
           # FastAPIデプロイ
-          kubectl apply -f k8s/fastapi/service-account.yaml --namespace production
-          kubectl apply -f k8s/fastapi/deployment.yaml --namespace production
-          kubectl apply -f k8s/fastapi/service.yaml --namespace production
-          kubectl apply -f k8s/fastapi/horizontal-pod-autoscaler.yaml --namespace production
+          kubectl apply -f k8s/fastapi/service-account.yaml --namespace $NAMESPACE
+          kubectl apply -f k8s/fastapi/deployment.yaml --namespace $NAMESPACE
+          kubectl apply -f k8s/fastapi/service.yaml --namespace $NAMESPACE
+          kubectl apply -f k8s/fastapi/horizontal-pod-autoscaler.yaml --namespace $NAMESPACE
 
-          kubectl apply -f k8s/fastapi/managed-cert.yaml --namespace production
+          kubectl apply -f k8s/fastapi/managed-cert.yaml --namespace $NAMESPACE
 
-          # kubectl rollout status deployment/fastapi-app -n production
+          # kubectl rollout status deployment/fastapi-app -n $NAMESPACE
