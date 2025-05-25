@@ -37,7 +37,7 @@ resource "google_project_service" "enable_apis" {
 resource "google_service_account_iam_member" "fastapi_wi" {
   service_account_id = "projects/${var.project_id}/serviceAccounts/service-base-deployment-user@${var.project_id}.iam.gserviceaccount.com"
   role               = "roles/iam.workloadIdentityUser"
-  member             = "serviceAccount:${var.project_id}.svc.id.goog[production/fastapi]"
+  member             = "serviceAccount:${var.project_id}.svc.id.goog[$(var.env)/fastapi]"
 }
 
 
@@ -142,7 +142,7 @@ resource "kubernetes_secret" "db_url" {
   }
 
   data = {
-    DATABASE_URL = base64encode("postgresql+asyncpg://postgres:${var.db_password}@db-host:5432/fastapi_${var.env}")
+    DATABASE_URL = base64encode("postgresql+asyncpg://postgres:${var.db_password}@127.0.0.1:5432/fastapi_${var.env}")
   }
 }
 

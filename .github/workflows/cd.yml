@@ -40,8 +40,6 @@ jobs:
       - name: Terraform Init
         working-directory: ./terraform/infra
         run: terraform init -input=false
-      - name: lock off
-        run: terraform force-unlock 1748164135323599
 
       - name: Terraform Plan
         working-directory: ./terraform/infra
@@ -90,22 +88,12 @@ jobs:
           docker tag $IMAGE_NAME:$SHORT_SHA $IMAGE_NAME:latest
           docker push $IMAGE_NAME:latest
 
-      - name: Create DATABASE_URL Secret
-        run: |
-          kubectl delete secret db-url --namespace production --ignore-not-found
-          kubectl create secret generic db-url \
-            --from-literal=DATABASE_URL="postgresql+asyncpg://postgres:${{ secrets.DB_PASSWORD }}@127.0.0.1:5432/fastapi_production" \
-            --namespace production
-
       - name: Deploy to GKE
         run: |
           export IMAGE_TAG=$(echo "${{ github.sha }}" | cut -c1-7)
           kubectl apply -f k8s/namespace.yaml
           kubectl apply -f k8s/fastapi/frontendconfig.yaml --namespace production
           kubectl apply -f k8s/fastapi/ingress.yaml --namespace production
-
-          # DBパスワードなどをSecretに書き込む (環境変数を使うなど色々方法はあります)
-          # kubectl apply -f k8s/fastapi/secret-db.yaml --namespace production
 
           envsubst < k8s/fastapi/deployment.yaml.template > k8s/fastapi/deployment.yaml
 
