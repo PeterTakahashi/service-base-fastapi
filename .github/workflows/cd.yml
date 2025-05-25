@@ -34,42 +34,42 @@ jobs:
           location: ${{ secrets.GCP_REGION }}
           project_id: ${{ secrets.GCP_PROJECT_ID }}
 
-      - name: Install Terraform
-        uses: hashicorp/setup-terraform@v2
+      # - name: Install Terraform
+      #   uses: hashicorp/setup-terraform@v2
 
-      - name: Terraform Init
-        working-directory: ./terraform/infra
-        run: terraform init -input=false
+      # - name: Terraform Init
+      #   working-directory: ./terraform/infra
+      #   run: terraform init -input=false
 
-      - name: Terraform Plan
-        working-directory: ./terraform/infra
-        env:
-          KUBECONFIG: ${{ steps.get-gke-credentials.outputs.kubeconfig_path }}
-          TF_VAR_project_id: ${{ secrets.GCP_PROJECT_ID }}
-          TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
-          TF_VAR_github_oauth_client_id: ${{ secrets.GIT_HUB_OAUTH_CLIENT_ID }}
-          TF_VAR_github_oauth_client_secret: ${{ secrets.GIT_HUB_OAUTH_CLIENT_SECRET }}
-          TF_VAR_google_oauth_client_id: ${{ secrets.GOOGLE_OAUTH_CLIENT_ID }}
-          TF_VAR_google_oauth_client_secret: ${{ secrets.GOOGLE_OAUTH_CLIENT_SECRET }}
-          TF_VAR_docker_username: ${{ secrets.DOCKERHUB_USERNAME }}
-          TF_VAR_docker_password: ${{ secrets.DOCKERHUB_TOKEN }}
-          TF_VAR_docker_email: ${{ secrets.DOCKERHUB_EMAIL }}
-        run: terraform plan -lock=false
+      # - name: Terraform Plan
+      #   working-directory: ./terraform/infra
+      #   env:
+      #     KUBECONFIG: ${{ steps.get-gke-credentials.outputs.kubeconfig_path }}
+      #     TF_VAR_project_id: ${{ secrets.GCP_PROJECT_ID }}
+      #     TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
+      #     TF_VAR_github_oauth_client_id: ${{ secrets.GIT_HUB_OAUTH_CLIENT_ID }}
+      #     TF_VAR_github_oauth_client_secret: ${{ secrets.GIT_HUB_OAUTH_CLIENT_SECRET }}
+      #     TF_VAR_google_oauth_client_id: ${{ secrets.GOOGLE_OAUTH_CLIENT_ID }}
+      #     TF_VAR_google_oauth_client_secret: ${{ secrets.GOOGLE_OAUTH_CLIENT_SECRET }}
+      #     TF_VAR_docker_username: ${{ secrets.DOCKERHUB_USERNAME }}
+      #     TF_VAR_docker_password: ${{ secrets.DOCKERHUB_TOKEN }}
+      #     TF_VAR_docker_email: ${{ secrets.DOCKERHUB_EMAIL }}
+      #   run: terraform plan -lock=false
 
-      - name: Terraform Apply
-        working-directory: ./terraform/infra
-        env:
-          KUBECONFIG: ${{ steps.get-gke-credentials.outputs.kubeconfig_path }}
-          TF_VAR_project_id: ${{ secrets.GCP_PROJECT_ID }}
-          TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
-          TF_VAR_github_oauth_client_id: ${{ secrets.GIT_HUB_OAUTH_CLIENT_ID }}
-          TF_VAR_github_oauth_client_secret: ${{ secrets.GIT_HUB_OAUTH_CLIENT_SECRET }}
-          TF_VAR_google_oauth_client_id: ${{ secrets.GOOGLE_OAUTH_CLIENT_ID }}
-          TF_VAR_google_oauth_client_secret: ${{ secrets.GOOGLE_OAUTH_CLIENT_SECRET }}
-          TF_VAR_docker_username: ${{ secrets.DOCKERHUB_USERNAME }}
-          TF_VAR_docker_password: ${{ secrets.DOCKERHUB_TOKEN }}
-          TF_VAR_docker_email: ${{ secrets.DOCKERHUB_EMAIL }}
-        run: terraform apply -auto-approve -lock=false
+      # - name: Terraform Apply
+      #   working-directory: ./terraform/infra
+      #   env:
+      #     KUBECONFIG: ${{ steps.get-gke-credentials.outputs.kubeconfig_path }}
+      #     TF_VAR_project_id: ${{ secrets.GCP_PROJECT_ID }}
+      #     TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
+      #     TF_VAR_github_oauth_client_id: ${{ secrets.GIT_HUB_OAUTH_CLIENT_ID }}
+      #     TF_VAR_github_oauth_client_secret: ${{ secrets.GIT_HUB_OAUTH_CLIENT_SECRET }}
+      #     TF_VAR_google_oauth_client_id: ${{ secrets.GOOGLE_OAUTH_CLIENT_ID }}
+      #     TF_VAR_google_oauth_client_secret: ${{ secrets.GOOGLE_OAUTH_CLIENT_SECRET }}
+      #     TF_VAR_docker_username: ${{ secrets.DOCKERHUB_USERNAME }}
+      #     TF_VAR_docker_password: ${{ secrets.DOCKERHUB_TOKEN }}
+      #     TF_VAR_docker_email: ${{ secrets.DOCKERHUB_EMAIL }}
+      #   run: terraform apply -auto-approve -lock=false
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
