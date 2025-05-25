@@ -135,59 +135,59 @@ resource "google_sql_database" "appdb" {
   ]
 }
 
-# resource "kubernetes_secret" "db_url" {
-#   metadata {
-#     name      = "db-url"
-#     namespace = var.env
-#   }
+resource "kubernetes_secret" "db_url" {
+  metadata {
+    name      = "db-url"
+    namespace = var.env
+  }
 
-#   data = {
-#     DATABASE_URL = "postgresql+asyncpg://postgres:${var.db_password}@127.0.0.1:5432/fastapi_${var.env}"
-#   }
-# }
+  data = {
+    DATABASE_URL = "postgresql+asyncpg://postgres:${var.db_password}@127.0.0.1:5432/fastapi_${var.env}"
+  }
+}
 
-# resource "kubernetes_secret" "github_oauth" {
-#   metadata {
-#     name      = "github-oauth"
-#     namespace = var.env
-#   }
+resource "kubernetes_secret" "github_oauth" {
+  metadata {
+    name      = "github-oauth"
+    namespace = var.env
+  }
 
-#   data = {
-#     GITHUB_OAUTH_CLIENT_ID     = var.github_oauth_client_id
-#     GITHUB_OAUTH_CLIENT_SECRET = var.github_oauth_client_secret
-#   }
-# }
+  data = {
+    GITHUB_OAUTH_CLIENT_ID     = var.github_oauth_client_id
+    GITHUB_OAUTH_CLIENT_SECRET = var.github_oauth_client_secret
+  }
+}
 
-# resource "kubernetes_secret" "google_oauth" {
-#   metadata {
-#     name      = "google-oauth"
-#     namespace = var.env
-#   }
+resource "kubernetes_secret" "google_oauth" {
+  metadata {
+    name      = "google-oauth"
+    namespace = var.env
+  }
 
-#   data = {
-#     GOOGLE_OAUTH_CLIENT_ID     = var.google_oauth_client_id
-#     GOOGLE_OAUTH_CLIENT_SECRET = var.google_oauth_client_secret
-#   }
-# }
+  data = {
+    GOOGLE_OAUTH_CLIENT_ID     = var.google_oauth_client_id
+    GOOGLE_OAUTH_CLIENT_SECRET = var.google_oauth_client_secret
+  }
+}
 
-# resource "kubernetes_secret" "docker_registry" {
-#   metadata {
-#     name      = "dockerhub-credentials"
-#     namespace = var.env
-#   }
+resource "kubernetes_secret" "docker_registry" {
+  metadata {
+    name      = "dockerhub-credentials"
+    namespace = var.env
+  }
 
-#   type = "kubernetes.io/dockerconfigjson"
+  type = "kubernetes.io/dockerconfigjson"
 
-#   data = {
-#     ".dockerconfigjson" = jsonencode({
-#       auths = {
-#         "https://index.docker.io/v1/" = {
-#           username = var.docker_username
-#           password = var.docker_password
-#           email    = var.docker_email
-#           auth     = base64encode("${var.docker_username}:${var.docker_password}")
-#         }
-#       }
-#     })
-#   }
-# }
+  data = {
+    ".dockerconfigjson" = jsonencode({
+      auths = {
+        "https://index.docker.io/v1/" = {
+          username = var.docker_username
+          password = var.docker_password
+          email    = var.docker_email
+          auth     = base64encode("${var.docker_username}:${var.docker_password}")
+        }
+      }
+    })
+  }
+}
