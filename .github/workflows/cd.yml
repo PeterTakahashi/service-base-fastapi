@@ -90,8 +90,8 @@ jobs:
 
       - name: Deploy to GKE
         run: |
-          IMAGE_TAG=$(echo "${{ github.sha }}" | cut -c1-7)
-          NAMESPACE=${ENV_NAME}
+          export IMAGE_TAG=$(echo "${{ github.sha }}" | cut -c1-7)
+          export NAMESPACE=${ENV_NAME}
 
           kubectl apply -f k8s/namespace.yaml
           kubectl apply -f k8s/fastapi/frontendconfig.yaml --namespace $NAMESPACE
