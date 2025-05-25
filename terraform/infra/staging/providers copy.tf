@@ -3,7 +3,7 @@ terraform {
 
   backend "gcs" {
     bucket = "aiproject-terraform-state"
-    prefix = "infra/production/terraform.tfstate"
+    prefix = "infra/staging/terraform.tfstate"
   }
 
   required_providers {
