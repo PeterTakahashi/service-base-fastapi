@@ -132,7 +132,7 @@ export TF_VAR_docker_username=""
 export TF_VAR_docker_password=""
 export TF_VAR_docker_email=""
 
-gcloud container clusters get-credentials service-base-auth-production-ap-cluster \
+gcloud container clusters get-credentials service-base-auth-ap-cluster \
   --region us-central1 \
   --project aiproject-460606
 
