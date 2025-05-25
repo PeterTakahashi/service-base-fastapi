@@ -37,7 +37,7 @@ resource "google_project_service" "enable_apis" {
 resource "google_service_account_iam_member" "fastapi_wi" {
   service_account_id = "projects/${var.project_id}/serviceAccounts/service-base-deployment-user@${var.project_id}.iam.gserviceaccount.com"
   role               = "roles/iam.workloadIdentityUser"
-  member             = "serviceAccount:${var.project_id}.svc.id.goog[$(var.env)/fastapi]"
+  member             = "serviceAccount:${var.project_id}.svc.id.goog[${var.env}/fastapi]"
 }
 
 
