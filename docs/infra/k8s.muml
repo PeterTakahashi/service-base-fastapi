@@ -7,37 +7,32 @@ flowchart TD
   subgraph GC[Google Cloud]
     direction TB
 
-    LB["HTTPS Load Balancer (Managed Ingress)"]
+    LB["HTTPS Load Balancer<br/>(GCE Ingress / Google-managed TLS)"]
 
     %% ----- GKE -----
     subgraph GKE[GKE Autopilot cluster]
       direction TB
-      Ingress["Ingress-NGINX (autoscaled)"]
 
-      %% FastAPI Pod (sidecar pattern)
-      subgraph Pod["FastAPI Pod"]
-        direction LR
-        API["FastAPI<br/>(app container)"]
-        Proxy["Cloud SQL Auth Proxy<br/>(sidecar)"]
-        API -- "TCP 5432<br/>localhost" --> Proxy
-      end
+        IngressRes["Ingress<br/>(ingressClass: gce)"]
 
-      Cert["cert-manager (Let's Encrypt)"]
+        %% FastAPI Pod (sidecar pattern)
+        subgraph Pod["FastAPI Pod"]
+          direction LR
+          API["FastAPI<br/>(app container)"]
+          Proxy["Cloud SQL Auth Proxy<br/>(sidecar)"]
+          API -- "TCP 5432<br/>localhost" --> Proxy
+        end
     end
 
-    DB["Cloud SQL (PostgreSQL, Private IP)"]
+    DB["Cloud SQL<br/>(PostgreSQL – Private IP)"]
   end
 
   %% ========= Flows =========
   User -->|HTTPS 443| Internet
-  Internet -->|HTTPS 443<br/>TLS redirect ON| LB
-  LB -->|HTTPS 443| Ingress
-  Ingress -->|HTTP 80| API
+  Internet -->|HTTPS 443<br/>HTTP→HTTPS redirect| LB
+  LB -->|HTTP 80| IngressRes
+  IngressRes -->|HTTP 80| API
   Proxy -->|PostgreSQL 5432| DB
 
-  %% cert-manager ACME challenge
-  Cert -. "ACME HTTP-01<br/>challenge" .-> LB
-
-  %% ========= Styling for note look =========
+  %% ========= Styling =========
   classDef note fill:#ffffff,stroke:#bbbbbb,stroke-dasharray:5 5,color:#555,font-size:12px
-  class Cert note
