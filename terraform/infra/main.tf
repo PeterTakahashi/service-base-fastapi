@@ -176,6 +176,8 @@ resource "kubernetes_secret" "docker_registry" {
     namespace = var.env
   }
 
+  type = "kubernetes.io/dockerconfigjson"
+
   data = {
     ".dockerconfigjson" = base64encode(jsonencode({
       auths = {
