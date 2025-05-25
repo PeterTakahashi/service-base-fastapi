@@ -3,6 +3,12 @@ variable "project_id" {
   description = "GCP project ID"
 }
 
+variable "service_name" {
+  type        = string
+  description = "Service name for Kubernetes deployment"
+  default     = "service-base-auth"
+}
+
 variable "region" {
   type        = string
   default     = "us-central1"

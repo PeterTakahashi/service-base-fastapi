@@ -47,8 +47,8 @@ resource "google_service_account_iam_member" "fastapi_wi" {
 # 2. GKE Autopilot cluster
 #
 resource "google_container_cluster" "primary" {
-  name             = "service-base-auth-ap-cluster"
-  description      = "Autopilot GKE cluster for service-base-auth"
+  name             = "${var.service_name}-ap-cluster"
+  description      = "Autopilot GKE cluster for ${var.service_name}"
   project          = var.project_id
   location         = var.region
   enable_autopilot = true
@@ -65,7 +65,7 @@ resource "google_container_cluster" "primary" {
 }
 
 resource "google_compute_global_address" "private_ip_range" {
-  name          = "private-ip-range"
+  name          = "${var.service_name}-${var.env}-private-ip-range"
   project       = var.project_id
   purpose       = "VPC_PEERING"
   address_type  = "INTERNAL"
@@ -85,7 +85,7 @@ resource "google_service_networking_connection" "default" {
 # 3. Cloud SQL (PostgreSQL)
 #
 resource "google_sql_database_instance" "default" {
-  name             = "service-base-auth-postgres"
+  name             = "${var.service_name}-postgres"
   project          = var.project_id
   database_version = "POSTGRES_15"
   region           = var.region
