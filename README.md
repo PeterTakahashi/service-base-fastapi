@@ -130,9 +130,20 @@ terraform plan
 terraform apply
 ```
 
+#### kubectl create sercret
+
+```sh
+kubectl create secret docker-registry regcred \
+    --docker-server=docker.io \
+  --docker-username=takahashiseiya \
+  --docker-password=xxxxxx \
+  --docker-email=xxxxxx \
+  --namespace=production
+```
+
 ### add context to kubernetes CLI
 
-```
+```sh
 gcloud container clusters get-credentials service-base-auth-production-ap-cluster \
   --region us-central1 \
   --project aiproject-460606

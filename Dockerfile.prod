@@ -1,0 +1,25 @@
+FROM ubuntu:24.04
+
+RUN mkdir /myapp
+WORKDIR /myapp
+
+RUN apt update --yes \
+    && apt install -y curl g++ cargo libpq-dev git
+
+RUN curl -LsSf https://astral.sh/uv/install.sh | env UV_INSTALL_DIR="/root/.local/bin" sh
+ENV PATH="/root/.local/bin:$PATH"
+
+COPY . /myapp
+
+RUN uv python install 3.11.11
+
+RUN uv venv --python 3.11.11 \
+    && uv pip install . \
+    && uv pip install --group dev
+
+RUN uv pip install gunicorn
+
+EXPOSE 8000
+
+SHELL ["/bin/bash", "-c"]
+CMD source .venv/bin/activate && gunicorn main:app --workers 1 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:8000
