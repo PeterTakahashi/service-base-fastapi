@@ -30,7 +30,6 @@ jobs:
         id: get-gke-credentials
         uses: google-github-actions/get-gke-credentials@v2
         with:
-          cluster_name: "service-base-auth-ap-cluster"
           location: ${{ secrets.GCP_REGION }}
           project_id: ${{ secrets.GCP_PROJECT_ID }}
 
@@ -44,7 +43,7 @@ jobs:
       - name: Terraform Plan
         working-directory: ./terraform/infra
         env:
-          # KUBECONFIG: ${{ steps.get-gke-credentials.outputs.kubeconfig_path }}
+          KUBECONFIG: ${{ steps.get-gke-credentials.outputs.kubeconfig_path }}
           TF_VAR_project_id: ${{ secrets.GCP_PROJECT_ID }}
           TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
           TF_VAR_github_oauth_client_id: ${{ secrets.GIT_HUB_OAUTH_CLIENT_ID }}
@@ -59,7 +58,7 @@ jobs:
       - name: Terraform Apply
         working-directory: ./terraform/infra
         env:
-          # KUBECONFIG: ${{ steps.get-gke-credentials.outputs.kubeconfig_path }}
+          KUBECONFIG: ${{ steps.get-gke-credentials.outputs.kubeconfig_path }}
           TF_VAR_project_id: ${{ secrets.GCP_PROJECT_ID }}
           TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
           TF_VAR_github_oauth_client_id: ${{ secrets.GIT_HUB_OAUTH_CLIENT_ID }}
