@@ -142,7 +142,7 @@ resource "kubernetes_secret" "db_url" {
   }
 
   data = {
-    DATABASE_URL = base64encode("postgresql+asyncpg://postgres:${var.db_password}@127.0.0.1:5432/fastapi_${var.env}")
+    DATABASE_URL = "postgresql+asyncpg://postgres:${var.db_password}@127.0.0.1:5432/fastapi_${var.env}"
   }
 }
 
@@ -153,8 +153,8 @@ resource "kubernetes_secret" "github_oauth" {
   }
 
   data = {
-    GITHUB_OAUTH_CLIENT_ID     = base64encode(var.github_oauth_client_id)
-    GITHUB_OAUTH_CLIENT_SECRET = base64encode(var.github_oauth_client_secret)
+    GITHUB_OAUTH_CLIENT_ID     = var.github_oauth_client_id
+    GITHUB_OAUTH_CLIENT_SECRET = var.github_oauth_client_secret
   }
 }
 
@@ -165,8 +165,8 @@ resource "kubernetes_secret" "google_oauth" {
   }
 
   data = {
-    GOOGLE_OAUTH_CLIENT_ID     = base64encode(var.google_oauth_client_id)
-    GOOGLE_OAUTH_CLIENT_SECRET = base64encode(var.google_oauth_client_secret)
+    GOOGLE_OAUTH_CLIENT_ID     = var.google_oauth_client_id
+    GOOGLE_OAUTH_CLIENT_SECRET = var.google_oauth_client_secret
   }
 }
 
