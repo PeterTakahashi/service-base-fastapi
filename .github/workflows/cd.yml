@@ -40,6 +40,8 @@ jobs:
       - name: Terraform Init
         working-directory: ./terraform/infra
         run: terraform init -input=false
+      - name: lock off
+        run: terraform force-unlock 1748164135323599
 
       - name: Terraform Plan
         working-directory: ./terraform/infra
