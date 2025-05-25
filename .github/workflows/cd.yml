@@ -30,6 +30,7 @@ jobs:
         id: get-gke-credentials
         uses: google-github-actions/get-gke-credentials@v2
         with:
+          cluster_name: "service-base-auth-ap-cluster"
           location: ${{ secrets.GCP_REGION }}
           project_id: ${{ secrets.GCP_PROJECT_ID }}
 
