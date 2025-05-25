@@ -51,6 +51,9 @@ jobs:
           TF_VAR_github_oauth_client_secret: ${{ secrets.GIT_HUB_OAUTH_CLIENT_SECRET }}
           TF_VAR_google_oauth_client_id: ${{ secrets.GOOGLE_OAUTH_CLIENT_ID }}
           TF_VAR_google_oauth_client_secret: ${{ secrets.GOOGLE_OAUTH_CLIENT_SECRET }}
+          TF_VAR_docker_username: ${{ secrets.DOCKERHUB_USERNAME }}
+          TF_VAR_docker_password: ${{ secrets.DOCKERHUB_TOKEN }}
+          TF_VAR_docker_email: ${{ secrets.DOCKERHUB_EMAIL }}
         run: terraform plan
 
       - name: Terraform Apply
