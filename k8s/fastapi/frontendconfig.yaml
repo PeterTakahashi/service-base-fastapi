@@ -1,7 +1,6 @@
 apiVersion: networking.gke.io/v1beta1
 kind: FrontendConfig
 metadata:
-  namespace: production
   name: frontendconfig
 spec:
   redirectToHttps:

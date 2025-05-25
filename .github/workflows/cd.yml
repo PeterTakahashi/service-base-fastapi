@@ -93,7 +93,9 @@ jobs:
           export IMAGE_TAG=$(echo "${{ github.sha }}" | cut -c1-7)
           export NAMESPACE=${ENV_NAME}
 
+           envsubst < k8s/namespace.yaml.template > k8s/namespace.yaml
           kubectl apply -f k8s/namespace.yaml
+
           kubectl apply -f k8s/fastapi/frontendconfig.yaml --namespace $NAMESPACE
           kubectl apply -f k8s/fastapi/ingress.yaml --namespace $NAMESPACE
 
@@ -107,4 +109,4 @@ jobs:
 
           kubectl apply -f k8s/fastapi/managed-cert.yaml --namespace $NAMESPACE
 
-          # kubectl rollout status deployment/fastapi-app -n $NAMESPACE
+          # kubectl rollout status deployment/fastapi-app --namespace $NAMESPACE

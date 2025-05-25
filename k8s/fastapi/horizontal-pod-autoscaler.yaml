@@ -2,7 +2,6 @@ apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: fastapi-app-hpa
-  namespace: production
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
