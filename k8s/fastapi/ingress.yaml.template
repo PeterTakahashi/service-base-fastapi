@@ -9,7 +9,7 @@ metadata:
 spec:
   ingressClassName: gce
   rules:
-    - host: service-base-auth.baltoon.jp
+    - host: ${API_DOMAIN}
       http:
         paths:
           - path: /

@@ -93,11 +93,14 @@ jobs:
           export IMAGE_TAG=$(echo "${{ github.sha }}" | cut -c1-7)
           export NAMESPACE=${ENV_NAME}
           export CLOUD_SQL_INSTANCE_CONNECTION_NAME="${{ secrets.GCP_PROJECT_ID}}:${{ secrets.GCP_REGION}}:service-base-auth-${{ env.ENV_NAME }}-postgres"
+          export API_DOMAIN=${{ secrets.API_DOMAIN }}
 
           envsubst < k8s/namespace.yaml.template > k8s/namespace.yaml
           kubectl apply -f k8s/namespace.yaml
 
           kubectl apply -f k8s/fastapi/frontendconfig.yaml --namespace $NAMESPACE
+
+          envsubst < k8s/fastapi/ingress.yaml.template > k8s/fastapi/ingress.yaml
           kubectl apply -f k8s/fastapi/ingress.yaml --namespace $NAMESPACE
 
           envsubst < k8s/fastapi/deployment.yaml.template > k8s/fastapi/deployment.yaml
@@ -108,6 +111,7 @@ jobs:
           kubectl apply -f k8s/fastapi/service.yaml --namespace $NAMESPACE
           kubectl apply -f k8s/fastapi/horizontal-pod-autoscaler.yaml --namespace $NAMESPACE
 
+          envsubst < k8s/fastapi/managed-cert.yaml.template > k8s/fastapi/managed-cert.yaml
           kubectl apply -f k8s/fastapi/managed-cert.yaml --namespace $NAMESPACE
 
           # kubectl rollout status deployment/fastapi-app --namespace $NAMESPACE

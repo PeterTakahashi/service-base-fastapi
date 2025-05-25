@@ -4,4 +4,4 @@ metadata:
   name: fastapi-managed-cert
 spec:
   domains:
-    - service-base-auth.baltoon.jp
+    - ${API_DOMAIN}
