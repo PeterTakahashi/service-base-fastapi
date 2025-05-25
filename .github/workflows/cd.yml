@@ -92,8 +92,9 @@ jobs:
         run: |
           export IMAGE_TAG=$(echo "${{ github.sha }}" | cut -c1-7)
           export NAMESPACE=${ENV_NAME}
+          export CLOUD_SQL_INSTANCE_CONNECTION_NAME="${{ secrets.GCP_PROJECT_ID}}:${{ secrets.GCP_REGION}}:service-base-auth-${{ env.ENV_NAME }}-postgres"
 
-           envsubst < k8s/namespace.yaml.template > k8s/namespace.yaml
+          envsubst < k8s/namespace.yaml.template > k8s/namespace.yaml
           kubectl apply -f k8s/namespace.yaml
 
           kubectl apply -f k8s/fastapi/frontendconfig.yaml --namespace $NAMESPACE

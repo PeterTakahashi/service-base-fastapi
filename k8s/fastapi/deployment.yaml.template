@@ -67,7 +67,7 @@ spec:
             - "--structured-logs"
             - "--private-ip"
             - "--port=5432"
-            - "aiproject-460606:us-central1:service-base-auth-production-postgres"
+            - "${CLOUD_SQL_INSTANCE_CONNECTION_NAME}"
           ports:
             - containerPort: 5432
           resources:
