@@ -47,7 +47,7 @@ resource "google_service_account_iam_member" "fastapi_wi" {
 # 2. GKE Autopilot cluster
 #
 resource "google_container_cluster" "primary" {
-  name             = "service-base-auth-${var.env}-ap-cluster"
+  name             = "service-base-auth-ap-cluster"
   description      = "Autopilot GKE cluster for service-base-auth"
   project          = var.project_id
   location         = var.region
@@ -85,7 +85,7 @@ resource "google_service_networking_connection" "default" {
 # 3. Cloud SQL (PostgreSQL)
 #
 resource "google_sql_database_instance" "default" {
-  name             = "service-base-auth-${var.env}-postgres"
+  name             = "service-base-auth-postgres"
   project          = var.project_id
   database_version = "POSTGRES_15"
   region           = var.region
