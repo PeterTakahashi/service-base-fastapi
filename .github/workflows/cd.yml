@@ -26,6 +26,13 @@ jobs:
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
 
+      - name: Get GKE Credentials
+        uses: google-github-actions/get-gke-credentials@v1
+        with:
+          cluster_name: "service-base-auth-${{ env.ENV_NAME }}-ap-cluster"
+          location: ${{ secrets.GCP_REGION }}
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v2
 
@@ -71,14 +78,6 @@ jobs:
           docker push $IMAGE_NAME:$SHORT_SHA
           docker tag $IMAGE_NAME:$SHORT_SHA $IMAGE_NAME:latest
           docker push $IMAGE_NAME:latest
-
-      # GKEへkubectl apply
-      - name: Get GKE Credentials
-        uses: google-github-actions/get-gke-credentials@v1
-        with:
-          cluster_name: "service-base-auth-${{ env.ENV_NAME }}-ap-cluster"
-          location: ${{ secrets.GCP_REGION }}
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
 
       - name: Create DATABASE_URL Secret
         run: |

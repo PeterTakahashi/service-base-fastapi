@@ -124,6 +124,14 @@ gsutil mb -p $GCP_PROJECT_ID -l us-central1 gs://aiproject-terraform-state/
 ```sh
 export TF_VAR_project_id="aiproject-460606"
 export TF_VAR_db_password=""
+export TF_VAR_github_oauth_client_id=""
+export TF_VAR_github_oauth_client_secret=""
+export TF_VAR_google_oauth_client_id=""
+export TF_VAR_google_oauth_client_secret=""
+
+gcloud container clusters get-credentials service-base-auth-production-ap-cluster \
+  --region us-central1 \
+  --project aiproject-460606
 
 terraform init
 terraform plan
