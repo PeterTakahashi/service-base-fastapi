@@ -140,11 +140,3 @@ kubectl create secret docker-registry regcred \
   --docker-email=xxxxxx \
   --namespace=production
 ```
-
-### add context to kubernetes CLI
-
-```sh
-gcloud container clusters get-credentials service-base-auth-production-ap-cluster \
-  --region us-central1 \
-  --project aiproject-460606
-```
