@@ -54,7 +54,7 @@ jobs:
           COMMIT_SHA="${{ github.sha }}"
           SHORT_SHA=$(echo "$COMMIT_SHA" | cut -c1-7)
 
-          docker build -t $IMAGE_NAME:$SHORT_SHA -f Dockerfile .
+          docker build -t $IMAGE_NAME:$SHORT_SHA -f Dockerfile.prod .
           docker push $IMAGE_NAME:$SHORT_SHA
           docker tag $IMAGE_NAME:$SHORT_SHA $IMAGE_NAME:latest
           docker push $IMAGE_NAME:latest
