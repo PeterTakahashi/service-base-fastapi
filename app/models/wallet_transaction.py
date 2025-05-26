@@ -5,13 +5,13 @@ from datetime import datetime
 import enum
 
 
-class TransactionType(enum.Enum):  # Use standard enum.Enum
+class WalletTransactionType(enum.Enum):  # Use standard enum.Enum
     DEPOSIT = "deposit"
     WITHDRAWAL = "withdrawal"
     SPEND = "spend"
 
 
-class TransactionStatus(enum.Enum):  # Use standard enum.Enum
+class WalletTransactionStatus(enum.Enum):  # Use standard enum.Enum
     PENDING = "pending"
     COMPLETED = "completed"
     FAILED = "failed"
@@ -27,14 +27,14 @@ class WalletTransaction(Base):
         nullable=True, unique=True, index=True
     )
 
-    transaction_type: Mapped[TransactionType] = mapped_column(
-        SQLAlchemyEnum(TransactionType, native_enum=True), nullable=False
+    wallet_transaction_type: Mapped[WalletTransactionType] = mapped_column(
+        SQLAlchemyEnum(WalletTransactionType, native_enum=True), nullable=False
     )
 
-    status: Mapped[TransactionStatus] = mapped_column(
-        SQLAlchemyEnum(TransactionStatus, native_enum=True),
+    wallet_transaction_status: Mapped[WalletTransactionStatus] = mapped_column(
+        SQLAlchemyEnum(WalletTransactionStatus, native_enum=True),
         nullable=False,
-        default=TransactionStatus.PENDING,
+        default=WalletTransactionStatus.PENDING,
     )
 
     created_at: Mapped[datetime] = mapped_column(

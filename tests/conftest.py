@@ -6,10 +6,14 @@ import pytest_asyncio
 from app.core.startup import database
 from app.db.session import get_async_session
 from faker import Faker
-from tests.fixtures.model_fixture import user
+from tests.fixtures.model_fixture import (
+    user,
+    wallet,
+)
 from tests.fixtures.repository_fixture import (
     user_repository,
     wallet_repository,
+    wallet_transaction_repository,
 )
 from tests.fixtures.service_fixture import (
     user_service,

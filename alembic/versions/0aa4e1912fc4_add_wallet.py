@@ -1,8 +1,8 @@
-"""add wallet and wallet transaction
+"""add wallet
 
-Revision ID: f2c5abd23bed
+Revision ID: 0aa4e1912fc4
 Revises: 7d027468cc23
-Create Date: 2025-05-26 11:10:32.153077
+Create Date: 2025-05-26 14:07:50.773431
 
 """
 from typing import Sequence, Union
@@ -11,8 +11,9 @@ from alembic import op
 import sqlalchemy as sa
 import fastapi_users_db_sqlalchemy
 
+
 # revision identifiers, used by Alembic.
-revision: str = 'f2c5abd23bed'
+revision: str = '0aa4e1912fc4'
 down_revision: Union[str, None] = '7d027468cc23'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -37,8 +38,8 @@ def upgrade() -> None:
     sa.Column('wallet_id', sa.Integer(), nullable=False),
     sa.Column('amount', sa.Integer(), nullable=False),
     sa.Column('stripe_payment_intent_id', sa.String(), nullable=True),
-    sa.Column('transaction_type', sa.Enum('DEPOSIT', 'WITHDRAWAL', 'SPEND', name='transactiontype'), nullable=False),
-    sa.Column('status', sa.Enum('PENDING', 'COMPLETED', 'FAILED', name='transactionstatus'), nullable=False),
+    sa.Column('wallet_transaction_type', sa.Enum('DEPOSIT', 'WITHDRAWAL', 'SPEND', name='wallettransactiontype'), nullable=False),
+    sa.Column('wallet_transaction_status', sa.Enum('PENDING', 'COMPLETED', 'FAILED', name='wallettransactionstatus'), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('updated_at', sa.DateTime(), nullable=False),
     sa.ForeignKeyConstraint(['wallet_id'], ['wallets.id'], ),
