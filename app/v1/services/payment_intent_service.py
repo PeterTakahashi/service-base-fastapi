@@ -33,9 +33,9 @@ class PaymentIntentService:
         )
 
         return PaymentIntentCreateResponse(
-            id=payment_intent.id,
-            amount=payment_intent.amount,
-            currency=payment_intent.currency,
-            client_secret=payment_intent.client_secret,
-            status=payment_intent.status
-        )
+                id=payment_intent.id,
+                amount=payment_intent.amount,
+                currency=payment_intent.currency,
+                client_secret=payment_intent.client_secret,
+                status=payment_intent.status
+            )

@@ -14,7 +14,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi_users import BaseUserManager, UUIDIDMixin, exceptions, models, schemas
 from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase
 from fastapi_users.db import BaseUserDatabase
-from fastapi_users.password import PasswordHelper, PasswordHelperProtocol
+from fastapi_users.password import PasswordHelperProtocol
 
 from app.core.config import settings
 from app.db.session import get_async_session

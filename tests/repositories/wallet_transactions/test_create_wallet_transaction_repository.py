@@ -1,5 +1,3 @@
-import pytest_asyncio
-from app.v1.repositories.wallet_transaction_repository import WalletTransactionRepository
 from app.models.wallet_transaction import WalletTransactionType, WalletTransactionStatus
 
 async def test_create_wallet_transaction_success(wallet_transaction_repository, wallet):

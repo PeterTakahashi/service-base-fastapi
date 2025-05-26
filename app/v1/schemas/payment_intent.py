@@ -12,7 +12,7 @@ class PaymentIntentCreateResponse(BaseModel):
     id: str = Field(
         ...,
         description="The unique identifier for the payment intent.",
-        json_schema_extra={"example": "pi_1F8Y2e2eZvKYlo2C0d3f4g5h6"}
+        json_schema_extra={"example": "pi_1F8Y2e2eZvKYlo2C0d3f4g5h6"},
     )
     amount: int = Field(
         ...,

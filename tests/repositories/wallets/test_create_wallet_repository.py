@@ -1,5 +1,3 @@
-import pytest_asyncio
-from app.v1.repositories.wallet_repository import WalletRepository
 
 async def test_create_wallet_success(wallet_repository, user):
     stripe_customer_id = "cus_1234567890"

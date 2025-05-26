@@ -8,7 +8,7 @@ class WalletRepository(BaseRepository):
     def __init__(self, session: AsyncSession):
         super().__init__(session, Wallet)
 
-    async def get_wallet_by_user_id(self, user_id: GUID) -> Wallet:
+    async def get_wallet_by_user_id(self, user_id: GUID) -> Wallet | None:
         result = await self.session.execute(select(Wallet).filter(Wallet.user_id == user_id))
         return result.scalars().first()
 
