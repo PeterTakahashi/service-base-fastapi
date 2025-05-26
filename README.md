@@ -26,8 +26,16 @@ alembic revision --autogenerate -m ""
 
 #### db migrate
 
+for development
+
 ```bash
 alembic upgrade head
+```
+
+for test
+
+```bash
+ENV=test alembic upgrade head
 ```
 
 #### reset table

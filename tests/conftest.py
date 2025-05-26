@@ -9,6 +9,7 @@ from faker import Faker
 from tests.fixtures.model_fixture import user
 from tests.fixtures.repository_fixture import (
     user_repository,
+    wallet_repository,
 )
 from tests.fixtures.service_fixture import (
     user_service,
