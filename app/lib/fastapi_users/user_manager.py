@@ -5,6 +5,7 @@ This module defines the UserManager class and utility functions for managing use
 from uuid import UUID
 from typing import Optional, Union
 from datetime import datetime, timezone, timedelta
+from app.lib.stripe import stripe
 
 from fastapi import Depends, Request, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
@@ -12,6 +13,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from fastapi_users import BaseUserManager, UUIDIDMixin, exceptions, models, schemas
 from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase
+from fastapi_users.db import BaseUserDatabase
+from fastapi_users.password import PasswordHelper, PasswordHelperProtocol
 
 from app.core.config import settings
 from app.db.session import get_async_session
@@ -20,7 +23,7 @@ from fastapi_mail import MessageSchema, MessageType
 
 from app.models.user import User
 from app.models.oauth_account import OAuthAccount
-
+from app.v1.repositories.wallet_repository import WalletRepository
 
 class UserManager(UUIDIDMixin, BaseUserManager[User, UUID]):
     """
@@ -34,6 +37,28 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, UUID]):
     AUTHENTICATE_MAX_FAILED_ATTEMPTS = settings.AUTHENTICATE_MAX_FAILED_ATTEMPTS
     LOCK_MINUTES = 30
     RESET_FAILED_ATTEMPTS_SECONDS = 1800  # 30 minutes
+
+    def __init__(
+        self,
+        user_db: BaseUserDatabase[models.UP, models.ID],
+        password_helper: Optional[PasswordHelperProtocol] = None,
+        session: AsyncSession = Depends(get_async_session),
+    ):
+        super().__init__(user_db, password_helper)
+        self.wallet_repository = WalletRepository(session)
+
+    async def on_after_register(
+        self, user: User, request: Optional[Request] = None
+    ):
+        if settings.ENV == "test":
+            customer_id = f"cus_test_{user.id}"
+        else:
+            customer = stripe.Customer.create(
+                name=user.email,
+                email=user.email,
+            )
+            customer_id = customer.id
+        await self.wallet_repository.create_wallet(user.id, customer_id)
 
     async def on_after_request_verify(
         self, user: User, token: str, request: Optional[Request] = None
@@ -214,7 +239,7 @@ async def get_user_db(session: AsyncSession = Depends(get_async_session)):
     yield SQLAlchemyUserDatabase(session, User, OAuthAccount)
 
 
-async def get_user_manager(user_db=Depends(get_user_db)):
+async def get_user_manager(user_db=Depends(get_user_db), session: AsyncSession = Depends(get_async_session)):
     """
     Dependency function to retrieve the user manager instance.
 
@@ -224,4 +249,4 @@ async def get_user_manager(user_db=Depends(get_user_db)):
     Yields:
         UserManager: The user manager instance.
     """
-    yield UserManager(user_db)
+    yield UserManager(user_db=user_db, session=session)
