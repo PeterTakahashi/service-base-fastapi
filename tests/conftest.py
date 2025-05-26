@@ -17,6 +17,7 @@ from tests.fixtures.repository_fixture import (
 )
 from tests.fixtures.service_fixture import (
     user_service,
+    payment_intent_service,
 )
 
 

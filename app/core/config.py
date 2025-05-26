@@ -52,6 +52,8 @@ class Settings(BaseSettings):
     SECURE_COOKIES: bool = env == "prod"
     ENV: str = env
 
+    PAYMENT_CURRENCY: str = "usd"
+
     AUTHENTICATE_MAX_FAILED_ATTEMPTS: int = 5
 
 
