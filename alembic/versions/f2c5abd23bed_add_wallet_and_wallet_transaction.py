@@ -1,8 +1,8 @@
 """add wallet and wallet transaction
 
-Revision ID: 78df6110a334
+Revision ID: f2c5abd23bed
 Revises: 7d027468cc23
-Create Date: 2025-05-26 07:51:37.476983
+Create Date: 2025-05-26 11:10:32.153077
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 import fastapi_users_db_sqlalchemy
 
 # revision identifiers, used by Alembic.
-revision: str = '78df6110a334'
+revision: str = 'f2c5abd23bed'
 down_revision: Union[str, None] = '7d027468cc23'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -55,7 +55,4 @@ def downgrade() -> None:
     op.drop_table('wallet_transactions')
     op.drop_index(op.f('ix_wallets_stripe_customer_id'), table_name='wallets')
     op.drop_table('wallets')
-
-    op.execute("DROP TYPE IF EXISTS transactiontype")
-    op.execute("DROP TYPE IF EXISTS transactionstatus")
     # ### end Alembic commands ###
