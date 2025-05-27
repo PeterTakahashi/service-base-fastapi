@@ -14,7 +14,6 @@ class UserRead(schemas.CreateUpdateDictModel, Generic[models.ID]):
 
 class UserWithWalletRead(UserRead):
     wallet: WalletRead = Field(
-        default=None,
         description="The wallet associated with the user.",
     )
 

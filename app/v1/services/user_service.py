@@ -14,8 +14,8 @@ class UserService:
         self.user_repository = user_repository
 
     async def get_me(self, user: User) -> UserWithWalletRead:
-        user = await self.user_repository.get_user_with_wallet(user.id)
-        return UserWithWalletRead.model_validate(user)
+        user_with_wallet = await self.user_repository.get_user_with_wallet(user.id)
+        return UserWithWalletRead.model_validate(user_with_wallet)
 
     async def update_me(
         self,
