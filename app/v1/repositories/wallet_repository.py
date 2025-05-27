@@ -21,3 +21,10 @@ class WalletRepository(BaseRepository):
         await self.session.commit()
         await self.session.refresh(wallet)
         return wallet
+
+    async def update_wallet(self, wallet: Wallet, balance: int) -> Wallet:
+        wallet.balance = balance
+        self.session.add(wallet)
+        await self.session.commit()
+        await self.session.refresh(wallet)
+        return wallet

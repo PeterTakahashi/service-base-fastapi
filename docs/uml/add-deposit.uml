@@ -11,10 +11,9 @@ sequenceDiagram
     
     %% ----- 2. PaymentIntent 作成 -----
     FE->>API: POST /api/v1/payment-intents {amount: 3000}
-    API->>PG: INSERT wallet_transactions(status=PENDING, amount=3000)
     API->>S: PaymentIntent.create(amount=3000, currency="usd", payment_method_types=["link"])
     S-->>API: client_secret, payment_intent_id
-    API->>PG: UPDATE wallet_transactions(payment_intent_id)
+    API->>PG: INSERT wallet_transactions(status=PENDING, amount=3000)
     API-->>FE: {client_secret}
 
     %% ----- 3. 決済 UI -----

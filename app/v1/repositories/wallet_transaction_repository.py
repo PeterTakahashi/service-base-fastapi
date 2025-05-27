@@ -7,11 +7,21 @@ from app.models.wallet_transaction import (
 from app.v1.repositories.base_repository import BaseRepository
 from sqlalchemy.future import select
 from typing import Optional
-
+from sqlalchemy.orm import selectinload
 
 class WalletTransactionRepository(BaseRepository):
     def __init__(self, session: AsyncSession):
         super().__init__(session, WalletTransaction)
+
+    async def get_wallet_transaction_by_stripe_payment_intent_id(
+        self, stripe_payment_intent_id: str
+    ) -> WalletTransaction | None:
+        result = await self.session.execute(
+            select(WalletTransaction)
+            .filter(WalletTransaction.stripe_payment_intent_id == stripe_payment_intent_id)
+            .options(selectinload(WalletTransaction.wallet))
+        )
+        return result.scalars().first()
 
     async def get_latest_wallet_transaction_by_wallet_id(
         self, wallet_id: int
@@ -40,6 +50,18 @@ class WalletTransactionRepository(BaseRepository):
             wallet_transaction_status=wallet_transaction_status,
         )
         self.session.add(wallet_transaction)
+        await self.session.commit()
+        await self.session.refresh(wallet_transaction)
+        return wallet_transaction
+
+    async def update_wallet_transaction(
+        self,
+        wallet_transaction: WalletTransaction,
+        amount: int,
+        status: WalletTransactionStatus,
+    ) -> WalletTransaction:
+        wallet_transaction.wallet_transaction_status = status
+        wallet_transaction.amount = amount
         await self.session.commit()
         await self.session.refresh(wallet_transaction)
         return wallet_transaction

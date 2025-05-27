@@ -5,7 +5,10 @@ from app.v1.schemas.payment_intent import (
 from app.lib.stripe import stripe
 from app.core.config import settings
 from app.models.user import User
-
+from app.models.wallet import Wallet
+from app.models.wallet_transaction import (
+    WalletTransactionStatus,
+)
 
 class PaymentIntentService:
     """
@@ -40,3 +43,21 @@ class PaymentIntentService:
             client_secret=payment_intent.client_secret,
             status=payment_intent.status,
         )
+
+    async def update_payment_intent_by_webhook(
+        self, stripe_payment_intent_id: str, amount: int
+    ) -> Wallet:
+        wallet_transaction = await self.wallet_transaction_repository.get_wallet_transaction_by_stripe_payment_intent_id(
+            stripe_payment_intent_id=stripe_payment_intent_id
+        )
+        if not wallet_transaction:
+            raise ValueError("Wallet transaction not found for the given payment intent ID")
+        await self.wallet_transaction_repository.update_wallet_transaction(
+            wallet_transaction=wallet_transaction,
+            amount=amount,
+            status=WalletTransactionStatus.COMPLETED,
+        )
+        wallet = wallet_transaction.wallet
+        new_balance = wallet.balance + amount
+        updated_wallet = await self.wallet_repository.update_wallet(wallet=wallet, balance=new_balance)
+        return updated_wallet
