@@ -41,7 +41,7 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, UUID]):
 
     def __init__(
         self,
-        user_db: BaseUserDatabase[models.UP, models.ID],
+        user_db: BaseUserDatabase[User, UUID],
         password_helper: Optional[PasswordHelperProtocol] = None,
         session: AsyncSession = Depends(get_async_session),
     ):

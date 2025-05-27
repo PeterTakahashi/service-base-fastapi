@@ -25,7 +25,7 @@ class PaymentIntentService:
             currency=settings.PAYMENT_CURRENCY,
             customer=wallet.stripe_customer_id,
         )
-        if not payment_intent:
+        if not payment_intent or payment_intent.client_secret is None:
             raise ValueError("Failed to create payment intent")
         await self.wallet_transaction_repository.create_wallet_transaction(
             wallet_id=wallet.id,
