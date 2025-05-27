@@ -21,6 +21,7 @@ from tests.fixtures.service_fixture import (
 )
 from tests.mocks.stripe import (
     mock_stripe_customer_create,
+    mock_payment_intent_create_patch,
 )
 
 

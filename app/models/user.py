@@ -5,8 +5,9 @@ from sqlalchemy import Boolean, Integer, DateTime
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from typing import List
 from datetime import datetime
-from app.models.wallet import Wallet
-
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from app.models.wallet import Wallet
 
 class User(SQLAlchemyBaseUserTableUUID, Base):
     __tablename__ = "users"
@@ -22,4 +23,4 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
     oauth_accounts: Mapped[List[OAuthAccount]] = relationship(
         "OAuthAccount", lazy="joined"
     )
-    wallet: Mapped[Wallet] = relationship(back_populates="user", uselist=False)
+    wallet: Mapped["Wallet"] = relationship(back_populates="user", uselist=False)

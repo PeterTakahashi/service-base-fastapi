@@ -3,7 +3,11 @@ from sqlalchemy import Enum as SQLAlchemyEnum, ForeignKey
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 from datetime import datetime
 import enum
-from app.models.wallet import Wallet  # Ensure Wallet is imported for relationship
+
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from app.models.wallet import Wallet
 
 
 class WalletTransactionType(enum.Enum):  # Use standard enum.Enum

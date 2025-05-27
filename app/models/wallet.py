@@ -3,10 +3,12 @@ from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from datetime import datetime
 from typing import List
-from app.models.wallet_transaction import WalletTransaction
 import fastapi_users_db_sqlalchemy
-from app.models.user import User
 
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from app.models.user import User
+    from app.models.wallet_transaction import WalletTransaction
 
 class Wallet(Base):
     __tablename__ = "wallets"
@@ -27,6 +29,6 @@ class Wallet(Base):
     )
 
     user: Mapped["User"] = relationship("User", back_populates="wallet", uselist=False)
-    wallet_transactions: Mapped[List[WalletTransaction]] = relationship(
+    wallet_transactions: Mapped[List["WalletTransaction"]] = relationship(
         "WalletTransaction", back_populates="wallet", cascade="all, delete-orphan"
     )
