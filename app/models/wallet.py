@@ -6,9 +6,11 @@ from typing import List
 import fastapi_users_db_sqlalchemy
 
 from typing import TYPE_CHECKING
+
 if TYPE_CHECKING:
     from app.models.user import User
     from app.models.wallet_transaction import WalletTransaction
+
 
 class Wallet(Base):
     __tablename__ = "wallets"

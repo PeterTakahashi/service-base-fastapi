@@ -6,8 +6,10 @@ from sqlalchemy.orm import relationship, Mapped, mapped_column
 from typing import List
 from datetime import datetime
 from typing import TYPE_CHECKING
+
 if TYPE_CHECKING:
     from app.models.wallet import Wallet
+
 
 class User(SQLAlchemyBaseUserTableUUID, Base):
     __tablename__ = "users"

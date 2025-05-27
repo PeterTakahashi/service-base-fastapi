@@ -5,7 +5,7 @@ from fastapi_users.router.common import ErrorCode, ErrorModel
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.lib.fastapi_users.user_setup import current_active_user
-from app.v1.schemas.user import UserRead, UserUpdate
+from app.v1.schemas.user import UserRead, UserUpdate, UserWithWalletRead
 from app.models.user import User
 from app.db.session import get_async_session
 from app.v1.repositories.user_repository import UserRepository
@@ -20,7 +20,7 @@ def get_user_service(session: AsyncSession = Depends(get_async_session)) -> User
     return UserService(repo)
 
 
-@router.get("/me", response_model=UserRead, name="users:get_current_user")
+@router.get("/me", response_model=UserWithWalletRead, name="users:get_current_user")
 async def get_me(
     user: User = Depends(current_active_user),
     service: UserService = Depends(get_user_service),
