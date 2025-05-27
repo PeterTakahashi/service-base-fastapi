@@ -31,6 +31,7 @@ async def create_payment_intent(
     )
     return payment_intent
 
+
 @router.post(
     "/webhook",
     response_model=None,
@@ -44,11 +45,10 @@ async def update_payment_intent_by_webhook(
     payload = await request.body()
     json_data = payload.decode("utf-8")
     data = json.loads(json_data)
-    stripe_payment_intent_id = data['data']['object']['id']
-    amount = data['data']['object']['amount_received']
+    stripe_payment_intent_id = data["data"]["object"]["id"]
+    amount = data["data"]["object"]["amount_received"]
     await service.update_payment_intent_by_webhook(
         stripe_payment_intent_id=stripe_payment_intent_id,
         amount=amount,
     )
     return None
-

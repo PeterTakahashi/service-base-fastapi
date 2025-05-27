@@ -1,4 +1,3 @@
-from app.models.wallet_transaction import WalletTransactionType, WalletTransactionStatus
 
 
 async def test_get_wallet_transaction_by_stripe_payment_intent_id_success(
@@ -13,4 +12,7 @@ async def test_get_wallet_transaction_by_stripe_payment_intent_id_success(
     assert fetched_transaction.id == wallet_transaction.id
     assert fetched_transaction.wallet_id == wallet.id
     assert fetched_transaction.amount == wallet_transaction.amount
-    assert fetched_transaction.stripe_payment_intent_id == wallet_transaction.stripe_payment_intent_id
+    assert (
+        fetched_transaction.stripe_payment_intent_id
+        == wallet_transaction.stripe_payment_intent_id
+    )

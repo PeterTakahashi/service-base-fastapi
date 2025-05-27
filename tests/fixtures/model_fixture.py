@@ -17,6 +17,7 @@ async def wallet(async_session, user):
     wallet = await WalletFactory.create(user=user)
     return wallet
 
+
 @pytest_asyncio.fixture
 async def wallet_transaction(async_session, wallet):
     WalletTransactionFactory._meta.session = async_session

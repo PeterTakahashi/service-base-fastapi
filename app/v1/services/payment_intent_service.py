@@ -10,6 +10,7 @@ from app.models.wallet_transaction import (
     WalletTransactionStatus,
 )
 
+
 class PaymentIntentService:
     """
     Service class for handling payment intents.
@@ -51,7 +52,9 @@ class PaymentIntentService:
             stripe_payment_intent_id=stripe_payment_intent_id
         )
         if not wallet_transaction:
-            raise ValueError("Wallet transaction not found for the given payment intent ID")
+            raise ValueError(
+                "Wallet transaction not found for the given payment intent ID"
+            )
         await self.wallet_transaction_repository.update_wallet_transaction(
             wallet_transaction=wallet_transaction,
             amount=amount,
@@ -59,5 +62,7 @@ class PaymentIntentService:
         )
         wallet = wallet_transaction.wallet
         new_balance = wallet.balance + amount
-        updated_wallet = await self.wallet_repository.update_wallet(wallet=wallet, balance=new_balance)
+        updated_wallet = await self.wallet_repository.update_wallet(
+            wallet=wallet, balance=new_balance
+        )
         return updated_wallet

@@ -9,6 +9,7 @@ from sqlalchemy.future import select
 from typing import Optional
 from sqlalchemy.orm import selectinload
 
+
 class WalletTransactionRepository(BaseRepository):
     def __init__(self, session: AsyncSession):
         super().__init__(session, WalletTransaction)
@@ -18,7 +19,9 @@ class WalletTransactionRepository(BaseRepository):
     ) -> WalletTransaction | None:
         result = await self.session.execute(
             select(WalletTransaction)
-            .filter(WalletTransaction.stripe_payment_intent_id == stripe_payment_intent_id)
+            .filter(
+                WalletTransaction.stripe_payment_intent_id == stripe_payment_intent_id
+            )
             .options(selectinload(WalletTransaction.wallet))
         )
         return result.scalars().first()
