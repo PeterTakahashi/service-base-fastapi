@@ -5,6 +5,7 @@ from datetime import datetime
 from typing import List
 from app.models.wallet_transaction import WalletTransaction
 import fastapi_users_db_sqlalchemy
+from app.models.user import User
 
 
 class Wallet(Base):
