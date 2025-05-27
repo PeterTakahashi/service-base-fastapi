@@ -1,5 +1,6 @@
 from app.models.wallet_transaction import WalletTransactionType, WalletTransactionStatus
 
+
 async def test_create_wallet_transaction_success(wallet_transaction_repository, wallet):
     amount = 1000  # Amount in cents
     stripe_payment_intent_id = "test_intent_id"
@@ -11,7 +12,7 @@ async def test_create_wallet_transaction_success(wallet_transaction_repository, 
         amount,
         stripe_payment_intent_id,
         wallet_transaction_type,
-        wallet_transaction_status
+        wallet_transaction_status,
     )
 
     assert transaction.wallet_id == wallet.id

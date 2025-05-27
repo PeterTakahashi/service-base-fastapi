@@ -6,11 +6,14 @@ from typing import List
 from app.models.wallet_transaction import WalletTransaction
 import fastapi_users_db_sqlalchemy
 
+
 class Wallet(Base):
     __tablename__ = "wallets"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    user_id: Mapped[fastapi_users_db_sqlalchemy.generics.GUID] = mapped_column(ForeignKey("users.id"), nullable=False)
+    user_id: Mapped[fastapi_users_db_sqlalchemy.generics.GUID] = mapped_column(
+        ForeignKey("users.id"), nullable=False
+    )
     stripe_customer_id: Mapped[str] = mapped_column(
         nullable=False, unique=True, index=True
     )

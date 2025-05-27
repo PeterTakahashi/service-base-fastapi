@@ -8,7 +8,6 @@ from datetime import datetime
 from app.models.wallet import Wallet
 
 
-
 class User(SQLAlchemyBaseUserTableUUID, Base):
     __tablename__ = "users"
 
@@ -23,6 +22,4 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
     oauth_accounts: Mapped[List[OAuthAccount]] = relationship(
         "OAuthAccount", lazy="joined"
     )
-    wallet: Mapped[Wallet] = relationship(
-        back_populates="user", uselist=False
-    )
+    wallet: Mapped[Wallet] = relationship(back_populates="user", uselist=False)

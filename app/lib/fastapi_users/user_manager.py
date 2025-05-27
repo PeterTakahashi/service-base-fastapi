@@ -25,6 +25,7 @@ from app.models.user import User
 from app.models.oauth_account import OAuthAccount
 from app.v1.repositories.wallet_repository import WalletRepository
 
+
 class UserManager(UUIDIDMixin, BaseUserManager[User, UUID]):
     """
     UserManager handles user-related operations such as password validation
@@ -47,18 +48,12 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, UUID]):
         super().__init__(user_db, password_helper)
         self.wallet_repository = WalletRepository(session)
 
-    async def on_after_register(
-        self, user: User, request: Optional[Request] = None
-    ):
-        if settings.ENV == "test":
-            customer_id = f"cus_test_{user.id}"
-        else:
-            customer = stripe.Customer.create(
-                name=user.email,
-                email=user.email,
-            )
-            customer_id = customer.id
-        await self.wallet_repository.create_wallet(user.id, customer_id)
+    async def on_after_register(self, user: User, request: Optional[Request] = None):
+        customer = stripe.Customer.create(
+            name=user.email,
+            email=user.email,
+        )
+        await self.wallet_repository.create_wallet(user.id, customer.id)
 
     async def on_after_request_verify(
         self, user: User, token: str, request: Optional[Request] = None
@@ -239,7 +234,9 @@ async def get_user_db(session: AsyncSession = Depends(get_async_session)):
     yield SQLAlchemyUserDatabase(session, User, OAuthAccount)
 
 
-async def get_user_manager(user_db=Depends(get_user_db), session: AsyncSession = Depends(get_async_session)):
+async def get_user_manager(
+    user_db=Depends(get_user_db), session: AsyncSession = Depends(get_async_session)
+):
     """
     Dependency function to retrieve the user manager instance.
 
