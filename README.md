@@ -18,6 +18,12 @@ open http://127.0.0.1:8000/app/v1/docs # open api docs
 
 ```
 
+
+### start stripe local server
+```sh
+stripe listen --events=payment_intent.succeeded --forward-to http://127.0.0.1:8000/app/v1/payment-intents/webhook
+```
+
 #### create db migration file
 
 ```bash
