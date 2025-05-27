@@ -7,7 +7,7 @@ class WalletTransactionFactory(AsyncSQLAlchemyModelFactory):
     class Meta:
         model = WalletTransaction
 
-    wallet_id = factory.SubFactory(WalletFactory)
+    wallet = factory.SubFactory(WalletFactory)
     amount = factory.Faker("random_int", min=100, max=10000)
     stripe_payment_intent_id = factory.Faker("uuid4")
     wallet_transaction_type = factory.Faker("random_element", elements=["DEPOSIT", "WITHDRAWAL"])
