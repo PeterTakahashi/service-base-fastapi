@@ -10,7 +10,7 @@ class UserRead(schemas.CreateUpdateDictModel, Generic[models.ID]):
     is_verified: bool = False
     model_config = ConfigDict(from_attributes=True)
 
-class UserReadWithWallet(UserRead):
+class UserWithWalletRead(UserRead):
     wallet: WalletRead = Field(
         default=None,
         description="The wallet associated with the user.",

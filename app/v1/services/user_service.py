@@ -5,7 +5,7 @@ from fastapi_users.router.common import ErrorCode
 
 from app.v1.repositories.user_repository import UserRepository
 from app.models.user import User
-from app.v1.schemas.user import UserUpdate, UserRead
+from app.v1.schemas.user import UserUpdate, UserRead, UserWithWalletRead
 from app.lib.fastapi_users.user_setup import current_active_user
 
 
@@ -13,8 +13,9 @@ class UserService:
     def __init__(self, user_repository: UserRepository):
         self.user_repository = user_repository
 
-    async def get_me(self, user: User) -> UserRead:
-        return UserRead.model_validate(user)
+    async def get_me(self, user: User) -> UserWithWalletRead:
+        user = await self.user_repository.get_user_with_wallet(user.id)
+        return UserWithWalletRead.model_validate(user)
 
     async def update_me(
         self,
