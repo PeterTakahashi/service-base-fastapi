@@ -56,6 +56,8 @@ class Settings(BaseSettings):
     PAYMENT_CURRENCY: str = "usd"
 
     AUTHENTICATE_MAX_FAILED_ATTEMPTS: int = 5
+    ADMIN_USERNAME: str = os.getenv("ADMIN_USERNAME", "admin")
+    ADMIN_PASSWORD: str = os.getenv("ADMIN_PASSWORD", "password")
 
 
 print("Loading environment variables...")

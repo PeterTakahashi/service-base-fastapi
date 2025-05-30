@@ -43,9 +43,9 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, UUID]):
     def __init__(
         self,
         user_db: BaseUserDatabase[User, UUID],
+        session: AsyncSession,
+        mailer: FastMail,
         password_helper: Optional[PasswordHelperProtocol] = None,
-        session: AsyncSession = Depends(get_async_session),
-        mailer: FastMail = Depends(get_mailer),
     ):
         super().__init__(user_db, password_helper)
         self.wallet_repository = WalletRepository(session)
@@ -240,7 +240,9 @@ async def get_user_db(session: AsyncSession = Depends(get_async_session)):
 
 
 async def get_user_manager(
-    user_db=Depends(get_user_db), session: AsyncSession = Depends(get_async_session)
+    user_db=Depends(get_user_db),
+    session: AsyncSession = Depends(get_async_session),
+    mailer: FastMail = Depends(get_mailer)
 ):
     """
     Dependency function to retrieve the user manager instance.
@@ -251,4 +253,4 @@ async def get_user_manager(
     Yields:
         UserManager: The user manager instance.
     """
-    yield UserManager(user_db=user_db, session=session)
+    yield UserManager(user_db=user_db, session=session, mailer=mailer)
