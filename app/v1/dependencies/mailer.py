@@ -1,4 +1,3 @@
-from fastapi import Depends
 from fastapi_mail import FastMail
 from app.core.mailer import mailer
 

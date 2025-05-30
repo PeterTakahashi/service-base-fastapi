@@ -88,7 +88,9 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, UUID]):
             template_body={"user_id": str(user.id), "url": url},
             subtype=MessageType.html,
         )
-        await self.mailer.send_message(message, template_name="email/reset_password.html")
+        await self.mailer.send_message(
+            message, template_name="email/reset_password.html"
+        )
 
     async def validate_password(
         self, password: str, user: Union[schemas.UC, models.UP]
