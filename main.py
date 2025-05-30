@@ -5,6 +5,8 @@ from app.core.config import settings
 from app.core.startup import startup, shutdown
 from app.v1.app import v1_app
 
+from app.admin.app import init_sqladmin
+
 app = FastAPI(
     title=settings.PROJECT_NAME,
     description="A FastAPI server for the project.",
@@ -23,7 +25,7 @@ app.add_middleware(
 
 app.add_event_handler("startup", startup)
 app.add_event_handler("shutdown", shutdown)
-
+app = init_sqladmin(app)
 
 @app.get("/")
 def root():
