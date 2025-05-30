@@ -9,7 +9,6 @@ from app.v1.dependencies.services.payment_intent_service import (
 from app.lib.fastapi_users.user_setup import current_active_user
 from app.models.user import User
 from app.v1.services.payment_intent_service import PaymentIntentService
-import json
 from app.lib.stripe import get_stripe_webhook_event
 
 router = APIRouter()

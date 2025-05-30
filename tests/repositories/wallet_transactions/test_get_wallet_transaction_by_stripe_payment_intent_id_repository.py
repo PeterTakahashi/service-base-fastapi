@@ -1,5 +1,3 @@
-
-
 async def test_get_wallet_transaction_by_stripe_payment_intent_id_success(
     wallet_transaction_repository, wallet, wallet_transaction
 ):

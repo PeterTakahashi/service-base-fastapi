@@ -1,5 +1,3 @@
-
-
 async def test_update_payment_intent_by_webhook_service(
     payment_intent_service, wallet, wallet_transaction
 ):
