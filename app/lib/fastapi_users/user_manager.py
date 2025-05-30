@@ -18,7 +18,8 @@ from fastapi_users.password import PasswordHelperProtocol
 
 from app.core.config import settings
 from app.db.session import get_async_session
-from app.core.mailer import mailer
+from fastapi_mail import FastMail
+from app.v1.dependencies.mailer import get_mailer
 from fastapi_mail import MessageSchema, MessageType
 
 from app.models.user import User
@@ -44,9 +45,11 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, UUID]):
         user_db: BaseUserDatabase[User, UUID],
         password_helper: Optional[PasswordHelperProtocol] = None,
         session: AsyncSession = Depends(get_async_session),
+        mailer: FastMail = Depends(get_mailer),
     ):
         super().__init__(user_db, password_helper)
         self.wallet_repository = WalletRepository(session)
+        self.mailer = mailer
 
     async def on_after_register(self, user: User, request: Optional[Request] = None):
         customer = stripe.Customer.create(
@@ -69,7 +72,7 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, UUID]):
             template_body={"url": url},
             subtype=MessageType.html,
         )
-        await mailer.send_message(message, template_name="email/verify_email.html")
+        await self.mailer.send_message(message, template_name="email/verify_email.html")
 
     async def on_after_forgot_password(
         self, user: User, token: str, request: Optional[Request] = None
@@ -85,7 +88,7 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, UUID]):
             template_body={"user_id": str(user.id), "url": url},
             subtype=MessageType.html,
         )
-        await mailer.send_message(message, template_name="email/reset_password.html")
+        await self.mailer.send_message(message, template_name="email/reset_password.html")
 
     async def validate_password(
         self, password: str, user: Union[schemas.UC, models.UP]
