@@ -19,7 +19,3 @@ async def get_stripe_webhook_event(request: Request):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid payload"
         )
-    except stripe.error.SignatureVerificationError:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid signature"
-        )
