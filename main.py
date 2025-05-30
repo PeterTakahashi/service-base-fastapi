@@ -27,6 +27,7 @@ app.add_event_handler("startup", startup)
 app.add_event_handler("shutdown", shutdown)
 app = init_sqladmin(app)
 
+
 @app.get("/")
 def root():
     return {"message": "Welcome to the FastAPI Applicatoin!"}

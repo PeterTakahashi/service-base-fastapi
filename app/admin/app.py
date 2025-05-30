@@ -7,6 +7,7 @@ from app.admin.model_views.wallet_admin import WalletAdmin
 from app.admin.model_views.wallet_transaction_admin import WalletTransactionAdmin
 from app.admin.model_views.oauth_account_admin import OAuthAccountAdmin
 
+
 def init_sqladmin(app):
     admin_auth = AdminAuth(secret_key="your-secret-key")
     admin = Admin(

@@ -1,6 +1,6 @@
 from sqladmin import ModelView
-from app.db.session import engine
 from app.models.user import User
+
 
 class UserAdmin(ModelView, model=User):
     name = "User"

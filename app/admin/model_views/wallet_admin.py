@@ -1,6 +1,6 @@
 from sqladmin import ModelView
-from app.db.session import engine
 from app.models.wallet import Wallet
+
 
 class WalletAdmin(ModelView, model=Wallet):
     name = "Wallet"

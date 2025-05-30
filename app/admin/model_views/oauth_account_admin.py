@@ -1,6 +1,6 @@
 from sqladmin import ModelView
-from app.db.session import engine
 from app.models.oauth_account import OAuthAccount
+
 
 class OAuthAccountAdmin(ModelView, model=OAuthAccount):
     name = "OAuthAccount"
@@ -16,7 +16,7 @@ class OAuthAccountAdmin(ModelView, model=OAuthAccount):
         "expires_at",
         "refresh_token",
         "account_id",
-        "account_email"
+        "account_email",
     ]
     form_columns = [
         "user_id",
@@ -25,13 +25,7 @@ class OAuthAccountAdmin(ModelView, model=OAuthAccount):
         "expires_at",
         "refresh_token",
         "account_id",
-        "account_email"
+        "account_email",
     ]
-    column_searchable_list = [
-        "oauth_name",
-        "account_email"
-    ]
-    column_filters = [
-        "oauth_name",
-        "account_email"
-    ]
+    column_searchable_list = ["oauth_name", "account_email"]
+    column_filters = ["oauth_name", "account_email"]

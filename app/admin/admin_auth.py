@@ -1,7 +1,7 @@
 from sqladmin.authentication import AuthenticationBackend
 from starlette.requests import Request
-from starlette.responses import RedirectResponse
 from app.core.config import settings
+
 
 class AdminAuth(AuthenticationBackend):
     async def login(self, request: Request) -> bool:
