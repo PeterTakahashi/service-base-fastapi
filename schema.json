@@ -7,6 +7,56 @@
       "default": "None"
     }
   ],
+  "oauth_accounts": [
+    {
+      "name": "id",
+      "type": "INTEGER",
+      "nullable": false,
+      "default": "nextval('oauth_accounts_id_seq'::regclass)"
+    },
+    {
+      "name": "user_id",
+      "type": "UUID",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "oauth_name",
+      "type": "VARCHAR(100)",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "access_token",
+      "type": "VARCHAR(1024)",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "expires_at",
+      "type": "INTEGER",
+      "nullable": true,
+      "default": "None"
+    },
+    {
+      "name": "refresh_token",
+      "type": "VARCHAR(1024)",
+      "nullable": true,
+      "default": "None"
+    },
+    {
+      "name": "account_id",
+      "type": "VARCHAR(320)",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "account_email",
+      "type": "VARCHAR(320)",
+      "nullable": false,
+      "default": "None"
+    }
+  ],
   "users": [
     {
       "name": "id",
@@ -42,6 +92,30 @@
       "name": "is_verified",
       "type": "BOOLEAN",
       "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "failed_attempts",
+      "type": "INTEGER",
+      "nullable": false,
+      "default": "0"
+    },
+    {
+      "name": "last_attempted_at",
+      "type": "TIMESTAMP",
+      "nullable": true,
+      "default": "None"
+    },
+    {
+      "name": "is_locked",
+      "type": "BOOLEAN",
+      "nullable": false,
+      "default": "false"
+    },
+    {
+      "name": "locked_until",
+      "type": "TIMESTAMP",
+      "nullable": true,
       "default": "None"
     }
   ]

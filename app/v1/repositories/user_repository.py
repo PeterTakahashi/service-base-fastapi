@@ -1,12 +1,23 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.user import User
+from app.v1.repositories.base_repository import BaseRepository
+from sqlalchemy.future import select
+from sqlalchemy.orm import selectinload
+from uuid import UUID
 
 
-class UserRepository:
+class UserRepository(BaseRepository):
     def __init__(self, session: AsyncSession):
-        self.session = session
+        super().__init__(session, User)
 
-    # NOTE: it's not used yet
+    async def get_user_with_wallet(self, user_id: UUID) -> User | None:
+        result = await self.session.execute(
+            select(User)
+            .where(User.id == user_id)  # type: ignore
+            .options(selectinload(User.wallet))
+        )
+        return result.scalars().first()
+
     async def update_user(self, user: User, update_data: dict) -> User:
         for field, value in update_data.items():
             setattr(user, field, value)

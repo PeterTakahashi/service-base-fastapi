@@ -1,0 +1,30 @@
+sequenceDiagram
+    autonumber
+    actor U as User<br/>(Browser)
+    participant FE as React Frontend
+    participant API as FastAPI Backend
+    participant PG as PostgreSQL
+    participant S as Stripe
+
+    %% ----- 1. ユーザー操作 -----
+    U->>FE: Click "Add Funds 30 usd"
+    
+    %% ----- 2. PaymentIntent 作成 -----
+    FE->>API: POST /api/v1/payment-intents {amount: 3000}
+    API->>S: PaymentIntent.create(amount=3000, currency="usd", payment_method_types=["link"])
+    S-->>API: client_secret, payment_intent_id
+    API->>PG: INSERT wallet_transactions(status=PENDING, amount=3000)
+    API-->>FE: {client_secret}
+
+    %% ----- 3. 決済 UI -----
+    FE->>S: stripe.confirmPayment({client_secret})
+    S-->>U: Link UI
+
+    %% ----- 4. 決済完了 -----
+    S-->>FE: payment_intent.succeeded (redirect or promise resolve)
+    S-->>API: webhook payment_intent.succeeded
+    API->>PG: UPDATE wallet_transactions SET status=COMPLETED
+    FE->>API: GET wallet balance
+    
+    %% ----- 5. 完了表示 -----
+    FE-->>U: Show "completed to change 30 usd"
