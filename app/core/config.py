@@ -29,6 +29,7 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRED_SECONDS: int = 3600 * 24 * 7  # 1 week
 
     STRIPE_API_KEY: str = os.getenv("STRIPE_API_KEY", "")
+    STRIPE_WEBHOOK_SECRET: str = os.getenv("STRIPE_WEBHOOK_SECRET", "")
 
     GITHUB_CLIENT_ID: str = os.getenv("GITHUB_CLIENT_ID", "")
     GITHUB_CLIENT_SECRET: str = os.getenv("GITHUB_CLIENT_SECRET", "")
