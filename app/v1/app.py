@@ -6,10 +6,12 @@ from app.v1.exception_handlers import (
     http_exception_handler,
     server_exception_handler,
     validation_exception_handler,
+    no_result_found_exception_handler,
 )
 from app.core.i18n import load_messages
 from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
+from sqlalchemy.exc import NoResultFound
 
 load_messages()
 
@@ -28,5 +30,7 @@ v1_app.add_exception_handler(Exception, server_exception_handler)  # type: ignor
 v1_app.add_exception_handler(
     RequestValidationError, validation_exception_handler  # type: ignore
 )
+
+v1_app.add_exception_handler(NoResultFound, no_result_found_exception_handler)  # type: ignore
 
 v1_app.openapi = lambda: custom_openapi(v1_app)  # type: ignore
