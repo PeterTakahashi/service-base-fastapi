@@ -3,8 +3,8 @@ from sqlalchemy.exc import NoResultFound
 from sqlalchemy.future import select
 from uuid import UUID
 from sqlalchemy.orm import joinedload, lazyload
-from sqlalchemy import func
-from typing import Optional, List, Union
+from sqlalchemy import func, update
+from typing import Optional, List, Union, Dict, Any
 
 OPERATORS = {
     # 完全一致
@@ -239,3 +239,36 @@ class BaseRepository:
         await self.session.commit()
         await self.session.refresh(instance)
         return instance
+
+    async def update(self, id: Union[int, UUID], **kwargs):
+        """
+        Update a single record by its primary key.
+        Raises NoResultFound if the record doesn't exist.
+
+        Usage:
+            await repository.update(some_id, field1='value1', field2='value2')
+        """
+        instance = await self.find(id)
+        for field, value in kwargs.items():
+            setattr(instance, field, value)
+        await self.session.commit()
+        await self.session.refresh(instance)
+        return instance
+
+    async def update_all(self, updates: Dict[str, Any], **kwargs) -> int:
+        """
+        Update all records that match the given conditions in one query.
+        Returns the number of rows that were updated.
+
+        Usage:
+            await repository.update_all(
+                {"field1": "new_value", "field2": 123},
+                some_field__gte=10,
+                other_field="foo"
+            )
+        """
+        conditions = await self.__get_conditions(**kwargs)
+        stmt = update(self.model).where(*conditions).values(**updates)
+        result = await self.session.execute(stmt)
+        await self.session.commit()
+        return result.rowcount
