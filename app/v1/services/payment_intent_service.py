@@ -23,7 +23,7 @@ class PaymentIntentService:
     async def create_payment_intent(
         self, user: User, payment_intent_create: PaymentIntentCreate
     ) -> PaymentIntentCreateResponse:
-        wallet = await self.wallet_repository.get_wallet_by_user_id(user.id)
+        wallet = await self.wallet_repository.find_by_or_raise(user_id=user.id)
         payment_intent = stripe.PaymentIntent.create(
             amount=payment_intent_create.amount,
             currency=settings.PAYMENT_CURRENCY,

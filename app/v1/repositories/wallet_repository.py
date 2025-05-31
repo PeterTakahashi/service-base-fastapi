@@ -9,12 +9,6 @@ class WalletRepository(BaseRepository):
     def __init__(self, session: AsyncSession):
         super().__init__(session, Wallet)
 
-    async def get_wallet_by_user_id(self, user_id: UUID) -> Wallet | None:
-        result = await self.session.execute(
-            select(Wallet).filter(Wallet.user_id == user_id)
-        )
-        return result.scalars().first()
-
     async def update_wallet(self, wallet: Wallet, balance: int) -> Wallet:
         wallet.balance = balance
         self.session.add(wallet)
