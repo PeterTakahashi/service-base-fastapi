@@ -109,7 +109,7 @@ class BaseRepository:
         result = await self.session.execute(query)
         return result.unique().scalars().all()
 
-    async def count(self, **kwargs):
+    async def count(self, **kwargs) -> int:
         """
         Count records with optional filtering.
         """
@@ -117,6 +117,13 @@ class BaseRepository:
         query = select(func.count("*")).select_from(self.model).where(*conditions)
         result = await self.session.execute(query)
         return result.scalar() or 0
+
+    async def exists(self, **kwargs) -> bool:
+        """
+        Check if any record exists with the given attributes.
+        """
+        counted = await self.count(**kwargs)
+        return counted > 0
 
     async def __generate_query(
         self,
