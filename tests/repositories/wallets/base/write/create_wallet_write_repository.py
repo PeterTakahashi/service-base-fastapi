@@ -1,12 +1,12 @@
 import pytest
-from app.models.wallet import Wallet
+
 
 @pytest.mark.asyncio
 async def test_create_wallet(wallet_repository, user):
     wallet_data = {
         "user_id": user.id,
         "stripe_customer_id": "cus_1234",
-        "balance": 1000
+        "balance": 1000,
     }
     new_wallet = await wallet_repository.create(**wallet_data)
 
