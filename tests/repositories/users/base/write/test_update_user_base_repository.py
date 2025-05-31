@@ -2,6 +2,7 @@ import pytest
 from sqlalchemy.exc import NoResultFound
 from uuid import uuid4
 
+
 @pytest.mark.asyncio
 async def test_update_user(user_repository, user):
     """
@@ -51,8 +52,7 @@ async def test_update_all_with_conditions(user_repository, users):
     # For the test, let's update only those who have a certain field set to True/False.
     # Adjust `is_active` or any other field depending on your actual model/fixtures.
     updated_count = await user_repository.update_all(
-        {"failed_attempts": 3},
-        is_active=True
+        {"failed_attempts": 3}, is_active=True
     )
     assert updated_count > 0  # Expect at least some users to be active
 
@@ -73,7 +73,6 @@ async def test_update_all_no_match(user_repository):
     Test update_all when the WHERE clause matches zero records.
     """
     updated_count = await user_repository.update_all(
-        {"failed_attempts": 4},
-        failed_attempts=5
+        {"failed_attempts": 4}, failed_attempts=5
     )
     assert updated_count == 0

@@ -3,7 +3,7 @@ from sqlalchemy.exc import NoResultFound
 from sqlalchemy.future import select
 from uuid import UUID
 from sqlalchemy.orm import joinedload, lazyload
-from sqlalchemy import func, update
+from sqlalchemy import func, update, delete
 from typing import Optional, List, Union, Dict, Any
 
 OPERATORS = {
@@ -269,6 +269,29 @@ class BaseRepository:
         """
         conditions = await self.__get_conditions(**kwargs)
         stmt = update(self.model).where(*conditions).values(**updates)
+        result = await self.session.execute(stmt)
+        await self.session.commit()
+        return result.rowcount
+
+    async def destroy(self, id: Union[int, UUID]) -> None:
+        """
+        Destroy (delete) a single record by its primary key.
+        Raises NoResultFound if the record doesn't exist.
+        """
+        instance = await self.find(id)  # Will raise NoResultFound if not found
+        await self.session.delete(instance)
+        await self.session.commit()
+
+    async def destroy_all(self, **kwargs) -> int:
+        """
+        Destroy (delete) all records that match the given conditions in one query.
+        Returns the number of rows that were deleted.
+
+        Usage:
+            await repository.destroy_all(field1="value1", field2__gte=10)
+        """
+        conditions = await self.__get_conditions(**kwargs)
+        stmt = delete(self.model).where(*conditions)
         result = await self.session.execute(stmt)
         await self.session.commit()
         return result.rowcount
