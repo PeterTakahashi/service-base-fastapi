@@ -24,3 +24,24 @@ class BaseRepository:
             raise NoResultFound(f"{self.model.__name__} with id {id} not found.")
 
         return instance
+
+    async def find_by(self, **kwargs):
+        """
+        Find a record by given attributes. Raise an exception if not found.
+        """
+        query = select(self.model).where(
+            *[getattr(self.model, key) == value for key, value in kwargs.items()]
+        )
+        result = await self.session.execute(query)
+        instance = result.scalars().first()
+
+        return instance
+
+    async def find_by_or_raise(self, **kwargs):
+        """
+        Find a record by given attributes. Raise an exception if not found.
+        """
+        instance = await self.find_by(**kwargs)
+        if not instance:
+            raise NoResultFound(f"{self.model.__name__} with attributes {kwargs} not found.")
+        return instance
