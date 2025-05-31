@@ -1,5 +1,3 @@
-
-
 async def test_find_user_by_email(user_repository, user):
     found_user = await user_repository.find_by(email=user.email)
     assert found_user is not None

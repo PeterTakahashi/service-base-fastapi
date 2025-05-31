@@ -31,3 +31,7 @@ class AsyncSQLAlchemyModelFactory(factory.alchemy.SQLAlchemyModelFactory):
         await session.commit()
         await session.refresh(obj)
         return obj
+
+    @classmethod
+    async def create_batch(cls, size: int, **kwargs):
+        return [await cls.create(**kwargs) for _ in range(size)]
