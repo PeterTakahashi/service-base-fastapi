@@ -62,7 +62,7 @@ class PaymentIntentService:
         )
         wallet = wallet_transaction.wallet
         new_balance = wallet.balance + amount
-        updated_wallet = await self.wallet_repository.update_wallet(
-            wallet=wallet, balance=new_balance
+        updated_wallet = await self.wallet_repository.update(
+            id=wallet.id, balance=new_balance
         )
         return updated_wallet
