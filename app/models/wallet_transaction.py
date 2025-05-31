@@ -33,7 +33,9 @@ class WalletTransaction(Base):
     )
 
     wallet_transaction_type: Mapped[WalletTransactionType] = mapped_column(
-        SQLAlchemyEnum(WalletTransactionType, native_enum=True), nullable=False
+        SQLAlchemyEnum(WalletTransactionType, native_enum=True),
+        nullable=False,
+        default=WalletTransactionType.DEPOSIT,
     )
 
     wallet_transaction_status: Mapped[WalletTransactionStatus] = mapped_column(

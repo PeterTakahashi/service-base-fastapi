@@ -31,7 +31,7 @@ class PaymentIntentService:
         )
         if not payment_intent or payment_intent.client_secret is None:
             raise ValueError("Failed to create payment intent")
-        await self.wallet_transaction_repository.create_wallet_transaction(
+        await self.wallet_transaction_repository.create(
             wallet_id=wallet.id,
             amount=payment_intent_create.amount,
             stripe_payment_intent_id=payment_intent.id,
