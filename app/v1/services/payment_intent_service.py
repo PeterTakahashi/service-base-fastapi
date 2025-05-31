@@ -23,7 +23,7 @@ class PaymentIntentService:
     async def create_payment_intent(
         self, user: User, payment_intent_create: PaymentIntentCreate
     ) -> PaymentIntentCreateResponse:
-        wallet = await self.wallet_repository.get_wallet_by_user_id(user.id)
+        wallet = await self.wallet_repository.find_by_or_raise(user_id=user.id)
         payment_intent = stripe.PaymentIntent.create(
             amount=payment_intent_create.amount,
             currency=settings.PAYMENT_CURRENCY,
@@ -31,7 +31,7 @@ class PaymentIntentService:
         )
         if not payment_intent or payment_intent.client_secret is None:
             raise ValueError("Failed to create payment intent")
-        await self.wallet_transaction_repository.create_wallet_transaction(
+        await self.wallet_transaction_repository.create(
             wallet_id=wallet.id,
             amount=payment_intent_create.amount,
             stripe_payment_intent_id=payment_intent.id,
@@ -48,21 +48,21 @@ class PaymentIntentService:
     async def update_payment_intent_by_webhook(
         self, stripe_payment_intent_id: str, amount: int
     ) -> Wallet:
-        wallet_transaction = await self.wallet_transaction_repository.get_wallet_transaction_by_stripe_payment_intent_id(
+        wallet_transaction = await self.wallet_transaction_repository.find_by(
             stripe_payment_intent_id=stripe_payment_intent_id
         )
         if not wallet_transaction:
             raise ValueError(
                 "Wallet transaction not found for the given payment intent ID"
             )
-        await self.wallet_transaction_repository.update_wallet_transaction(
-            wallet_transaction=wallet_transaction,
+        await self.wallet_transaction_repository.update(
+            id=wallet_transaction.id,
             amount=amount,
-            status=WalletTransactionStatus.COMPLETED,
+            wallet_transaction_status=WalletTransactionStatus.COMPLETED,
         )
         wallet = wallet_transaction.wallet
         new_balance = wallet.balance + amount
-        updated_wallet = await self.wallet_repository.update_wallet(
-            wallet=wallet, balance=new_balance
+        updated_wallet = await self.wallet_repository.update(
+            id=wallet.id, balance=new_balance
         )
         return updated_wallet

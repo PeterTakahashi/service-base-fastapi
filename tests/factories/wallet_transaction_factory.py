@@ -2,6 +2,7 @@ from app.models.wallet_transaction import WalletTransaction
 from tests.factories.async_factory import AsyncSQLAlchemyModelFactory
 import factory
 from tests.factories.wallet_factory import WalletFactory
+import pytest_asyncio
 
 
 class WalletTransactionFactory(AsyncSQLAlchemyModelFactory):
@@ -19,3 +20,9 @@ class WalletTransactionFactory(AsyncSQLAlchemyModelFactory):
     )
     created_at = factory.Faker("date_time_this_year")
     updated_at = factory.Faker("date_time_this_year")
+
+
+@pytest_asyncio.fixture
+async def wallet_transaction_factory(async_session):
+    WalletTransactionFactory._meta.session = async_session
+    return WalletTransactionFactory

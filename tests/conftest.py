@@ -8,7 +8,9 @@ from app.db.session import get_async_session
 from faker import Faker
 from tests.fixtures.model_fixture import (
     user,
+    users,
     wallet,
+    wallets,
     wallet_transaction,
 )
 from tests.fixtures.repository_fixture import (
@@ -24,6 +26,9 @@ from tests.mocks.stripe import (
     mock_stripe_customer_create,
     mock_payment_intent_create_patch,
 )
+from tests.factories.user_factory import user_factory
+from tests.factories.wallet_factory import wallet_factory
+from tests.factories.wallet_transaction_factory import wallet_transaction_factory
 
 
 @pytest.fixture(scope="session")
