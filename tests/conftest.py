@@ -24,6 +24,9 @@ from tests.mocks.stripe import (
     mock_stripe_customer_create,
     mock_payment_intent_create_patch,
 )
+from tests.factories.user_factory import user_factory
+from tests.factories.wallet_factory import wallet_factory
+from tests.factories.wallet_transaction_factory import wallet_transaction_factory
 
 
 @pytest.fixture(scope="session")
