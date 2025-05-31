@@ -23,8 +23,10 @@ async def test_create_payment_intent_service(
     assert payment_intent.currency == "usd"
     assert payment_intent.status == "requires_payment_method"
     assert payment_intent.client_secret is not None
-    wallet_transaction = await payment_intent_service.wallet_transaction_repository.get_latest_wallet_transaction_by_wallet_id(
-        wallet.id
+    wallet_transaction = (
+        await payment_intent_service.wallet_transaction_repository.find_by(
+            wallet_id=wallet.id,
+        )
     )
     assert wallet_transaction is not None
     assert wallet_transaction.amount == payment_intent_data.amount

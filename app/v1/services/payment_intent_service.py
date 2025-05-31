@@ -55,10 +55,10 @@ class PaymentIntentService:
             raise ValueError(
                 "Wallet transaction not found for the given payment intent ID"
             )
-        await self.wallet_transaction_repository.update_wallet_transaction(
-            wallet_transaction=wallet_transaction,
+        await self.wallet_transaction_repository.update(
+            id=wallet_transaction.id,
             amount=amount,
-            status=WalletTransactionStatus.COMPLETED,
+            wallet_transaction_status=WalletTransactionStatus.COMPLETED,
         )
         wallet = wallet_transaction.wallet
         new_balance = wallet.balance + amount
