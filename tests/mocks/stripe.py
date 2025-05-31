@@ -1,13 +1,16 @@
 import pytest
 from unittest.mock import patch, MagicMock
+from faker import Faker
+
+fake = Faker()
 
 
 def mock_payment_intent_create(**kwargs):
     mock_intent = MagicMock()
-    mock_intent.id = "pi_test_123"
+    mock_intent.id = f"pi_test_{fake.uuid4()}"
     mock_intent.amount = 1000
     mock_intent.currency = "usd"
-    mock_intent.client_secret = "test_secret_123"
+    mock_intent.client_secret = f"secret_{mock_intent.id}"
     mock_intent.status = "requires_payment_method"
     return mock_intent
 

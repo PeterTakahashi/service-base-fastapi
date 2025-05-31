@@ -8,10 +8,13 @@ from app.db.session import get_async_session
 from faker import Faker
 from tests.fixtures.model_fixture import (
     user,
+    other_user,
     users,
     wallet,
+    other_wallet,
     wallets,
     wallet_transaction,
+    other_wallet_transaction,
 )
 from tests.fixtures.repository_fixture import (
     user_repository,
