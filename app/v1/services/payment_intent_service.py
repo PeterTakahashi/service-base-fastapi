@@ -48,7 +48,7 @@ class PaymentIntentService:
     async def update_payment_intent_by_webhook(
         self, stripe_payment_intent_id: str, amount: int
     ) -> Wallet:
-        wallet_transaction = await self.wallet_transaction_repository.get_wallet_transaction_by_stripe_payment_intent_id(
+        wallet_transaction = await self.wallet_transaction_repository.find_by(
             stripe_payment_intent_id=stripe_payment_intent_id
         )
         if not wallet_transaction:

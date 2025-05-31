@@ -56,7 +56,9 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, UUID]):
             name=user.email,
             email=user.email,
         )
-        await self.wallet_repository.create(user_id=user.id, stripe_customer_id=customer.id)
+        await self.wallet_repository.create(
+            user_id=user.id, stripe_customer_id=customer.id
+        )
 
     async def on_after_request_verify(
         self, user: User, token: str, request: Optional[Request] = None

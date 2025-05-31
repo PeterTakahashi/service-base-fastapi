@@ -1,8 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.future import select
 from app.models.wallet import Wallet
 from app.v1.repositories.base_repository import BaseRepository
-from uuid import UUID
 
 
 class WalletRepository(BaseRepository):
