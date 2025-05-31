@@ -21,6 +21,7 @@ from tests.fixtures.repository_fixture import (
 from tests.fixtures.service_fixture import (
     user_service,
     payment_intent_service,
+    wallet_transaction_service,
 )
 from tests.mocks.stripe import (
     mock_stripe_customer_create,
