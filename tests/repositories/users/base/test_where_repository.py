@@ -63,4 +63,4 @@ async def test_where_repository_attribute_error(user_repository):
     try:
         await user_repository.where(non_existent_column="value")
     except AttributeError as e:
-        assert str(e) == "type object 'User' has no attribute 'non_existent_column'"
+        assert str(e) == "User has no attribute 'non_existent_column'"

@@ -3,7 +3,7 @@ from sqlalchemy.exc import NoResultFound
 from sqlalchemy.future import select
 from uuid import UUID
 from sqlalchemy.orm import joinedload, lazyload
-
+from sqlalchemy import func
 
 class BaseRepository:
     def __init__(self, session: AsyncSession, model=None):
@@ -107,6 +107,15 @@ class BaseRepository:
         result = await self.session.execute(query)
         return result.unique().scalars().all()
 
+    async def count(self, **kwargs):
+        """
+        Count records with optional filtering.
+        """
+        conditions = await self.__get_conditions(**kwargs)
+        query = select(func.count("*")).select_from(self.model).where(*conditions)
+        result = await self.session.execute(query)
+        return result.scalar() or 0
+
     async def __generate_query(
         self,
         limit: int = 100,
@@ -120,9 +129,7 @@ class BaseRepository:
         """
         Generate a query with optional filtering, sorting, and pagination.
         """
-        conditions = [
-            getattr(self.model, key) == value for key, value in kwargs.items()
-        ]
+        conditions = await self.__get_conditions(**kwargs)
         query = select(self.model).where(*conditions)
 
         if joinedload_models:
@@ -139,3 +146,15 @@ class BaseRepository:
                 query = query.order_by(getattr(self.model, sorted_by).desc())
 
         return query.limit(limit).offset(offset)
+
+    async def __get_conditions(self, **kwargs):
+        """
+        Generate conditions for filtering based on provided keyword arguments.
+        """
+        conditions = []
+        for key, value in kwargs.items():
+            if hasattr(self.model, key):
+                conditions.append(getattr(self.model, key) == value)
+            else:
+                raise AttributeError(f"{self.model.__name__} has no attribute '{key}'")
+        return conditions
