@@ -36,11 +36,12 @@ class WalletTransactionService:
             exclude_unset=True, exclude={"limit", "offset", "sorted_by", "sorted_order"}
         )
         query_kwargs["wallet_id"] = wallet.id
+        cleaned_filters = {k: v for k, v in query_kwargs.items() if v is not None}
         wallet_transactions = await self.wallet_transaction_repository.where(
             limit=filter_params.limit,
             offset=filter_params.offset,
             sorted_by=filter_params.sorted_by,
             sorted_order=filter_params.sorted_order,
-            **query_kwargs,
+            **cleaned_filters,
         )
         return [WalletTransactionRead.model_validate(tx) for tx in wallet_transactions]

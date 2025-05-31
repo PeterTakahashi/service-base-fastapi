@@ -15,20 +15,6 @@ router = APIRouter()
 
 
 @router.get(
-    "/{wallet_transaction_id}",
-    response_model=WalletTransactionRead,
-)
-async def get_wallet_transaction(
-    wallet_transaction_id: str,
-    user: User = Depends(current_active_user),
-    wallet_transaction_service=Depends(get_wallet_transaction_service),
-):
-    return await wallet_transaction_service.get(
-        user_id=user.id, wallet_transaction_id=decode_id(wallet_transaction_id)
-    )
-
-
-@router.get(
     "",
     response_model=List[WalletTransactionRead],
     name="wallet_transactions:list_wallet_transactions",
@@ -44,4 +30,18 @@ async def list_wallet_transactions(
     return await wallet_transaction_service.get_list(
         user_id=user.id,
         filter_params=filter_params,
+    )
+
+
+@router.get(
+    "/{wallet_transaction_id}",
+    response_model=WalletTransactionRead,
+)
+async def get_wallet_transaction(
+    wallet_transaction_id: str,
+    user: User = Depends(current_active_user),
+    wallet_transaction_service=Depends(get_wallet_transaction_service),
+):
+    return await wallet_transaction_service.get(
+        user_id=user.id, wallet_transaction_id=decode_id(wallet_transaction_id)
     )
