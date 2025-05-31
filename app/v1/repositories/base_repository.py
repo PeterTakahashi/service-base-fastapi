@@ -4,6 +4,8 @@ from sqlalchemy.future import select
 from uuid import UUID
 from sqlalchemy.orm import joinedload, lazyload
 from sqlalchemy import func
+from typing import Optional, List, Union
+
 
 class BaseRepository:
     def __init__(self, session: AsyncSession, model=None):
@@ -14,11 +16,11 @@ class BaseRepository:
 
     async def find(
         self,
-        id: int | UUID,
-        sorted_by: str = None,
+        id: Union[int, UUID],
+        sorted_by: Optional[str] = None,
         sorted_order: str = "asc",
-        joinedload_models: list = None,
-        lazyload_models: list = None,
+        joinedload_models: Optional[List] = None,
+        lazyload_models: Optional[List] = None,
     ):
         """
         Find a record by its ID. Raise an exception if not found.
@@ -35,10 +37,10 @@ class BaseRepository:
 
     async def find_by(
         self,
-        sorted_by: str = None,
+        sorted_by: Optional[str] = None,
         sorted_order: str = "asc",
-        joinedload_models: list = None,
-        lazyload_models: list = None,
+        joinedload_models: Optional[List] = None,
+        lazyload_models: Optional[List] = None,
         **kwargs,
     ):
         """
@@ -60,10 +62,10 @@ class BaseRepository:
 
     async def find_by_or_raise(
         self,
-        sorted_by: str = None,
+        sorted_by: Optional[str] = None,
         sorted_order: str = "asc",
-        joinedload_models: list = None,
-        lazyload_models: list = None,
+        joinedload_models: Optional[List] = None,
+        lazyload_models: Optional[List] = None,
         **kwargs,
     ):
         """
@@ -86,10 +88,10 @@ class BaseRepository:
         self,
         limit: int = 100,
         offset: int = 0,
-        sorted_by: str = None,
+        sorted_by: Optional[str] = None,
         sorted_order: str = "asc",
-        joinedload_models: list = None,
-        lazyload_models: list = None,
+        joinedload_models: Optional[List] = None,
+        lazyload_models: Optional[List] = None,
         **kwargs,
     ):
         """
@@ -120,10 +122,10 @@ class BaseRepository:
         self,
         limit: int = 100,
         offset: int = 0,
-        sorted_by: str = None,
+        sorted_by: Optional[str] = None,
         sorted_order: str = "asc",
-        joinedload_models: list = None,
-        lazyload_models: list = None,
+        joinedload_models: Optional[List] = None,
+        lazyload_models: Optional[List] = None,
         **kwargs,
     ):
         """
