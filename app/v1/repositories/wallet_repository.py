@@ -15,13 +15,6 @@ class WalletRepository(BaseRepository):
         )
         return result.scalars().first()
 
-    async def create_wallet(self, user_id: UUID, stripe_customer_id: str) -> Wallet:
-        wallet = Wallet(user_id=user_id, stripe_customer_id=stripe_customer_id)
-        self.session.add(wallet)
-        await self.session.commit()
-        await self.session.refresh(wallet)
-        return wallet
-
     async def update_wallet(self, wallet: Wallet, balance: int) -> Wallet:
         wallet.balance = balance
         self.session.add(wallet)
