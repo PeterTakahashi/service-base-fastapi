@@ -1,6 +1,6 @@
 from typing import Optional
 from datetime import datetime
-from app.v1.schemas.base_search_params import BaseSearchParams
+from app.v1.schemas.common.list.base_search_params import BaseSearchParams
 from app.models.wallet_transaction import WalletTransactionType, WalletTransactionStatus
 
 

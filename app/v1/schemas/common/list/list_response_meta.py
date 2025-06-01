@@ -1,4 +1,4 @@
-from app.v1.schemas.base_search_params import BaseSearchParams
+from app.v1.schemas.common.list.base_search_params import BaseSearchParams
 from pydantic import Field
 
 
