@@ -1,7 +1,7 @@
 from datetime import datetime
 from pydantic import Field, ConfigDict
 from app.models.wallet_transaction import WalletTransactionType, WalletTransactionStatus
-from app.v1.schemas.base import HasEncodedID
+from app.v1.schemas.common.id_encoder import HasEncodedID
 
 
 class WalletTransactionRead(HasEncodedID):
