@@ -3,7 +3,7 @@ from app.v1.schemas.wallet_transaction import (
     WalletTransactionSearchParams,
     WalletTransactionListResponse,
 )
-from app.v1.schemas.base_list_response import ListResponseMeta
+from app.v1.schemas.common.list.base_list_response import ListResponseMeta
 
 
 class WalletTransactionService:
