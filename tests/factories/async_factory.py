@@ -13,7 +13,7 @@ class AsyncSQLAlchemyModelFactory(factory.alchemy.SQLAlchemyModelFactory):
         sqlalchemy_session_persistence = "flush"
 
     @classmethod
-    async def _create(cls, model_class, *args, **kwargs):
+    async def _create(cls, model_class, *args, **create_params):
         """
         factory_boy が `create()` するときに呼ばれるメソッドをオーバーライド。
         非同期で session.add & commit する。
@@ -24,7 +24,7 @@ class AsyncSQLAlchemyModelFactory(factory.alchemy.SQLAlchemyModelFactory):
             raise ValueError("No session provided in factory Meta.")
 
         # モデルを初期化
-        obj = model_class(*args, **kwargs)
+        obj = model_class(*args, **create_params)
 
         # 非同期セッションに追加 → commit → refresh
         session.add(obj)
@@ -33,5 +33,5 @@ class AsyncSQLAlchemyModelFactory(factory.alchemy.SQLAlchemyModelFactory):
         return obj
 
     @classmethod
-    async def create_batch(cls, size: int, **kwargs):  # type: ignore
-        return [await cls.create(**kwargs) for _ in range(size)]
+    async def create_batch(cls, size: int, **create_params):  # type: ignore
+        return [await cls.create(**create_params) for _ in range(size)]

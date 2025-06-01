@@ -70,7 +70,7 @@ class BaseRepository:
         sorted_order: str = "asc",
         joinedload_models: Optional[List] = None,
         lazyload_models: Optional[List] = None,
-        **kwargs,
+        **search_params,
     ):
         """
         Find a record by given attributes. Return None if not found.
@@ -82,7 +82,7 @@ class BaseRepository:
             sorted_order=sorted_order,
             joinedload_models=joinedload_models,
             lazyload_models=lazyload_models,
-            **kwargs,
+            **search_params,
         )
         result = await self.session.execute(query)
         instance = result.scalars().first()
@@ -94,7 +94,7 @@ class BaseRepository:
         sorted_order: str = "asc",
         joinedload_models: Optional[List] = None,
         lazyload_models: Optional[List] = None,
-        **kwargs,
+        **search_params,
     ):
         """
         Find a record by given attributes. Raise an exception if not found.
@@ -104,11 +104,11 @@ class BaseRepository:
             sorted_order=sorted_order,
             joinedload_models=joinedload_models,
             lazyload_models=lazyload_models,
-            **kwargs,
+            **search_params,
         )
         if not instance:
             raise NoResultFound(
-                f"{self.model.__name__} with attributes {kwargs} not found."
+                f"{self.model.__name__} with attributes {search_params} not found."
             )
         return instance
 
@@ -120,7 +120,7 @@ class BaseRepository:
         sorted_order: str = "asc",
         joinedload_models: Optional[List] = None,
         lazyload_models: Optional[List] = None,
-        **kwargs,
+        **search_params,
     ):
         """
         Find records with optional filtering, sorting, and pagination.
@@ -132,25 +132,25 @@ class BaseRepository:
             sorted_order=sorted_order,
             joinedload_models=joinedload_models,
             lazyload_models=lazyload_models,
-            **kwargs,
+            **search_params,
         )
         result = await self.session.execute(query)
         return result.unique().scalars().all()
 
-    async def count(self, **kwargs) -> int:
+    async def count(self, **search_params) -> int:
         """
         Count records with optional filtering.
         """
-        conditions = await self.__get_conditions(**kwargs)
+        conditions = await self.__get_conditions(**search_params)
         query = select(func.count("*")).select_from(self.model).where(*conditions)
         result = await self.session.execute(query)
         return result.scalar() or 0
 
-    async def exists(self, **kwargs) -> bool:
+    async def exists(self, **search_params) -> bool:
         """
         Check if any record exists with the given attributes.
         """
-        counted = await self.count(**kwargs)
+        counted = await self.count(**search_params)
         return counted > 0
 
     async def __generate_query(
@@ -161,12 +161,12 @@ class BaseRepository:
         sorted_order: str = "asc",
         joinedload_models: Optional[List] = None,
         lazyload_models: Optional[List] = None,
-        **kwargs,
+        **search_params,
     ):
         """
         Generate a query with optional filtering, sorting, and pagination.
         """
-        conditions = await self.__get_conditions(**kwargs)
+        conditions = await self.__get_conditions(**search_params)
         query = select(self.model).where(*conditions)
 
         if joinedload_models:
@@ -197,13 +197,13 @@ class BaseRepository:
             query = query.order_by(column.desc())
         return query
 
-    async def __get_conditions(self, **kwargs):
+    async def __get_conditions(self, **search_params):
         """
         Generate conditions for filtering based on provided keyword arguments.
         Supports Ransack-like operators (field__operator=value).
         """
         conditions = []
-        for key, value in kwargs.items():
+        for key, value in search_params.items():
             # keyに "__" が含まれていれば、フィールド名と演算子を分割する
             if "__" in key:
                 field_name, op = key.split("__", 1)
@@ -229,18 +229,18 @@ class BaseRepository:
 
         return conditions
 
-    async def create(self, **kwargs):
+    async def create(self, **search_params):
         """
         Generic create method that instantiates the model,
         saves it, and returns the new instance.
         """
-        instance = self.model(**kwargs)
+        instance = self.model(**search_params)
         self.session.add(instance)
         await self.session.commit()
         await self.session.refresh(instance)
         return instance
 
-    async def update(self, id: Union[int, UUID], **kwargs):
+    async def update(self, id: Union[int, UUID], **search_params):
         """
         Update a single record by its primary key.
         Raises NoResultFound if the record doesn't exist.
@@ -249,13 +249,13 @@ class BaseRepository:
             await repository.update(some_id, field1='value1', field2='value2')
         """
         instance = await self.find(id)
-        for field, value in kwargs.items():
+        for field, value in search_params.items():
             setattr(instance, field, value)
         await self.session.commit()
         await self.session.refresh(instance)
         return instance
 
-    async def update_all(self, updates: Dict[str, Any], **kwargs) -> int:
+    async def update_all(self, updates: Dict[str, Any], **search_params) -> int:
         """
         Update all records that match the given conditions in one query.
         Returns the number of rows that were updated.
@@ -267,7 +267,7 @@ class BaseRepository:
                 other_field="foo"
             )
         """
-        conditions = await self.__get_conditions(**kwargs)
+        conditions = await self.__get_conditions(**search_params)
         stmt = update(self.model).where(*conditions).values(**updates)
         result = await self.session.execute(stmt)
         await self.session.commit()
@@ -282,7 +282,7 @@ class BaseRepository:
         await self.session.delete(instance)
         await self.session.commit()
 
-    async def destroy_all(self, **kwargs) -> int:
+    async def destroy_all(self, **search_params) -> int:
         """
         Destroy (delete) all records that match the given conditions in one query.
         Returns the number of rows that were deleted.
@@ -290,7 +290,7 @@ class BaseRepository:
         Usage:
             await repository.destroy_all(field1="value1", field2__gte=10)
         """
-        conditions = await self.__get_conditions(**kwargs)
+        conditions = await self.__get_conditions(**search_params)
         stmt = delete(self.model).where(*conditions)
         result = await self.session.execute(stmt)
         await self.session.commit()

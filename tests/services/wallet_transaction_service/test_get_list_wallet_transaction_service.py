@@ -2,7 +2,7 @@
 import pytest
 from app.v1.schemas.wallet_transaction import (
     WalletTransactionRead,
-    WalletTransactionFilter,
+    WalletTransactionSearchParams,
 )
 from datetime import datetime, timedelta
 
@@ -25,9 +25,9 @@ async def test_get_list_no_filter(
     tx2 = await wallet_transaction_factory.create(wallet=wallet, amount=2000)
 
     # Call our service method with an empty filter
-    filter_params = WalletTransactionFilter()
+    search_params = WalletTransactionSearchParams()
     result = await wallet_transaction_service.get_list(
-        user_id=user.id, filter_params=filter_params
+        user_id=user.id, search_params=search_params
     )
 
     # We should only see tx1, tx2 in the results, not other_wallet_transaction
@@ -52,9 +52,9 @@ async def test_get_list_with_filter_amount_gte(
     await wallet_transaction_factory.create(wallet=wallet, amount=1500)
 
     # We only want transactions where amount >= 1000
-    filter_params = WalletTransactionFilter(amount__gte=1000)
+    search_params = WalletTransactionSearchParams(amount__gte=1000)
     result = await wallet_transaction_service.get_list(
-        user_id=user.id, filter_params=filter_params
+        user_id=user.id, search_params=search_params
     )
 
     amounts = sorted([r.amount for r in result])
@@ -87,21 +87,21 @@ async def test_get_list_with_filter_created_at_range(
     )
 
     # 1) Only get transactions newer than 5 days ago
-    filter_params = WalletTransactionFilter(
+    search_params = WalletTransactionSearchParams(
         created_at__gte=datetime.utcnow() - timedelta(days=5)
     )
     result = await wallet_transaction_service.get_list(
-        user_id=user.id, filter_params=filter_params
+        user_id=user.id, search_params=search_params
     )
     assert len(result) == 1
     assert result[0].id == tx_new.id
 
     # 2) Only get transactions older than 5 days ago
-    filter_params = WalletTransactionFilter(
+    search_params = WalletTransactionSearchParams(
         created_at__lte=datetime.utcnow() - timedelta(days=5)
     )
     result = await wallet_transaction_service.get_list(
-        user_id=user.id, filter_params=filter_params
+        user_id=user.id, search_params=search_params
     )
     assert len(result) == 1
     assert result[0].id == tx_old.id
@@ -120,23 +120,23 @@ async def test_get_list_pagination(
         tx_list.append(tx)
 
     # limit=2, offset=0 => first 2
-    filter_params = WalletTransactionFilter(limit=2, offset=0)
+    search_params = WalletTransactionSearchParams(limit=2, offset=0)
     result = await wallet_transaction_service.get_list(
-        user_id=user.id, filter_params=filter_params
+        user_id=user.id, search_params=search_params
     )
     assert len(result) == 2
 
     # limit=2, offset=2 => next 2
-    filter_params = WalletTransactionFilter(limit=2, offset=2)
+    search_params = WalletTransactionSearchParams(limit=2, offset=2)
     result = await wallet_transaction_service.get_list(
-        user_id=user.id, filter_params=filter_params
+        user_id=user.id, search_params=search_params
     )
     assert len(result) == 2
 
     # limit=2, offset=4 => last 1
-    filter_params = WalletTransactionFilter(limit=2, offset=4)
+    search_params = WalletTransactionSearchParams(limit=2, offset=4)
     result = await wallet_transaction_service.get_list(
-        user_id=user.id, filter_params=filter_params
+        user_id=user.id, search_params=search_params
     )
     assert len(result) == 1
 
@@ -151,9 +151,11 @@ async def test_get_list_sorted_by_amount_desc(
     tx_medium = await wallet_transaction_factory.create(wallet=wallet, amount=1000)
     tx_large = await wallet_transaction_factory.create(wallet=wallet, amount=2000)
 
-    filter_params = WalletTransactionFilter(sorted_by="amount", sorted_order="desc")
+    search_params = WalletTransactionSearchParams(
+        sorted_by="amount", sorted_order="desc"
+    )
     result = await wallet_transaction_service.get_list(
-        user_id=user.id, filter_params=filter_params
+        user_id=user.id, search_params=search_params
     )
 
     amounts = [r.amount for r in result]

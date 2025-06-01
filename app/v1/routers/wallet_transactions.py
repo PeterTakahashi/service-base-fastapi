@@ -6,7 +6,7 @@ from app.v1.dependencies.services.wallet_transaction_service import (
 from app.lib.fastapi_users.user_setup import current_active_user
 from app.v1.schemas.wallet_transaction import (
     WalletTransactionRead,
-    WalletTransactionFilter,
+    WalletTransactionSearchParams,
 )
 from app.models.user import User
 from app.lib.convert_id import decode_id
@@ -20,7 +20,7 @@ router = APIRouter()
     name="wallet_transactions:list_wallet_transactions",
 )
 async def list_wallet_transactions(
-    filter_params: WalletTransactionFilter = Depends(),
+    search_params: WalletTransactionSearchParams = Depends(),
     user: User = Depends(current_active_user),
     wallet_transaction_service=Depends(get_wallet_transaction_service),
 ):
@@ -29,7 +29,7 @@ async def list_wallet_transactions(
     """
     return await wallet_transaction_service.get_list(
         user_id=user.id,
-        filter_params=filter_params,
+        search_params=search_params,
     )
 
 
