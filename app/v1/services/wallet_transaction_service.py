@@ -32,18 +32,8 @@ class WalletTransactionService:
         Retrieve a list of wallet transactions with filtering, sorting, and pagination.
         """
         wallet = await self.wallet_repository.find_by_or_raise(user_id=user_id)
-        query_search_params = search_params.model_dump(
-            exclude_unset=True, exclude={"limit", "offset", "sorted_by", "sorted_order"}
-        )
-        query_search_params["wallet_id"] = wallet.id
-        cleaned_search_params = {
-            k: v for k, v in query_search_params.items() if v is not None
-        }
         wallet_transactions = await self.wallet_transaction_repository.where(
-            limit=search_params.limit,
-            offset=search_params.offset,
-            sorted_by=search_params.sorted_by,
-            sorted_order=search_params.sorted_order,
-            **cleaned_search_params,
+            **search_params.model_dump(exclude_none=True),
+            wallet_id=wallet.id,
         )
         return [WalletTransactionRead.model_validate(tx) for tx in wallet_transactions]
