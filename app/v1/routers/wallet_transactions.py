@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Depends
-from typing import List
 from app.v1.dependencies.services.wallet_transaction_service import (
     get_wallet_transaction_service,
 )
 from app.v1.schemas.wallet_transaction import (
     WalletTransactionRead,
     WalletTransactionSearchParams,
+    WalletTransactionListResponse,
 )
 from app.models.wallet import Wallet
 from app.lib.convert_id import decode_id
@@ -18,7 +18,7 @@ router = APIRouter()
 
 @router.get(
     "",
-    response_model=List[WalletTransactionRead],
+    response_model=WalletTransactionListResponse,
     name="wallet_transactions:list_wallet_transactions",
 )
 async def list_wallet_transactions(

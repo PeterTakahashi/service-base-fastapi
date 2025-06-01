@@ -36,7 +36,8 @@ async def test_list_wallet_transactions_no_filter(
     response = await auth_client.get("/wallet-transactions")
     assert response.status_code == 200
 
-    data = response.json()
+    response_json = response.json()
+    data = response_json["data"]
     # We expect only tx1 and tx2
     # Sort to ensure consistent indexing
     returned_ids = sorted(decode_id(tx["id"]) for tx in data)
@@ -69,19 +70,19 @@ async def test_list_wallet_transactions_pagination(
     # limit=2, offset=0 => first 2
     resp_1 = await auth_client.get("/wallet-transactions?limit=2&offset=0")
     assert resp_1.status_code == 200
-    data_1 = resp_1.json()
+    data_1 = resp_1.json()["data"]
     assert len(data_1) == 2
 
     # limit=2, offset=2 => next 2
     resp_2 = await auth_client.get("/wallet-transactions?limit=2&offset=2")
     assert resp_2.status_code == 200
-    data_2 = resp_2.json()
+    data_2 = resp_2.json()["data"]
     assert len(data_2) == 2
 
     # limit=2, offset=4 => last 1
     resp_3 = await auth_client.get("/wallet-transactions?limit=2&offset=4")
     assert resp_3.status_code == 200
-    data_3 = resp_3.json()
+    data_3 = resp_3.json()["data"]
     assert len(data_3) == 1
 
 
@@ -105,7 +106,7 @@ async def test_list_wallet_transactions_sorting(
         "/wallet-transactions?sorted_by=amount&sorted_order=desc"
     )
     assert resp.status_code == 200
-    data = resp.json()
+    data = resp.json()["data"]
     amounts = [tx["amount"] for tx in data]
 
     # They should come back in descending order by amount: 2000, 1000, 500
@@ -132,7 +133,7 @@ async def test_list_wallet_transactions_filter(
     # We'll filter for amount >= 1000
     resp = await auth_client.get("/wallet-transactions?amount__gte=1000")
     assert resp.status_code == 200
-    data = resp.json()
+    data = resp.json()["data"]
 
     # Only tx2 and tx3 should appear
     returned_ids = {decode_id(tx["id"]) for tx in data}
@@ -170,7 +171,7 @@ async def test_list_wallet_transactions_date_filter(
         "/wallet-transactions?created_at__gte=2025-01-01T00:00:00"
     )
     assert resp.status_code == 200
-    data = resp.json()
+    data = resp.json()["data"]
     if old_tx.created_at < datetime(2025, 1, 1):
         # Then presumably only new_tx is returned
         assert len(data) == 1

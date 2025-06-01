@@ -28,15 +28,22 @@ async def test_get_list_no_filter(
     result = await wallet_transaction_service.get_list(
         wallet_id=wallet.id, search_params=search_params
     )
+    wallet_transactions = result.data
+
+    assert result.meta.total_count == 2
+    assert result.meta.limit == 100  # Default limit
+    assert result.meta.offset == 0
+    assert result.meta.sorted_by == "id"
+    assert result.meta.sorted_order == "asc"
 
     # We should only see tx1, tx2 in the results, not other_wallet_transaction
-    assert len(result) == 2
-    amounts = {r.amount for r in result}
+    assert len(wallet_transactions) == 2
+    amounts = {r.amount for r in wallet_transactions}
     assert amounts == {1000, 2000}
 
     # And they should be instances of WalletTransactionRead
-    for r in result:
-        assert isinstance(r, WalletTransactionRead)
+    for wallet_transaction in wallet_transactions:
+        assert isinstance(wallet_transaction, WalletTransactionRead)
 
 
 async def test_get_list_with_filter_amount_gte(
@@ -55,8 +62,13 @@ async def test_get_list_with_filter_amount_gte(
     result = await wallet_transaction_service.get_list(
         wallet_id=wallet.id, search_params=search_params
     )
-
-    amounts = sorted([r.amount for r in result])
+    assert result.meta.total_count == 2
+    assert result.meta.limit == 100  # Default limit
+    assert result.meta.offset == 0
+    assert result.meta.sorted_by == "id"
+    assert result.meta.sorted_order == "asc"
+    assert len(result.data) == 2
+    amounts = sorted([r.amount for r in result.data])
     assert amounts == [1000, 1500]
 
 
@@ -91,8 +103,8 @@ async def test_get_list_with_filter_created_at_range(
     result = await wallet_transaction_service.get_list(
         wallet_id=wallet.id, search_params=search_params
     )
-    assert len(result) == 1
-    assert result[0].id == tx_new.id
+    assert len(result.data) == 1
+    assert result.data[0].id == tx_new.id
 
     # 2) Only get transactions older than 5 days ago
     search_params = WalletTransactionSearchParams(
@@ -101,8 +113,8 @@ async def test_get_list_with_filter_created_at_range(
     result = await wallet_transaction_service.get_list(
         wallet_id=wallet.id, search_params=search_params
     )
-    assert len(result) == 1
-    assert result[0].id == tx_old.id
+    assert len(result.data) == 1
+    assert result.data[0].id == tx_old.id
 
 
 async def test_get_list_pagination(
@@ -122,21 +134,21 @@ async def test_get_list_pagination(
     result = await wallet_transaction_service.get_list(
         wallet_id=wallet.id, search_params=search_params
     )
-    assert len(result) == 2
+    assert len(result.data) == 2
 
     # limit=2, offset=2 => next 2
     search_params = WalletTransactionSearchParams(limit=2, offset=2)
     result = await wallet_transaction_service.get_list(
         wallet_id=wallet.id, search_params=search_params
     )
-    assert len(result) == 2
+    assert len(result.data) == 2
 
     # limit=2, offset=4 => last 1
     search_params = WalletTransactionSearchParams(limit=2, offset=4)
     result = await wallet_transaction_service.get_list(
         wallet_id=wallet.id, search_params=search_params
     )
-    assert len(result) == 1
+    assert len(result.data) == 1
 
 
 async def test_get_list_sorted_by_amount_desc(
@@ -156,5 +168,5 @@ async def test_get_list_sorted_by_amount_desc(
         wallet_id=wallet.id, search_params=search_params
     )
 
-    amounts = [r.amount for r in result]
+    amounts = [r.amount for r in result.data]
     assert amounts == sorted([500, 1000, 2000], reverse=True)

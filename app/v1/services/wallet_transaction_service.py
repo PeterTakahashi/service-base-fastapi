@@ -1,8 +1,9 @@
-from typing import List
 from app.v1.schemas.wallet_transaction import (
     WalletTransactionRead,
     WalletTransactionSearchParams,
+    WalletTransactionListResponse,
 )
+from app.v1.schemas.base_list_response import ListResponseMeta
 
 
 class WalletTransactionService:
@@ -25,7 +26,7 @@ class WalletTransactionService:
         self,
         wallet_id: int,
         search_params: WalletTransactionSearchParams,
-    ) -> List[WalletTransactionRead]:
+    ) -> WalletTransactionListResponse:
         """
         Retrieve a list of wallet transactions with filtering, sorting, and pagination.
         """
@@ -33,4 +34,19 @@ class WalletTransactionService:
             **search_params.model_dump(exclude_none=True),
             wallet_id=wallet_id,
         )
-        return [WalletTransactionRead.model_validate(tx) for tx in wallet_transactions]
+        total_count = await self.wallet_transaction_repository.count(
+            **search_params.model_dump(
+                exclude_none=True,
+                exclude={"limit", "offset", "sorted_by", "sorted_order"},
+            ),
+            wallet_id=wallet_id,
+        )
+        return WalletTransactionListResponse(
+            meta=ListResponseMeta(
+                total_count=total_count,
+                **search_params.model_dump(exclude_none=True),
+            ),
+            data=[
+                WalletTransactionRead.model_validate(tx) for tx in wallet_transactions
+            ],
+        )
