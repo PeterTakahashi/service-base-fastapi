@@ -11,7 +11,6 @@ pytestmark = pytest.mark.asyncio
 
 async def test_get_list_no_filter(
     wallet_transaction_service,
-    user,
     wallet,
     other_wallet_transaction,
     wallet_transaction_factory,
@@ -27,7 +26,7 @@ async def test_get_list_no_filter(
     # Call our service method with an empty filter
     search_params = WalletTransactionSearchParams()
     result = await wallet_transaction_service.get_list(
-        user_id=user.id, search_params=search_params
+        wallet_id=wallet.id, search_params=search_params
     )
 
     # We should only see tx1, tx2 in the results, not other_wallet_transaction
@@ -41,7 +40,7 @@ async def test_get_list_no_filter(
 
 
 async def test_get_list_with_filter_amount_gte(
-    wallet_transaction_service, user, wallet, wallet_transaction_factory
+    wallet_transaction_service, wallet, wallet_transaction_factory
 ):
     """
     Test that get_list can filter by amount__gte correctly.
@@ -54,7 +53,7 @@ async def test_get_list_with_filter_amount_gte(
     # We only want transactions where amount >= 1000
     search_params = WalletTransactionSearchParams(amount__gte=1000)
     result = await wallet_transaction_service.get_list(
-        user_id=user.id, search_params=search_params
+        wallet_id=wallet.id, search_params=search_params
     )
 
     amounts = sorted([r.amount for r in result])
@@ -63,7 +62,6 @@ async def test_get_list_with_filter_amount_gte(
 
 async def test_get_list_with_filter_created_at_range(
     wallet_transaction_service,
-    user,
     wallet,
     wallet_transaction_factory,
     faker,
@@ -91,7 +89,7 @@ async def test_get_list_with_filter_created_at_range(
         created_at__gte=datetime.utcnow() - timedelta(days=5)
     )
     result = await wallet_transaction_service.get_list(
-        user_id=user.id, search_params=search_params
+        wallet_id=wallet.id, search_params=search_params
     )
     assert len(result) == 1
     assert result[0].id == tx_new.id
@@ -101,14 +99,14 @@ async def test_get_list_with_filter_created_at_range(
         created_at__lte=datetime.utcnow() - timedelta(days=5)
     )
     result = await wallet_transaction_service.get_list(
-        user_id=user.id, search_params=search_params
+        wallet_id=wallet.id, search_params=search_params
     )
     assert len(result) == 1
     assert result[0].id == tx_old.id
 
 
 async def test_get_list_pagination(
-    wallet_transaction_service, user, wallet, wallet_transaction_factory
+    wallet_transaction_service, wallet, wallet_transaction_factory
 ):
     """
     Test limit/offset pagination.
@@ -122,27 +120,27 @@ async def test_get_list_pagination(
     # limit=2, offset=0 => first 2
     search_params = WalletTransactionSearchParams(limit=2, offset=0)
     result = await wallet_transaction_service.get_list(
-        user_id=user.id, search_params=search_params
+        wallet_id=wallet.id, search_params=search_params
     )
     assert len(result) == 2
 
     # limit=2, offset=2 => next 2
     search_params = WalletTransactionSearchParams(limit=2, offset=2)
     result = await wallet_transaction_service.get_list(
-        user_id=user.id, search_params=search_params
+        wallet_id=wallet.id, search_params=search_params
     )
     assert len(result) == 2
 
     # limit=2, offset=4 => last 1
     search_params = WalletTransactionSearchParams(limit=2, offset=4)
     result = await wallet_transaction_service.get_list(
-        user_id=user.id, search_params=search_params
+        wallet_id=wallet.id, search_params=search_params
     )
     assert len(result) == 1
 
 
 async def test_get_list_sorted_by_amount_desc(
-    wallet_transaction_service, user, wallet, wallet_transaction_factory
+    wallet_transaction_service, wallet, wallet_transaction_factory
 ):
     """
     Test that sorting by amount desc returns correct order.
@@ -155,7 +153,7 @@ async def test_get_list_sorted_by_amount_desc(
         sorted_by="amount", sorted_order="desc"
     )
     result = await wallet_transaction_service.get_list(
-        user_id=user.id, search_params=search_params
+        wallet_id=wallet.id, search_params=search_params
     )
 
     amounts = [r.amount for r in result]
