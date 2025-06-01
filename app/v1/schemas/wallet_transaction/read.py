@@ -1,19 +1,7 @@
-from pydantic import Field, ConfigDict
-from typing import Optional, List
 from datetime import datetime
+from pydantic import Field, ConfigDict
 from app.models.wallet_transaction import WalletTransactionType, WalletTransactionStatus
 from app.v1.schemas.base import HasEncodedID
-from app.v1.schemas.base_search_params import BaseSearchParams
-from app.v1.schemas.base_list_response import BaseListResponse
-
-
-class WalletTransactionSearchParams(BaseSearchParams):
-    amount__gte: Optional[int] = None
-    amount__lte: Optional[int] = None
-    created_at__gte: Optional[datetime] = None
-    created_at__lte: Optional[datetime] = None
-    wallet_transaction_type__exact: Optional[WalletTransactionType] = None
-    wallet_transaction_status__exact: Optional[WalletTransactionStatus] = None
 
 
 class WalletTransactionRead(HasEncodedID):
@@ -48,7 +36,3 @@ class WalletTransactionRead(HasEncodedID):
     )
 
     model_config = ConfigDict(from_attributes=True)
-
-
-class WalletTransactionListResponse(BaseListResponse):
-    data: List[WalletTransactionRead]
