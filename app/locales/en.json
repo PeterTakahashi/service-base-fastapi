@@ -11,5 +11,9 @@
   "internal_server_error": {
     "title": "Internal Server Error",
     "detail": "An unexpected error occurred. Please try again later."
+  },
+  "not_found": {
+    "title": "Not Found",
+    "detail": "The requested resource could not be found."
   }
 }
