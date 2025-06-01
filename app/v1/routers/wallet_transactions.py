@@ -38,6 +38,7 @@ async def list_wallet_transactions(
 @router.get(
     "/{wallet_transaction_id}",
     response_model=WalletTransactionRead,
+    name="wallet_transactions:get_wallet_transaction",
 )
 async def get_wallet_transaction(
     wallet_transaction_id: str,
