@@ -19,6 +19,7 @@ async def payment_intent_service(wallet_repository, wallet_transaction_repositor
 async def wallet_transaction_service(wallet_repository, wallet_transaction_repository):
     return WalletTransactionService(wallet_repository, wallet_transaction_repository)
 
+
 @pytest_asyncio.fixture
 async def user_api_key_service(user_api_key_repository):
     return UserApiKeyService(user_api_key_repository)

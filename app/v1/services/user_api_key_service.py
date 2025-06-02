@@ -3,16 +3,19 @@ from app.v1.schemas.user_api_key import (
     UserApiKeyRead,
     UserApiKeyCreate,
     UserApiKeyUpdate,
-    UserApiKeySearchParams
+    UserApiKeySearchParams,
 )
 from app.v1.schemas.common.list.base_list_response import ListResponseMeta
 from uuid import UUID
+
 
 class UserApiKeyService:
     def __init__(self, user_api_key_repository):
         self.user_api_key_repository = user_api_key_repository
 
-    async def get_list(self, user_id: UUID, search_params: UserApiKeySearchParams) -> UserApiKeyListRead:
+    async def get_list(
+        self, user_id: UUID, search_params: UserApiKeySearchParams
+    ) -> UserApiKeyListRead:
         """
         Retrieve a list of user API keys with filtering, sorting, and pagination.
         """
@@ -32,19 +35,21 @@ class UserApiKeyService:
                 total_count=total_count,
                 **search_params.model_dump(exclude_none=True),
             ),
-            data=[
-                UserApiKeyRead.model_validate(tx) for tx in user_api_keys
-            ],
+            data=[UserApiKeyRead.model_validate(tx) for tx in user_api_keys],
         )
 
-    async def create(self, user_id: UUID, user_api_key_create: UserApiKeyCreate) -> UserApiKeyRead:
+    async def create(
+        self, user_id: UUID, user_api_key_create: UserApiKeyCreate
+    ) -> UserApiKeyRead:
         """
         Create a new user API key.
         """
         # Implement the logic to create a new user API key
         pass
 
-    async def update(self, user_id: UUID, user_api_key_id: str, user_api_key_update: UserApiKeyUpdate) -> UserApiKeyRead:
+    async def update(
+        self, user_id: UUID, user_api_key_id: str, user_api_key_update: UserApiKeyUpdate
+    ) -> UserApiKeyRead:
         """
         Update an existing user API key.
         """

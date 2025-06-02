@@ -18,6 +18,7 @@ from tests.fixtures.models import (
     user_api_key,
     soft_deleted_user_api_key,
     user_api_keys,
+    expired_user_api_key,
 )
 from tests.fixtures.repository_fixture import (
     user_repository,
@@ -29,6 +30,7 @@ from tests.fixtures.service_fixture import (
     user_service,
     payment_intent_service,
     wallet_transaction_service,
+    user_api_key_service,
 )
 from tests.mocks.stripe import (
     mock_stripe_customer_create,

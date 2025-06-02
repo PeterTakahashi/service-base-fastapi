@@ -1,5 +1,11 @@
 from fastapi import APIRouter
-from app.v1.routers import users, auth, payment_intents, wallet_transactions, user_api_keys
+from app.v1.routers import (
+    users,
+    auth,
+    payment_intents,
+    wallet_transactions,
+    user_api_keys,
+)
 
 router = APIRouter()
 

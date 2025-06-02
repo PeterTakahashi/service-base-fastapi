@@ -5,7 +5,7 @@ from app.v1.schemas.user_api_key import (
     UserApiKeyRead,
     UserApiKeyCreate,
     UserApiKeyUpdate,
-    UserApiKeySearchParams
+    UserApiKeySearchParams,
 )
 
 router = APIRouter()
@@ -25,6 +25,7 @@ async def list_user_api_keys(
     """
     # return await user_api_key_service.get_list(request=request)
 
+
 @router.post(
     "",
     response_model=UserApiKeyRead,
@@ -40,6 +41,7 @@ async def create_user_api_key(
     """
     # return await user_api_key_service.create(request=request, user_api_key_create=user_api_key_create)
 
+
 @router.patch(
     "/{user_api_key_id}",
     response_model=UserApiKeyRead,
@@ -54,6 +56,7 @@ async def update_user_api_key(
     Update an existing user API key.
     """
     # return await user_api_key_service.update(request=request, user_api_key_id=user_api_key_id, user_api_key_update=user_api_key_update)
+
 
 @router.delete(
     "/{user_api_key_id}",
