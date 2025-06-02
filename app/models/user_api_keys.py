@@ -13,6 +13,7 @@ class UserApiKey(Base):
     __tablename__ = "user_api_keys"
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    name: Mapped[str] = mapped_column(String, nullable=False)
     api_key: Mapped[str] = mapped_column(
         String, unique=True, index=True, nullable=False
     )
