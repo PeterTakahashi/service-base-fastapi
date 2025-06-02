@@ -1,6 +1,6 @@
 from .oauth_account import OAuthAccount
 from .user import User
-from .user_api_keys import UserApiKey
+from .user_api_key import UserApiKey
 from .wallet import Wallet
 from .wallet_transaction import WalletTransaction
 

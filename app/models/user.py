@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from app.models.wallet import Wallet
-    from app.models.user_api_keys import UserApiKey
+    from app.models.user_api_key import UserApiKey
 
 
 class User(SQLAlchemyBaseUserTableUUID, Base):

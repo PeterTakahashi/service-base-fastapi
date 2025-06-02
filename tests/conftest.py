@@ -6,7 +6,7 @@ import pytest_asyncio
 from app.core.startup import database
 from app.db.session import get_async_session
 from faker import Faker
-from tests.fixtures.model_fixture import (
+from tests.fixtures.models import (
     user,
     other_user,
     users,
@@ -15,11 +15,15 @@ from tests.fixtures.model_fixture import (
     wallets,
     wallet_transaction,
     other_wallet_transaction,
+    user_api_key,
+    soft_deleted_user_api_key,
+    user_api_keys,
 )
 from tests.fixtures.repository_fixture import (
     user_repository,
     wallet_repository,
     wallet_transaction_repository,
+    user_api_key_repository,
 )
 from tests.fixtures.service_fixture import (
     user_service,
@@ -33,6 +37,7 @@ from tests.mocks.stripe import (
 from tests.factories.user_factory import user_factory
 from tests.factories.wallet_factory import wallet_factory
 from tests.factories.wallet_transaction_factory import wallet_transaction_factory
+from tests.factories.user_api_key_factory import user_api_key_factory
 
 
 @pytest.fixture(scope="session")

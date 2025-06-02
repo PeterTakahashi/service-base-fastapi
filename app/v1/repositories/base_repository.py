@@ -151,7 +151,12 @@ class BaseRepository:
         """
         Count records with optional filtering.
         """
-        conditions = await self.__get_conditions(**search_params)
+        conditions = []
+        if not disable_default_scope:
+            default_conditions = await self.__get_conditions(**self.default_scope)
+            conditions.extend(default_conditions)
+
+        conditions += await self.__get_conditions(**search_params)
         query = select(func.count("*")).select_from(self.model).where(*conditions)
         result = await self.session.execute(query)
         return result.scalar() or 0
@@ -182,13 +187,11 @@ class BaseRepository:
         Generate a query with optional filtering, sorting, and pagination.
         Apply default scope if not disabled.
         """
-        # default scopeの条件を適用
         conditions = []
         if not disable_default_scope:
             default_conditions = await self.__get_conditions(**self.default_scope)
             conditions.extend(default_conditions)
 
-        # 通常の検索条件を適用
         conditions += await self.__get_conditions(**search_params)
 
         query = select(self.model).where(*conditions)

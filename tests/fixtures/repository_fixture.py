@@ -4,6 +4,7 @@ from app.v1.repositories.wallet_repository import WalletRepository
 from app.v1.repositories.wallet_transaction_repository import (
     WalletTransactionRepository,
 )
+from app.v1.repositories.user_api_key_repository import UserApiKeyRepository
 
 
 @pytest_asyncio.fixture
@@ -19,3 +20,8 @@ async def wallet_repository(async_session):
 @pytest_asyncio.fixture
 async def wallet_transaction_repository(async_session):
     return WalletTransactionRepository(async_session)
+
+
+@pytest_asyncio.fixture
+async def user_api_key_repository(async_session):
+    return UserApiKeyRepository(async_session)
