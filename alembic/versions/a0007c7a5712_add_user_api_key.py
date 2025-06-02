@@ -1,8 +1,8 @@
 """add user api key
 
-Revision ID: 57170b11d50c
+Revision ID: a0007c7a5712
 Revises: 0aa4e1912fc4
-Create Date: 2025-06-02 03:22:18.552171
+Create Date: 2025-06-02 03:59:04.209303
 
 """
 
@@ -10,10 +10,11 @@ from typing import Sequence, Union
 
 from alembic import op
 import sqlalchemy as sa
+import fastapi_users_db_sqlalchemy
 
 
 # revision identifiers, used by Alembic.
-revision: str = "57170b11d50c"
+revision: str = "a0007c7a5712"
 down_revision: Union[str, None] = "0aa4e1912fc4"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -26,7 +27,9 @@ def upgrade() -> None:
         "user_api_keys",
         sa.Column("id", sa.Integer(), nullable=False),
         sa.Column("api_key", sa.String(), nullable=False),
-        sa.Column("user_id", sa.Uuid(), nullable=True),
+        sa.Column(
+            "user_id", fastapi_users_db_sqlalchemy.generics.GUID(), nullable=False
+        ),
         sa.Column("expires_at", sa.DateTime(), nullable=True),
         sa.Column("allowed_origin", sa.String(), nullable=True),
         sa.Column("allowed_ip", sa.String(), nullable=True),
