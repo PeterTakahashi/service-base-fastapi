@@ -27,6 +27,3 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
         "OAuthAccount", lazy="joined"
     )
     wallet: Mapped["Wallet"] = relationship(back_populates="user", uselist=False)
-    user_api_keys: Mapped[List["UserApiKey"]] = relationship(
-        "UserApiKey", back_populates="user", cascade="all, delete-orphan"
-    )

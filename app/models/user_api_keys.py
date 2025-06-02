@@ -20,4 +20,3 @@ class UserApiKey(Base):
     )
     deleted_at = Column(DateTime, nullable=True)
 
-    user = relationship("User", back_populates="api_keys")
