@@ -7,6 +7,10 @@ from app.v1.schemas.user_api_key import (
     UserApiKeyUpdate,
     UserApiKeySearchParams,
 )
+from app.v1.dependencies.services.user_api_key_service import get_user_api_key_service
+from app.v1.services.user_api_key_service import UserApiKeyService
+from app.lib.fastapi_users.user_setup import current_active_user
+from app.models.user import User
 
 router = APIRouter()
 
@@ -19,11 +23,13 @@ router = APIRouter()
 async def list_user_api_keys(
     request: Request,
     search_params: UserApiKeySearchParams = Depends(),
+    user: User = Depends(current_active_user),
+    service: UserApiKeyService = Depends(get_user_api_key_service),
 ):
     """
     Retrieve a list of user API keys with filtering, sorting, and pagination.
     """
-    # return await user_api_key_service.get_list(request=request)
+    return await service.get_list(user_id=user.id, search_params=search_params)
 
 
 @router.post(
