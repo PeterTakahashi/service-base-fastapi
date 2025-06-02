@@ -1,8 +1,12 @@
 from app.db.base import Base
 from sqlalchemy import Column, String, Integer, DateTime, ForeignKey
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, Mapped
 from datetime import datetime
 from sqlalchemy import Uuid
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from app.models.user import User
 
 
 class UserApiKey(Base):
@@ -20,3 +24,4 @@ class UserApiKey(Base):
     )
     deleted_at = Column(DateTime, nullable=True)
 
+    user: Mapped["User"] = relationship("User", back_populates="user_api_keys")
