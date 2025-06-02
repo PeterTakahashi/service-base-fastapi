@@ -29,6 +29,8 @@ OPERATORS = {
 
 
 class BaseRepository:
+    default_scope: dict = {}
+
     def __init__(self, session: AsyncSession, model=None):
         self.session = session
         if not model:
@@ -42,6 +44,7 @@ class BaseRepository:
         sorted_order: str = "asc",
         joinedload_models: Optional[List] = None,
         lazyload_models: Optional[List] = None,
+        disable_default_scope: bool = False,
     ):
         """
         Find a record by its ID. Raise an exception if not found.
@@ -53,6 +56,7 @@ class BaseRepository:
             sorted_order=sorted_order,
             joinedload_models=joinedload_models,
             lazyload_models=lazyload_models,
+            disable_default_scope=disable_default_scope,
             id=id,
         )
 
@@ -70,6 +74,7 @@ class BaseRepository:
         sorted_order: str = "asc",
         joinedload_models: Optional[List] = None,
         lazyload_models: Optional[List] = None,
+        disable_default_scope: bool = False,
         **search_params,
     ):
         """
@@ -82,6 +87,7 @@ class BaseRepository:
             sorted_order=sorted_order,
             joinedload_models=joinedload_models,
             lazyload_models=lazyload_models,
+            disable_default_scope=disable_default_scope,
             **search_params,
         )
         result = await self.session.execute(query)
@@ -94,6 +100,7 @@ class BaseRepository:
         sorted_order: str = "asc",
         joinedload_models: Optional[List] = None,
         lazyload_models: Optional[List] = None,
+        disable_default_scope: bool = False,
         **search_params,
     ):
         """
@@ -104,6 +111,7 @@ class BaseRepository:
             sorted_order=sorted_order,
             joinedload_models=joinedload_models,
             lazyload_models=lazyload_models,
+            disable_default_scope=disable_default_scope,
             **search_params,
         )
         if not instance:
@@ -120,6 +128,7 @@ class BaseRepository:
         sorted_order: str = "asc",
         joinedload_models: Optional[List] = None,
         lazyload_models: Optional[List] = None,
+        disable_default_scope: bool = False,
         **search_params,
     ):
         """
@@ -132,25 +141,35 @@ class BaseRepository:
             sorted_order=sorted_order,
             joinedload_models=joinedload_models,
             lazyload_models=lazyload_models,
+            disable_default_scope=disable_default_scope,
             **search_params,
         )
         result = await self.session.execute(query)
         return result.unique().scalars().all()
 
-    async def count(self, **search_params) -> int:
+    async def count(self, disable_default_scope: bool = False, **search_params) -> int:
         """
         Count records with optional filtering.
         """
-        conditions = await self.__get_conditions(**search_params)
+        conditions = []
+        if not disable_default_scope:
+            default_conditions = await self.__get_conditions(**self.default_scope)
+            conditions.extend(default_conditions)
+
+        conditions += await self.__get_conditions(**search_params)
         query = select(func.count("*")).select_from(self.model).where(*conditions)
         result = await self.session.execute(query)
         return result.scalar() or 0
 
-    async def exists(self, **search_params) -> bool:
+    async def exists(
+        self, disable_default_scope: bool = False, **search_params
+    ) -> bool:
         """
         Check if any record exists with the given attributes.
         """
-        counted = await self.count(**search_params)
+        counted = await self.count(
+            disable_default_scope=disable_default_scope, **search_params
+        )
         return counted > 0
 
     async def __generate_query(
@@ -161,12 +180,20 @@ class BaseRepository:
         sorted_order: str = "asc",
         joinedload_models: Optional[List] = None,
         lazyload_models: Optional[List] = None,
+        disable_default_scope: bool = False,
         **search_params,
     ):
         """
         Generate a query with optional filtering, sorting, and pagination.
+        Apply default scope if not disabled.
         """
-        conditions = await self.__get_conditions(**search_params)
+        conditions = []
+        if not disable_default_scope:
+            default_conditions = await self.__get_conditions(**self.default_scope)
+            conditions.extend(default_conditions)
+
+        conditions += await self.__get_conditions(**search_params)
+
         query = select(self.model).where(*conditions)
 
         if joinedload_models:
@@ -229,18 +256,18 @@ class BaseRepository:
 
         return conditions
 
-    async def create(self, **search_params):
+    async def create(self, **create_params):
         """
         Generic create method that instantiates the model,
         saves it, and returns the new instance.
         """
-        instance = self.model(**search_params)
+        instance = self.model(**create_params)
         self.session.add(instance)
         await self.session.commit()
         await self.session.refresh(instance)
         return instance
 
-    async def update(self, id: Union[int, UUID], **search_params):
+    async def update(self, id: Union[int, UUID], **update_params):
         """
         Update a single record by its primary key.
         Raises NoResultFound if the record doesn't exist.
@@ -249,7 +276,7 @@ class BaseRepository:
             await repository.update(some_id, field1='value1', field2='value2')
         """
         instance = await self.find(id)
-        for field, value in search_params.items():
+        for field, value in update_params.items():
             setattr(instance, field, value)
         await self.session.commit()
         await self.session.refresh(instance)

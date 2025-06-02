@@ -19,6 +19,7 @@ from app.models.user import User
 from app.models.wallet import Wallet
 from app.models.wallet_transaction import WalletTransaction
 from app.models.oauth_account import OAuthAccount
+from app.models.user_api_key import UserApiKey
 
 load_dotenv()
 

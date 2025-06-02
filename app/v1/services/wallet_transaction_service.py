@@ -7,20 +7,8 @@ from app.v1.schemas.common.list.base_list_response import ListResponseMeta
 
 
 class WalletTransactionService:
-    def __init__(self, wallet_repository, wallet_transaction_repository):
-        self.wallet_repository = wallet_repository
+    def __init__(self, wallet_transaction_repository):
         self.wallet_transaction_repository = wallet_transaction_repository
-
-    async def get(
-        self, wallet_id: int, wallet_transaction_id: int
-    ) -> WalletTransactionRead:
-        """
-        Retrieve a wallet transaction by its ID.
-        """
-        wallet_transaction = await self.wallet_transaction_repository.find_by_or_raise(
-            wallet_id=wallet_id, id=wallet_transaction_id
-        )
-        return WalletTransactionRead.model_validate(wallet_transaction)
 
     async def get_list(
         self,
@@ -50,3 +38,14 @@ class WalletTransactionService:
                 WalletTransactionRead.model_validate(tx) for tx in wallet_transactions
             ],
         )
+
+    async def get(
+        self, wallet_id: int, wallet_transaction_id: int
+    ) -> WalletTransactionRead:
+        """
+        Retrieve a wallet transaction by its ID.
+        """
+        wallet_transaction = await self.wallet_transaction_repository.find_by_or_raise(
+            wallet_id=wallet_id, id=wallet_transaction_id
+        )
+        return WalletTransactionRead.model_validate(wallet_transaction)

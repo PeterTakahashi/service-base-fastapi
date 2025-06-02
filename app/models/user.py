@@ -9,6 +9,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from app.models.wallet import Wallet
+    from app.models.user_api_key import UserApiKey
 
 
 class User(SQLAlchemyBaseUserTableUUID, Base):
@@ -26,3 +27,6 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
         "OAuthAccount", lazy="joined"
     )
     wallet: Mapped["Wallet"] = relationship(back_populates="user", uselist=False)
+    user_api_keys: Mapped[List["UserApiKey"]] = relationship(
+        "UserApiKey", back_populates="user", cascade="all, delete-orphan"
+    )
