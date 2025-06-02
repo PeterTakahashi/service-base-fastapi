@@ -29,7 +29,7 @@ OPERATORS = {
 
 
 class BaseRepository:
-    default_scope = {}
+    default_scope: dict = {}
 
     def __init__(self, session: AsyncSession, model=None):
         self.session = session
