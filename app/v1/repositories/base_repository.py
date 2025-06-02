@@ -29,6 +29,8 @@ OPERATORS = {
 
 
 class BaseRepository:
+    default_scope = {}
+
     def __init__(self, session: AsyncSession, model=None):
         self.session = session
         if not model:
@@ -42,6 +44,7 @@ class BaseRepository:
         sorted_order: str = "asc",
         joinedload_models: Optional[List] = None,
         lazyload_models: Optional[List] = None,
+        disable_default_scope: bool = False,
     ):
         """
         Find a record by its ID. Raise an exception if not found.
@@ -53,6 +56,7 @@ class BaseRepository:
             sorted_order=sorted_order,
             joinedload_models=joinedload_models,
             lazyload_models=lazyload_models,
+            disable_default_scope=disable_default_scope,
             id=id,
         )
 
@@ -70,6 +74,7 @@ class BaseRepository:
         sorted_order: str = "asc",
         joinedload_models: Optional[List] = None,
         lazyload_models: Optional[List] = None,
+        disable_default_scope: bool = False,
         **search_params,
     ):
         """
@@ -82,6 +87,7 @@ class BaseRepository:
             sorted_order=sorted_order,
             joinedload_models=joinedload_models,
             lazyload_models=lazyload_models,
+            disable_default_scope=disable_default_scope,
             **search_params,
         )
         result = await self.session.execute(query)
@@ -94,6 +100,7 @@ class BaseRepository:
         sorted_order: str = "asc",
         joinedload_models: Optional[List] = None,
         lazyload_models: Optional[List] = None,
+        disable_default_scope: bool = False,
         **search_params,
     ):
         """
@@ -104,6 +111,7 @@ class BaseRepository:
             sorted_order=sorted_order,
             joinedload_models=joinedload_models,
             lazyload_models=lazyload_models,
+            disable_default_scope=disable_default_scope,
             **search_params,
         )
         if not instance:
@@ -120,6 +128,7 @@ class BaseRepository:
         sorted_order: str = "asc",
         joinedload_models: Optional[List] = None,
         lazyload_models: Optional[List] = None,
+        disable_default_scope: bool = False,
         **search_params,
     ):
         """
@@ -132,12 +141,13 @@ class BaseRepository:
             sorted_order=sorted_order,
             joinedload_models=joinedload_models,
             lazyload_models=lazyload_models,
+            disable_default_scope=disable_default_scope,
             **search_params,
         )
         result = await self.session.execute(query)
         return result.unique().scalars().all()
 
-    async def count(self, **search_params) -> int:
+    async def count(self, disable_default_scope: bool = False, **search_params) -> int:
         """
         Count records with optional filtering.
         """
@@ -146,11 +156,15 @@ class BaseRepository:
         result = await self.session.execute(query)
         return result.scalar() or 0
 
-    async def exists(self, **search_params) -> bool:
+    async def exists(
+        self, disable_default_scope: bool = False, **search_params
+    ) -> bool:
         """
         Check if any record exists with the given attributes.
         """
-        counted = await self.count(**search_params)
+        counted = await self.count(
+            disable_default_scope=disable_default_scope, **search_params
+        )
         return counted > 0
 
     async def __generate_query(
@@ -161,12 +175,22 @@ class BaseRepository:
         sorted_order: str = "asc",
         joinedload_models: Optional[List] = None,
         lazyload_models: Optional[List] = None,
+        disable_default_scope: bool = False,
         **search_params,
     ):
         """
         Generate a query with optional filtering, sorting, and pagination.
+        Apply default scope if not disabled.
         """
-        conditions = await self.__get_conditions(**search_params)
+        # default scopeの条件を適用
+        conditions = []
+        if not disable_default_scope:
+            default_conditions = await self.__get_conditions(**self.default_scope)
+            conditions.extend(default_conditions)
+
+        # 通常の検索条件を適用
+        conditions += await self.__get_conditions(**search_params)
+
         query = select(self.model).where(*conditions)
 
         if joinedload_models:
