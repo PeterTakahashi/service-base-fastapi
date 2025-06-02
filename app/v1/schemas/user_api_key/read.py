@@ -8,6 +8,8 @@ class UserApiKeyRead(HasEncodedID):
         ...,
         description="Name of the API key",
         json_schema_extra={"example": "My API Key"},
+        max_length=255,
+        min_length=1,
     )
     api_key: str = Field(
         ...,

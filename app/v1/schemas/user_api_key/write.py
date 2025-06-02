@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import Optional
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, Field, ConfigDict, field_validator
 
 
 class UserApiKeyCreate(BaseModel):
@@ -8,6 +8,8 @@ class UserApiKeyCreate(BaseModel):
         ...,
         description="Name of the API key",
         json_schema_extra={"example": "My API Key"},
+        max_length=255,
+        min_length=1,
     )
     expires_at: Optional[datetime] = Field(
         None,
@@ -27,27 +29,12 @@ class UserApiKeyCreate(BaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
+    @field_validator("expires_at")
+    def validate_expires_at(cls, value: Optional[datetime]) -> Optional[datetime]:
+        if value and value < datetime.utcnow():
+            raise ValueError("The expiration datetime cannot be in the past.")
+        return value
 
-class UserApiKeyUpdate(BaseModel):
-    name: Optional[str] = Field(
-        None,
-        description="Updated name of the API key",
-        json_schema_extra={"example": "My Updated API Key"},
-    )
-    expires_at: Optional[datetime] = Field(
-        None,
-        description="Updated expiration datetime",
-        json_schema_extra={"example": "2025-12-31T23:59:59Z"},
-    )
-    allowed_origin: Optional[str] = Field(
-        None,
-        description="Updated CORS allowed origin",
-        json_schema_extra={"example": "https://example.com"},
-    )
-    allowed_ip: Optional[str] = Field(
-        None,
-        description="Updated allowed IP address",
-        json_schema_extra={"example": "192.168.1.1"},
-    )
 
-    model_config = ConfigDict(from_attributes=True)
+class UserApiKeyUpdate(UserApiKeyCreate):
+    pass

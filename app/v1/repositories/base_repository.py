@@ -256,18 +256,18 @@ class BaseRepository:
 
         return conditions
 
-    async def create(self, **search_params):
+    async def create(self, **create_params):
         """
         Generic create method that instantiates the model,
         saves it, and returns the new instance.
         """
-        instance = self.model(**search_params)
+        instance = self.model(**create_params)
         self.session.add(instance)
         await self.session.commit()
         await self.session.refresh(instance)
         return instance
 
-    async def update(self, id: Union[int, UUID], **search_params):
+    async def update(self, id: Union[int, UUID], **update_params):
         """
         Update a single record by its primary key.
         Raises NoResultFound if the record doesn't exist.
@@ -276,7 +276,7 @@ class BaseRepository:
             await repository.update(some_id, field1='value1', field2='value2')
         """
         instance = await self.find(id)
-        for field, value in search_params.items():
+        for field, value in update_params.items():
             setattr(instance, field, value)
         await self.session.commit()
         await self.session.refresh(instance)

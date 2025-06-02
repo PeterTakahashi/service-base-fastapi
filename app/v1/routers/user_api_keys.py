@@ -8,9 +8,11 @@ from app.v1.schemas.user_api_key import (
     UserApiKeySearchParams,
 )
 from app.v1.dependencies.services.user_api_key_service import get_user_api_key_service
+from app.v1.dependencies.models.user_api_key.get_user_api_key import get_user_api_key
 from app.v1.services.user_api_key_service import UserApiKeyService
 from app.lib.fastapi_users.user_setup import current_active_user
 from app.models.user import User
+from app.models.user_api_key import UserApiKey
 
 router = APIRouter()
 
@@ -41,11 +43,15 @@ async def list_user_api_keys(
 async def create_user_api_key(
     request: Request,
     user_api_key_create: UserApiKeyCreate,
+    user: User = Depends(current_active_user),
+    service: UserApiKeyService = Depends(get_user_api_key_service),
 ):
     """
     Create a new user API key.
     """
-    # return await user_api_key_service.create(request=request, user_api_key_create=user_api_key_create)
+    return await service.create(
+        user_id=user.id, user_api_key_create=user_api_key_create
+    )
 
 
 @router.patch(
@@ -55,13 +61,16 @@ async def create_user_api_key(
 )
 async def update_user_api_key(
     request: Request,
-    user_api_key_id: str,
     user_api_key_update: UserApiKeyUpdate,
+    user_api_key: UserApiKey = Depends(get_user_api_key),
+    service: UserApiKeyService = Depends(get_user_api_key_service),
 ):
     """
     Update an existing user API key.
     """
-    # return await user_api_key_service.update(request=request, user_api_key_id=user_api_key_id, user_api_key_update=user_api_key_update)
+    return await service.update(
+        user_api_key_id=user_api_key.id, user_api_key_update=user_api_key_update
+    )
 
 
 @router.delete(
@@ -71,9 +80,11 @@ async def update_user_api_key(
 )
 async def delete_user_api_key(
     request: Request,
-    user_api_key_id: str,
-):
+    user_api_key: UserApiKey = Depends(get_user_api_key),
+    service: UserApiKeyService = Depends(get_user_api_key_service),
+) -> None:
     """
     Delete a user API key.
     """
-    # await user_api_key_service.delete(request=request, user_api_key_id=user_api_key_id)
+    await service.delete(user_api_key_id=user_api_key.id)
+    return None

@@ -6,7 +6,7 @@ from app.v1.schemas.user_api_key import (
     UserApiKeySearchParams,
 )
 from app.v1.schemas.common.list.base_list_response import ListResponseMeta
-from uuid import UUID
+from uuid import UUID, uuid4
 
 
 class UserApiKeyService:
@@ -44,21 +44,25 @@ class UserApiKeyService:
         """
         Create a new user API key.
         """
-        # Implement the logic to create a new user API key
-        pass
+        api_key = uuid4().hex
+        user_api_key = await self.user_api_key_repository.create(
+            user_id=user_id, api_key=api_key, **user_api_key_create.model_dump()
+        )
+        return UserApiKeyRead.model_validate(user_api_key)
 
     async def update(
-        self, user_id: UUID, user_api_key_id: str, user_api_key_update: UserApiKeyUpdate
+        self, user_api_key_id: int, user_api_key_update: UserApiKeyUpdate
     ) -> UserApiKeyRead:
         """
         Update an existing user API key.
         """
-        # Implement the logic to update an existing user API key
-        pass
+        user_api_key = await self.user_api_key_repository.update(
+            id=user_api_key_id, **user_api_key_update.model_dump()
+        )
+        return UserApiKeyRead.model_validate(user_api_key)
 
-    async def delete(self, user_id: UUID, user_api_key_id: str):
+    async def delete(self, user_api_key_id: int) -> None:
         """
         Delete a user API key.
         """
-        # Implement the logic to delete a user API key
-        pass
+        await self.user_api_key_repository.soft_delete(id=user_api_key_id)
