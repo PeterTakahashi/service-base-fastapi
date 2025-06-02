@@ -1,5 +1,5 @@
 from datetime import datetime
-from pydantic import Field, ConfigDict
+from pydantic import Field
 from app.models.wallet_transaction import WalletTransactionType, WalletTransactionStatus
 from app.v1.schemas.common.id_encoder import HasEncodedID
 
@@ -34,5 +34,3 @@ class WalletTransactionRead(HasEncodedID):
         description="The date and time when the transaction was last updated.",
         json_schema_extra={"example": "2023-10-01T12:00:00Z"},
     )
-
-    model_config = ConfigDict(from_attributes=True)
