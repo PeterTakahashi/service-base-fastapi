@@ -16,8 +16,8 @@ async def payment_intent_service(wallet_repository, wallet_transaction_repositor
 
 
 @pytest_asyncio.fixture
-async def wallet_transaction_service(wallet_repository, wallet_transaction_repository):
-    return WalletTransactionService(wallet_repository, wallet_transaction_repository)
+async def wallet_transaction_service(wallet_transaction_repository):
+    return WalletTransactionService(wallet_transaction_repository)
 
 
 @pytest_asyncio.fixture

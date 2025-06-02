@@ -7,8 +7,7 @@ from app.v1.schemas.common.list.base_list_response import ListResponseMeta
 
 
 class WalletTransactionService:
-    def __init__(self, wallet_repository, wallet_transaction_repository):
-        self.wallet_repository = wallet_repository
+    def __init__(self, wallet_transaction_repository):
         self.wallet_transaction_repository = wallet_transaction_repository
 
     async def get_list(
