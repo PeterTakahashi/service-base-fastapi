@@ -2,6 +2,7 @@ from app.models.user_api_key import UserApiKey
 from tests.factories.async_factory import AsyncSQLAlchemyModelFactory
 import factory
 import pytest_asyncio
+import secrets
 
 
 class UserApiKeyFactory(AsyncSQLAlchemyModelFactory):
@@ -9,7 +10,7 @@ class UserApiKeyFactory(AsyncSQLAlchemyModelFactory):
         model = UserApiKey
 
     name = factory.Faker("word")
-    api_key = factory.Faker("uuid4")
+    api_key = factory.Sequence(lambda n: secrets.token_urlsafe(32) + str(n))
     user_id = factory.Faker("uuid4")
     expires_at = factory.Faker("future_datetime", end_date="+1y")
     allowed_origin = factory.Faker("url")

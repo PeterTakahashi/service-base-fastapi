@@ -6,7 +6,8 @@ from app.v1.schemas.user_api_key import (
     UserApiKeySearchParams,
 )
 from app.v1.schemas.common.list.base_list_response import ListResponseMeta
-from uuid import UUID, uuid4
+from uuid import UUID
+import secrets
 
 
 class UserApiKeyService:
@@ -44,7 +45,7 @@ class UserApiKeyService:
         """
         Create a new user API key.
         """
-        api_key = uuid4().hex
+        api_key = secrets.token_urlsafe(32)
         user_api_key = await self.user_api_key_repository.create(
             user_id=user_id, api_key=api_key, **user_api_key_create.model_dump()
         )
