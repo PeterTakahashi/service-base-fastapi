@@ -3,6 +3,7 @@ from .user_api_key_fixture import (
     soft_deleted_user_api_key,
     user_api_keys,
     expired_user_api_key,
+    user_api_key_with_expires_at,
 )
 from .user_fixture import user, other_user, users
 from .wallet_fixture import wallet, other_wallet, wallets
@@ -22,4 +23,5 @@ __all__ = [
     "soft_deleted_user_api_key",
     "user_api_keys",
     "expired_user_api_key",
+    "user_api_key_with_expires_at",
 ]

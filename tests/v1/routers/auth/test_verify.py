@@ -6,10 +6,12 @@ from tests.common.mailer import (
 
 
 async def test_verify_token_success(
-    auth_client: AsyncClient, access_token: str, fake_email: str
+    not_verified_auth_client: AsyncClient,
+    not_verified_access_token: str,
+    fake_email: str,
 ):
     # 1. Request Verify the token
-    await auth_client.post(
+    await not_verified_auth_client.post(
         "/auth/request-verify-token",
         json={"email": fake_email},
     )
@@ -20,7 +22,7 @@ async def test_verify_token_success(
     )
 
     # 2. Verify the token
-    response = await auth_client.post(
+    response = await not_verified_auth_client.post(
         "/auth/verify",
         json={"token": token},
     )
@@ -28,7 +30,7 @@ async def test_verify_token_success(
     # 3. Check the response
     assert response.status_code == 200
 
-    response = await auth_client.get("/users/me")
+    response = await not_verified_auth_client.get("/users/me")
     assert response.status_code == 200
     assert response.json()["email"] == fake_email
     assert response.json()["is_verified"] is True
