@@ -10,13 +10,16 @@ from app.core.i18n import get_locale, get_message
 async def http_exception_handler(request: Request, exc: StarletteHTTPException):
     locale = get_locale(request)
     if exc.status_code == 401:
+        code = (
+            exc.detail.get("code") if isinstance(exc.detail, dict) else "unauthorized"
+        )
         return JSONResponse(
             status_code=401,
             content={
                 "errors": [
                     {
                         "status": "401",
-                        "code": "unauthorized",
+                        "code": code,
                         "title": get_message(locale, "unauthorized", "title"),
                         "detail": get_message(locale, "unauthorized", "detail"),
                     }

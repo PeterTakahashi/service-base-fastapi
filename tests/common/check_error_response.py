@@ -2,12 +2,12 @@ from app.core.response_type import not_found_response_detail
 from app.core.response_type import forbidden_detail
 
 
-def check_unauthorized_response(response):
+def check_unauthorized_response(response, code: str = "unauthorized"):
     assert response.status_code == 401
     assert response.json() == {
         "errors": [
             {
-                "code": "unauthorized",
+                "code": code,
                 "detail": (
                     "Authentication credentials were not provided or are invalid."
                 ),

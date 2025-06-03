@@ -9,6 +9,14 @@ async def user_api_key(async_session, user, user_api_key_factory):
 
 
 @pytest_asyncio.fixture
+async def user_api_key_with_expires_at(async_session, user, user_api_key_factory):
+    user_api_key = await user_api_key_factory.create(
+        user=user, expires_at=datetime.utcnow() + timedelta(days=1)
+    )
+    return user_api_key
+
+
+@pytest_asyncio.fixture
 async def expired_user_api_key(async_session, user, user_api_key_factory):
     user_api_key = await user_api_key_factory.create(
         user=user, expires_at=datetime.utcnow() - timedelta(days=1)

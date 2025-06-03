@@ -1,27 +1,6 @@
 from fastapi import status
 from app.v1.schemas.common.error import ErrorResponse
 from app.lib.camel_to_snake import camel_to_snake
-from typing import Any, Dict
-
-unauthorized_response: Dict[int | str, Dict[str, Any]] = {
-    status.HTTP_401_UNAUTHORIZED: {
-        "description": "Unauthorized",
-        "content": {"application/json": {"example": {"detail": "Not authenticated"}}},
-    }
-}
-
-
-def unauthorized_detail(code: str = "unauthorized") -> Dict[str, Any]:
-    return {
-        "errors": [
-            {
-                "status": "401",
-                "code": code,
-                "title": "Unauthorized",
-                "detail": "Authentication credentials were not provided or are invalid.",
-            }
-        ]
-    }
 
 
 forbidden_detail = {

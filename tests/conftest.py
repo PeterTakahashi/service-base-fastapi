@@ -19,6 +19,7 @@ from tests.fixtures.models import (
     soft_deleted_user_api_key,
     user_api_keys,
     expired_user_api_key,
+    user_api_key_with_expires_at,
 )
 from tests.fixtures.repository_fixture import (
     user_repository,
