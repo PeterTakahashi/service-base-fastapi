@@ -10,16 +10,19 @@ unauthorized_response: Dict[int | str, Dict[str, Any]] = {
     }
 }
 
-unauthorized_detail = {
-    "errors": [
-        {
-            "status": "401",
-            "code": "unauthorized",
-            "title": "Unauthorized",
-            "detail": "Authentication credentials were not provided or are invalid.",
-        }
-    ]
-}
+
+def unauthorized_detail(code: str = "unauthorized") -> Dict[str, Any]:
+    return {
+        "errors": [
+            {
+                "status": "401",
+                "code": code,
+                "title": "Unauthorized",
+                "detail": "Authentication credentials were not provided or are invalid.",
+            }
+        ]
+    }
+
 
 forbidden_detail = {
     "errors": [
