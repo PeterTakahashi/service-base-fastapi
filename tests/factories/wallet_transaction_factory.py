@@ -13,7 +13,7 @@ class WalletTransactionFactory(AsyncSQLAlchemyModelFactory):
     amount = factory.Faker("random_int", min=100, max=10000)
     stripe_payment_intent_id = factory.Faker("uuid4")
     wallet_transaction_type = factory.Faker(
-        "random_element", elements=["DEPOSIT", "WITHDRAWAL"]
+        "random_element", elements=["DEPOSIT", "SPEND"]
     )
     wallet_transaction_status = factory.Faker(
         "random_element", elements=["PENDING", "COMPLETED", "FAILED"]
