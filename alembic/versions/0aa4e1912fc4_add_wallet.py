@@ -53,7 +53,7 @@ def upgrade() -> None:
         sa.Column("stripe_payment_intent_id", sa.String(), nullable=True),
         sa.Column(
             "wallet_transaction_type",
-            sa.Enum("DEPOSIT", "WITHDRAWAL", "SPEND", name="wallettransactiontype"),
+            sa.Enum("DEPOSIT", "SPEND", name="wallettransactiontype"),
             nullable=False,
         ),
         sa.Column(

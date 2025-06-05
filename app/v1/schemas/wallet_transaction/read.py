@@ -16,7 +16,7 @@ class WalletTransactionRead(HasEncodedID):
     )
     wallet_transaction_type: WalletTransactionType = Field(
         ...,
-        description="The type of the wallet transaction (e.g., 'deposit', 'withdrawal').",
+        description="The type of the wallet transaction (e.g., 'deposit', 'spend').",
         json_schema_extra={"example": WalletTransactionType.DEPOSIT.value},
     )
     wallet_transaction_status: WalletTransactionStatus = Field(

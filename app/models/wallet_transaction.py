@@ -12,7 +12,6 @@ if TYPE_CHECKING:
 
 class WalletTransactionType(enum.Enum):  # Use standard enum.Enum
     DEPOSIT = "deposit"
-    WITHDRAWAL = "withdrawal"
     SPEND = "spend"
 
 
