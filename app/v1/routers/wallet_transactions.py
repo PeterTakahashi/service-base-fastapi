@@ -12,6 +12,9 @@ from app.lib.convert_id import decode_id
 from app.v1.dependencies.models.wallet.get_wallet_by_current_active_user import (
     get_wallet_by_current_active_user,
 )
+from app.v1.dependencies.query_params.get_wallet_transaction_search_params import (
+    get_wallet_transaction_search_params,
+)
 
 router = APIRouter()
 
@@ -22,7 +25,7 @@ router = APIRouter()
     name="wallet_transactions:list_wallet_transactions",
 )
 async def list_wallet_transactions(
-    search_params: WalletTransactionSearchParams = Depends(),
+    search_params: WalletTransactionSearchParams = Depends(get_wallet_transaction_search_params),
     wallet: Wallet = Depends(get_wallet_by_current_active_user),
     wallet_transaction_service=Depends(get_wallet_transaction_service),
 ):
