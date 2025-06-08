@@ -1,5 +1,6 @@
 from hashids import Hashids  # type: ignore[import]
 from app.core.config import settings
+from sqlalchemy.exc import NoResultFound
 
 hashids = Hashids(min_length=settings.HASHIDS_MIN_LENGTH, salt=settings.HASHIDS_SALT)
 
@@ -17,5 +18,5 @@ def decode_id(hashid: str) -> int:
     """
     decoded = hashids.decode(hashid)
     if not decoded:
-        raise ValueError(f"Invalid hashid: {hashid}")
+        raise NoResultFound(f"id '{hashid}' could not be decoded.")
     return decoded[0]
