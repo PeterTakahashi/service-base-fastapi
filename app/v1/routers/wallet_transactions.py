@@ -25,7 +25,9 @@ router = APIRouter()
     name="wallet_transactions:list_wallet_transactions",
 )
 async def list_wallet_transactions(
-    search_params: WalletTransactionSearchParams = Depends(get_wallet_transaction_search_params),
+    search_params: WalletTransactionSearchParams = Depends(
+        get_wallet_transaction_search_params
+    ),
     wallet: Wallet = Depends(get_wallet_by_current_active_user),
     wallet_transaction_service=Depends(get_wallet_transaction_service),
 ):

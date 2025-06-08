@@ -4,6 +4,7 @@ from httpx import AsyncClient
 from tests.common.check_error_response import check_unauthorized_response
 from app.v1.schemas.user_api_key.write import UserApiKeyCreate
 
+
 @pytest.mark.asyncio
 async def test_get_user_api_key_unauthenticated(client: AsyncClient):
     """
@@ -11,6 +12,7 @@ async def test_get_user_api_key_unauthenticated(client: AsyncClient):
     """
     response = await client.get("/user-api-keys/test")
     check_unauthorized_response(response)
+
 
 @pytest.mark.asyncio
 async def test_get_user_api_key(auth_client: AsyncClient):
@@ -38,6 +40,7 @@ async def test_get_user_api_key(auth_client: AsyncClient):
     assert response_json["name"] == user_api_key_create.name
     assert response_json["api_key"] is not None
 
+
 @pytest.mark.asyncio
 async def test_get_user_api_key_not_found(auth_client: AsyncClient):
     """
@@ -46,4 +49,7 @@ async def test_get_user_api_key_not_found(auth_client: AsyncClient):
     response = await auth_client.get("/user-api-keys/nonexistent-id")
     assert response.status_code == 404
     response_json = response.json()
-    assert response_json["errors"][0]["detail"] == 'The requested resource could not be found.'
+    assert (
+        response_json["errors"][0]["detail"]
+        == "The requested resource could not be found."
+    )
