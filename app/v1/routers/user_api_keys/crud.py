@@ -33,6 +33,18 @@ async def list_user_api_keys(
     """
     return await service.get_list(user_id=user.id, search_params=search_params)
 
+@router.get(
+   "/{user_api_key_id}",
+    response_model=UserApiKeyRead,
+    name="user_api_keys:get_user_api_keys",
+)
+async def get_user_api_keys(
+    user_api_key: UserApiKey = Depends(get_user_api_key),
+):
+    """
+    Retrieve a user API key by its ID.
+    """
+    return UserApiKeyRead.model_validate(user_api_key)
 
 @router.post(
     "",
