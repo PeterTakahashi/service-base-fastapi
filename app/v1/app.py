@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from app.v1.routers import api as api_router
 from app.core.config import settings
 from app.v1.openapi import custom_openapi
-from app.v1.exception_handlers import (
+from app.v1.exception_handlers.common import (
     http_exception_handler,
     server_exception_handler,
     validation_exception_handler,

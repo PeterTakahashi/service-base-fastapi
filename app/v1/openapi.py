@@ -36,6 +36,39 @@ def custom_openapi(app):
             "example": "en",
         },
     }
+
+    openapi_schema["components"]["schemas"]["ErrorSource"] = {
+        "title": "ErrorSource",
+        "type": "object",
+        "properties": {
+            "parameter": {"type": "string"},
+        }
+    }
+    openapi_schema["components"]["schemas"]["ErrorDetail"] = {
+        "title": "ErrorDetail",
+        "type": "object",
+        "properties": {
+            "status": {"type": "string"},
+            "code": {"type": "string"},
+            "title": {"type": "string"},
+            "detail": {"type": "string"},
+            "source": {"$ref": "#/components/schemas/ErrorSource"},
+        },
+        "required": ["status", "code", "title", "detail"],
+    }
+    openapi_schema["components"]["schemas"]["ErrorResponse"] = {
+        "title": "ErrorResponse",
+        "type": "object",
+        "properties": {
+            "errors": {
+                "type": "array",
+                "items": {"$ref": "#/components/schemas/ErrorDetail"},
+            }
+        },
+        "required": ["errors"],
+    }
+
+
     for path, path_item in openapi_schema["paths"].items():
         for method, method_item in path_item.items():
             responses = method_item.setdefault("responses", {})
@@ -102,6 +135,9 @@ def custom_openapi(app):
                     "description": "Validation Error",
                     "content": {
                         "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ErrorResponse"
+                            },
                             "example": {
                                 "errors": [
                                     {
