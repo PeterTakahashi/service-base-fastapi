@@ -5,6 +5,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app.core.i18n import get_locale, get_message
 
+
 def bad_request_json_content(code: str, instance: str, locale: str = "en"):
     return {
         "type": "about:blank",
@@ -20,6 +21,7 @@ def bad_request_json_content(code: str, instance: str, locale: str = "en"):
             }
         ],
     }
+
 
 def bad_request_exception_handler(request: Request, exc: StarletteHTTPException):
     if isinstance(exc.detail, dict):

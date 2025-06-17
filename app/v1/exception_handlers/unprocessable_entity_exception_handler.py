@@ -1,10 +1,46 @@
 from fastapi import Request, status
 from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
-from app.v1.exception_handlers.responses.unprocessable_entity_json_response import (
-    unprocessable_entity_json_content,
-)
-from app.core.i18n import get_locale
+from app.core.i18n import get_locale, get_message
+
+
+def unprocessable_entity_json_content(instance: str, errors: list[dict]) -> dict:
+    return {
+        "type": "about:blank",
+        "title": "Unprocessable Entity",
+        "status": status.HTTP_422_UNPROCESSABLE_ENTITY,
+        "instance": instance,
+        "errors": errors,
+    }
+
+
+def unprocessable_entity_json_content_with_code(
+    code: str,
+    instance: str,
+    source_parameter: str | None = None,
+    detail: str | None = None,
+    locale: str = "en",
+) -> dict:
+    error_detail = detail or get_message(locale, code, "detail")
+    if source_parameter is None:
+        source = {}
+    else:
+        source = {"pointer": f"#/{source_parameter}"}
+    return {
+        "type": "about:blank",
+        "title": "Unprocessable Entity",
+        "status": status.HTTP_422_UNPROCESSABLE_ENTITY,
+        "instance": instance,
+        "errors": [
+            {
+                "status": "422",
+                "code": code,
+                "title": get_message(locale, code, "title"),
+                "detail": error_detail,
+                "source": source,
+            }
+        ],
+    }
 
 
 def unprocessable_entity_exception_handler(
@@ -14,7 +50,7 @@ def unprocessable_entity_exception_handler(
         content = exc.detail
     elif isinstance(exc.detail, str):
         code = exc.detail.lower() if exc.detail else "unprocessable_entity"
-        content = unprocessable_entity_json_content(
+        content = unprocessable_entity_json_content_with_code(
             code=code, instance=str(request.url), locale=get_locale(request)
         )
     return JSONResponse(

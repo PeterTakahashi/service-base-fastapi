@@ -10,6 +10,10 @@ from app.v1.services.user_service import UserService
 from app.lib.fastapi_users.user_manager import get_user_manager
 from app.v1.dependencies.services.user_service import get_user_service
 
+from app.v1.exception_handlers.unprocessable_entity_exception_handler import (
+    unprocessable_entity_json_content_with_code,
+)
+
 router = APIRouter()
 
 
@@ -26,26 +30,27 @@ async def get_me(
     response_model=UserRead,
     name="users:patch_current_user",
     responses={
-        status.HTTP_400_BAD_REQUEST: {
+        status.HTTP_422_UNPROCESSABLE_ENTITY: {
             "model": ErrorModel,
             "content": {
                 "application/json": {
                     "examples": {
                         ErrorCode.UPDATE_USER_EMAIL_ALREADY_EXISTS: {
                             "summary": "A user with this email already exists.",
-                            "value": {
-                                "detail": ErrorCode.UPDATE_USER_EMAIL_ALREADY_EXISTS
-                            },
+                            "value": unprocessable_entity_json_content_with_code(
+                                code=ErrorCode.UPDATE_USER_EMAIL_ALREADY_EXISTS.lower(),
+                                instance="http://127.0.0.1:8000/app/v1/auth/register/register",
+                                source_parameter="email",
+                            ),
                         },
                         ErrorCode.UPDATE_USER_INVALID_PASSWORD: {
                             "summary": "Password validation failed.",
-                            "value": {
-                                "detail": {
-                                    "code": ErrorCode.UPDATE_USER_INVALID_PASSWORD,
-                                    "reason": "Password should be"
-                                    "at least 3 characters",
-                                }
-                            },
+                            "value": unprocessable_entity_json_content_with_code(
+                                code=ErrorCode.UPDATE_USER_INVALID_PASSWORD.lower(),
+                                instance="http://127.0.0.1:8000/app/v1/auth/register/register",
+                                detail="Password must be at least 8 characters long",
+                                source_parameter="password",
+                            ),
                         },
                     }
                 }

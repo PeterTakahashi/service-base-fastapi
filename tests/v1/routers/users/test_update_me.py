@@ -1,5 +1,8 @@
 from httpx import AsyncClient
-from tests.common.check_error_response import check_unauthorized_response
+from tests.common.check_error_response import (
+    check_unauthorized_response,
+    check_validation_error_response,
+)
 
 
 async def test_update_me_email(auth_client: AsyncClient, faker):
@@ -55,8 +58,19 @@ async def test_update_me_email_already_exists(
         json={"email": email},
     )
     # 3. check the response
-    assert response.status_code == 400
-    assert response.json()["detail"] == "UPDATE_USER_EMAIL_ALREADY_EXISTS"
+    check_validation_error_response(
+        response,
+        path="/users/me",
+        errors=[
+            {
+                "status": "422",
+                "code": "update_user_email_already_exists",
+                "title": "User Email Already Exists",
+                "detail": "The email address you are trying to use is already associated with another account. Please use a different email address.",
+                "source": {},
+            }
+        ],
+    )
 
 
 async def test_update_me_unauthenticated(client: AsyncClient):

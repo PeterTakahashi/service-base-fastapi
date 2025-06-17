@@ -6,7 +6,7 @@ from fastapi_users.router.common import ErrorCode, ErrorModel
 
 from app.v1.schemas.user import UserRead, UserCreate
 
-from app.v1.exception_handlers.responses.unprocessable_entity_json_response import (
+from app.v1.exception_handlers.unprocessable_entity_exception_handler import (
     unprocessable_entity_json_content,
 )
 

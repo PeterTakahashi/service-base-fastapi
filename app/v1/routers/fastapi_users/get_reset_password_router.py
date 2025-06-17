@@ -1,4 +1,3 @@
-import code
 from fastapi import APIRouter, Body, Depends, HTTPException, Request, status
 from pydantic import EmailStr
 
@@ -6,7 +5,7 @@ from fastapi_users import exceptions, models
 from fastapi_users.manager import BaseUserManager, UserManagerDependency
 from fastapi_users.openapi import OpenAPIResponseType
 from fastapi_users.router.common import ErrorCode, ErrorModel
-from app.v1.exception_handlers.responses.unprocessable_entity_json_response import (
+from app.v1.exception_handlers.unprocessable_entity_exception_handler import (
     unprocessable_entity_json_content,
 )
 from app.v1.exception_handlers.bad_request_exception_handler import (
@@ -21,10 +20,10 @@ RESET_PASSWORD_RESPONSES: OpenAPIResponseType = {
                 "examples": {
                     ErrorCode.RESET_PASSWORD_BAD_TOKEN: {
                         "summary": "Bad or expired token.",
-                        "value":  bad_request_json_content(
+                        "value": bad_request_json_content(
                             code=ErrorCode.RESET_PASSWORD_BAD_TOKEN.lower(),
                             instance="http://127.0.0.1:8000/app/v1/auth/reset-password",
-                        )
+                        ),
                     },
                 }
             }
