@@ -13,4 +13,4 @@ async def test_get_me_authenticated(auth_client: AsyncClient):
 
 async def test_get_me_unauthenticated(client: AsyncClient):
     response = await client.get("/users/me")
-    check_unauthorized_response(response)
+    check_unauthorized_response(response, path="/users/me")

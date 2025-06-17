@@ -61,4 +61,4 @@ async def test_update_me_email_already_exists(
 
 async def test_update_me_unauthenticated(client: AsyncClient):
     response = await client.patch("/users/me", json={"email": "test@test.com"})
-    check_unauthorized_response(response)
+    check_unauthorized_response(response, path="/users/me")

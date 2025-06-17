@@ -21,6 +21,24 @@ def get_auth_router(
     )
 
     login_responses: OpenAPIResponseType = {
+         status.HTTP_401_UNAUTHORIZED: {
+            "description": "Missing token or inactive user.",
+            "model": ErrorModel,
+            "content": {
+                "application/json": {
+                    "examples": {
+                        ErrorCode.LOGIN_BAD_CREDENTIALS: {
+                            "summary": "Bad credentials or the user is inactive.",
+                            "value": {"detail": ErrorCode.LOGIN_BAD_CREDENTIALS},
+                        },
+                        ErrorCode.LOGIN_USER_NOT_VERIFIED: {
+                            "summary": "The user is not verified.",
+                            "value": {"detail": ErrorCode.LOGIN_USER_NOT_VERIFIED},
+                        },
+                    }
+                }
+            },
+        },
         status.HTTP_400_BAD_REQUEST: {
             "model": ErrorModel,
             "content": {

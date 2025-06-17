@@ -37,14 +37,14 @@ async def test_verify_expired_user_api_key(
         "/user-api-keys/verify",
         headers={"X-API-KEY": expired_user_api_key.api_key},
     )
-    check_unauthorized_response(resp, code="expired_api_key")
+    check_unauthorized_response(resp, path="/user-api-keys/verify", code="expired_api_key")
 
 
 @pytest.mark.asyncio
 async def test_verify_user_api_key_missing_header(client: AsyncClient):
     """Requests without the X‑API‑KEY header should be rejected with 401."""
     resp = await client.post("/user-api-keys/verify")
-    check_unauthorized_response(resp)
+    check_unauthorized_response(resp, path="/user-api-keys/verify")
 
 
 @pytest.mark.asyncio
@@ -54,7 +54,7 @@ async def test_verify_user_api_key_invalid(client: AsyncClient):
         "/user-api-keys/verify",
         headers={"X-API-KEY": "invalid123"},
     )
-    check_unauthorized_response(resp, code="invalid_api_key")
+    check_unauthorized_response(resp, path="/user-api-keys/verify", code="invalid_api_key")
 
 
 @pytest.mark.asyncio
@@ -116,7 +116,7 @@ async def test_verify_user_api_key_invalid_origin(
             "Origin": "https://evil.com",
         },
     )
-    check_unauthorized_response(resp, code="invalid_origin")
+    check_unauthorized_response(resp, path="/user-api-keys/verify", code="invalid_origin")
 
 
 @pytest.mark.asyncio
@@ -154,7 +154,7 @@ async def test_verify_user_api_key_invalid_ip(
         "/user-api-keys/verify",
         headers={"X-API-KEY": api_key.api_key},
     )
-    check_unauthorized_response(resp, code="invalid_ip")
+    check_unauthorized_response(resp, path="/user-api-keys/verify", code="invalid_ip")
 
 
 @pytest.mark.asyncio

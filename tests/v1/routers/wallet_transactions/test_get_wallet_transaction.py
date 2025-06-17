@@ -25,8 +25,9 @@ async def test_get_wallet_transaction_authenticated(
 async def test_get_wallet_transaction_unauthenticated(
     client: AsyncClient,
 ):
-    response = await client.get(f"/wallet-transactions/{encode_id(1)}")
-    check_unauthorized_response(response)
+    path = f"/wallet-transactions/{encode_id(1)}"
+    response = await client.get(path)
+    check_unauthorized_response(response, path=path)
 
 
 async def test_get_wallet_transaction_not_found(

@@ -12,7 +12,7 @@ async def test_list_wallet_transactions_unauthenticated(client: AsyncClient):
     Test that unauthenticated requests return 401 Unauthorized.
     """
     response = await client.get("/wallet-transactions")
-    check_unauthorized_response(response)
+    check_unauthorized_response(response, path="/wallet-transactions")
 
 
 @pytest.mark.asyncio
