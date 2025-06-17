@@ -3,11 +3,14 @@ from fastapi import APIRouter, Depends, Request, status
 from fastapi_users import exceptions, models, schemas
 from fastapi_users.manager import BaseUserManager, UserManagerDependency
 from fastapi_users.router.common import ErrorCode, ErrorModel
-from fastapi.responses import JSONResponse
 
 from app.v1.schemas.user import UserRead, UserCreate
 
-from app.core.responses.unprocessable_entity_json_response import unprocessable_entity_json_response, unprocessable_entity_json_content
+from app.core.responses.unprocessable_entity_json_response import (
+    unprocessable_entity_json_response,
+    unprocessable_entity_json_content,
+)
+
 
 def get_register_router(
     get_user_manager: UserManagerDependency[models.UP, models.ID],
@@ -31,17 +34,17 @@ def get_register_router(
                             ErrorCode.REGISTER_USER_ALREADY_EXISTS: {
                                 "summary": "A user with this email already exists.",
                                 "value": unprocessable_entity_json_content(
-                                        instance="http://127.0.0.1:8000/app/v1/auth/register/register",
-                                        errors=[
-                                            {
-                                                "code": ErrorCode.REGISTER_USER_ALREADY_EXISTS,
-                                                "title": "User Already Exists",
-                                                "detail": "A user with this email already exists.",
-                                                "source": {"pointer": "#/email"},
-                                            }
-                                        ],
-                                    ),
-                                },
+                                    instance="http://127.0.0.1:8000/app/v1/auth/register/register",
+                                    errors=[
+                                        {
+                                            "code": ErrorCode.REGISTER_USER_ALREADY_EXISTS,
+                                            "title": "User Already Exists",
+                                            "detail": "A user with this email already exists.",
+                                            "source": {"pointer": "#/email"},
+                                        }
+                                    ],
+                                ),
+                            },
                             ErrorCode.REGISTER_INVALID_PASSWORD: {
                                 "summary": "Password validation failed.",
                                 "value": unprocessable_entity_json_content(
@@ -75,13 +78,13 @@ def get_register_router(
             return unprocessable_entity_json_response(
                 instance=str(request.url),
                 errors=[
-                        {
-                            "code": ErrorCode.REGISTER_USER_ALREADY_EXISTS,
-                            "title": "User Already Exists",
-                            "detail": "A user with this email already exists.",
-                            "source": {"pointer": "#/email"},
-                        }
-                ]
+                    {
+                        "code": ErrorCode.REGISTER_USER_ALREADY_EXISTS,
+                        "title": "User Already Exists",
+                        "detail": "A user with this email already exists.",
+                        "source": {"pointer": "#/email"},
+                    }
+                ],
             )
         except exceptions.InvalidPasswordException as e:
             return unprocessable_entity_json_response(
@@ -93,7 +96,7 @@ def get_register_router(
                         "detail": e.reason,
                         "source": {"pointer": "#/password"},
                     }
-                ]
+                ],
             )
 
         return schemas.model_validate(user_schema, created_user)

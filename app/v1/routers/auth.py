@@ -14,17 +14,18 @@ from app.lib.fastapi_users.user_manager import get_user_manager
 
 from app.core.config import settings
 from app.v1.routers.fastapi_users.get_register_router import get_register_router
+from app.v1.routers.fastapi_users.get_auth_router import get_auth_router
 
 router = APIRouter()
 
 router.include_router(
-    fastapi_users.get_auth_router(jwt_auth_backend),
+    get_auth_router(jwt_auth_backend, get_user_manager, fastapi_users.authenticator),
     prefix="/jwt",
     tags=["auth"],
 )
 
 router.include_router(
-    fastapi_users.get_auth_router(cookie_auth_backend),
+    get_auth_router(cookie_auth_backend, get_user_manager, fastapi_users.authenticator),
     prefix="/cookie",
     tags=["auth"],
 )
