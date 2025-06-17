@@ -3,6 +3,10 @@
     "title": "Unauthorized",
     "detail": "Authentication credentials were not provided or are invalid."
   },
+  "unprocessable_entity": {
+    "title": "Unprocessable Entity",
+    "detail": "The request was well-formed but was unable to be followed due to semantic errors."
+  },
   "expired_api_key": {
     "title": "Expired API Key",
     "detail": "The provided API key has expired. Please obtain a new API key."
@@ -22,6 +26,10 @@
   "login_bad_credentials": {
     "title": "Login Failed",
     "detail": "The provided credentials are invalid. Please check your username and password."
+  },
+  "oauth_user_already_exists": {
+    "title": "User Already Exists",
+    "detail": "An account with this email already exists. Please log in or use a different email."
   },
   "validation_error": {
     "title": "Validation Error",
@@ -47,5 +55,21 @@
   "login_user_not_verified": {
     "title": "User Not Verified",
     "detail": "Your account has not been verified. Please check your email for the verification link."
+  },
+  "reset_password_invalid_password": {
+    "title": "Invalid Password",
+    "detail": "The provided password does not meet the required criteria. Please ensure it is at least 8 characters long and contains a mix of letters, numbers, and special characters."
+  },
+  "reset_password_bad_token": {
+    "title": "Invalid Reset Token",
+    "detail": "The reset token is invalid or has expired. Please request a new password reset."
+  },
+  "verify_user_already_verified": {
+    "title": "User Already Verified",
+    "detail": "Your account is already verified. You can log in now."
+  },
+  "verify_user_bad_token": {
+    "title": "Invalid Verification Token",
+    "detail": "The verification token is invalid or has expired. Please request a new verification email."
   }
 }

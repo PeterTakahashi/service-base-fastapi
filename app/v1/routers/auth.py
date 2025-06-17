@@ -15,6 +15,11 @@ from app.lib.fastapi_users.user_manager import get_user_manager
 from app.core.config import settings
 from app.v1.routers.fastapi_users.get_register_router import get_register_router
 from app.v1.routers.fastapi_users.get_auth_router import get_auth_router
+from app.v1.routers.fastapi_users.get_oauth_router import get_oauth_router
+from app.v1.routers.fastapi_users.get_reset_password_router import (
+    get_reset_password_router,
+)
+from app.v1.routers.fastapi_users.get_verify_router import get_verify_router
 
 router = APIRouter()
 
@@ -37,19 +42,20 @@ router.include_router(
 )
 
 router.include_router(
-    fastapi_users.get_reset_password_router(),
+    get_reset_password_router(get_user_manager),
     tags=["auth"],
 )
 
 router.include_router(
-    fastapi_users.get_verify_router(UserRead),  # type: ignore
+    get_verify_router(get_user_manager, UserRead),
     tags=["auth"],
 )
 
 router.include_router(
-    fastapi_users.get_oauth_router(
+    get_oauth_router(
         google_oauth_client,
         cookie_oauth_auth_backend,
+        get_user_manager,
         settings.GOOGLE_CLIENT_SECRET,
         redirect_url=f"{settings.BACKEND_API_V1_URL}/auth/cookie/google/callback",
         is_verified_by_default=True,
@@ -59,9 +65,10 @@ router.include_router(
 )
 
 router.include_router(
-    fastapi_users.get_oauth_router(
+    get_oauth_router(
         github_oauth_client,
         cookie_oauth_auth_backend,
+        get_user_manager,
         settings.GITHUB_CLIENT_SECRET,
         redirect_url=f"{settings.BACKEND_API_V1_URL}/auth/cookie/github/callback",
         is_verified_by_default=True,
