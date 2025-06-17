@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi import APIRouter, Depends, Request, status
 from fastapi.security import OAuth2PasswordRequestForm
 
 from fastapi_users import models
@@ -6,6 +6,11 @@ from fastapi_users.authentication import AuthenticationBackend, Authenticator, S
 from fastapi_users.manager import BaseUserManager, UserManagerDependency
 from fastapi_users.openapi import OpenAPIResponseType
 from fastapi_users.router.common import ErrorCode, ErrorModel
+
+from app.v1.exception_handlers.unauthorized_exception_handler import (
+    unauthorized_json_content,
+)
+from app.lib.exception.http.unauthorized import HTTPExceptionUnauthorized
 
 
 def get_auth_router(
@@ -29,28 +34,11 @@ def get_auth_router(
                     "examples": {
                         ErrorCode.LOGIN_BAD_CREDENTIALS: {
                             "summary": "Bad credentials or the user is inactive.",
-                            "value": {"detail": ErrorCode.LOGIN_BAD_CREDENTIALS},
-                        },
-                        ErrorCode.LOGIN_USER_NOT_VERIFIED: {
-                            "summary": "The user is not verified.",
-                            "value": {"detail": ErrorCode.LOGIN_USER_NOT_VERIFIED},
-                        },
-                    }
-                }
-            },
-        },
-        status.HTTP_400_BAD_REQUEST: {
-            "model": ErrorModel,
-            "content": {
-                "application/json": {
-                    "examples": {
-                        ErrorCode.LOGIN_BAD_CREDENTIALS: {
-                            "summary": "Bad credentials or the user is inactive.",
-                            "value": {"detail": ErrorCode.LOGIN_BAD_CREDENTIALS},
-                        },
-                        ErrorCode.LOGIN_USER_NOT_VERIFIED: {
-                            "summary": "The user is not verified.",
-                            "value": {"detail": ErrorCode.LOGIN_USER_NOT_VERIFIED},
+                            "value": unauthorized_json_content(
+                                code=ErrorCode.LOGIN_BAD_CREDENTIALS.lower(),
+                                instance="http://127.0.0.1:8000/app/v1/auth/jwt/login",
+                                locale="en",
+                            ),
                         },
                     }
                 }
@@ -73,14 +61,8 @@ def get_auth_router(
         user = await user_manager.authenticate(credentials)
 
         if user is None or not user.is_active:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail=ErrorCode.LOGIN_BAD_CREDENTIALS,
-            )
-        if requires_verification and not user.is_verified:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail=ErrorCode.LOGIN_USER_NOT_VERIFIED,
+            raise HTTPExceptionUnauthorized(
+                request, ErrorCode.LOGIN_BAD_CREDENTIALS.lower()
             )
         response = await backend.login(strategy, user)
         await user_manager.on_after_login(user, request, response)

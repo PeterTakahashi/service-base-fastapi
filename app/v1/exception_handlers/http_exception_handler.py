@@ -14,6 +14,9 @@ from app.v1.exception_handlers.unprocessable_entity_exception_handler import (
 from app.v1.exception_handlers.server_exception_handler import (
     server_exception_handler,
 )
+from app.v1.exception_handlers.forbidden_exception_handler import (
+    forbidden_exception_handler,
+)
 
 
 def http_exception_handler(request: Request, exc: StarletteHTTPException):
@@ -21,6 +24,8 @@ def http_exception_handler(request: Request, exc: StarletteHTTPException):
         return unauthorized_exception_handler(request, exc)
     elif exc.status_code == 400:
         return bad_request_exception_handler(request, exc)
+    elif exc.status_code == 403:
+        return forbidden_exception_handler(request, exc)
     elif exc.status_code == 422:
         return unprocessable_entity_exception_handler(request, exc)
     elif exc.status_code == 500:

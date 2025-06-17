@@ -3,6 +3,9 @@ from app.core.config import settings
 from datetime import timedelta
 from freezegun import freeze_time
 
+from fastapi_users.router.common import ErrorCode
+from tests.common.check_error_response import check_unauthorized_response
+
 
 async def test_cookie_login_success(client: AsyncClient, faker):
     """
@@ -47,8 +50,9 @@ async def test_cookie_login_bad_credentials(client: AsyncClient, faker):
         headers={"Content-Type": "application/x-www-form-urlencoded"},
     )
 
-    assert resp.status_code == 400
-    assert resp.json()["detail"] == "LOGIN_BAD_CREDENTIALS"
+    check_unauthorized_response(
+        resp, code=ErrorCode.LOGIN_BAD_CREDENTIALS.lower(), path="/auth/cookie/login"
+    )
 
 
 async def test_cookie_login_lockout_reached(client: AsyncClient, faker):
@@ -72,8 +76,11 @@ async def test_cookie_login_lockout_reached(client: AsyncClient, faker):
             data={"username": email, "password": "wrong-password"},
             headers={"Content-Type": "application/x-www-form-urlencoded"},
         )
-        assert resp.status_code == 400
-        assert resp.json()["detail"] == "LOGIN_BAD_CREDENTIALS"
+        check_unauthorized_response(
+            resp,
+            code=ErrorCode.LOGIN_BAD_CREDENTIALS.lower(),
+            path="/auth/cookie/login",
+        )
 
     # 3. Verify that we can still log in successfully before hitting the threshold
     resp = await client.post(
@@ -96,8 +103,11 @@ async def test_cookie_login_lockout_reached(client: AsyncClient, faker):
             data={"username": email, "password": "wrong-password"},
             headers={"Content-Type": "application/x-www-form-urlencoded"},
         )
-        assert resp.status_code == 400
-        assert resp.json()["detail"] == "LOGIN_BAD_CREDENTIALS"
+        check_unauthorized_response(
+            resp,
+            code=ErrorCode.LOGIN_BAD_CREDENTIALS.lower(),
+            path="/auth/cookie/login",
+        )
 
     # 5. At this point, the account should be locked
     #    Even the correct password should fail
@@ -137,8 +147,9 @@ async def test_cookie_login_failed_attempts_reset_after_time(
         headers={"Content-Type": "application/x-www-form-urlencoded"},
     )
     # Should fail => 400 / "LOGIN_BAD_CREDENTIALS"
-    assert resp.status_code == 400
-    assert resp.json()["detail"] == "LOGIN_BAD_CREDENTIALS"
+    check_unauthorized_response(
+        resp, code=ErrorCode.LOGIN_BAD_CREDENTIALS.lower(), path="/auth/cookie/login"
+    )
 
     # 3. Advance the current time by 31 minutes (30 + 1)
     with freeze_time() as frozen_time:
@@ -151,7 +162,11 @@ async def test_cookie_login_failed_attempts_reset_after_time(
             data={"username": email, "password": "wrong-pass-again"},
             headers={"Content-Type": "application/x-www-form-urlencoded"},
         )
-        assert resp.status_code == 400
+        check_unauthorized_response(
+            resp,
+            code=ErrorCode.LOGIN_BAD_CREDENTIALS.lower(),
+            path="/auth/cookie/login",
+        )
 
         # 5. A correct password should now succeed
         resp = await client.post(
@@ -189,8 +204,11 @@ async def test_cookie_login_unlock_after_time(client: AsyncClient, faker):
             data={"username": email, "password": "wrong-pass"},
             headers={"Content-Type": "application/x-www-form-urlencoded"},
         )
-        assert resp.status_code == 400
-        assert resp.json()["detail"] == "LOGIN_BAD_CREDENTIALS"
+        check_unauthorized_response(
+            resp,
+            code=ErrorCode.LOGIN_BAD_CREDENTIALS.lower(),
+            path="/auth/cookie/login",
+        )
 
     # 3. Confirm the account is locked - correct password => 423
     resp = await client.post(

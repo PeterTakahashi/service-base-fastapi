@@ -2,18 +2,18 @@ from fastapi import Request, status
 from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from app.core.i18n import get_message, get_locale
+from app.core.i18n import get_locale, get_message
 
 
-def unauthorized_json_content(code: str, instance: str, locale: str = "en"):
+def forbidden_json_content(code: str, instance: str, locale: str = "en"):
     return {
         "type": "about:blank",
-        "title": "Unauthorized",
-        "status": status.HTTP_401_UNAUTHORIZED,
+        "title": "Forbidden",
+        "status": status.HTTP_403_FORBIDDEN,
         "instance": instance,
         "errors": [
             {
-                "status": "401",
+                "status": "403",
                 "code": code,
                 "title": get_message(locale, code, "title"),
                 "detail": get_message(locale, code, "detail"),
@@ -22,15 +22,15 @@ def unauthorized_json_content(code: str, instance: str, locale: str = "en"):
     }
 
 
-def unauthorized_exception_handler(request: Request, exc: StarletteHTTPException):
+def forbidden_exception_handler(request: Request, exc: StarletteHTTPException):
     if isinstance(exc.detail, dict):
         content = exc.detail
     elif isinstance(exc.detail, str):
-        code = exc.detail.lower() if exc.detail else "unauthorized"
-        content = unauthorized_json_content(
+        code = exc.detail.lower() if exc.detail else "forbidden"
+        content = forbidden_json_content(
             code=code, instance=str(request.url), locale=get_locale(request)
         )
     return JSONResponse(
-        status_code=401,
+        status_code=403,
         content=content,
     )

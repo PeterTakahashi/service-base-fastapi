@@ -7,12 +7,11 @@ from app.v1.exception_handlers.no_result_found_exception_handler import (
     no_result_found_exception_handler,
 )
 from app.v1.exception_handlers.validation import validation_exception_handler
-from app.core.i18n import load_messages
+
 from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from sqlalchemy.exc import NoResultFound
 
-load_messages()
 
 v1_app = FastAPI(
     title=settings.PROJECT_NAME,
