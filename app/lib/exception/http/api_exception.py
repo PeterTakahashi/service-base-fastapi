@@ -1,5 +1,4 @@
-from fastapi import HTTPException
-from h11 import Request
+from fastapi import HTTPException, Request
 from app.lib.schemas.error import ErrorDetail, ErrorResponse, ErrorSource
 from app.lib.i18n import get_message, get_locale
 from http import HTTPStatus
