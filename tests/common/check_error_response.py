@@ -40,3 +40,16 @@ def check_not_found_status_code_and_detail(
 def check_forbidden_response(response):
     assert response.status_code == 403
     assert response.json()["detail"] == forbidden_detail
+
+
+def check_validation_error_response(
+    response, path: str, errors: list, base_url: str = "http://test/app/v1"
+):
+    assert response.status_code == 422
+    assert response.json() == {
+        "type": "about:blank",
+        "title": "Unprocessable Entity",
+        "status": 422,
+        "instance": f"{base_url}{path}",
+        "errors": errors,
+    }

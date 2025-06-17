@@ -1,13 +1,12 @@
 from fastapi import FastAPI
 from app.v1.routers import api as api_router
 from app.core.config import settings
-from app.v1.openapi import custom_openapi
 from app.v1.exception_handlers.common import (
     http_exception_handler,
     server_exception_handler,
-    validation_exception_handler,
     no_result_found_exception_handler,
 )
+from app.v1.exception_handlers.validation import validation_exception_handler
 from app.core.i18n import load_messages
 from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
@@ -32,5 +31,3 @@ v1_app.add_exception_handler(
 )
 
 v1_app.add_exception_handler(NoResultFound, no_result_found_exception_handler)  # type: ignore
-
-v1_app.openapi = lambda: custom_openapi(v1_app)  # type: ignore

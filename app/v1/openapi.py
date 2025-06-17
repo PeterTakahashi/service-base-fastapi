@@ -42,7 +42,7 @@ def custom_openapi(app):
         "type": "object",
         "properties": {
             "parameter": {"type": "string"},
-        }
+        },
     }
     openapi_schema["components"]["schemas"]["ErrorDetail"] = {
         "title": "ErrorDetail",
@@ -67,7 +67,6 @@ def custom_openapi(app):
         },
         "required": ["errors"],
     }
-
 
     for path, path_item in openapi_schema["paths"].items():
         for method, method_item in path_item.items():
@@ -135,9 +134,7 @@ def custom_openapi(app):
                     "description": "Validation Error",
                     "content": {
                         "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/ErrorResponse"
-                            },
+                            "schema": {"$ref": "#/components/schemas/ErrorResponse"},
                             "example": {
                                 "errors": [
                                     {
@@ -148,7 +145,7 @@ def custom_openapi(app):
                                         "source": {"parameter": "title"},
                                     }
                                 ]
-                            }
+                            },
                         }
                     },
                 }

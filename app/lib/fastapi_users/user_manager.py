@@ -107,6 +107,10 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, UUID]):
             raise exceptions.InvalidPasswordException(
                 reason="Password must be at least 8 characters long"
             )
+        if len(password) > 100:
+            raise exceptions.InvalidPasswordException(
+                reason="Password must not exceed 100 characters"
+            )
         if not any(char.isdigit() for char in password):
             raise exceptions.InvalidPasswordException(
                 reason="Password must contain at least one digit"

@@ -1,5 +1,6 @@
 import pytest
 from httpx import AsyncClient
+from tests.common.check_error_response import check_validation_error_response
 
 
 async def test_register_success(client: AsyncClient, faker):
@@ -51,13 +52,18 @@ async def test_register_duplicate_email(client: AsyncClient, faker):
     response = await client.post(
         "/auth/register/register", json=second_registration_data
     )
-
-    # Assertions
-    assert (
-        response.status_code == 400
-    ), f"Expected 400, got {response.status_code}. Response: {response.text}"
-    response_data = response.json()
-    assert response_data["detail"] == "REGISTER_USER_ALREADY_EXISTS"
+    check_validation_error_response(
+        response,
+        path="/auth/register/register",
+        errors=[
+            {
+                "code": "REGISTER_USER_ALREADY_EXISTS",
+                "title": "User Already Exists",
+                "detail": "A user with this email already exists.",
+                "source": {"pointer": "#/email"},
+            }
+        ],
+    )
 
 
 @pytest.mark.parametrize(
@@ -78,12 +84,18 @@ async def test_register_invalid_password_rules(
 
     response = await client.post("/auth/register/register", json=registration_data)
 
-    assert (
-        response.status_code == 400
-    ), f"Expected 400, got {response.status_code}. Response: {response.text}"
-    response_data = response.json()
-    assert response_data["detail"]["code"] == "REGISTER_INVALID_PASSWORD"
-    assert expected_reason in response_data["detail"]["reason"]
+    check_validation_error_response(
+        response,
+        path="/auth/register/register",
+        errors=[
+            {
+                "code": "REGISTER_INVALID_PASSWORD",
+                "title": "Invalid Password",
+                "detail": expected_reason,
+                "source": {"pointer": "#/password"},
+            }
+        ],
+    )
 
 
 async def test_register_too_short_password(client: AsyncClient, faker):
@@ -97,21 +109,18 @@ async def test_register_too_short_password(client: AsyncClient, faker):
 
     response = await client.post("/auth/register/register", json=registration_data)
 
-    assert (
-        response.status_code == 422
-    ), f"Expected 422, got {response.status_code}. Response: {response.text}"
-    response_data = response.json()
-    assert response_data == {
-        "errors": [
+    check_validation_error_response(
+        response,
+        path="/auth/register/register",
+        errors=[
             {
-                "status": "422",
-                "code": "validation_error",
-                "title": "Validation Error",
-                "detail": "String should have at least 8 characters",
-                "source": {"parameter": "password"},
+                "code": "REGISTER_INVALID_PASSWORD",
+                "title": "Invalid Password",
+                "detail": "Password must be at least 8 characters long",
+                "source": {"pointer": "#/password"},
             }
-        ]
-    }
+        ],
+    )
 
 
 async def test_register_missing_field(client: AsyncClient, faker):
@@ -124,20 +133,15 @@ async def test_register_missing_field(client: AsyncClient, faker):
     }
 
     response = await client.post("/auth/register/register", json=registration_data)
-
-    # Assertions for validation error
-    assert (
-        response.status_code == 422
-    ), f"Expected 422, got {response.status_code}. Response: {response.text}"
-    response_data = response.json()
-    assert response_data == {
-        "errors": [
+    check_validation_error_response(
+        response,
+        path="/auth/register/register",
+        errors=[
             {
-                "status": "422",
                 "code": "validation_error",
                 "title": "Validation Error",
                 "detail": "Field required",
-                "source": {"parameter": "email"},
+                "source": {"pointer": "#/email"},
             }
-        ]
-    }
+        ],
+    )

@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.v1.schemas.user import UserRead, UserCreate
+from app.v1.schemas.user import UserRead
 from app.lib.fastapi_users.user_setup import fastapi_users
 from app.lib.fastapi_users.auth_backend import (
     jwt_auth_backend,
@@ -10,7 +10,10 @@ from app.lib.fastapi_users.oauth_client import (
     github_oauth_client,
     google_oauth_client,
 )
+from app.lib.fastapi_users.user_manager import get_user_manager
+
 from app.core.config import settings
+from app.v1.routers.fastapi_users.get_register_router import get_register_router
 
 router = APIRouter()
 
@@ -27,7 +30,7 @@ router.include_router(
 )
 
 router.include_router(
-    fastapi_users.get_register_router(UserRead, UserCreate),  # type: ignore
+    get_register_router(get_user_manager),
     prefix="/register",
     tags=["auth"],
 )

@@ -1,7 +1,10 @@
 import pytest
 
 from httpx import AsyncClient
-from tests.common.check_error_response import check_unauthorized_response
+from tests.common.check_error_response import (
+    check_unauthorized_response,
+    check_validation_error_response,
+)
 from app.v1.schemas.user_api_key.write import UserApiKeyUpdate, UserApiKeyCreate
 
 
@@ -68,15 +71,15 @@ async def test_update_user_api_key_invalid(auth_client: AsyncClient):
     response = await auth_client.patch(
         f"/user-api-keys/{user_api_key['id']}", json=user_api_key_update.model_dump()
     )
-    assert response.json() == {
-        "errors": [
+    check_validation_error_response(
+        response,
+        path=f"/user-api-keys/{user_api_key['id']}",
+        errors=[
             {
-                "status": "422",
                 "code": "validation_error",
                 "title": "Validation Error",
                 "detail": "String should have at least 1 character",
-                "source": {"parameter": "name"},
+                "source": {"pointer": "#/name"},
             }
-        ]
-    }
-    assert response.status_code == 422
+        ],
+    )

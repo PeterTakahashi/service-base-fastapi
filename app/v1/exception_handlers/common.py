@@ -1,6 +1,5 @@
 from fastapi import Request
 from fastapi.responses import JSONResponse
-from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from sqlalchemy.exc import NoResultFound
 
@@ -47,26 +46,6 @@ async def server_exception_handler(request: Request, exc: Exception):
             ]
         },
     )
-
-
-async def validation_exception_handler(request: Request, exc: RequestValidationError):
-    locale = get_locale(request)
-    errors = []
-
-    for e in exc.errors():
-        parameter = "/".join(str(loc) for loc in e["loc"] if loc != "body")
-
-        errors.append(
-            {
-                "status": "422",
-                "code": "validation_error",
-                "title": get_message(locale, "validation_error", "title"),
-                "detail": e["msg"],
-                "source": {"parameter": parameter},
-            }
-        )
-
-    return JSONResponse(status_code=422, content={"errors": errors})
 
 
 async def no_result_found_exception_handler(request: Request, exc: NoResultFound):
