@@ -17,9 +17,7 @@ from fastapi_users.router.oauth import (
     OAuth2AuthorizeResponse,
     generate_state_token,
 )
-from app.v1.exception_handlers.unauthorized_exception_handler import (
-    unauthorized_json_content,
-)
+from app.lib.exception.http.api_exception import APIException
 
 
 def get_oauth_router(
@@ -87,17 +85,34 @@ def get_oauth_router(
                     }
                 },
             },
-            status.HTTP_401_UNAUTHORIZED: {
+            status.HTTP_422_UNPROCESSABLE_ENTITY: {
                 "model": ErrorModel,
                 "content": {
                     "application/json": {
                         "examples": {
                             ErrorCode.OAUTH_USER_ALREADY_EXISTS: {
                                 "summary": "User is inactive.",
-                                "value": unauthorized_json_content(
-                                    code=ErrorCode.OAUTH_USER_ALREADY_EXISTS.lower(),
-                                    instance="http://127.0.0.1:8000/app/v1/auth/jwt/login",
-                                    locale="en",
+                                "value": APIException.openapi_example(
+                                    status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                                    detail_code=ErrorCode.OAUTH_USER_ALREADY_EXISTS.lower(),
+                                    instance="http://127.0.0.1:8000/app/v1/auth/cookie/google/callback",
+                                ),
+                            },
+                        }
+                    }
+                },
+            },
+            status.HTTP_401_UNAUTHORIZED: {
+                "model": ErrorModel,
+                "content": {
+                    "application/json": {
+                        "examples": {
+                            ErrorCode.LOGIN_BAD_CREDENTIALS: {
+                                "summary": "Bad credentials or the user is inactive.",
+                                "value": APIException.openapi_example(
+                                    status_code=status.HTTP_401_UNAUTHORIZED,
+                                    detail_code=ErrorCode.LOGIN_BAD_CREDENTIALS.lower(),
+                                    instance="http://127.0.0.1:8000/app/v1/auth/cookie/google/callback",
                                 ),
                             },
                         }
@@ -149,9 +164,9 @@ def get_oauth_router(
             )
 
         if not user.is_active:
-            raise HTTPException(
+            raise APIException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail=ErrorCode.LOGIN_BAD_CREDENTIALS.lower(),
+                detail_code=ErrorCode.LOGIN_BAD_CREDENTIALS.lower(),
             )
 
         # Authenticate

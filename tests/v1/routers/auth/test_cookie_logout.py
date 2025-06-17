@@ -25,7 +25,6 @@ async def test_cookie_logout_success(client: AsyncClient, faker):
 
 async def test_cookie_logout_unauthorized(client: AsyncClient):
     logout_resp = await client.post("/auth/cookie/logout")
-    assert logout_resp.status_code == 401
     check_unauthorized_response(
         logout_resp, path="/auth/cookie/logout", code="unauthorized"
     )

@@ -3,7 +3,7 @@ from typing import List, Optional
 
 
 class ErrorSource(BaseModel):
-    parameter: Optional[str] = None  # e.g. "title"
+    parameter: Optional[str] = None  # e.g. "#/title"
 
 
 class ErrorDetail(BaseModel):
@@ -15,4 +15,8 @@ class ErrorDetail(BaseModel):
 
 
 class ErrorResponse(BaseModel):
+    type: str = "about:blank"
+    title: str
+    status: int
+    instance: str
     errors: List[ErrorDetail]

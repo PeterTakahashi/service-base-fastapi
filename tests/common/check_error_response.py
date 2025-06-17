@@ -1,6 +1,6 @@
 from app.core.response_type import not_found_response_detail
 from app.core.response_type import forbidden_detail
-from app.core.i18n import get_message
+from app.lib.i18n import get_message
 
 
 def check_unauthorized_response(
@@ -22,6 +22,7 @@ def check_unauthorized_response(
                 "code": code,
                 "title": get_message(locale, code, "title"),
                 "detail": get_message(locale, code, "detail"),
+                "source": None,
             }
         ],
     }

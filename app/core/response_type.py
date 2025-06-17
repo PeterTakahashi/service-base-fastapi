@@ -1,5 +1,5 @@
 from fastapi import status
-from app.v1.schemas.common.error import ErrorResponse
+from app.lib.schemas.error import ErrorResponse
 from app.lib.camel_to_snake import camel_to_snake
 
 

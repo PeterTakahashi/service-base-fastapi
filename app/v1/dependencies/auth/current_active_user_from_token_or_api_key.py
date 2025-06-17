@@ -1,6 +1,6 @@
 from typing import Optional
 
-from fastapi import Depends, Header, Request
+from fastapi import Depends, Header, Request, status
 
 from app.models.user import User
 from app.v1.dependencies.repositories.user_api_key_repository import (
@@ -10,7 +10,7 @@ from app.v1.repositories.user_api_key_repository import UserApiKeyRepository
 from app.v1.repositories.user_repository import UserRepository
 from app.v1.dependencies.repositories.user_repository import get_user_repository
 
-from app.lib.exception.http.unauthorized import HTTPExceptionUnauthorized
+from app.lib.exception.http.api_exception import APIException
 from app.lib.datetime import as_utc, now_utc
 
 from app.lib.fastapi_users.user_setup import optional_current_active_user
@@ -45,13 +45,17 @@ async def current_active_user_from_token_or_api_key(
 
     # ------- 2. API‑Key authentication -------
     if api_key is None:
-        raise HTTPExceptionUnauthorized(request)  # missing_api_key
+        raise APIException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail_code="unauthorized"
+        )
 
     try:
         user_api_key = await user_api_key_repository.find_by_or_raise(api_key=api_key)
     except Exception:
         # Only "not found" should end up here; keep it broad but specific to invalid key
-        raise HTTPExceptionUnauthorized(request, "invalid_api_key")
+        raise APIException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail_code="invalid_api_key"
+        )
 
     # ---- IP restriction ----
     if user_api_key.allowed_ip:
@@ -60,7 +64,9 @@ async def current_active_user_from_token_or_api_key(
             ip.strip() for ip in user_api_key.allowed_ip.split(",") if ip.strip()
         ]
         if len(allowed_ips) > 0 and (client_ip is None or client_ip not in allowed_ips):
-            raise HTTPExceptionUnauthorized(request, "invalid_ip")
+            raise APIException(
+                status_code=status.HTTP_401_UNAUTHORIZED, detail_code="invalid_ip"
+            )
 
     # ---- Origin restriction ----
     if user_api_key.allowed_origin:
@@ -69,12 +75,16 @@ async def current_active_user_from_token_or_api_key(
             o.strip() for o in user_api_key.allowed_origin.split(",") if o.strip()
         ]
         if len(allowed_origins) > 0 and origin not in allowed_origins:
-            raise HTTPExceptionUnauthorized(request, "invalid_origin")
+            raise APIException(
+                status_code=status.HTTP_401_UNAUTHORIZED, detail_code="invalid_origin"
+            )
 
     # ---- Expiry check ----
     expires_at_utc = as_utc(user_api_key.expires_at)
     if expires_at_utc and expires_at_utc < now_utc():
-        raise HTTPExceptionUnauthorized(request, "expired_api_key")
+        raise APIException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail_code="expired_api_key"
+        )
 
     user = await user_repository.find(id=user_api_key.user_id)
     return user

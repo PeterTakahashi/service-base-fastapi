@@ -49,7 +49,6 @@ async def test_cookie_login_bad_credentials(client: AsyncClient, faker):
         data={"username": email, "password": "wrong-password"},
         headers={"Content-Type": "application/x-www-form-urlencoded"},
     )
-
     check_unauthorized_response(
         resp, code=ErrorCode.LOGIN_BAD_CREDENTIALS.lower(), path="/auth/cookie/login"
     )

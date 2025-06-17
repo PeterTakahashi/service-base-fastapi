@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 
-from app.core.i18n import get_locale, get_message
+from app.lib.i18n import get_locale, get_message
 
 
 def bad_request_json_content(code: str, instance: str, locale: str = "en"):

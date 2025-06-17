@@ -2,7 +2,7 @@ from fastapi import Request, status
 from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from app.core.i18n import get_message, get_locale
+from app.lib.i18n import get_message, get_locale
 
 
 def unauthorized_json_content(code: str, instance: str, locale: str = "en"):
@@ -17,6 +17,7 @@ def unauthorized_json_content(code: str, instance: str, locale: str = "en"):
                 "code": code,
                 "title": get_message(locale, code, "title"),
                 "detail": get_message(locale, code, "detail"),
+                "source": None,
             }
         ],
     }

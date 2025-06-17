@@ -1,7 +1,7 @@
 from fastapi import Request, status
 from fastapi.responses import JSONResponse
 
-from app.core.i18n import get_locale, get_message
+from app.lib.i18n import get_locale, get_message
 from starlette.exceptions import HTTPException
 
 

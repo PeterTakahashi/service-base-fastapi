@@ -1,6 +1,6 @@
 from databases import Database
 from app.core.config import settings
-from app.core.i18n import load_messages
+from app.lib.i18n import load_messages
 
 database = Database(settings.DATABASE_URL)
 

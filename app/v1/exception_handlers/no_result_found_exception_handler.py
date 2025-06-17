@@ -2,7 +2,7 @@ from fastapi import Request
 from fastapi.responses import JSONResponse
 from sqlalchemy.exc import NoResultFound
 
-from app.core.i18n import get_locale, get_message
+from app.lib.i18n import get_locale, get_message
 
 
 async def no_result_found_exception_handler(request: Request, exc: NoResultFound):

@@ -1,7 +1,7 @@
 from fastapi import Request, status
 from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
-from app.core.i18n import get_locale, get_message
+from app.lib.i18n import get_locale, get_message
 
 
 def unprocessable_entity_json_content(instance: str, errors: list[dict]) -> dict:

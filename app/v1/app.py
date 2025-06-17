@@ -14,6 +14,8 @@ from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from sqlalchemy.exc import NoResultFound
 
+from app.lib.exception.http.api_exception import APIException
+from app.lib.exception_handlers.api_exception_handler import api_exception_handler
 
 v1_app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -32,3 +34,5 @@ v1_app.add_exception_handler(
 )
 
 v1_app.add_exception_handler(NoResultFound, no_result_found_exception_handler)  # type: ignore
+
+v1_app.add_exception_handler(APIException, api_exception_handler)  # type: ignore
