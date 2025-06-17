@@ -1,5 +1,5 @@
-from fastapi.responses import JSONResponse
 from fastapi import status
+
 
 def unprocessable_entity_json_content(instance: str, errors: list[dict]) -> dict:
     return {

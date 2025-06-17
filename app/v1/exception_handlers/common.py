@@ -37,11 +37,12 @@ def unauthorized_exception_handler(request: Request, exc: StarletteHTTPException
         },
     )
 
-def unprocessable_entity_exception_handler(request: Request, exc: StarletteHTTPException):
-    locale = get_locale(request)
+
+def unprocessable_entity_exception_handler(
+    request: Request, exc: StarletteHTTPException
+):
     return JSONResponse(
-        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-        content=exc.detail
+        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, content=exc.detail
     )
 
 

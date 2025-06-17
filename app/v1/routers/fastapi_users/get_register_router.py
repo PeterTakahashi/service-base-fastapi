@@ -10,6 +10,7 @@ from app.v1.exception_handlers.responses.unprocessable_entity_json_response impo
     unprocessable_entity_json_content,
 )
 
+
 def get_register_router(
     get_user_manager: UserManagerDependency[models.UP, models.ID],
     user_schema=UserRead,
@@ -76,14 +77,14 @@ def get_register_router(
             raise HTTPException(
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                 detail=unprocessable_entity_json_content(
-                                    instance=str(request.url),
-                                    errors=[
-                                        {
-                                            "code": ErrorCode.REGISTER_USER_ALREADY_EXISTS,
-                                            "title": "User Already Exists",
-                                            "detail": "A user with this email already exists.",
-                                            "source": {"pointer": "#/email"},
-                                        }
+                    instance=str(request.url),
+                    errors=[
+                        {
+                            "code": ErrorCode.REGISTER_USER_ALREADY_EXISTS,
+                            "title": "User Already Exists",
+                            "detail": "A user with this email already exists.",
+                            "source": {"pointer": "#/email"},
+                        }
                     ],
                 ),
             )
