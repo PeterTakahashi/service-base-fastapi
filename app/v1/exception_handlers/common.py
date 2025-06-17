@@ -11,6 +11,8 @@ def http_exception_handler(request: Request, exc: StarletteHTTPException):
         return unauthorized_exception_handler(request, exc)
     elif exc.status_code == 400:
         return bad_request_exception_handler(request, exc)
+    elif exc.status_code == 422:
+        return unprocessable_entity_exception_handler(request, exc)
     else:
         return JSONResponse(
             status_code=exc.status_code,
@@ -33,6 +35,13 @@ def unauthorized_exception_handler(request: Request, exc: StarletteHTTPException
                 }
             ]
         },
+    )
+
+def unprocessable_entity_exception_handler(request: Request, exc: StarletteHTTPException):
+    locale = get_locale(request)
+    return JSONResponse(
+        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+        content=exc.detail
     )
 
 
