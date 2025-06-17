@@ -6,7 +6,9 @@ from app.v1.exception_handlers.server_exception_handler import server_exception_
 from app.v1.exception_handlers.no_result_found_exception_handler import (
     no_result_found_exception_handler,
 )
-from app.v1.exception_handlers.validation import validation_exception_handler
+from app.v1.exception_handlers.validation_exception_handler import (
+    validation_exception_handler,
+)
 
 from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
