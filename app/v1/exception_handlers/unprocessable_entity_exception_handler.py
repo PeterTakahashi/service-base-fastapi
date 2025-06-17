@@ -3,7 +3,6 @@ from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 
-
 def unprocessable_entity_exception_handler(
     request: Request, exc: StarletteHTTPException
 ):

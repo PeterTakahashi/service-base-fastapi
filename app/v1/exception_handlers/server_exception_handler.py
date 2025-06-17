@@ -2,9 +2,10 @@ from fastapi import Request, status
 from fastapi.responses import JSONResponse
 
 from app.core.i18n import get_locale, get_message
+from starlette.exceptions import HTTPException
 
 
-async def server_exception_handler(request: Request, exc: Exception):
+async def server_exception_handler(request: Request, exc: Exception | HTTPException):
     locale = get_locale(request)
     return JSONResponse(
         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
