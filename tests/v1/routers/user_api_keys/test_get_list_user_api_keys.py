@@ -11,9 +11,7 @@ async def test_list_user_api_keys_unauthenticated(client: AsyncClient):
     Test that unauthenticated requests return 401 Unauthorized.
     """
     response = await client.get("/user-api-keys")
-    check_unauthorized_response(
-        response, path="/user-api-keys"
-    )
+    check_unauthorized_response(response, path="/user-api-keys")
 
 
 @pytest.mark.asyncio

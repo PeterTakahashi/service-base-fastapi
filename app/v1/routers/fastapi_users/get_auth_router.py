@@ -21,7 +21,7 @@ def get_auth_router(
     )
 
     login_responses: OpenAPIResponseType = {
-         status.HTTP_401_UNAUTHORIZED: {
+        status.HTTP_401_UNAUTHORIZED: {
             "description": "Missing token or inactive user.",
             "model": ErrorModel,
             "content": {

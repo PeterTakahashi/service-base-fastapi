@@ -1,6 +1,7 @@
 from httpx import AsyncClient
 from tests.common.check_error_response import check_unauthorized_response
 
+
 async def test_cookie_logout_success(client: AsyncClient, faker):
     email = faker.unique.email()
     password = faker.password(length=12)

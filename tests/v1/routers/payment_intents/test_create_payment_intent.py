@@ -10,10 +10,7 @@ async def test_create_payment_intent_unauthenticated(client: AsyncClient):
         "/payment-intents",
         json={"amount": 1000},
     )
-    check_unauthorized_response(
-        response, path="/payment-intents"
-    )
-
+    check_unauthorized_response(response, path="/payment-intents")
 
 
 async def test_create_payment_intent_authenticated(

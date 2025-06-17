@@ -23,6 +23,6 @@ def unauthorized_exception_handler(request: Request, exc: StarletteHTTPException
                     "title": get_message(locale, code, "title"),
                     "detail": get_message(locale, code, "detail"),
                 }
-            ]
-        }
+            ],
+        },
     )
