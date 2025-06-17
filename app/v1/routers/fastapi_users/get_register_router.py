@@ -7,6 +7,7 @@ from fastapi.responses import JSONResponse
 
 from app.v1.schemas.user import UserRead, UserCreate
 
+from app.core.responses.unprocessable_entity_json_response import unprocessable_entity_json_response, unprocessable_entity_json_content
 
 def get_register_router(
     get_user_manager: UserManagerDependency[models.UP, models.ID],
@@ -29,29 +30,23 @@ def get_register_router(
                         "examples": {
                             ErrorCode.REGISTER_USER_ALREADY_EXISTS: {
                                 "summary": "A user with this email already exists.",
-                                "value": {
-                                    "type": "about:blank",
-                                    "title": "Unprocessable Entity",
-                                    "status": status.HTTP_422_UNPROCESSABLE_ENTITY,
-                                    "instance": "http://127.0.0.1:8000/app/v1/auth/register/register",
-                                    "errors": [
-                                        {
-                                            "code": ErrorCode.REGISTER_USER_ALREADY_EXISTS,
-                                            "title": "User Already Exists",
-                                            "detail": "A user with this email already exists.",
-                                            "source": {"pointer": "#/email"},
-                                        }
-                                    ],
+                                "value": unprocessable_entity_json_content(
+                                        instance="http://127.0.0.1:8000/app/v1/auth/register/register",
+                                        errors=[
+                                            {
+                                                "code": ErrorCode.REGISTER_USER_ALREADY_EXISTS,
+                                                "title": "User Already Exists",
+                                                "detail": "A user with this email already exists.",
+                                                "source": {"pointer": "#/email"},
+                                            }
+                                        ],
+                                    ),
                                 },
-                            },
                             ErrorCode.REGISTER_INVALID_PASSWORD: {
                                 "summary": "Password validation failed.",
-                                "value": {
-                                    "type": "about:blank",
-                                    "title": "Unprocessable Entity",
-                                    "status": status.HTTP_422_UNPROCESSABLE_ENTITY,
-                                    "instance": "http://127.0.0.1:8000/app/v1/auth/register/register",
-                                    "errors": [
+                                "value": unprocessable_entity_json_content(
+                                    instance="http://127.0.0.1:8000/app/v1/auth/register/register",
+                                    errors=[
                                         {
                                             "code": ErrorCode.REGISTER_INVALID_PASSWORD,
                                             "title": "Invalid Password",
@@ -59,7 +54,7 @@ def get_register_router(
                                             "source": {"pointer": "#/password"},
                                         }
                                     ],
-                                },
+                                ),
                             },
                         }
                     }
@@ -77,40 +72,28 @@ def get_register_router(
                 user_create, safe=True, request=request
             )
         except exceptions.UserAlreadyExists:
-            return JSONResponse(
-                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                content={
-                    "type": "about:blank",
-                    "title": "Unprocessable Entity",
-                    "status": status.HTTP_422_UNPROCESSABLE_ENTITY,
-                    "instance": str(request.url),
-                    "errors": [
+            return unprocessable_entity_json_response(
+                instance=str(request.url),
+                errors=[
                         {
                             "code": ErrorCode.REGISTER_USER_ALREADY_EXISTS,
                             "title": "User Already Exists",
                             "detail": "A user with this email already exists.",
                             "source": {"pointer": "#/email"},
                         }
-                    ],
-                },
+                ]
             )
         except exceptions.InvalidPasswordException as e:
-            return JSONResponse(
-                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                content={
-                    "type": "about:blank",
-                    "title": "Unprocessable Entity",
-                    "status": status.HTTP_422_UNPROCESSABLE_ENTITY,
-                    "instance": str(request.url),
-                    "errors": [
-                        {
-                            "code": ErrorCode.REGISTER_INVALID_PASSWORD,
-                            "title": "Invalid Password",
-                            "detail": e.reason,
-                            "source": {"pointer": "#/password"},
-                        }
-                    ],
-                },
+            return unprocessable_entity_json_response(
+                instance=str(request.url),
+                errors=[
+                    {
+                        "code": ErrorCode.REGISTER_INVALID_PASSWORD,
+                        "title": "Invalid Password",
+                        "detail": e.reason,
+                        "source": {"pointer": "#/password"},
+                    }
+                ]
             )
 
         return schemas.model_validate(user_schema, created_user)
