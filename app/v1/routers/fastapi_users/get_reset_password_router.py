@@ -79,12 +79,12 @@ def get_reset_password_router(
             exceptions.UserNotExists,
             exceptions.UserInactive,
         ):
-            raise APIException(
+            raise APIException.init_with_detail(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail_code=ErrorCode.RESET_PASSWORD_BAD_TOKEN,
             )
         except exceptions.InvalidPasswordException as e:
-            raise APIException(
+            raise APIException.init_with_detail(
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                 detail_code=ErrorCode.RESET_PASSWORD_INVALID_PASSWORD,
                 detail_detail=e.reason,

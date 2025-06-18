@@ -18,7 +18,7 @@ async def get_stripe_webhook_event(request: Request):
             secret=settings.STRIPE_WEBHOOK_SECRET,
         )
     except ValueError:
-        raise APIException(
+        raise APIException.init_with_detail(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail_code=ErrorCode.INVALID_PAYLOAD,
         )

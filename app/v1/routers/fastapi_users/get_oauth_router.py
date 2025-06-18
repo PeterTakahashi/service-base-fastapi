@@ -126,7 +126,7 @@ def get_oauth_router(
         )
 
         if account_email is None:
-            raise APIException(
+            raise APIException.init_with_detail(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail_code=ErrorCode.OAUTH_NOT_AVAILABLE_EMAIL,
             )
@@ -134,7 +134,7 @@ def get_oauth_router(
         try:
             decode_jwt(state, state_secret, [STATE_TOKEN_AUDIENCE])
         except jwt.DecodeError:
-            raise APIException(
+            raise APIException.init_with_detail(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail_code=ErrorCode.INVALID_PAYLOAD,
             )
@@ -152,13 +152,13 @@ def get_oauth_router(
                 is_verified_by_default=is_verified_by_default,
             )
         except UserAlreadyExists:
-            raise APIException(
+            raise APIException.init_with_detail(
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                 detail_code=ErrorCode.OAUTH_USER_ALREADY_EXISTS,
             )
 
         if not user.is_active:
-            raise APIException(
+            raise APIException.init_with_detail(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail_code=ErrorCode.LOGIN_BAD_CREDENTIALS,
             )
@@ -257,7 +257,7 @@ def get_oauth_associate_router(
         )
 
         if account_email is None:
-            raise APIException(
+            raise APIException.init_with_detail(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail_code=ErrorCode.OAUTH_NOT_AVAILABLE_EMAIL,
             )
@@ -265,13 +265,13 @@ def get_oauth_associate_router(
         try:
             state_data = decode_jwt(state, state_secret, [STATE_TOKEN_AUDIENCE])
         except jwt.DecodeError:
-            raise APIException(
+            raise APIException.init_with_detail(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail_code=ErrorCode.INVALID_PAYLOAD,
             )
 
         if state_data["sub"] != str(user.id):
-            raise APIException(
+            raise APIException.init_with_detail(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail_code=ErrorCode.INVALID_PAYLOAD,
             )

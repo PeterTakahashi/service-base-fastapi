@@ -146,7 +146,7 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, UUID]):
             return None
         # Check if the user is currently locked and possibly unlock
         if not await self._handle_lock_state(user):
-            raise APIException(
+            raise APIException.init_with_detail(
                 status_code=status.HTTP_423_LOCKED,
                 detail_code=ErrorCode.LOGIN_ACCOUNT_LOCKED,
             )

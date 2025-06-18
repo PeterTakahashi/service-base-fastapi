@@ -69,12 +69,12 @@ def get_verify_router(
             user = await user_manager.verify(token, request)
             return schemas.model_validate(user_schema, user)
         except (exceptions.InvalidVerifyToken, exceptions.UserNotExists):
-            raise APIException(
+            raise APIException.init_with_detail(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail_code=ErrorCode.VERIFY_USER_BAD_TOKEN,
             )
         except exceptions.UserAlreadyVerified:
-            raise APIException(
+            raise APIException.init_with_detail(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail_code=ErrorCode.VERIFY_USER_ALREADY_VERIFIED,
             )

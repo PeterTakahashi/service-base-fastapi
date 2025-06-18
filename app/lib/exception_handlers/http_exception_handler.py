@@ -7,7 +7,7 @@ from fastapi.responses import JSONResponse
 
 
 async def http_exception_handler(request: Request, exc: HTTPException) -> JSONResponse:
-    api_exception = APIException(
+    api_exception = APIException.init_with_detail(
         status_code=exc.status_code,
         detail_code=status_code_to_snake_case(exc.status_code),
     )
