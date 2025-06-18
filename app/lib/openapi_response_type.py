@@ -1,14 +1,14 @@
 from app.lib.schemas.error import ErrorResponse
 from app.lib.exception.api_exception import APIException
 from app.lib.schemas.api_exception_openapi_example import APIExceptionOpenAPIExample
-from typing import List
+from typing import List, Optional
 
 
 def openapi_response_type(
     status_code: int,
-    description: str,
     request_path: str,
     api_exception_openapi_examples: List[APIExceptionOpenAPIExample],
+    description: Optional[str] = None,
 ):
     examples = {}
     for api_exception_openapi_example in api_exception_openapi_examples:

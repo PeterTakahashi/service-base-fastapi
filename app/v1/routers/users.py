@@ -32,7 +32,6 @@ async def get_me(
     responses={
         status.HTTP_422_UNPROCESSABLE_ENTITY: openapi_response_type(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            description="",
             request_path="/app/v1/users/me",
             api_exception_openapi_examples=[
                 APIExceptionOpenAPIExample(

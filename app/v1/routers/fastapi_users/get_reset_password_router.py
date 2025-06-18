@@ -21,7 +21,6 @@ RESET_PASSWORD_RESPONSES: OpenAPIResponseType = {
     ),
     status.HTTP_422_UNPROCESSABLE_ENTITY: openapi_response_type(
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-        description="",
         request_path="/auth/reset-password",
         api_exception_openapi_examples=[
             APIExceptionOpenAPIExample(
