@@ -26,29 +26,24 @@ router = APIRouter()
 router.include_router(
     get_auth_router(jwt_auth_backend, get_user_manager, fastapi_users.authenticator),
     prefix="/jwt",
-    tags=["auth"],
 )
 
 router.include_router(
     get_auth_router(cookie_auth_backend, get_user_manager, fastapi_users.authenticator),
     prefix="/cookie",
-    tags=["auth"],
 )
 
 router.include_router(
     get_register_router(get_user_manager),
     prefix="/register",
-    tags=["auth"],
 )
 
 router.include_router(
     get_reset_password_router(get_user_manager),
-    tags=["auth"],
 )
 
 router.include_router(
     get_verify_router(get_user_manager, UserRead),
-    tags=["auth"],
 )
 
 router.include_router(
@@ -61,7 +56,6 @@ router.include_router(
         is_verified_by_default=True,
     ),
     prefix="/cookie/google",
-    tags=["auth"],
 )
 
 router.include_router(
@@ -74,5 +68,4 @@ router.include_router(
         is_verified_by_default=True,
     ),
     prefix="/cookie/github",
-    tags=["auth"],
 )

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Request, status
+from fastapi import Depends, Request, status
 from app.v1.schemas.payment_intent import (
     PaymentIntentCreate,
     PaymentIntentCreateResponse,
@@ -15,7 +15,9 @@ from app.lib.utils.openapi_response_type import openapi_response_type
 from app.schemas.api_exception_openapi_example import APIExceptionOpenAPIExample
 from app.lib.error_code import ErrorCode
 
-router = APIRouter()
+from app.core.routers.auth_api_router import AuthAPIRouter
+
+router = AuthAPIRouter(prefix="/payment-intents", tags=["Payment Intents"])
 
 
 @router.post(

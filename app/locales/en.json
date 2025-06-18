@@ -47,6 +47,7 @@
   "validation_error": {
     "openapi_example_summary": "Validation failed on input data.",
     "title": "Validation Error",
+    "detail": "The input data did not pass validation checks.",
     "required": "The field '{field}' is required.",
     "max_length": "The field '{field}' must be at most {max_length} characters."
   },
