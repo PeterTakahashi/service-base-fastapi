@@ -21,7 +21,7 @@ from app.v1.routers.fastapi_users.get_reset_password_router import (
 )
 from app.v1.routers.fastapi_users.get_verify_router import get_verify_router
 
-router = APIRouter()
+router = APIRouter(prefix="/auth", tags=["Auth"])
 
 router.include_router(
     get_auth_router(jwt_auth_backend, get_user_manager, fastapi_users.authenticator),

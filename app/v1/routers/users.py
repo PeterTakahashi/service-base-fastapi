@@ -14,7 +14,7 @@ from app.v1.dependencies.services.user_service import get_user_service
 from app.lib.utils.openapi_response_type import openapi_response_type
 from app.schemas.api_exception_openapi_example import APIExceptionOpenAPIExample
 
-router = APIRouter()
+router = APIRouter(prefix="/users", tags=["Users"])
 
 
 @router.get("/me", response_model=UserWithWalletRead, name="users:get_current_user")
