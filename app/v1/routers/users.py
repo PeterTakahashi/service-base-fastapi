@@ -36,11 +36,11 @@ async def get_me(
             api_exception_openapi_examples=[
                 APIExceptionOpenAPIExample(
                     detail_code=ErrorCode.UPDATE_USER_EMAIL_ALREADY_EXISTS,
-                    parameter="email",
+                    pointer="email",
                 ),
                 APIExceptionOpenAPIExample(
                     detail_code=ErrorCode.UPDATE_USER_INVALID_PASSWORD,
-                    parameter="password",
+                    pointer="password",
                 ),
             ],
         ),

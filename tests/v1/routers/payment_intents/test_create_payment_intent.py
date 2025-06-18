@@ -46,5 +46,5 @@ async def test_create_payment_intent_invalid_amount(
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
         detail_code=ErrorCode.VALIDATION_ERROR,
         detail_detail="Input should be greater than or equal to 100",
-        parameter="amount",
+        pointer="amount",
     )

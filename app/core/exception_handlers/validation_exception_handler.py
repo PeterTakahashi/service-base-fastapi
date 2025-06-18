@@ -14,16 +14,16 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
     locale = get_locale(request)
 
     for error in exc.errors():
-        parameter = None
+        pointer = None
         detail_code = ErrorCode.VALIDATION_ERROR
         if error["loc"][0] == "body":
-            parameter = "#/" + "/".join(str(loc) for loc in error["loc"][1:])
+            pointer = "#/" + "/".join(str(loc) for loc in error["loc"][1:])
         elif error["loc"][0] == "query":
-            parameter = "#/" + "/".join(str(loc) for loc in error["loc"][1:])
+            pointer = "#/" + "/".join(str(loc) for loc in error["loc"][1:])
         elif error["loc"][0] == "path":
-            parameter = "#/" + "/".join(str(loc) for loc in error["loc"][1:])
+            pointer = "#/" + "/".join(str(loc) for loc in error["loc"][1:])
         else:
-            parameter = "#/" + "/".join(str(loc) for loc in error["loc"])
+            pointer = "#/" + "/".join(str(loc) for loc in error["loc"])
 
         error_details.append(
             ErrorDetail(
@@ -31,7 +31,7 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
                 code=detail_code,
                 title=get_message(locale, detail_code, "title"),
                 detail=error["msg"],
-                source=ErrorSource(parameter=parameter) if parameter else None,
+                source=ErrorSource(pointer=pointer) if pointer else None,
             )
         )
     api_exception = APIException(

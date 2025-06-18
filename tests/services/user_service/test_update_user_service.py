@@ -88,7 +88,7 @@ async def test_update_me_already_exists():
         exc_info,
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
         detail_code=ErrorCode.UPDATE_USER_EMAIL_ALREADY_EXISTS,
-        parameter="email",
+        pointer="email",
     )
 
 
@@ -136,7 +136,7 @@ async def test_update_me_password_invalid():
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
         detail_code=ErrorCode.UPDATE_USER_INVALID_PASSWORD,
         detail_detail="Password must contain at least one digit",
-        parameter="password",
+        pointer="password",
     )
 
     # -- 7) user_manager.update が正しく呼ばれたことも確認

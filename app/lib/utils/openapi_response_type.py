@@ -18,7 +18,7 @@ def openapi_response_type(
             detail_code=api_exception_openapi_example.detail_code,
             detail_title=api_exception_openapi_example.detail_title,
             detail_detail=api_exception_openapi_example.detail_detail,
-            parameter=api_exception_openapi_example.parameter,
+            pointer=api_exception_openapi_example.pointer,
         )
         examples[api_exception_openapi_example.detail_code] = example
 

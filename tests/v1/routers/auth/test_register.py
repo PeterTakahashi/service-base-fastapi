@@ -60,7 +60,7 @@ async def test_register_duplicate_email(client: AsyncClient, faker):
         response,
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
         detail_code=ErrorCode.REGISTER_USER_ALREADY_EXISTS,
-        parameter="email",
+        pointer="email",
     )
 
 
@@ -87,7 +87,7 @@ async def test_register_invalid_password_rules(
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
         detail_code=ErrorCode.REGISTER_INVALID_PASSWORD,
         detail_detail=expected_reason,
-        parameter="password",
+        pointer="password",
     )
 
 
@@ -106,7 +106,7 @@ async def test_register_too_short_password(client: AsyncClient, faker):
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
         detail_code=ErrorCode.REGISTER_INVALID_PASSWORD,
         detail_detail="Password must be at least 8 characters long",
-        parameter="password",
+        pointer="password",
     )
 
 
@@ -125,5 +125,5 @@ async def test_register_missing_field(client: AsyncClient, faker):
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
         detail_code=ErrorCode.VALIDATION_ERROR,
         detail_detail="Field required",
-        parameter="email",
+        pointer="email",
     )

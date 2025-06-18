@@ -81,5 +81,5 @@ async def test_update_user_api_key_invalid(auth_client: AsyncClient):
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
         detail_code=ErrorCode.VALIDATION_ERROR,
         detail_detail="String should have at least 1 character",
-        parameter="name",
+        pointer="name",
     )

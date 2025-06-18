@@ -31,11 +31,11 @@ def get_register_router(
                 api_exception_openapi_examples=[
                     APIExceptionOpenAPIExample(
                         detail_code=ErrorCode.REGISTER_USER_ALREADY_EXISTS,
-                        parameter="email",
+                        pointer="email",
                     ),
                     APIExceptionOpenAPIExample(
                         detail_code=ErrorCode.REGISTER_INVALID_PASSWORD,
-                        parameter="password",
+                        pointer="password",
                     ),
                 ],
             )
@@ -54,14 +54,14 @@ def get_register_router(
             raise init_api_exception(
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                 detail_code=ErrorCode.REGISTER_USER_ALREADY_EXISTS,
-                parameter="email",
+                pointer="email",
             )
         except exceptions.InvalidPasswordException as e:
             raise init_api_exception(
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                 detail_code=ErrorCode.REGISTER_INVALID_PASSWORD,
                 detail_detail=e.reason,
-                parameter="password",
+                pointer="password",
             )
 
         return schemas.model_validate(user_schema, created_user)

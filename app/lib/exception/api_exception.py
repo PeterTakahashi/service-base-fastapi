@@ -7,6 +7,12 @@ from app.core.config import settings
 
 
 class APIException(HTTPException):
+    """
+    Custom exception class for API errors following RFC 9457,
+    which specifies a standardized error response format for HTTP APIs.
+    See: https://www.rfc-editor.org/rfc/rfc9457.html
+    """
+
     def __init__(
         self,
         status_code: int,
@@ -48,13 +54,13 @@ class APIException(HTTPException):
         request_path: str,
         detail_title: Optional[str] = None,
         detail_detail: Optional[str] = None,
-        parameter: Optional[str] = None,
+        pointer: Optional[str] = None,
         locale: str = "en",
     ) -> dict:
         instance = f"{settings.BACKEND_API_V1_URL}{request_path}"
         detail_title = detail_title or get_message(locale, detail_code, "title")
         detail_detail = detail_detail or get_message(locale, detail_code, "detail")
-        source = ErrorSource(parameter=f"#/{parameter}") if parameter else None
+        source = ErrorSource(pointer=f"#/{pointer}") if pointer else None
         error_detail = ErrorDetail(
             status=str(status_code),
             code=detail_code,
@@ -83,12 +89,12 @@ def init_api_exception(
     detail_code: str,
     detail_title: Optional[str] = None,
     detail_detail: Optional[str] = None,
-    parameter: Optional[str] = None,
+    pointer: Optional[str] = None,
     locale: str = "en",
 ) -> APIException:
     detail_title = detail_title or get_message(locale, detail_code, "title")
     detail_detail = detail_detail or get_message(locale, detail_code, "detail")
-    source = ErrorSource(parameter=f"#/{parameter}") if parameter else None
+    source = ErrorSource(pointer=f"#/{pointer}") if pointer else None
     error_detail = ErrorDetail(
         status=str(status_code),
         code=detail_code,

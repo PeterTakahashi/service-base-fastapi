@@ -17,7 +17,7 @@ async def test_get_list_no_filter(
 ):
     """
     Test that get_list returns all wallet transactions for the user's wallet
-    when no filter parameters are specified.
+    when no filter pointers are specified.
     """
     # Create multiple wallet transactions for the same user/wallet
     tx1 = await wallet_transaction_factory.create(wallet=wallet, amount=1000)

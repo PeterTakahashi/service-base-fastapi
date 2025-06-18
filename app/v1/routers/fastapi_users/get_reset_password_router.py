@@ -25,7 +25,7 @@ RESET_PASSWORD_RESPONSES: OpenAPIResponseType = {
         api_exception_openapi_examples=[
             APIExceptionOpenAPIExample(
                 detail_code=ErrorCode.RESET_PASSWORD_INVALID_PASSWORD,
-                parameter="password",
+                pointer="password",
             ),
         ],
     ),
@@ -87,7 +87,7 @@ def get_reset_password_router(
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                 detail_code=ErrorCode.RESET_PASSWORD_INVALID_PASSWORD,
                 detail_detail=e.reason,
-                parameter="password",
+                pointer="password",
             )
 
     return router

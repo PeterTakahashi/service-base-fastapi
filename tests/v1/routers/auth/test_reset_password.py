@@ -88,5 +88,5 @@ async def test_reset_password_invalid_password(
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
         detail_code=ErrorCode.RESET_PASSWORD_INVALID_PASSWORD,
         detail_detail=expected_reason,
-        parameter="password",
+        pointer="password",
     )

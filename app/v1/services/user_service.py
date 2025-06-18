@@ -37,11 +37,11 @@ class UserService:
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                 detail_code=ErrorCode.UPDATE_USER_INVALID_PASSWORD,
                 detail_detail=e.reason,
-                parameter="password",
+                pointer="password",
             )
         except exceptions.UserAlreadyExists:
             raise init_api_exception(
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                 detail_code=ErrorCode.UPDATE_USER_EMAIL_ALREADY_EXISTS,
-                parameter="email",
+                pointer="email",
             )

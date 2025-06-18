@@ -3,7 +3,7 @@ from typing import List, Optional
 
 
 class ErrorSource(BaseModel):
-    parameter: Optional[str] = None  # e.g. "#/title"
+    pointer: Optional[str] = None  # e.g. "#/title"
 
 
 class ErrorDetail(BaseModel):

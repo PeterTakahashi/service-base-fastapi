@@ -63,7 +63,7 @@ async def test_update_me_email_already_exists(
         response,
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
         detail_code=ErrorCode.UPDATE_USER_EMAIL_ALREADY_EXISTS,
-        parameter="email",
+        pointer="email",
     )
 
 

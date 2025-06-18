@@ -6,4 +6,4 @@ class APIExceptionOpenAPIExample(BaseModel):
     detail_code: str
     detail_title: Optional[str] = None
     detail_detail: Optional[str] = None
-    parameter: Optional[str] = None
+    pointer: Optional[str] = None
