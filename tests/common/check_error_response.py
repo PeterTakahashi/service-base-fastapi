@@ -28,16 +28,3 @@ def check_api_exception_response(
             }
         ],
     }
-
-
-def check_validation_error_response(
-    response, path: str, errors: list, base_url: str = "http://test/app/v1"
-):
-    assert response.status_code == 422
-    assert response.json() == {
-        "type": "about:blank",
-        "title": "Unprocessable Entity",
-        "status": 422,
-        "instance": f"{base_url}{path}",
-        "errors": errors,
-    }

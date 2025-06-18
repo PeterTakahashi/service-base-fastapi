@@ -2,7 +2,6 @@ import pytest
 from httpx import AsyncClient
 from tests.common.check_error_response import (
     check_api_exception_response,
-    check_validation_error_response,
 )
 from app.lib.error_code import ErrorCode
 from fastapi import status
@@ -121,15 +120,10 @@ async def test_register_missing_field(client: AsyncClient, faker):
     }
 
     response = await client.post("/auth/register/register", json=registration_data)
-    check_validation_error_response(
+    check_api_exception_response(
         response,
-        path="/auth/register/register",
-        errors=[
-            {
-                "code": ErrorCode.VALIDATION_ERROR,
-                "title": "Validation Error",
-                "detail": "Field required",
-                "source": {"parameter": "#/email"},
-            }
-        ],
+        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+        detail_code=ErrorCode.VALIDATION_ERROR,
+        detail_detail="Field required",
+        parameter="email",
     )

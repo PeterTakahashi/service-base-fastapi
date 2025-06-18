@@ -2,10 +2,9 @@ import pytest
 
 from httpx import AsyncClient
 from tests.common.check_error_response import (
-    check_validation_error_response,
+    check_api_exception_response,
 )
 from fastapi import status
-from tests.common.check_error_response import check_api_exception_response
 from app.v1.schemas.user_api_key.write import UserApiKeyUpdate, UserApiKeyCreate
 from app.lib.error_code import ErrorCode
 
@@ -77,15 +76,10 @@ async def test_update_user_api_key_invalid(auth_client: AsyncClient):
     response = await auth_client.patch(
         f"/user-api-keys/{user_api_key['id']}", json=user_api_key_update.model_dump()
     )
-    check_validation_error_response(
+    check_api_exception_response(
         response,
-        path=f"/user-api-keys/{user_api_key['id']}",
-        errors=[
-            {
-                "code": "validation_error",
-                "title": "Validation Error",
-                "detail": "String should have at least 1 character",
-                "source": {"parameter": "#/name"},
-            }
-        ],
+        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+        detail_code=ErrorCode.VALIDATION_ERROR,
+        detail_detail="String should have at least 1 character",
+        parameter="name",
     )
