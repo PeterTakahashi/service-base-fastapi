@@ -122,7 +122,7 @@ async def test_cookie_login_lockout_reached(client: AsyncClient, faker):
     check_api_exception_response(
         resp,
         status_code=status.HTTP_423_LOCKED,
-        detail_code="login_account_locked",
+        detail_code=ErrorCode.LOGIN_ACCOUNT_LOCKED,
     )
     # Accessing /users/me should return 401
     me_resp = await client.get("/users/me")
@@ -226,7 +226,7 @@ async def test_cookie_login_unlock_after_time(client: AsyncClient, faker):
     check_api_exception_response(
         resp,
         status_code=status.HTTP_423_LOCKED,
-        detail_code="login_account_locked",
+        detail_code=ErrorCode.LOGIN_ACCOUNT_LOCKED,
     )
 
     # 4. Advance the current time by 31 minutes to pass lock expiration

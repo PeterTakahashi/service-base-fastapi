@@ -27,6 +27,7 @@ from fastapi_mail import MessageSchema, MessageType
 from app.models.user import User
 from app.models.oauth_account import OAuthAccount
 from app.v1.repositories.wallet_repository import WalletRepository
+from app.lib.error_code import ErrorCode
 
 
 class UserManager(UUIDIDMixin, BaseUserManager[User, UUID]):
@@ -146,7 +147,8 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, UUID]):
         # Check if the user is currently locked and possibly unlock
         if not await self._handle_lock_state(user):
             raise APIException(
-                status_code=status.HTTP_423_LOCKED, detail_code="login_account_locked"
+                status_code=status.HTTP_423_LOCKED,
+                detail_code=ErrorCode.LOGIN_ACCOUNT_LOCKED,
             )
 
         # Reset failed_attempts if enough time has passed since last attempt

@@ -7,6 +7,7 @@ from tests.common.check_error_response import (
 from fastapi import status
 from tests.common.check_error_response import check_api_exception_response
 from app.v1.schemas.user_api_key.write import UserApiKeyUpdate, UserApiKeyCreate
+from app.lib.error_code import ErrorCode
 
 
 @pytest.mark.asyncio
@@ -16,7 +17,9 @@ async def test_update_user_api_key_unauthenticated(client: AsyncClient):
     """
     response = await client.patch("/user-api-keys/test")
     check_api_exception_response(
-        response, status_code=status.HTTP_401_UNAUTHORIZED, detail_code="unauthorized"
+        response,
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail_code=ErrorCode.UNAUTHORIZED,
     )
 
 
