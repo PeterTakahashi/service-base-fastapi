@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.exc import NoResultFound
 
 from app.lib.exception.api_exception import init_api_exception
-from app.lib.exception_handlers.api_exception_handler import api_exception_handler
+from app.core.exception_handlers.api_exception_handler import api_exception_handler
 from app.lib.error_code import ErrorCode
 
 

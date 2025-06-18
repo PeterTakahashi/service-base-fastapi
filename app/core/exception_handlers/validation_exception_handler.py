@@ -3,7 +3,7 @@ from fastapi.exceptions import RequestValidationError
 from app.schemas.error import ErrorDetail, ErrorSource
 
 from app.lib.exception.api_exception import APIException
-from app.lib.exception_handlers.api_exception_handler import api_exception_handler
+from app.core.exception_handlers.api_exception_handler import api_exception_handler
 from app.lib.error_code import ErrorCode
 from app.lib.utils.i18n import get_message, get_locale
 from typing import List
