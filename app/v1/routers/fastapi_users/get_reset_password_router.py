@@ -4,7 +4,8 @@ from pydantic import EmailStr
 from fastapi_users import exceptions, models
 from fastapi_users.manager import BaseUserManager, UserManagerDependency
 from fastapi_users.openapi import OpenAPIResponseType
-from fastapi_users.router.common import ErrorCode, ErrorModel
+from fastapi_users.router.common import ErrorCode
+from app.lib.schemas.error import ErrorResponse
 from app.v1.exception_handlers.unprocessable_entity_exception_handler import (
     unprocessable_entity_json_content,
 )
@@ -15,7 +16,7 @@ from app.v1.exception_handlers.bad_request_exception_handler import (
 
 RESET_PASSWORD_RESPONSES: OpenAPIResponseType = {
     status.HTTP_400_BAD_REQUEST: {
-        "model": ErrorModel,
+        "model": ErrorResponse,
         "content": {
             "application/json": {
                 "examples": {
@@ -31,7 +32,7 @@ RESET_PASSWORD_RESPONSES: OpenAPIResponseType = {
         },
     },
     status.HTTP_422_UNPROCESSABLE_ENTITY: {
-        "model": ErrorModel,
+        "model": ErrorResponse,
         "content": {
             "application/json": {
                 "examples": {

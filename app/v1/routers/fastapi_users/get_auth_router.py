@@ -5,7 +5,8 @@ from fastapi_users import models
 from fastapi_users.authentication import AuthenticationBackend, Authenticator, Strategy
 from fastapi_users.manager import BaseUserManager, UserManagerDependency
 from fastapi_users.openapi import OpenAPIResponseType
-from fastapi_users.router.common import ErrorCode, ErrorModel
+from fastapi_users.router.common import ErrorCode
+from app.lib.schemas.error import ErrorResponse
 
 from app.lib.exception.http.api_exception import APIException
 
@@ -25,7 +26,7 @@ def get_auth_router(
     login_responses: OpenAPIResponseType = {
         status.HTTP_401_UNAUTHORIZED: {
             "description": "Missing token or inactive user.",
-            "model": ErrorModel,
+            "model": ErrorResponse,
             "content": {
                 "application/json": {
                     "examples": {

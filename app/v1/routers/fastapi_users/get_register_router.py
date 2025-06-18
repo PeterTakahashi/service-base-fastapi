@@ -2,7 +2,8 @@ from fastapi import APIRouter, Depends, Request, status, HTTPException
 
 from fastapi_users import exceptions, models, schemas
 from fastapi_users.manager import BaseUserManager, UserManagerDependency
-from fastapi_users.router.common import ErrorCode, ErrorModel
+from fastapi_users.router.common import ErrorCode
+from app.lib.schemas.error import ErrorResponse
 
 from app.v1.schemas.user import UserRead, UserCreate
 
@@ -26,7 +27,7 @@ def get_register_router(
         name="register:register",
         responses={
             status.HTTP_422_UNPROCESSABLE_ENTITY: {
-                "model": ErrorModel,
+                "model": ErrorResponse,
                 "content": {
                     "application/json": {
                         "examples": {

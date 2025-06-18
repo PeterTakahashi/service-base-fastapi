@@ -1,7 +1,8 @@
 from fastapi import APIRouter, Depends, Request, status
 from fastapi_users import models
 from fastapi_users.manager import BaseUserManager
-from fastapi_users.router.common import ErrorCode, ErrorModel
+from fastapi_users.router.common import ErrorCode
+from app.lib.schemas.error import ErrorResponse
 
 from app.lib.fastapi_users.user_setup import current_active_user
 from app.v1.schemas.user import UserRead, UserUpdate, UserWithWalletRead
@@ -31,7 +32,7 @@ async def get_me(
     name="users:patch_current_user",
     responses={
         status.HTTP_422_UNPROCESSABLE_ENTITY: {
-            "model": ErrorModel,
+            "model": ErrorResponse,
             "content": {
                 "application/json": {
                     "examples": {

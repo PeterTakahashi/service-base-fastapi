@@ -3,7 +3,8 @@ from pydantic import EmailStr
 
 from fastapi_users import exceptions, models, schemas
 from fastapi_users.manager import BaseUserManager, UserManagerDependency
-from fastapi_users.router.common import ErrorCode, ErrorModel
+from fastapi_users.router.common import ErrorCode
+from app.lib.schemas.error import ErrorResponse
 from app.v1.schemas.user import UserRead
 
 from app.v1.exception_handlers.bad_request_exception_handler import (
@@ -45,7 +46,7 @@ def get_verify_router(
         name="verify:verify",
         responses={
             status.HTTP_400_BAD_REQUEST: {
-                "model": ErrorModel,
+                "model": ErrorResponse,
                 "content": {
                     "application/json": {
                         "examples": {

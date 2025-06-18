@@ -12,7 +12,9 @@ from fastapi_users.authentication import AuthenticationBackend, Authenticator, S
 from fastapi_users.exceptions import UserAlreadyExists
 from fastapi_users.jwt import SecretType, decode_jwt
 from fastapi_users.manager import BaseUserManager, UserManagerDependency
-from fastapi_users.router.common import ErrorCode, ErrorModel
+from fastapi_users.router.common import ErrorCode
+from app.lib.schemas.error import ErrorResponse
+
 
 from fastapi_users.router.oauth import (
     STATE_TOKEN_AUDIENCE,
@@ -74,7 +76,7 @@ def get_oauth_router(
         description="The response varies based on the authentication backend used.",
         responses={
             status.HTTP_400_BAD_REQUEST: {
-                "model": ErrorModel,
+                "model": ErrorResponse,
                 "content": {
                     "application/json": {
                         "examples": {
@@ -87,7 +89,7 @@ def get_oauth_router(
                 },
             },
             status.HTTP_422_UNPROCESSABLE_ENTITY: {
-                "model": ErrorModel,
+                "model": ErrorResponse,
                 "content": {
                     "application/json": {
                         "examples": {
@@ -104,7 +106,7 @@ def get_oauth_router(
                 },
             },
             status.HTTP_401_UNAUTHORIZED: {
-                "model": ErrorModel,
+                "model": ErrorResponse,
                 "content": {
                     "application/json": {
                         "examples": {
@@ -242,7 +244,7 @@ def get_oauth_associate_router(
         description="The response varies based on the authentication backend used.",
         responses={
             status.HTTP_400_BAD_REQUEST: {
-                "model": ErrorModel,
+                "model": ErrorResponse,
                 "content": {
                     "application/json": {
                         "examples": {
