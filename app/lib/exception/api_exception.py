@@ -48,13 +48,11 @@ class APIException(HTTPException):
         detail_title: Optional[str] = None,
         detail_detail: Optional[str] = None,
         parameter: Optional[str] = None,
-        locale: str = "en"
+        locale: str = "en",
     ) -> None:
         detail_title = detail_title or get_message(locale, detail_code, "title")
         detail_detail = detail_detail or get_message(locale, detail_code, "detail")
-        source = (
-            ErrorSource(parameter=f"#/{parameter}") if parameter else None
-        )
+        source = ErrorSource(parameter=f"#/{parameter}") if parameter else None
         error_detail = ErrorDetail(
             status=str(status_code),
             code=detail_code,
@@ -62,11 +60,7 @@ class APIException(HTTPException):
             detail=detail_detail,
             source=source,
         )
-        return cls(
-            status_code=status_code,
-            error_details=[error_detail],
-            locale=locale
-        )
+        return cls(status_code=status_code, error_details=[error_detail], locale=locale)
 
     @classmethod
     def openapi_example(
