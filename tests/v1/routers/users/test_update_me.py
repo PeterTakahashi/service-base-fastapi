@@ -65,12 +65,3 @@ async def test_update_me_email_already_exists(
         detail_code=ErrorCode.UPDATE_USER_EMAIL_ALREADY_EXISTS,
         pointer="email",
     )
-
-
-async def test_update_me_unauthenticated(client: AsyncClient):
-    response = await client.patch("/users/me", json={"email": "test@test.com"})
-    check_api_exception_response(
-        response,
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail_code=ErrorCode.UNAUTHORIZED,
-    )

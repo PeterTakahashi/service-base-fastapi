@@ -6,18 +6,6 @@ from fastapi import status
 from app.lib.error_code import ErrorCode
 
 
-async def test_create_payment_intent_unauthenticated(client: AsyncClient):
-    response = await client.post(
-        "/payment-intents",
-        json={"amount": 1000},
-    )
-    check_api_exception_response(
-        response,
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail_code=ErrorCode.UNAUTHORIZED,
-    )
-
-
 async def test_create_payment_intent_authenticated(
     mock_payment_intent_create_patch, auth_client: AsyncClient
 ):

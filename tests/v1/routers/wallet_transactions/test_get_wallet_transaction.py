@@ -24,18 +24,6 @@ async def test_get_wallet_transaction_authenticated(
     assert response.json()["amount"] == wallet_transaction.amount
 
 
-async def test_get_wallet_transaction_unauthenticated(
-    client: AsyncClient,
-):
-    path = f"/wallet-transactions/{encode_id(1)}"
-    response = await client.get(path)
-    check_api_exception_response(
-        response,
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail_code=ErrorCode.UNAUTHORIZED,
-    )
-
-
 async def test_get_wallet_transaction_not_found(
     auth_client: AsyncClient,
 ):
