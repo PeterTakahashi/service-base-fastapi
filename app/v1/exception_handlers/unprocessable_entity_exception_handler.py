@@ -25,7 +25,7 @@ def unprocessable_entity_json_content_with_code(
     if source_parameter is None:
         source = {}
     else:
-        source = {"pointer": f"#/{source_parameter}"}
+        source = {"parameter": f"#/{source_parameter}"}
     return {
         "type": "about:blank",
         "title": "Unprocessable Entity",

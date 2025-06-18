@@ -27,8 +27,29 @@ class APIException(HTTPException):
             locale=locale,
         )
         self.parameter = parameter
+        self.source = (
+            ErrorSource(parameter=f"#/{self.parameter}") if self.parameter else None
+        )
         self.locale = locale
-        super().__init__(status_code=status_code)
+
+        # detailに渡した値はresponseの時には使わないが、testsでの検証のために必要
+        super().__init__(
+            status_code=status_code,
+            detail={
+                "type": "about:blank",
+                "title": self.title,
+                "status": status_code,
+                "errors": [
+                    {
+                        "status": status_code,
+                        "code": detail_code,
+                        "title": self.detail_title,
+                        "detail": self.detail_detail,
+                        "source": self.source.model_dump() if self.source else None,
+                    }
+                ],
+            },
+        )
 
     def to_error_response(self, request: Request) -> ErrorResponse:
         self.locale = get_locale(request)
@@ -86,7 +107,7 @@ class APIException(HTTPException):
             code=self.detail_code,
             title=self.detail_title,
             detail=self.detail_detail,
-            source=ErrorSource(parameter=self.parameter) if self.parameter else None,
+            source=self.source,
         )
 
     def __set_detail_title_and_detail(

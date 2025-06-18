@@ -8,22 +8,22 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 
     for e in exc.errors():
         print(e)  # Debugging line to print the error details
-        pointer = ""
+        parameter = ""
         if e["loc"][0] == "body":
-            pointer = "#/" + "/".join(str(loc) for loc in e["loc"][1:])
+            parameter = "#/" + "/".join(str(loc) for loc in e["loc"][1:])
         elif e["loc"][0] == "query":
-            pointer = "#/" + "/".join(str(loc) for loc in e["loc"][1:])
+            parameter = "#/" + "/".join(str(loc) for loc in e["loc"][1:])
         elif e["loc"][0] == "path":
-            pointer = "#/" + "/".join(str(loc) for loc in e["loc"][1:])
+            parameter = "#/" + "/".join(str(loc) for loc in e["loc"][1:])
         else:
-            pointer = "#/" + "/".join(str(loc) for loc in e["loc"])
+            parameter = "#/" + "/".join(str(loc) for loc in e["loc"])
 
         errors.append(
             {
                 "code": "validation_error",
                 "title": "Validation Error",
                 "detail": e["msg"],
-                "source": {"pointer": pointer},
+                "source": {"parameter": parameter},
             }
         )
 

@@ -86,12 +86,12 @@
     "detail": "The reset token is invalid or has expired. Please request a new password reset."
   },
   "verify_user_already_verified": {
-    "openapi_example_summary": "User already verified.",
+    "openapi_example_summary": "The user is already verified.",
     "title": "User Already Verified",
     "detail": "Your account is already verified. You can log in now."
   },
   "verify_user_bad_token": {
-    "openapi_example_summary": "Invalid or expired verification token.",
+    "openapi_example_summary": "Bad token, not existing user or not the e-mail currently set for the user.",
     "title": "Invalid Verification Token",
     "detail": "The verification token is invalid or has expired. Please request a new verification email."
   },
@@ -119,5 +119,15 @@
     "openapi_example_summary": "State token is invalid or expired.",
     "title": "Invalid State Token",
     "detail": "The state token is invalid or has expired. Please try again."
+  },
+  "register_user_already_exists": {
+    "openapi_example_summary": "User already exists with this email.",
+    "title": "User Already Exists",
+    "detail": "An account with this email already exists. Please log in or use a different email."
+  },
+  "register_invalid_password": {
+    "openapi_example_summary": "Password does not meet criteria.",
+    "title": "Invalid Password",
+    "detail": "The provided password does not meet the required criteria. Please ensure it is at least 8 characters long and contains a mix of letters, numbers, and special characters."
   }
 }

@@ -1,15 +1,29 @@
-from fastapi import APIRouter, Body, Depends, HTTPException, Request, status
+from fastapi import APIRouter, Body, Depends, Request, status
 from pydantic import EmailStr
 
 from fastapi_users import exceptions, models, schemas
 from fastapi_users.manager import BaseUserManager, UserManagerDependency
 from app.lib.error_code import ErrorCode
-from app.lib.schemas.error import ErrorResponse
 from app.v1.schemas.user import UserRead
 
-from app.v1.exception_handlers.bad_request_exception_handler import (
-    bad_request_json_content,
-)
+from app.lib.exception.http.api_exception import APIException
+from app.lib.openapi_response_type import openapi_response_type
+from app.lib.schemas.api_exception_openapi_example import APIExceptionOpenAPIExample
+from app.lib.schemas.openapi import OpenAPIResponseType
+
+VERIFY_RESPONSES: OpenAPIResponseType = {
+    status.HTTP_400_BAD_REQUEST: openapi_response_type(
+        status_code=status.HTTP_400_BAD_REQUEST,
+        description="Bad token.",
+        request_path="/auth/verify",
+        api_exception_openapi_examples=[
+            APIExceptionOpenAPIExample(detail_code=ErrorCode.VERIFY_USER_BAD_TOKEN),
+            APIExceptionOpenAPIExample(
+                detail_code=ErrorCode.VERIFY_USER_ALREADY_VERIFIED,
+            ),
+        ],
+    ),
+}
 
 
 def get_verify_router(
@@ -44,31 +58,7 @@ def get_verify_router(
         "/verify",
         response_model=user_schema,
         name="verify:verify",
-        responses={
-            status.HTTP_400_BAD_REQUEST: {
-                "model": ErrorResponse,
-                "content": {
-                    "application/json": {
-                        "examples": {
-                            ErrorCode.VERIFY_USER_BAD_TOKEN: {
-                                "summary": "Bad token, not existing user or not the e-mail currently set for the user.",
-                                "value": bad_request_json_content(
-                                    code=ErrorCode.VERIFY_USER_BAD_TOKEN,
-                                    instance="http://127.0.0.1:8000/app/v1/auth/verify",
-                                ),
-                            },
-                            ErrorCode.VERIFY_USER_ALREADY_VERIFIED: {
-                                "summary": "The user is already verified.",
-                                "value": bad_request_json_content(
-                                    code=ErrorCode.VERIFY_USER_ALREADY_VERIFIED,
-                                    instance="http://127.0.0.1:8000/app/v1/auth/verify",
-                                ),
-                            },
-                        }
-                    }
-                },
-            }
-        },
+        responses=VERIFY_RESPONSES,
     )
     async def verify(
         request: Request,
@@ -79,14 +69,14 @@ def get_verify_router(
             user = await user_manager.verify(token, request)
             return schemas.model_validate(user_schema, user)
         except (exceptions.InvalidVerifyToken, exceptions.UserNotExists):
-            raise HTTPException(
+            raise APIException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail=ErrorCode.VERIFY_USER_BAD_TOKEN,
+                detail_code=ErrorCode.VERIFY_USER_BAD_TOKEN,
             )
         except exceptions.UserAlreadyVerified:
-            raise HTTPException(
+            raise APIException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail=ErrorCode.VERIFY_USER_ALREADY_VERIFIED,
+                detail_code=ErrorCode.VERIFY_USER_ALREADY_VERIFIED,
             )
 
     return router

@@ -50,7 +50,7 @@ async def test_create_payment_intent_invalid_amount(
                 "code": "validation_error",
                 "title": "Validation Error",
                 "detail": "Input should be greater than or equal to 100",
-                "source": {"pointer": "#/amount"},
+                "source": {"parameter": "#/amount"},
             }
         ],
     )

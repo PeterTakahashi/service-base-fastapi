@@ -1,59 +1,35 @@
-from fastapi import APIRouter, Body, Depends, HTTPException, Request, status
+from fastapi import APIRouter, Body, Depends, Request, status
 from pydantic import EmailStr
 
 from fastapi_users import exceptions, models
 from fastapi_users.manager import BaseUserManager, UserManagerDependency
 from app.lib.schemas.openapi import OpenAPIResponseType
 from app.lib.error_code import ErrorCode
-from app.lib.schemas.error import ErrorResponse
-from app.v1.exception_handlers.unprocessable_entity_exception_handler import (
-    unprocessable_entity_json_content,
-)
-from app.v1.exception_handlers.bad_request_exception_handler import (
-    bad_request_json_content,
-)
+from app.lib.exception.http.api_exception import APIException
+from app.lib.openapi_response_type import openapi_response_type
+from app.lib.schemas.api_exception_openapi_example import APIExceptionOpenAPIExample
 
 
 RESET_PASSWORD_RESPONSES: OpenAPIResponseType = {
-    status.HTTP_400_BAD_REQUEST: {
-        "model": ErrorResponse,
-        "content": {
-            "application/json": {
-                "examples": {
-                    ErrorCode.RESET_PASSWORD_BAD_TOKEN: {
-                        "summary": "Bad or expired token.",
-                        "value": bad_request_json_content(
-                            code=ErrorCode.RESET_PASSWORD_BAD_TOKEN,
-                            instance="http://127.0.0.1:8000/app/v1/auth/reset-password",
-                        ),
-                    },
-                }
-            }
-        },
-    },
-    status.HTTP_422_UNPROCESSABLE_ENTITY: {
-        "model": ErrorResponse,
-        "content": {
-            "application/json": {
-                "examples": {
-                    ErrorCode.RESET_PASSWORD_INVALID_PASSWORD: {
-                        "summary": "Password validation failed.",
-                        "value": unprocessable_entity_json_content(
-                            instance="http://127.0.0.1:8000/app/v1/auth/reset-password",
-                            errors=[
-                                {
-                                    "code": ErrorCode.RESET_PASSWORD_INVALID_PASSWORD,
-                                    "title": "Invalid Password",
-                                    "detail": "Password should be at least 3 characters",
-                                    "source": {"pointer": "#/password"},
-                                }
-                            ],
-                        ),
-                    }
-                }
-            }
-        },
-    },
+    status.HTTP_400_BAD_REQUEST: openapi_response_type(
+        status_code=status.HTTP_400_BAD_REQUEST,
+        description="Bad token.",
+        request_path="/auth/reset-password",
+        api_exception_openapi_examples=[
+            APIExceptionOpenAPIExample(detail_code=ErrorCode.RESET_PASSWORD_BAD_TOKEN),
+        ],
+    ),
+    status.HTTP_422_UNPROCESSABLE_ENTITY: openapi_response_type(
+        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+        description="",
+        request_path="/auth/reset-password",
+        api_exception_openapi_examples=[
+            APIExceptionOpenAPIExample(
+                detail_code=ErrorCode.RESET_PASSWORD_INVALID_PASSWORD,
+                parameter="password",
+            ),
+        ],
+    ),
 }
 
 
@@ -103,24 +79,16 @@ def get_reset_password_router(
             exceptions.UserNotExists,
             exceptions.UserInactive,
         ):
-            raise HTTPException(
+            raise APIException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail=ErrorCode.RESET_PASSWORD_BAD_TOKEN,
+                detail_code=ErrorCode.RESET_PASSWORD_BAD_TOKEN,
             )
         except exceptions.InvalidPasswordException as e:
-            raise HTTPException(
+            raise APIException(
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                detail=unprocessable_entity_json_content(
-                    instance=str(request.url),
-                    errors=[
-                        {
-                            "code": ErrorCode.RESET_PASSWORD_INVALID_PASSWORD,
-                            "title": "Invalid Password",
-                            "detail": e.reason,
-                            "source": {"pointer": "#/password"},
-                        }
-                    ],
-                ),
+                detail_code=ErrorCode.RESET_PASSWORD_INVALID_PASSWORD,
+                detail_detail=e.reason,
+                parameter="password",
             )
 
     return router

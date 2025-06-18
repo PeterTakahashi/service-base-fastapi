@@ -26,7 +26,7 @@ def check_api_exception_response(
                 "code": detail_code,
                 "title": detail_title or get_message(locale, detail_code, "title"),
                 "detail": detail_detail or get_message(locale, detail_code, "detail"),
-                "source": {"parameter": parameter} if parameter else None,
+                "source": {"parameter": f"#/{parameter}"} if parameter else None,
             }
         ],
     }

@@ -5,8 +5,10 @@ from tests.common.mailer import (
     get_password_reset_token_from_email_source,
 )
 from tests.common.check_error_response import (
-    check_validation_error_response,
+    check_api_exception_response,
 )
+from app.lib.error_code import ErrorCode
+from fastapi import status
 
 
 async def create_and_get_token(client: AsyncClient, faker):
@@ -81,16 +83,10 @@ async def test_reset_password_invalid_password(
         "/auth/reset-password",
         json={"token": token, "password": password},
     )
-    assert response.status_code == 422
-    check_validation_error_response(
+    check_api_exception_response(
         response,
-        path="/auth/reset-password",
-        errors=[
-            {
-                "code": "reset_password_invalid_password",
-                "title": "Invalid Password",
-                "detail": expected_reason,
-                "source": {"pointer": "#/password"},
-            }
-        ],
+        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+        detail_code=ErrorCode.RESET_PASSWORD_INVALID_PASSWORD,
+        detail_detail=expected_reason,
+        parameter="password",
     )

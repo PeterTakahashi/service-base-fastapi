@@ -85,7 +85,7 @@ async def test_update_user_api_key_invalid(auth_client: AsyncClient):
                 "code": "validation_error",
                 "title": "Validation Error",
                 "detail": "String should have at least 1 character",
-                "source": {"pointer": "#/name"},
+                "source": {"parameter": "#/name"},
             }
         ],
     )

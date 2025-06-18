@@ -1,15 +1,14 @@
-from fastapi import APIRouter, Depends, Request, status, HTTPException
+from fastapi import APIRouter, Depends, Request, status
 
 from fastapi_users import exceptions, models, schemas
 from fastapi_users.manager import BaseUserManager, UserManagerDependency
 from app.lib.error_code import ErrorCode
-from app.lib.schemas.error import ErrorResponse
 
 from app.v1.schemas.user import UserRead, UserCreate
 
-from app.v1.exception_handlers.unprocessable_entity_exception_handler import (
-    unprocessable_entity_json_content,
-)
+from app.lib.exception.http.api_exception import APIException
+from app.lib.openapi_response_type import openapi_response_type
+from app.lib.schemas.api_exception_openapi_example import APIExceptionOpenAPIExample
 
 
 def get_register_router(
@@ -26,43 +25,21 @@ def get_register_router(
         status_code=status.HTTP_201_CREATED,
         name="register:register",
         responses={
-            status.HTTP_422_UNPROCESSABLE_ENTITY: {
-                "model": ErrorResponse,
-                "content": {
-                    "application/json": {
-                        "examples": {
-                            ErrorCode.REGISTER_USER_ALREADY_EXISTS: {
-                                "summary": "A user with this email already exists.",
-                                "value": unprocessable_entity_json_content(
-                                    instance="http://127.0.0.1:8000/app/v1/auth/register/register",
-                                    errors=[
-                                        {
-                                            "code": ErrorCode.REGISTER_USER_ALREADY_EXISTS,
-                                            "title": "User Already Exists",
-                                            "detail": "A user with this email already exists.",
-                                            "source": {"pointer": "#/email"},
-                                        }
-                                    ],
-                                ),
-                            },
-                            ErrorCode.REGISTER_INVALID_PASSWORD: {
-                                "summary": "Password validation failed.",
-                                "value": unprocessable_entity_json_content(
-                                    instance="http://127.0.0.1:8000/app/v1/auth/register/register",
-                                    errors=[
-                                        {
-                                            "code": ErrorCode.REGISTER_INVALID_PASSWORD,
-                                            "title": "Invalid Password",
-                                            "detail": "Password must be at least 8 characters long",
-                                            "source": {"pointer": "#/password"},
-                                        }
-                                    ],
-                                ),
-                            },
-                        }
-                    }
-                },
-            },
+            status.HTTP_422_UNPROCESSABLE_ENTITY: openapi_response_type(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                description="",
+                request_path="/app/v1/auth/register/register",
+                api_exception_openapi_examples=[
+                    APIExceptionOpenAPIExample(
+                        detail_code=ErrorCode.REGISTER_USER_ALREADY_EXISTS,
+                        parameter="email",
+                    ),
+                    APIExceptionOpenAPIExample(
+                        detail_code=ErrorCode.REGISTER_INVALID_PASSWORD,
+                        parameter="password",
+                    ),
+                ],
+            )
         },
     )
     async def register(
@@ -75,34 +52,17 @@ def get_register_router(
                 user_create, safe=True, request=request
             )
         except exceptions.UserAlreadyExists:
-            raise HTTPException(
+            raise APIException(
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                detail=unprocessable_entity_json_content(
-                    instance=str(request.url),
-                    errors=[
-                        {
-                            "code": ErrorCode.REGISTER_USER_ALREADY_EXISTS,
-                            "title": "User Already Exists",
-                            "detail": "A user with this email already exists.",
-                            "source": {"pointer": "#/email"},
-                        }
-                    ],
-                ),
+                detail_code=ErrorCode.REGISTER_USER_ALREADY_EXISTS,
+                parameter="email",
             )
         except exceptions.InvalidPasswordException as e:
-            raise HTTPException(
+            raise APIException(
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                detail=unprocessable_entity_json_content(
-                    instance=str(request.url),
-                    errors=[
-                        {
-                            "code": ErrorCode.REGISTER_INVALID_PASSWORD,
-                            "title": "Invalid Password",
-                            "detail": e.reason,
-                            "source": {"pointer": "#/password"},
-                        }
-                    ],
-                ),
+                detail_code=ErrorCode.REGISTER_INVALID_PASSWORD,
+                detail_detail=e.reason,
+                parameter="password",
             )
 
         return schemas.model_validate(user_schema, created_user)

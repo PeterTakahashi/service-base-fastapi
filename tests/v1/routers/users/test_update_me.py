@@ -1,9 +1,8 @@
 from httpx import AsyncClient
 from tests.common.check_error_response import (
-    check_validation_error_response,
+    check_api_exception_response,
 )
 from fastapi import status
-from tests.common.check_error_response import check_api_exception_response
 from app.lib.error_code import ErrorCode
 
 
@@ -60,18 +59,11 @@ async def test_update_me_email_already_exists(
         json={"email": email},
     )
     # 3. check the response
-    check_validation_error_response(
+    check_api_exception_response(
         response,
-        path="/users/me",
-        errors=[
-            {
-                "status": "422",
-                "code": "update_user_email_already_exists",
-                "title": "User Email Already Exists",
-                "detail": "The email address you are trying to use is already associated with another account. Please use a different email address.",
-                "source": {},
-            }
-        ],
+        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+        detail_code=ErrorCode.UPDATE_USER_EMAIL_ALREADY_EXISTS,
+        parameter="email",
     )
 
 

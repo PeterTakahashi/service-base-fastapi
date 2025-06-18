@@ -1,7 +1,11 @@
 import pytest
 from httpx import AsyncClient
-from tests.common.check_error_response import check_validation_error_response
+from tests.common.check_error_response import (
+    check_api_exception_response,
+    check_validation_error_response,
+)
 from app.lib.error_code import ErrorCode
+from fastapi import status
 
 
 async def test_register_success(client: AsyncClient, faker):
@@ -53,17 +57,11 @@ async def test_register_duplicate_email(client: AsyncClient, faker):
     response = await client.post(
         "/auth/register/register", json=second_registration_data
     )
-    check_validation_error_response(
+    check_api_exception_response(
         response,
-        path="/auth/register/register",
-        errors=[
-            {
-                "code": ErrorCode.REGISTER_USER_ALREADY_EXISTS,
-                "title": "User Already Exists",
-                "detail": "A user with this email already exists.",
-                "source": {"pointer": "#/email"},
-            }
-        ],
+        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+        detail_code=ErrorCode.REGISTER_USER_ALREADY_EXISTS,
+        parameter="email",
     )
 
 
@@ -85,17 +83,12 @@ async def test_register_invalid_password_rules(
 
     response = await client.post("/auth/register/register", json=registration_data)
 
-    check_validation_error_response(
+    check_api_exception_response(
         response,
-        path="/auth/register/register",
-        errors=[
-            {
-                "code": ErrorCode.REGISTER_INVALID_PASSWORD,
-                "title": "Invalid Password",
-                "detail": expected_reason,
-                "source": {"pointer": "#/password"},
-            }
-        ],
+        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+        detail_code=ErrorCode.REGISTER_INVALID_PASSWORD,
+        detail_detail=expected_reason,
+        parameter="password",
     )
 
 
@@ -109,18 +102,12 @@ async def test_register_too_short_password(client: AsyncClient, faker):
     }
 
     response = await client.post("/auth/register/register", json=registration_data)
-
-    check_validation_error_response(
+    check_api_exception_response(
         response,
-        path="/auth/register/register",
-        errors=[
-            {
-                "code": ErrorCode.REGISTER_INVALID_PASSWORD,
-                "title": "Invalid Password",
-                "detail": "Password must be at least 8 characters long",
-                "source": {"pointer": "#/password"},
-            }
-        ],
+        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+        detail_code=ErrorCode.REGISTER_INVALID_PASSWORD,
+        detail_detail="Password must be at least 8 characters long",
+        parameter="password",
     )
 
 
@@ -142,7 +129,7 @@ async def test_register_missing_field(client: AsyncClient, faker):
                 "code": ErrorCode.VALIDATION_ERROR,
                 "title": "Validation Error",
                 "detail": "Field required",
-                "source": {"pointer": "#/email"},
+                "source": {"parameter": "#/email"},
             }
         ],
     )
