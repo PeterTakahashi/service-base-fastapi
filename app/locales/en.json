@@ -1,95 +1,123 @@
 {
   "unauthorized": {
+    "openapi_example_summary": "Authentication credentials missing or invalid.",
     "title": "Unauthorized",
     "detail": "Authentication credentials were not provided or are invalid."
   },
   "unprocessable_entity": {
+    "openapi_example_summary": "Request contains semantic errors.",
     "title": "Unprocessable Entity",
     "detail": "The request was well-formed but was unable to be followed due to semantic errors."
   },
   "expired_api_key": {
+    "openapi_example_summary": "API key has expired.",
     "title": "Expired API Key",
     "detail": "The provided API key has expired. Please obtain a new API key."
   },
   "invalid_api_key": {
+    "openapi_example_summary": "API key is invalid.",
     "title": "Invalid API Key",
     "detail": "The provided API key is invalid. Please check your API key and try again."
   },
   "invalid_origin": {
+    "openapi_example_summary": "Request origin not allowed.",
     "title": "Invalid Origin",
     "detail": "The request origin is not allowed. Please check your request origin."
   },
   "invalid_ip": {
+    "openapi_example_summary": "Request IP address not allowed.",
     "title": "Invalid IP Address",
     "detail": "The request IP address is not allowed. Please check your request IP address."
   },
   "login_bad_credentials": {
+    "openapi_example_summary": "Login failed due to incorrect credentials.",
     "title": "Login Failed",
     "detail": "The provided credentials are invalid. Please check your username and password."
   },
   "oauth_user_already_exists": {
+    "openapi_example_summary": "OAuth user already exists.",
     "title": "User Already Exists",
     "detail": "An account with this email already exists. Please log in or use a different email."
   },
   "oauth_not_available_email": {
+    "openapi_example_summary": "OAuth email not available.",
     "title": "Email Not Available",
     "detail": "The email address is not available. Please use a different email address."
   },
   "validation_error": {
+    "openapi_example_summary": "Validation failed on input data.",
     "title": "Validation Error",
     "required": "The field '{field}' is required.",
     "max_length": "The field '{field}' must be at most {max_length} characters."
   },
   "internal_server_error": {
+    "openapi_example_summary": "Unexpected server error.",
     "title": "Internal Server Error",
     "detail": "An unexpected error occurred. Please try again later."
   },
   "not_found": {
+    "openapi_example_summary": "Requested resource not found.",
     "title": "Not Found",
     "detail": "The requested resource could not be found."
   },
   "bad_request": {
+    "openapi_example_summary": "Malformed request syntax.",
     "title": "Bad Request",
     "detail": "The request could not be understood by the server due to malformed syntax."
   },
   "forbidden": {
+    "openapi_example_summary": "Access to resource is forbidden.",
     "title": "Forbidden",
     "detail": "You do not have permission to access this resource."
   },
   "login_user_not_verified": {
+    "openapi_example_summary": "User email not verified.",
     "title": "User Not Verified",
     "detail": "Your account has not been verified. Please check your email for the verification link."
   },
   "reset_password_invalid_password": {
+    "openapi_example_summary": "Reset password does not meet criteria.",
     "title": "Invalid Password",
     "detail": "The provided password does not meet the required criteria. Please ensure it is at least 8 characters long and contains a mix of letters, numbers, and special characters."
   },
   "reset_password_bad_token": {
+    "openapi_example_summary": "Invalid or expired reset token.",
     "title": "Invalid Reset Token",
     "detail": "The reset token is invalid or has expired. Please request a new password reset."
   },
   "verify_user_already_verified": {
+    "openapi_example_summary": "User already verified.",
     "title": "User Already Verified",
     "detail": "Your account is already verified. You can log in now."
   },
   "verify_user_bad_token": {
+    "openapi_example_summary": "Invalid or expired verification token.",
     "title": "Invalid Verification Token",
     "detail": "The verification token is invalid or has expired. Please request a new verification email."
   },
   "update_user_email_already_exists": {
+    "openapi_example_summary": "Email already in use.",
     "title": "User Email Already Exists",
     "detail": "The email address you are trying to use is already associated with another account. Please use a different email address."
   },
   "update_user_invalid_password": {
+    "openapi_example_summary": "New password is invalid.",
     "title": "Invalid Password",
     "detail": "Password must be at least 8 characters long."
   },
   "invalid_payload": {
+    "openapi_example_summary": "Payload is invalid or malformed.",
     "title": "Invalid Payload",
     "detail": "The request payload is invalid or malformed."
   },
   "login_account_locked": {
+    "openapi_example_summary": "Account locked after failed login attempts.",
     "title": "Account Locked",
     "detail": "Your account has been locked due to multiple failed login attempts. Please try again later or contact support."
+  },
+  "invalid_state_token": {
+    "openapi_example_summary": "State token is invalid or expired.",
+    "title": "Invalid State Token",
+    "detail": "The state token is invalid or has expired. Please try again."
   }
 }

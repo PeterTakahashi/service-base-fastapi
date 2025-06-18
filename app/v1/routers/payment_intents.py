@@ -11,6 +11,10 @@ from app.models.user import User
 from app.v1.services.payment_intent_service import PaymentIntentService
 from app.lib.stripe import get_stripe_webhook_event
 
+from app.lib.openapi_response_type import openapi_response_type
+from app.lib.schemas.api_exception_openapi_example import APIExceptionOpenAPIExample
+from app.lib.error_code import ErrorCode
+
 router = APIRouter()
 
 
@@ -37,6 +41,16 @@ async def create_payment_intent(
     response_model=None,
     name="payment_intents:update_payment_intent_by_webhook",
     status_code=status.HTTP_200_OK,
+    responses={
+        status.HTTP_401_UNAUTHORIZED: openapi_response_type(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            description="Invalid payload or signature.",
+            request_path="/payment-intents/webhook",
+            api_exception_openapi_examples=[
+                APIExceptionOpenAPIExample(detail_code=ErrorCode.INVALID_PAYLOAD)
+            ],
+        )
+    },
 )
 async def update_payment_intent_by_webhook(
     request: Request,

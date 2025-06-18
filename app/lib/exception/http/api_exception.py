@@ -3,6 +3,7 @@ from app.lib.schemas.error import ErrorDetail, ErrorResponse, ErrorSource
 from app.lib.i18n import get_message, get_locale
 from http import HTTPStatus
 from typing import Optional
+from app.core.config import settings
 
 
 class APIException(HTTPException):
@@ -45,12 +46,13 @@ class APIException(HTTPException):
         cls,
         status_code: int,
         detail_code: str,
-        instance: str,
-        parameter: Optional[str] = None,
-        locale: str = "en",
+        request_path: str,
         detail_title: Optional[str] = None,
         detail_detail: Optional[str] = None,
+        parameter: Optional[str] = None,
+        locale: str = "en",
     ) -> dict:
+        instance = f"{settings.BACKEND_API_V1_URL}{request_path}"
         exc = cls(
             status_code=status_code,
             detail_code=detail_code,
@@ -60,13 +62,17 @@ class APIException(HTTPException):
             locale=locale,
         )
         exc.__set_detail()
-        return ErrorResponse(
+        error_response = ErrorResponse(
             type="about:blank",
             title=exc.title,
             status=exc.status_code,
             instance=instance,
             errors=[exc.error_detail],
         ).model_dump()
+        openapi_example_summary = get_message(
+            locale, exc.detail_code, "openapi_example_summary"
+        )
+        return {"summary": openapi_example_summary, "value": error_response}
 
     def __set_detail(self) -> None:
         self.__set_detail_title_and_detail(

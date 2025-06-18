@@ -22,3 +22,4 @@ class ErrorCode(str, Enum):
     INVALID_ORIGIN = "invalid_origin"
     EXPIRED_API_KEY = "expired_api_key"
     LOGIN_ACCOUNT_LOCKED = "login_account_locked"
+    INVALID_STATE_TOKEN = "invalid_state_token"

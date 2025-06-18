@@ -14,7 +14,8 @@ from fastapi_users.jwt import SecretType, decode_jwt
 from fastapi_users.manager import BaseUserManager, UserManagerDependency
 from app.lib.error_code import ErrorCode
 from app.lib.schemas.error import ErrorResponse
-
+from app.lib.openapi_response_type import openapi_response_type
+from app.lib.schemas.api_exception_openapi_example import APIExceptionOpenAPIExample
 
 from fastapi_users.router.oauth import (
     STATE_TOKEN_AUDIENCE,
@@ -75,49 +76,36 @@ def get_oauth_router(
         name=callback_route_name,
         description="The response varies based on the authentication backend used.",
         responses={
-            status.HTTP_400_BAD_REQUEST: {
-                "model": ErrorResponse,
-                "content": {
-                    "application/json": {
-                        "examples": {
-                            "INVALID_STATE_TOKEN": {
-                                "summary": "Invalid state token.",
-                                "value": None,
-                            },
-                        }
-                    }
-                },
-            },
+            status.HTTP_400_BAD_REQUEST: openapi_response_type(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                description="Invalid state token or missing email.",
+                request_path=f"/auth/cookie/{oauth_client.name}/callback",
+                api_exception_openapi_examples=[
+                    APIExceptionOpenAPIExample(
+                        detail_code=ErrorCode.INVALID_STATE_TOKEN
+                    )
+                ],
+            ),
+            status.HTTP_401_UNAUTHORIZED: openapi_response_type(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                description="Missing token or inactive user.",
+                request_path=f"/auth/cookie/{oauth_client.name}/callback",
+                api_exception_openapi_examples=[
+                    APIExceptionOpenAPIExample(
+                        detail_code=ErrorCode.LOGIN_BAD_CREDENTIALS
+                    )
+                ],
+            ),
             status.HTTP_422_UNPROCESSABLE_ENTITY: {
                 "model": ErrorResponse,
                 "content": {
                     "application/json": {
                         "examples": {
-                            ErrorCode.OAUTH_USER_ALREADY_EXISTS: {
-                                "summary": "User is inactive.",
-                                "value": APIException.openapi_example(
-                                    status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                                    detail_code=ErrorCode.OAUTH_USER_ALREADY_EXISTS,
-                                    instance="http://127.0.0.1:8000/app/v1/auth/cookie/google/callback",
-                                ),
-                            },
-                        }
-                    }
-                },
-            },
-            status.HTTP_401_UNAUTHORIZED: {
-                "model": ErrorResponse,
-                "content": {
-                    "application/json": {
-                        "examples": {
-                            ErrorCode.LOGIN_BAD_CREDENTIALS: {
-                                "summary": "Bad credentials or the user is inactive.",
-                                "value": APIException.openapi_example(
-                                    status_code=status.HTTP_401_UNAUTHORIZED,
-                                    detail_code=ErrorCode.LOGIN_BAD_CREDENTIALS,
-                                    instance="http://127.0.0.1:8000/app/v1/auth/cookie/google/callback",
-                                ),
-                            },
+                            ErrorCode.OAUTH_USER_ALREADY_EXISTS: APIException.openapi_example(
+                                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                                detail_code=ErrorCode.OAUTH_USER_ALREADY_EXISTS,
+                                request_path=f"/auth/cookie/{oauth_client.name}/callback",
+                            )
                         }
                     }
                 },
@@ -243,19 +231,16 @@ def get_oauth_associate_router(
         name=callback_route_name,
         description="The response varies based on the authentication backend used.",
         responses={
-            status.HTTP_400_BAD_REQUEST: {
-                "model": ErrorResponse,
-                "content": {
-                    "application/json": {
-                        "examples": {
-                            "INVALID_STATE_TOKEN": {
-                                "summary": "Invalid state token.",
-                                "value": None,
-                            },
-                        }
-                    }
-                },
-            },
+            status.HTTP_400_BAD_REQUEST: openapi_response_type(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                description="Invalid state token or missing email.",
+                request_path=f"/auth/cookie/{oauth_client.name}/callback",
+                api_exception_openapi_examples=[
+                    APIExceptionOpenAPIExample(
+                        detail_code=ErrorCode.INVALID_STATE_TOKEN
+                    )
+                ],
+            ),
         },
     )
     async def callback(

@@ -6,9 +6,10 @@ from fastapi_users.authentication import AuthenticationBackend, Authenticator, S
 from fastapi_users.manager import BaseUserManager, UserManagerDependency
 from app.lib.schemas.openapi import OpenAPIResponseType
 from app.lib.error_code import ErrorCode
-from app.lib.schemas.error import ErrorResponse
 
 from app.lib.exception.http.api_exception import APIException
+from app.lib.openapi_response_type import openapi_response_type
+from app.lib.schemas.api_exception_openapi_example import APIExceptionOpenAPIExample
 
 
 def get_auth_router(
@@ -24,24 +25,14 @@ def get_auth_router(
     )
 
     login_responses: OpenAPIResponseType = {
-        status.HTTP_401_UNAUTHORIZED: {
-            "description": "Missing token or inactive user.",
-            "model": ErrorResponse,
-            "content": {
-                "application/json": {
-                    "examples": {
-                        ErrorCode.LOGIN_BAD_CREDENTIALS: {
-                            "summary": "Bad credentials or the user is inactive.",
-                            "value": APIException.openapi_example(
-                                status_code=status.HTTP_401_UNAUTHORIZED,
-                                detail_code=ErrorCode.LOGIN_BAD_CREDENTIALS,
-                                instance="http://127.0.0.1:8000/app/v1/auth/jwt/login",
-                            ),
-                        },
-                    }
-                }
-            },
-        },
+        status.HTTP_401_UNAUTHORIZED: openapi_response_type(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            description="Missing token or inactive user.",
+            request_path=f"/auth/{backend.name}/login",
+            api_exception_openapi_examples=[
+                APIExceptionOpenAPIExample(detail_code=ErrorCode.LOGIN_BAD_CREDENTIALS)
+            ],
+        ),
         **backend.transport.get_openapi_login_responses_success(),
     }
 
