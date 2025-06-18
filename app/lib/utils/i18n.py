@@ -19,12 +19,12 @@ def get_locale(request: Request) -> str:
     return lang
 
 
-def get_message(locale: str, code: str, key: str, **kwargs) -> str:
+def get_message(locale: str, code: str, key: str) -> str:
     if not messages:
-        load_messages()  # TODO: Load messages only once, possibly during app startup
+        load_messages()
     try:
         template = messages[locale][code][key]
     except KeyError:
-        template = messages["en"][code][key]  # fallback English
+        return ""
 
-    return template.format(**kwargs)
+    return template
