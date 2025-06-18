@@ -41,7 +41,5 @@ async def test_get_wallet_transaction_not_found(
 ):
     response = await auth_client.get(f"/wallet-transactions/{encode_id(0)}")
     check_api_exception_response(
-        response,
-        status_code=status.HTTP_404_NOT_FOUND,
-        detail_code=ErrorCode.NOT_FOUND
+        response, status_code=status.HTTP_404_NOT_FOUND, detail_code=ErrorCode.NOT_FOUND
     )

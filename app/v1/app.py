@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from app.v1.routers import api as api_router
 from app.core.config import settings
-from app.v1.exception_handlers.server_exception_handler import server_exception_handler
 from app.v1.exception_handlers.validation_exception_handler import (
     validation_exception_handler,
 )
@@ -15,6 +14,9 @@ from app.lib.exception_handlers.api_exception_handler import api_exception_handl
 from app.lib.exception_handlers.http_exception_handler import http_exception_handler
 from app.lib.exception_handlers.no_result_found_exception_handler import (
     no_result_found_exception_handler,
+)
+from app.lib.exception_handlers.server_exception_handler import (
+    server_exception_handler,
 )
 
 v1_app = FastAPI(

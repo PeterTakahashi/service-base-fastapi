@@ -24,3 +24,4 @@ class ErrorCode(str, Enum):
     EXPIRED_API_KEY = "expired_api_key"
     LOGIN_ACCOUNT_LOCKED = "login_account_locked"
     INVALID_STATE_TOKEN = "invalid_state_token"
+    INTERNAL_SERVER_ERROR = "internal_server_error"

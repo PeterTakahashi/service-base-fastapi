@@ -1,4 +1,3 @@
-from app.core.response_type import not_found_response_detail
 from app.lib.i18n import get_message
 from http import HTTPStatus
 
@@ -29,6 +28,7 @@ def check_api_exception_response(
             }
         ],
     }
+
 
 def check_validation_error_response(
     response, path: str, errors: list, base_url: str = "http://test/app/v1"
