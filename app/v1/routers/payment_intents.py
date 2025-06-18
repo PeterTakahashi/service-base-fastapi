@@ -11,7 +11,7 @@ from app.models.user import User
 from app.v1.services.payment_intent_service import PaymentIntentService
 from app.lib.utils.stripe import get_stripe_webhook_event
 
-from app.lib.openapi_response_type import openapi_response_type
+from app.lib.utils.openapi_response_type import openapi_response_type
 from app.schemas.api_exception_openapi_example import APIExceptionOpenAPIExample
 from app.lib.error_code import ErrorCode
 

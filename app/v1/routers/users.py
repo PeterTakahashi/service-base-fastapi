@@ -11,7 +11,7 @@ from app.lib.fastapi_users.user_manager import get_user_manager
 from app.v1.dependencies.services.user_service import get_user_service
 
 
-from app.lib.openapi_response_type import openapi_response_type
+from app.lib.utils.openapi_response_type import openapi_response_type
 from app.schemas.api_exception_openapi_example import APIExceptionOpenAPIExample
 
 router = APIRouter()

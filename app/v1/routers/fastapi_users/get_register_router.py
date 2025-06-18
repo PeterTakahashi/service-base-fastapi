@@ -7,7 +7,7 @@ from app.lib.error_code import ErrorCode
 from app.v1.schemas.user import UserRead, UserCreate
 
 from app.lib.exception.api_exception import init_api_exception
-from app.lib.openapi_response_type import openapi_response_type
+from app.lib.utils.openapi_response_type import openapi_response_type
 from app.schemas.api_exception_openapi_example import APIExceptionOpenAPIExample
 
 
