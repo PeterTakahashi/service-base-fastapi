@@ -53,9 +53,9 @@ async def test_get_user_api_key_not_found(auth_client: AsyncClient):
     Test that requesting a non-existent API key returns a 404 Not Found.
     """
     response = await auth_client.get("/user-api-keys/nonexistent-id")
-    assert response.status_code == 404
-    response_json = response.json()
-    assert (
-        response_json["errors"][0]["detail"]
-        == "The requested resource could not be found."
+    check_api_exception_response(
+        response,
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail_code=ErrorCode.NOT_FOUND
     )
+

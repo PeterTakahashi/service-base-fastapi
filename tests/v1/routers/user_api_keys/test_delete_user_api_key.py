@@ -8,7 +8,6 @@ from app.v1.schemas.user_api_key.write import UserApiKeyCreate
 from app.lib.convert_id import encode_id
 from app.lib.error_code import ErrorCode
 
-
 @pytest.mark.asyncio
 async def test_delete_user_api_key_unauthenticated(client: AsyncClient):
     """
@@ -47,4 +46,8 @@ async def test_update_user_api_key_not_found(auth_client: AsyncClient):
     Test that deleting a non-existent API key returns 404 Not Found.
     """
     response = await auth_client.delete(f"/user-api-keys/{encode_id(0)}")
-    assert response.status_code == 404
+    check_api_exception_response(
+        response,
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail_code=ErrorCode.NOT_FOUND
+    )

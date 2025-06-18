@@ -17,6 +17,7 @@ class ErrorCode(str, Enum):
     VALIDATION_ERROR = "validation_error"
     INVALID_PAYLOAD = "invalid_payload"
     UNAUTHORIZED = "unauthorized"
+    NOT_FOUND = "not_found"
     INVALID_API_KEY = "invalid_api_key"
     INVALID_IP = "invalid_ip"
     INVALID_ORIGIN = "invalid_origin"

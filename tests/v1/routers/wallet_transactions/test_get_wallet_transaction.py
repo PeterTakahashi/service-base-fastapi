@@ -40,14 +40,8 @@ async def test_get_wallet_transaction_not_found(
     auth_client: AsyncClient,
 ):
     response = await auth_client.get(f"/wallet-transactions/{encode_id(0)}")
-    assert response.status_code == 404
-    assert response.json() == {
-        "errors": [
-            {
-                "status": "404",
-                "code": "not_found",
-                "title": "Not Found",
-                "detail": "The requested resource could not be found.",
-            }
-        ]
-    }
+    check_api_exception_response(
+        response,
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail_code=ErrorCode.NOT_FOUND
+    )
