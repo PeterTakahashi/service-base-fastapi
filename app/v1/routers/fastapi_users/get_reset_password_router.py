@@ -3,7 +3,7 @@ from pydantic import EmailStr
 
 from fastapi_users import exceptions, models
 from fastapi_users.manager import BaseUserManager, UserManagerDependency
-from fastapi_users.openapi import OpenAPIResponseType
+from app.lib.schemas.openapi import OpenAPIResponseType
 from app.lib.error_code import ErrorCode
 from app.lib.schemas.error import ErrorResponse
 from app.v1.exception_handlers.unprocessable_entity_exception_handler import (
