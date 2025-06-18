@@ -8,8 +8,8 @@ from app.v1.schemas.user import UserRead
 
 from app.lib.exception.api_exception import init_api_exception
 from app.lib.openapi_response_type import openapi_response_type
-from app.lib.schemas.api_exception_openapi_example import APIExceptionOpenAPIExample
-from app.lib.schemas.openapi import OpenAPIResponseType
+from app.schemas.api_exception_openapi_example import APIExceptionOpenAPIExample
+from app.schemas.openapi import OpenAPIResponseType
 
 VERIFY_RESPONSES: OpenAPIResponseType = {
     status.HTTP_400_BAD_REQUEST: openapi_response_type(

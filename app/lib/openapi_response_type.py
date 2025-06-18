@@ -1,6 +1,6 @@
-from app.lib.schemas.error import ErrorResponse
+from app.schemas.error import ErrorResponse
 from app.lib.exception.api_exception import APIException
-from app.lib.schemas.api_exception_openapi_example import APIExceptionOpenAPIExample
+from app.schemas.api_exception_openapi_example import APIExceptionOpenAPIExample
 from typing import List, Optional
 
 

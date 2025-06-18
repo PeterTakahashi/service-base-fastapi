@@ -1,6 +1,6 @@
 from fastapi import Request, status
 from fastapi.exceptions import RequestValidationError
-from app.lib.schemas.error import ErrorDetail, ErrorSource
+from app.schemas.error import ErrorDetail, ErrorSource
 
 from app.lib.exception.api_exception import APIException
 from app.lib.exception_handlers.api_exception_handler import api_exception_handler
