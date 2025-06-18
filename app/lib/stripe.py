@@ -1,6 +1,7 @@
 import stripe
 from app.core.config import settings
-from fastapi import Request, status, HTTPException
+from fastapi import Request, status
+from app.lib.exception.http.api_exception import APIException
 
 stripe.api_key = settings.STRIPE_API_KEY
 
@@ -16,6 +17,6 @@ async def get_stripe_webhook_event(request: Request):
             secret=settings.STRIPE_WEBHOOK_SECRET,
         )
     except ValueError:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid payload"
+        raise APIException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail_code="invalid_payload"
         )

@@ -1,8 +1,9 @@
 from httpx import AsyncClient
 from tests.common.check_error_response import (
-    check_unauthorized_response,
     check_validation_error_response,
 )
+from fastapi import status
+from tests.common.check_error_response import check_api_exception_response
 
 
 async def test_create_payment_intent_unauthenticated(client: AsyncClient):
@@ -10,7 +11,9 @@ async def test_create_payment_intent_unauthenticated(client: AsyncClient):
         "/payment-intents",
         json={"amount": 1000},
     )
-    check_unauthorized_response(response, path="/payment-intents")
+    check_api_exception_response(
+        response, status_code=status.HTTP_401_UNAUTHORIZED, detail_code="unauthorized"
+    )
 
 
 async def test_create_payment_intent_authenticated(

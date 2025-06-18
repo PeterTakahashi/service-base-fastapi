@@ -1,5 +1,6 @@
 from httpx import AsyncClient
-from tests.common.check_error_response import check_unauthorized_response
+from fastapi import status
+from tests.common.check_error_response import check_api_exception_response
 
 
 async def test_get_me_authenticated(auth_client: AsyncClient):
@@ -13,4 +14,6 @@ async def test_get_me_authenticated(auth_client: AsyncClient):
 
 async def test_get_me_unauthenticated(client: AsyncClient):
     response = await client.get("/users/me")
-    check_unauthorized_response(response, path="/users/me")
+    check_api_exception_response(
+        response, status_code=status.HTTP_401_UNAUTHORIZED, detail_code="unauthorized"
+    )

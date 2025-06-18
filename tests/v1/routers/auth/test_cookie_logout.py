@@ -1,5 +1,6 @@
 from httpx import AsyncClient
-from tests.common.check_error_response import check_unauthorized_response
+from fastapi import status
+from tests.common.check_error_response import check_api_exception_response
 
 
 async def test_cookie_logout_success(client: AsyncClient, faker):
@@ -24,7 +25,7 @@ async def test_cookie_logout_success(client: AsyncClient, faker):
 
 
 async def test_cookie_logout_unauthorized(client: AsyncClient):
-    logout_resp = await client.post("/auth/cookie/logout")
-    check_unauthorized_response(
-        logout_resp, path="/auth/cookie/logout", code="unauthorized"
+    resp = await client.post("/auth/cookie/logout")
+    check_api_exception_response(
+        resp, status_code=status.HTTP_401_UNAUTHORIZED, detail_code="unauthorized"
     )

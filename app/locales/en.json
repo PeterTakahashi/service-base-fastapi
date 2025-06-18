@@ -31,6 +31,10 @@
     "title": "User Already Exists",
     "detail": "An account with this email already exists. Please log in or use a different email."
   },
+  "oauth_not_available_email": {
+    "title": "Email Not Available",
+    "detail": "The email address is not available. Please use a different email address."
+  },
   "validation_error": {
     "title": "Validation Error",
     "required": "The field '{field}' is required.",
@@ -79,5 +83,13 @@
   "update_user_invalid_password": {
     "title": "Invalid Password",
     "detail": "Password must be at least 8 characters long."
+  },
+  "invalid_payload": {
+    "title": "Invalid Payload",
+    "detail": "The request payload is invalid or malformed."
+  },
+  "login_account_locked": {
+    "title": "Account Locked",
+    "detail": "Your account has been locked due to multiple failed login attempts. Please try again later or contact support."
   }
 }

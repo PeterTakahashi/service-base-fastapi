@@ -12,6 +12,7 @@ from app.v1.exception_handlers.bad_request_exception_handler import (
     bad_request_json_content,
 )
 
+
 RESET_PASSWORD_RESPONSES: OpenAPIResponseType = {
     status.HTTP_400_BAD_REQUEST: {
         "model": ErrorModel,

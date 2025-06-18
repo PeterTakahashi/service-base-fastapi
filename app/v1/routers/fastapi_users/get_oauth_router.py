@@ -1,9 +1,11 @@
 from typing import Optional
 
 import jwt
-from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
+from fastapi import APIRouter, Depends, Query, Request, status
 from httpx_oauth.integrations.fastapi import OAuth2AuthorizeCallback
 from httpx_oauth.oauth2 import BaseOAuth2, OAuth2Token
+
+from app.lib.exception.http.api_exception import APIException
 
 from fastapi_users import models, schemas
 from fastapi_users.authentication import AuthenticationBackend, Authenticator, Strategy
@@ -17,7 +19,6 @@ from fastapi_users.router.oauth import (
     OAuth2AuthorizeResponse,
     generate_state_token,
 )
-from app.lib.exception.http.api_exception import APIException
 
 
 def get_oauth_router(
@@ -135,15 +136,18 @@ def get_oauth_router(
         )
 
         if account_email is None:
-            raise HTTPException(
+            raise APIException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail=ErrorCode.OAUTH_NOT_AVAILABLE_EMAIL,
+                detail_code=ErrorCode.OAUTH_NOT_AVAILABLE_EMAIL.lower(),
             )
 
         try:
             decode_jwt(state, state_secret, [STATE_TOKEN_AUDIENCE])
         except jwt.DecodeError:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
+            raise APIException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail_code=ErrorCode.INVALID_PAYLOAD.lower(),
+            )
 
         try:
             user = await user_manager.oauth_callback(
@@ -158,9 +162,9 @@ def get_oauth_router(
                 is_verified_by_default=is_verified_by_default,
             )
         except UserAlreadyExists:
-            raise HTTPException(
+            raise APIException(
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                detail=ErrorCode.OAUTH_USER_ALREADY_EXISTS.lower(),
+                detail_code=ErrorCode.OAUTH_USER_ALREADY_EXISTS.lower(),
             )
 
         if not user.is_active:
@@ -266,18 +270,24 @@ def get_oauth_associate_router(
         )
 
         if account_email is None:
-            raise HTTPException(
+            raise APIException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail=ErrorCode.OAUTH_NOT_AVAILABLE_EMAIL,
+                detail_code=ErrorCode.OAUTH_NOT_AVAILABLE_EMAIL.lower(),
             )
 
         try:
             state_data = decode_jwt(state, state_secret, [STATE_TOKEN_AUDIENCE])
         except jwt.DecodeError:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
+            raise APIException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail_code=ErrorCode.INVALID_PAYLOAD.lower(),
+            )
 
         if state_data["sub"] != str(user.id):
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
+            raise APIException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail_code=ErrorCode.INVALID_PAYLOAD.lower(),
+            )
 
         user = await user_manager.oauth_associate_callback(
             user,

@@ -7,9 +7,11 @@ from typing import Optional, Union
 from datetime import datetime, timezone, timedelta
 from app.lib.stripe import stripe
 
-from fastapi import Depends, Request, HTTPException
+from fastapi import Depends, Request, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.lib.exception.http.api_exception import APIException
 
 from fastapi_users import BaseUserManager, UUIDIDMixin, exceptions, models, schemas
 from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase
@@ -143,8 +145,9 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, UUID]):
             return None
         # Check if the user is currently locked and possibly unlock
         if not await self._handle_lock_state(user):
-            # Still locked
-            raise HTTPException(status_code=423, detail="LOGIN_ACCOUNT_LOCKED")
+            raise APIException(
+                status_code=status.HTTP_423_LOCKED, detail_code="login_account_locked"
+            )
 
         # Reset failed_attempts if enough time has passed since last attempt
         self._maybe_reset_failed_attempts(user)

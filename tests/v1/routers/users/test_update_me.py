@@ -1,8 +1,9 @@
 from httpx import AsyncClient
 from tests.common.check_error_response import (
-    check_unauthorized_response,
     check_validation_error_response,
 )
+from fastapi import status
+from tests.common.check_error_response import check_api_exception_response
 
 
 async def test_update_me_email(auth_client: AsyncClient, faker):
@@ -75,4 +76,6 @@ async def test_update_me_email_already_exists(
 
 async def test_update_me_unauthenticated(client: AsyncClient):
     response = await client.patch("/users/me", json={"email": "test@test.com"})
-    check_unauthorized_response(response, path="/users/me")
+    check_api_exception_response(
+        response, status_code=status.HTTP_401_UNAUTHORIZED, detail_code="unauthorized"
+    )

@@ -1,6 +1,7 @@
 from httpx import AsyncClient
 from app.lib.convert_id import encode_id, decode_id
-from tests.common.check_error_response import check_unauthorized_response
+from fastapi import status
+from tests.common.check_error_response import check_api_exception_response
 
 
 async def test_get_wallet_transaction_authenticated(
@@ -27,7 +28,9 @@ async def test_get_wallet_transaction_unauthenticated(
 ):
     path = f"/wallet-transactions/{encode_id(1)}"
     response = await client.get(path)
-    check_unauthorized_response(response, path=path)
+    check_api_exception_response(
+        response, status_code=status.HTTP_401_UNAUTHORIZED, detail_code="unauthorized"
+    )
 
 
 async def test_get_wallet_transaction_not_found(

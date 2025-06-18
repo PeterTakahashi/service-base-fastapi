@@ -1,28 +1,32 @@
 from app.core.response_type import not_found_response_detail
 from app.core.response_type import forbidden_detail
 from app.lib.i18n import get_message
+from http import HTTPStatus
 
 
-def check_unauthorized_response(
+def check_api_exception_response(
     response,
-    path: str,
-    code: str = "unauthorized",
-    base_url: str = "http://test/app/v1",
+    status_code: int,
+    detail_code: str,
+    detail_title: str | None = None,
+    detail_detail: str | None = None,
+    parameter: str | None = None,
     locale: str = "en",
 ):
-    assert response.status_code == 401
+    http_status = HTTPStatus(status_code)
+    assert response.status_code == status_code
     assert response.json() == {
         "type": "about:blank",
-        "title": "Unauthorized",
-        "status": 401,
-        "instance": f"{base_url}{path}",
+        "title": http_status.phrase,
+        "status": status_code,
+        "instance": str(response.url),
         "errors": [
             {
-                "status": "401",
-                "code": code,
-                "title": get_message(locale, code, "title"),
-                "detail": get_message(locale, code, "detail"),
-                "source": None,
+                "status": str(status_code),
+                "code": detail_code,
+                "title": detail_title or get_message(locale, detail_code, "title"),
+                "detail": detail_detail or get_message(locale, detail_code, "detail"),
+                "source": {"parameter": parameter} if parameter else None,
             }
         ],
     }

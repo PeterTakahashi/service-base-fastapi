@@ -82,9 +82,7 @@ async def test_update_me_already_exists():
             ),
         )
 
-    # fastapi-users 内部では UserAlreadyExists が起きると
-    # user_service 側は HTTPException(400) を投げるようにしている
-    # のでそれを確認
+    # fastapi-users 内部では UserAlreadyExists が起きる
     assert exc_info.value.status_code == 422
     assert exc_info.value.detail == ErrorCode.UPDATE_USER_EMAIL_ALREADY_EXISTS.lower()
 
@@ -129,8 +127,7 @@ async def test_update_me_password_invalid():
         )
 
     # -- 6) 発生した例外をアサート
-    # user_service 側では InvalidPasswordException を受け取ると
-    # HTTPException(400, detail={ code: ErrorCode.UPDATE_USER_INVALID_PASSWORD, reason: "..." }) を投げる。
+    # user_service 側では InvalidPasswordException
     assert exc_info.value.status_code == 422
     assert (
         exc_info.value.detail["errors"][0]["code"]

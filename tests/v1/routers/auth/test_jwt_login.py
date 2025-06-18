@@ -1,6 +1,7 @@
 from httpx import AsyncClient
 from fastapi_users.router.common import ErrorCode
-from tests.common.check_error_response import check_unauthorized_response
+from fastapi import status
+from tests.common.check_error_response import check_api_exception_response
 
 
 async def test_jwt_login_success(client: AsyncClient, faker):
@@ -43,6 +44,8 @@ async def test_jwt_login_bad_credentials(client: AsyncClient, faker):
         data={"username": email, "password": "wrong-password"},
         headers={"Content-Type": "application/x-www-form-urlencoded"},
     )
-    check_unauthorized_response(
-        resp, code=ErrorCode.LOGIN_BAD_CREDENTIALS.lower(), path="/auth/jwt/login"
+    check_api_exception_response(
+        resp,
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail_code=ErrorCode.LOGIN_BAD_CREDENTIALS.lower(),
     )
