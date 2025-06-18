@@ -11,7 +11,7 @@ from fastapi import Depends, Request, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.lib.exception.api_exception import APIException
+from app.lib.exception.api_exception import init_api_exception
 
 from fastapi_users import BaseUserManager, UUIDIDMixin, exceptions, models, schemas
 from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase
@@ -146,7 +146,7 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, UUID]):
             return None
         # Check if the user is currently locked and possibly unlock
         if not await self._handle_lock_state(user):
-            raise APIException.init_with_detail(
+            raise init_api_exception(
                 status_code=status.HTTP_423_LOCKED,
                 detail_code=ErrorCode.LOGIN_ACCOUNT_LOCKED,
             )

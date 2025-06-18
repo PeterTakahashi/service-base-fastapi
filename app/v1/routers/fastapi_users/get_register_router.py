@@ -6,7 +6,7 @@ from app.lib.error_code import ErrorCode
 
 from app.v1.schemas.user import UserRead, UserCreate
 
-from app.lib.exception.api_exception import APIException
+from app.lib.exception.api_exception import init_api_exception
 from app.lib.openapi_response_type import openapi_response_type
 from app.lib.schemas.api_exception_openapi_example import APIExceptionOpenAPIExample
 
@@ -52,13 +52,13 @@ def get_register_router(
                 user_create, safe=True, request=request
             )
         except exceptions.UserAlreadyExists:
-            raise APIException.init_with_detail(
+            raise init_api_exception(
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                 detail_code=ErrorCode.REGISTER_USER_ALREADY_EXISTS,
                 parameter="email",
             )
         except exceptions.InvalidPasswordException as e:
-            raise APIException.init_with_detail(
+            raise init_api_exception(
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                 detail_code=ErrorCode.REGISTER_INVALID_PASSWORD,
                 detail_detail=e.reason,

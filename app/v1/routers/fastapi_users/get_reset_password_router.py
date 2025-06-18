@@ -5,7 +5,7 @@ from fastapi_users import exceptions, models
 from fastapi_users.manager import BaseUserManager, UserManagerDependency
 from app.lib.schemas.openapi import OpenAPIResponseType
 from app.lib.error_code import ErrorCode
-from app.lib.exception.api_exception import APIException
+from app.lib.exception.api_exception import init_api_exception
 from app.lib.openapi_response_type import openapi_response_type
 from app.lib.schemas.api_exception_openapi_example import APIExceptionOpenAPIExample
 
@@ -79,12 +79,12 @@ def get_reset_password_router(
             exceptions.UserNotExists,
             exceptions.UserInactive,
         ):
-            raise APIException.init_with_detail(
+            raise init_api_exception(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail_code=ErrorCode.RESET_PASSWORD_BAD_TOKEN,
             )
         except exceptions.InvalidPasswordException as e:
-            raise APIException.init_with_detail(
+            raise init_api_exception(
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                 detail_code=ErrorCode.RESET_PASSWORD_INVALID_PASSWORD,
                 detail_detail=e.reason,

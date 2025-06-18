@@ -7,7 +7,7 @@ from fastapi_users.manager import BaseUserManager, UserManagerDependency
 from app.lib.schemas.openapi import OpenAPIResponseType
 from app.lib.error_code import ErrorCode
 
-from app.lib.exception.api_exception import APIException
+from app.lib.exception.api_exception import init_api_exception
 from app.lib.openapi_response_type import openapi_response_type
 from app.lib.schemas.api_exception_openapi_example import APIExceptionOpenAPIExample
 
@@ -50,7 +50,7 @@ def get_auth_router(
         user = await user_manager.authenticate(credentials)
 
         if user is None or not user.is_active:
-            raise APIException.init_with_detail(
+            raise init_api_exception(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail_code=ErrorCode.LOGIN_BAD_CREDENTIALS,
             )

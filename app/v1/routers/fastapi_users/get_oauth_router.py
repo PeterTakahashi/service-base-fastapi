@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, Query, Request, status
 from httpx_oauth.integrations.fastapi import OAuth2AuthorizeCallback
 from httpx_oauth.oauth2 import BaseOAuth2, OAuth2Token
 
-from app.lib.exception.api_exception import APIException
+from app.lib.exception.api_exception import init_api_exception
 
 from fastapi_users import models, schemas
 from fastapi_users.authentication import AuthenticationBackend, Authenticator, Strategy
@@ -13,7 +13,6 @@ from fastapi_users.exceptions import UserAlreadyExists
 from fastapi_users.jwt import SecretType, decode_jwt
 from fastapi_users.manager import BaseUserManager, UserManagerDependency
 from app.lib.error_code import ErrorCode
-from app.lib.schemas.error import ErrorResponse
 from app.lib.openapi_response_type import openapi_response_type
 from app.lib.schemas.api_exception_openapi_example import APIExceptionOpenAPIExample
 
@@ -96,20 +95,16 @@ def get_oauth_router(
                     )
                 ],
             ),
-            status.HTTP_422_UNPROCESSABLE_ENTITY: {
-                "model": ErrorResponse,
-                "content": {
-                    "application/json": {
-                        "examples": {
-                            ErrorCode.OAUTH_USER_ALREADY_EXISTS: APIException.openapi_example(
-                                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                                detail_code=ErrorCode.OAUTH_USER_ALREADY_EXISTS,
-                                request_path=f"/auth/cookie/{oauth_client.name}/callback",
-                            )
-                        }
-                    }
-                },
-            },
+            status.HTTP_422_UNPROCESSABLE_ENTITY: openapi_response_type(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                description="User already exists.",
+                request_path=f"/auth/cookie/{oauth_client.name}/callback",
+                api_exception_openapi_examples=[
+                    APIExceptionOpenAPIExample(
+                        detail_code=ErrorCode.OAUTH_USER_ALREADY_EXISTS
+                    )
+                ],
+            ),
         },
     )
     async def callback(
@@ -126,7 +121,7 @@ def get_oauth_router(
         )
 
         if account_email is None:
-            raise APIException.init_with_detail(
+            raise init_api_exception(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail_code=ErrorCode.OAUTH_NOT_AVAILABLE_EMAIL,
             )
@@ -134,7 +129,7 @@ def get_oauth_router(
         try:
             decode_jwt(state, state_secret, [STATE_TOKEN_AUDIENCE])
         except jwt.DecodeError:
-            raise APIException.init_with_detail(
+            raise init_api_exception(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail_code=ErrorCode.INVALID_PAYLOAD,
             )
@@ -152,13 +147,13 @@ def get_oauth_router(
                 is_verified_by_default=is_verified_by_default,
             )
         except UserAlreadyExists:
-            raise APIException.init_with_detail(
+            raise init_api_exception(
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                 detail_code=ErrorCode.OAUTH_USER_ALREADY_EXISTS,
             )
 
         if not user.is_active:
-            raise APIException.init_with_detail(
+            raise init_api_exception(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail_code=ErrorCode.LOGIN_BAD_CREDENTIALS,
             )
@@ -257,7 +252,7 @@ def get_oauth_associate_router(
         )
 
         if account_email is None:
-            raise APIException.init_with_detail(
+            raise init_api_exception(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail_code=ErrorCode.OAUTH_NOT_AVAILABLE_EMAIL,
             )
@@ -265,13 +260,13 @@ def get_oauth_associate_router(
         try:
             state_data = decode_jwt(state, state_secret, [STATE_TOKEN_AUDIENCE])
         except jwt.DecodeError:
-            raise APIException.init_with_detail(
+            raise init_api_exception(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail_code=ErrorCode.INVALID_PAYLOAD,
             )
 
         if state_data["sub"] != str(user.id):
-            raise APIException.init_with_detail(
+            raise init_api_exception(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail_code=ErrorCode.INVALID_PAYLOAD,
             )

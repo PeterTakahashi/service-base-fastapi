@@ -10,7 +10,7 @@ from app.v1.repositories.user_api_key_repository import UserApiKeyRepository
 from app.v1.repositories.user_repository import UserRepository
 from app.v1.dependencies.repositories.user_repository import get_user_repository
 
-from app.lib.exception.api_exception import APIException
+from app.lib.exception.api_exception import init_api_exception
 from app.lib.datetime import as_utc, now_utc
 
 from app.lib.fastapi_users.user_setup import optional_current_active_user
@@ -46,7 +46,7 @@ async def current_active_user_from_token_or_api_key(
 
     # ------- 2. API‑Key authentication -------
     if api_key is None:
-        raise APIException.init_with_detail(
+        raise init_api_exception(
             status_code=status.HTTP_401_UNAUTHORIZED, detail_code=ErrorCode.UNAUTHORIZED
         )
 
@@ -54,7 +54,7 @@ async def current_active_user_from_token_or_api_key(
         user_api_key = await user_api_key_repository.find_by_or_raise(api_key=api_key)
     except Exception:
         # Only "not found" should end up here; keep it broad but specific to invalid key
-        raise APIException.init_with_detail(
+        raise init_api_exception(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail_code=ErrorCode.INVALID_API_KEY,
         )
@@ -66,7 +66,7 @@ async def current_active_user_from_token_or_api_key(
             ip.strip() for ip in user_api_key.allowed_ip.split(",") if ip.strip()
         ]
         if len(allowed_ips) > 0 and (client_ip is None or client_ip not in allowed_ips):
-            raise APIException.init_with_detail(
+            raise init_api_exception(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail_code=ErrorCode.INVALID_IP,
             )
@@ -78,7 +78,7 @@ async def current_active_user_from_token_or_api_key(
             o.strip() for o in user_api_key.allowed_origin.split(",") if o.strip()
         ]
         if len(allowed_origins) > 0 and origin not in allowed_origins:
-            raise APIException.init_with_detail(
+            raise init_api_exception(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail_code=ErrorCode.INVALID_ORIGIN,
             )
@@ -86,7 +86,7 @@ async def current_active_user_from_token_or_api_key(
     # ---- Expiry check ----
     expires_at_utc = as_utc(user_api_key.expires_at)
     if expires_at_utc and expires_at_utc < now_utc():
-        raise APIException.init_with_detail(
+        raise init_api_exception(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail_code=ErrorCode.EXPIRED_API_KEY,
         )

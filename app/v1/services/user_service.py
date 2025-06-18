@@ -7,7 +7,7 @@ from app.v1.repositories.user_repository import UserRepository
 from app.models.user import User
 from app.v1.schemas.user import UserUpdate, UserRead, UserWithWalletRead
 from app.lib.fastapi_users.user_setup import current_active_user
-from app.lib.exception.api_exception import APIException
+from app.lib.exception.api_exception import init_api_exception
 
 
 class UserService:
@@ -33,14 +33,14 @@ class UserService:
             )
             return UserRead.model_validate(user)
         except exceptions.InvalidPasswordException as e:
-            raise APIException.init_with_detail(
+            raise init_api_exception(
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                 detail_code=ErrorCode.UPDATE_USER_INVALID_PASSWORD,
                 detail_detail=e.reason,
                 parameter="password",
             )
         except exceptions.UserAlreadyExists:
-            raise APIException.init_with_detail(
+            raise init_api_exception(
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                 detail_code=ErrorCode.UPDATE_USER_EMAIL_ALREADY_EXISTS,
                 parameter="email",

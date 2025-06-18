@@ -41,28 +41,6 @@ class APIException(HTTPException):
         )
 
     @classmethod
-    def init_with_detail(
-        cls,
-        status_code: int,
-        detail_code: str,
-        detail_title: Optional[str] = None,
-        detail_detail: Optional[str] = None,
-        parameter: Optional[str] = None,
-        locale: str = "en",
-    ) -> None:
-        detail_title = detail_title or get_message(locale, detail_code, "title")
-        detail_detail = detail_detail or get_message(locale, detail_code, "detail")
-        source = ErrorSource(parameter=f"#/{parameter}") if parameter else None
-        error_detail = ErrorDetail(
-            status=str(status_code),
-            code=detail_code,
-            title=detail_title,
-            detail=detail_detail,
-            source=source,
-        )
-        return cls(status_code=status_code, error_details=[error_detail], locale=locale)
-
-    @classmethod
     def openapi_example(
         cls,
         status_code: int,
@@ -74,13 +52,18 @@ class APIException(HTTPException):
         locale: str = "en",
     ) -> dict:
         instance = f"{settings.BACKEND_API_V1_URL}{request_path}"
-        exc = cls.init_with_detail(
-            status_code=status_code,
-            detail_code=detail_code,
-            detail_title=detail_title,
-            detail_detail=detail_detail,
-            parameter=parameter,
-            locale=locale,
+        detail_title = detail_title or get_message(locale, detail_code, "title")
+        detail_detail = detail_detail or get_message(locale, detail_code, "detail")
+        source = ErrorSource(parameter=f"#/{parameter}") if parameter else None
+        error_detail = ErrorDetail(
+            status=str(status_code),
+            code=detail_code,
+            title=detail_title,
+            detail=detail_detail,
+            source=source,
+        )
+        exc = APIException(
+            status_code=status_code, error_details=[error_detail], locale=locale
         )
         error_response = ErrorResponse(
             type="about:blank",
@@ -93,3 +76,26 @@ class APIException(HTTPException):
             locale, detail_code, "openapi_example_summary"
         )
         return {"summary": openapi_example_summary, "value": error_response}
+
+
+def init_api_exception(
+    status_code: int,
+    detail_code: str,
+    detail_title: Optional[str] = None,
+    detail_detail: Optional[str] = None,
+    parameter: Optional[str] = None,
+    locale: str = "en",
+) -> APIException:
+    detail_title = detail_title or get_message(locale, detail_code, "title")
+    detail_detail = detail_detail or get_message(locale, detail_code, "detail")
+    source = ErrorSource(parameter=f"#/{parameter}") if parameter else None
+    error_detail = ErrorDetail(
+        status=str(status_code),
+        code=detail_code,
+        title=detail_title,
+        detail=detail_detail,
+        source=source,
+    )
+    return APIException(
+        status_code=status_code, error_details=[error_detail], locale=locale
+    )
