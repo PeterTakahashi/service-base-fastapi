@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field, field_serializer, ConfigDict
-from app.lib.convert_id import encode_id
+from app.lib.utils.convert_id import encode_id
 
 IDField = Field(
     ...,

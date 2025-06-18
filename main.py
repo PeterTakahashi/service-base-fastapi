@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.core.config import settings
-from app.core.startup import startup, shutdown
+from app.lib.config import settings
+from app.lib.startup import startup, shutdown
 from app.v1.app import v1_app
 
 from app.admin.app import init_sqladmin

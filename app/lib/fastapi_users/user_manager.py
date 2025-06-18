@@ -5,7 +5,7 @@ This module defines the UserManager class and utility functions for managing use
 from uuid import UUID
 from typing import Optional, Union
 from datetime import datetime, timezone, timedelta
-from app.lib.stripe import stripe
+from app.lib.utils.stripe import stripe
 
 from fastapi import Depends, Request, status
 from fastapi.security import OAuth2PasswordRequestForm
@@ -18,7 +18,7 @@ from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase
 from fastapi_users.db import BaseUserDatabase
 from fastapi_users.password import PasswordHelperProtocol
 
-from app.core.config import settings
+from app.lib.config import settings
 from app.db.session import get_async_session
 from fastapi_mail import FastMail
 from app.v1.dependencies.mailer import get_mailer

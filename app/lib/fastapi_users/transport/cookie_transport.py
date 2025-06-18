@@ -1,7 +1,7 @@
 from fastapi_users.authentication import (
     CookieTransport,
 )
-from app.core.config import settings
+from app.lib.config import settings
 
 cookie_transport = CookieTransport(
     cookie_name="access_token",

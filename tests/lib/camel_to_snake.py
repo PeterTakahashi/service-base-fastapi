@@ -1,4 +1,4 @@
-from app.lib.camel_to_snake import camel_to_snake
+from app.lib.utils.camel_to_snake import camel_to_snake
 
 
 def test_camel_to_snake():

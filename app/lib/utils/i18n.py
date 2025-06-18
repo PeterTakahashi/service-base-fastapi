@@ -7,7 +7,7 @@ messages = {}
 
 def load_messages():
     global messages
-    base_path = Path(__file__).parent.parent / "locales"
+    base_path = Path(__file__).parent.parent.parent / "locales"
     for path in base_path.glob("*.json"):
         lang = path.stem
         with open(path, encoding="utf-8") as f:

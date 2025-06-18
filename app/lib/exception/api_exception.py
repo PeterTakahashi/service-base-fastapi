@@ -1,9 +1,9 @@
 from fastapi import HTTPException, Request
 from app.lib.schemas.error import ErrorDetail, ErrorResponse, ErrorSource
-from app.lib.i18n import get_message, get_locale
+from app.lib.utils.i18n import get_message, get_locale
 from http import HTTPStatus
 from typing import Optional, List
-from app.core.config import settings
+from app.lib.config import settings
 
 
 class APIException(HTTPException):

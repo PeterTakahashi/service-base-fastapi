@@ -1,6 +1,6 @@
 import base64
 import re
-from app.core.config import settings
+from app.lib.config import settings
 import httpx
 
 

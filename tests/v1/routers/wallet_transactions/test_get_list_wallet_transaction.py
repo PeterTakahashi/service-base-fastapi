@@ -2,7 +2,7 @@
 import pytest
 from httpx import AsyncClient
 from datetime import datetime, timedelta
-from app.lib.convert_id import decode_id
+from app.lib.utils.convert_id import decode_id
 from fastapi import status
 from tests.common.check_error_response import check_api_exception_response
 from app.lib.error_code import ErrorCode

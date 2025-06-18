@@ -13,7 +13,7 @@ from dotenv import load_dotenv
 
 from alembic import context
 from app.db.base import Base
-from app.core.config import settings
+from app.lib.config import settings
 
 from app.models.user import User
 from app.models.wallet import Wallet

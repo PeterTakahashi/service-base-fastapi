@@ -12,7 +12,7 @@ from app.lib.fastapi_users.oauth_client import (
 )
 from app.lib.fastapi_users.user_manager import get_user_manager
 
-from app.core.config import settings
+from app.lib.config import settings
 from app.v1.routers.fastapi_users.get_register_router import get_register_router
 from app.v1.routers.fastapi_users.get_auth_router import get_auth_router
 from app.v1.routers.fastapi_users.get_oauth_router import get_oauth_router

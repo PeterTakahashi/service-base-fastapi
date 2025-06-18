@@ -1,4 +1,4 @@
-from app.lib.i18n import get_message
+from app.lib.utils.i18n import get_message
 from http import HTTPStatus
 
 

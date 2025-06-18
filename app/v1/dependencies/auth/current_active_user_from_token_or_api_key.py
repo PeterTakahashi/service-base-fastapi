@@ -11,7 +11,7 @@ from app.v1.repositories.user_repository import UserRepository
 from app.v1.dependencies.repositories.user_repository import get_user_repository
 
 from app.lib.exception.api_exception import init_api_exception
-from app.lib.datetime import as_utc, now_utc
+from app.lib.utils.datetime import as_utc, now_utc
 
 from app.lib.fastapi_users.user_setup import optional_current_active_user
 from app.lib.error_code import ErrorCode

@@ -3,7 +3,7 @@
 import asyncio
 import pytest
 import pytest_asyncio
-from app.core.startup import database
+from app.lib.startup import database
 from app.db.session import get_async_session
 from faker import Faker
 from tests.fixtures.models import (

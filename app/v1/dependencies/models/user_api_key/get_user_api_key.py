@@ -5,7 +5,7 @@ from app.v1.dependencies.repositories.user_api_key_repository import (
 )
 from app.v1.repositories.user_api_key_repository import UserApiKeyRepository
 from app.lib.fastapi_users.user_setup import current_active_user
-from app.lib.convert_id import decode_id
+from app.lib.utils.convert_id import decode_id
 
 
 async def get_user_api_key(

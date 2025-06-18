@@ -1,5 +1,5 @@
-from app.lib.convert_id import encode_id, decode_id
-from app.core.config import settings
+from app.lib.utils.convert_id import encode_id, decode_id
+from app.lib.config import settings
 
 
 def test_encode_id():

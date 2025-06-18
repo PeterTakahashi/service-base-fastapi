@@ -5,7 +5,7 @@ from app.lib.schemas.error import ErrorDetail, ErrorSource
 from app.lib.exception.api_exception import APIException
 from app.lib.exception_handlers.api_exception_handler import api_exception_handler
 from app.lib.error_code import ErrorCode
-from app.lib.i18n import get_message, get_locale
+from app.lib.utils.i18n import get_message, get_locale
 from typing import List
 
 

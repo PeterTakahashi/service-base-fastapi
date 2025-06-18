@@ -8,7 +8,7 @@ from app.v1.schemas.wallet_transaction import (
     WalletTransactionListResponse,
 )
 from app.models.wallet import Wallet
-from app.lib.convert_id import decode_id
+from app.lib.utils.convert_id import decode_id
 from app.v1.dependencies.models.wallet.get_wallet_by_current_active_user import (
     get_wallet_by_current_active_user,
 )

@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from app.v1.routers import api as api_router
-from app.core.config import settings
+from app.lib.config import settings
 
 from fastapi.exceptions import RequestValidationError
 from fastapi import HTTPException

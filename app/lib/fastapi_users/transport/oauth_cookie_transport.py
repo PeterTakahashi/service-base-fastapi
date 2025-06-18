@@ -1,7 +1,7 @@
 from fastapi_users.authentication import CookieTransport
 from fastapi import status
 from fastapi.responses import RedirectResponse, Response
-from app.core.config import settings
+from app.lib.config import settings
 from app.lib.schemas.openapi import OpenAPIResponseType
 
 
