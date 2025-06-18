@@ -50,12 +50,6 @@ def check_not_found_status_code_and_detail(
         model_name=model_name, parameter=parameter, target_id=target_id
     )
 
-
-def check_forbidden_response(response):
-    assert response.status_code == 403
-    assert response.json()["detail"] == forbidden_detail
-
-
 def check_validation_error_response(
     response, path: str, errors: list, base_url: str = "http://test/app/v1"
 ):
