@@ -5,7 +5,7 @@ from app.lib.error_code import ErrorCode
 from app.core.routers.base_router import BaseRouter
 
 
-class AuthAPIRouter(BaseRouter):
+class ApiKeyAuthAPIRouter(BaseRouter):
 
     def get_default_responses(self, request_path: str) -> dict:
         return {
@@ -14,7 +14,11 @@ class AuthAPIRouter(BaseRouter):
                 request_path=request_path,
                 description="Unauthorized access.",
                 api_exception_openapi_examples=[
-                    APIExceptionOpenAPIExample(detail_code=ErrorCode.UNAUTHORIZED)
+                    APIExceptionOpenAPIExample(detail_code=ErrorCode.UNAUTHORIZED),
+                    APIExceptionOpenAPIExample(detail_code=ErrorCode.INVALID_API_KEY),
+                    APIExceptionOpenAPIExample(detail_code=ErrorCode.INVALID_IP),
+                    APIExceptionOpenAPIExample(detail_code=ErrorCode.INVALID_ORIGIN),
+                    APIExceptionOpenAPIExample(detail_code=ErrorCode.EXPIRED_API_KEY),
                 ],
             )
         }

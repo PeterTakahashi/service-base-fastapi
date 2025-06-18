@@ -9,9 +9,9 @@ from app.v1.dependencies.auth.current_active_user_from_token_or_api_key import (
 )
 from app.models.user import User
 
-from app.core.routers.auth_api_router import AuthAPIRouter
+from app.core.routers.api_key_auth_api_router import ApiKeyAuthAPIRouter
 
-router = AuthAPIRouter(prefix="/user-api-keys", tags=["User API Keys"])
+router = ApiKeyAuthAPIRouter(prefix="/user-api-keys", tags=["User API Keys"])
 
 
 @router.post(
