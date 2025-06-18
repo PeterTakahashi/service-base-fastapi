@@ -1,7 +1,7 @@
 import stripe
 from app.core.config import settings
 from fastapi import Request, status
-from app.lib.exception.http.api_exception import APIException
+from app.lib.exception.api_exception import APIException
 from app.lib.error_code import ErrorCode
 
 stripe.api_key = settings.STRIPE_API_KEY

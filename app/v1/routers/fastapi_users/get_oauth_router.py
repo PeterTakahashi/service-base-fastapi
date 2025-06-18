@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, Query, Request, status
 from httpx_oauth.integrations.fastapi import OAuth2AuthorizeCallback
 from httpx_oauth.oauth2 import BaseOAuth2, OAuth2Token
 
-from app.lib.exception.http.api_exception import APIException
+from app.lib.exception.api_exception import APIException
 
 from fastapi_users import models, schemas
 from fastapi_users.authentication import AuthenticationBackend, Authenticator, Strategy

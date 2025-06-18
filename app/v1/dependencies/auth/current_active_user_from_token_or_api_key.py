@@ -10,7 +10,7 @@ from app.v1.repositories.user_api_key_repository import UserApiKeyRepository
 from app.v1.repositories.user_repository import UserRepository
 from app.v1.dependencies.repositories.user_repository import get_user_repository
 
-from app.lib.exception.http.api_exception import APIException
+from app.lib.exception.api_exception import APIException
 from app.lib.datetime import as_utc, now_utc
 
 from app.lib.fastapi_users.user_setup import optional_current_active_user

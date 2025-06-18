@@ -7,7 +7,6 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
     errors = []
 
     for e in exc.errors():
-        print(e)  # Debugging line to print the error details
         parameter = ""
         if e["loc"][0] == "body":
             parameter = "#/" + "/".join(str(loc) for loc in e["loc"][1:])

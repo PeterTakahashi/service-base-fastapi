@@ -7,7 +7,7 @@ from app.v1.repositories.user_repository import UserRepository
 from app.models.user import User
 from app.v1.schemas.user import UserUpdate, UserRead, UserWithWalletRead
 from app.lib.fastapi_users.user_setup import current_active_user
-from app.lib.exception.http.api_exception import APIException
+from app.lib.exception.api_exception import APIException
 
 
 class UserService:
