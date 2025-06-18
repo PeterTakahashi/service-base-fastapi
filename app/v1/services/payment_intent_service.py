@@ -3,7 +3,7 @@ from app.v1.schemas.payment_intent import (
     PaymentIntentCreateResponse,
 )
 from app.lib.utils.stripe import stripe
-from app.lib.config import settings
+from app.core.config import settings
 from app.models.user import User
 from app.models.wallet import Wallet
 from app.models.wallet_transaction import (

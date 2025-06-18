@@ -18,7 +18,7 @@ from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase
 from fastapi_users.db import BaseUserDatabase
 from fastapi_users.password import PasswordHelperProtocol
 
-from app.lib.config import settings
+from app.core.config import settings
 from app.db.session import get_async_session
 from fastapi_mail import FastMail
 from app.v1.dependencies.mailer import get_mailer

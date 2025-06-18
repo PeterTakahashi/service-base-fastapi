@@ -1,5 +1,5 @@
 from httpx import AsyncClient
-from app.lib.config import settings
+from app.core.config import settings
 from datetime import timedelta
 from freezegun import freeze_time
 

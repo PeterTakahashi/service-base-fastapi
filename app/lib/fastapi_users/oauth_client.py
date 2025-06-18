@@ -1,4 +1,4 @@
-from app.lib.config import settings
+from app.core.config import settings
 from httpx_oauth.clients.google import GoogleOAuth2
 from httpx_oauth.clients.github import GitHubOAuth2
 

@@ -2,7 +2,7 @@ from fastapi_users.authentication import (
     AuthenticationBackend,
     JWTStrategy,
 )
-from app.lib.config import settings
+from app.core.config import settings
 from app.lib.fastapi_users.transport.bearer_transport import bearer_transport
 from app.lib.fastapi_users.transport.cookie_transport import cookie_transport
 from app.lib.fastapi_users.transport.oauth_cookie_transport import (

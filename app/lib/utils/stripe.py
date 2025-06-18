@@ -1,5 +1,5 @@
 import stripe
-from app.lib.config import settings
+from app.core.config import settings
 from fastapi import Request, status
 from app.lib.exception.api_exception import init_api_exception
 from app.lib.error_code import ErrorCode

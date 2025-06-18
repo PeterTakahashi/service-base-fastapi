@@ -1,5 +1,5 @@
 from hashids import Hashids  # type: ignore[import]
-from app.lib.config import settings
+from app.core.config import settings
 from sqlalchemy.exc import NoResultFound
 
 hashids = Hashids(min_length=settings.HASHIDS_MIN_LENGTH, salt=settings.HASHIDS_SALT)
