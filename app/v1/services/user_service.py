@@ -1,7 +1,7 @@
 from fastapi import Depends, HTTPException, Request, status
 from fastapi_users import exceptions, models
 from fastapi_users.manager import BaseUserManager
-from fastapi_users.router.common import ErrorCode
+from app.lib.error_code import ErrorCode
 
 from app.v1.repositories.user_repository import UserRepository
 from app.models.user import User
@@ -38,7 +38,7 @@ class UserService:
             raise HTTPException(
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                 detail=unprocessable_entity_json_content_with_code(
-                    code=ErrorCode.UPDATE_USER_INVALID_PASSWORD.lower(),
+                    code=ErrorCode.UPDATE_USER_INVALID_PASSWORD,
                     instance=str(request.url),
                     detail=e.reason,
                     source_parameter="password",
@@ -47,5 +47,5 @@ class UserService:
         except exceptions.UserAlreadyExists:
             raise HTTPException(
                 status.HTTP_422_UNPROCESSABLE_ENTITY,
-                detail=ErrorCode.UPDATE_USER_EMAIL_ALREADY_EXISTS.lower(),
+                detail=ErrorCode.UPDATE_USER_EMAIL_ALREADY_EXISTS,
             )

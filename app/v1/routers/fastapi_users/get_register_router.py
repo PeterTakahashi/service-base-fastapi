@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, Request, status, HTTPException
 
 from fastapi_users import exceptions, models, schemas
 from fastapi_users.manager import BaseUserManager, UserManagerDependency
-from fastapi_users.router.common import ErrorCode
+from app.lib.error_code import ErrorCode
 from app.lib.schemas.error import ErrorResponse
 
 from app.v1.schemas.user import UserRead, UserCreate

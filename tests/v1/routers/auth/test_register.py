@@ -1,6 +1,7 @@
 import pytest
 from httpx import AsyncClient
 from tests.common.check_error_response import check_validation_error_response
+from app.lib.error_code import ErrorCode
 
 
 async def test_register_success(client: AsyncClient, faker):
@@ -57,7 +58,7 @@ async def test_register_duplicate_email(client: AsyncClient, faker):
         path="/auth/register/register",
         errors=[
             {
-                "code": "REGISTER_USER_ALREADY_EXISTS",
+                "code": ErrorCode.REGISTER_USER_ALREADY_EXISTS,
                 "title": "User Already Exists",
                 "detail": "A user with this email already exists.",
                 "source": {"pointer": "#/email"},
@@ -89,7 +90,7 @@ async def test_register_invalid_password_rules(
         path="/auth/register/register",
         errors=[
             {
-                "code": "REGISTER_INVALID_PASSWORD",
+                "code": ErrorCode.REGISTER_INVALID_PASSWORD,
                 "title": "Invalid Password",
                 "detail": expected_reason,
                 "source": {"pointer": "#/password"},
@@ -114,7 +115,7 @@ async def test_register_too_short_password(client: AsyncClient, faker):
         path="/auth/register/register",
         errors=[
             {
-                "code": "REGISTER_INVALID_PASSWORD",
+                "code": ErrorCode.REGISTER_INVALID_PASSWORD,
                 "title": "Invalid Password",
                 "detail": "Password must be at least 8 characters long",
                 "source": {"pointer": "#/password"},
@@ -138,7 +139,7 @@ async def test_register_missing_field(client: AsyncClient, faker):
         path="/auth/register/register",
         errors=[
             {
-                "code": "validation_error",
+                "code": ErrorCode.VALIDATION_ERROR,
                 "title": "Validation Error",
                 "detail": "Field required",
                 "source": {"pointer": "#/email"},

@@ -3,7 +3,7 @@ from pydantic import EmailStr
 
 from fastapi_users import exceptions, models, schemas
 from fastapi_users.manager import BaseUserManager, UserManagerDependency
-from fastapi_users.router.common import ErrorCode
+from app.lib.error_code import ErrorCode
 from app.lib.schemas.error import ErrorResponse
 from app.v1.schemas.user import UserRead
 
@@ -53,14 +53,14 @@ def get_verify_router(
                             ErrorCode.VERIFY_USER_BAD_TOKEN: {
                                 "summary": "Bad token, not existing user or not the e-mail currently set for the user.",
                                 "value": bad_request_json_content(
-                                    code=ErrorCode.VERIFY_USER_BAD_TOKEN.lower(),
+                                    code=ErrorCode.VERIFY_USER_BAD_TOKEN,
                                     instance="http://127.0.0.1:8000/app/v1/auth/verify",
                                 ),
                             },
                             ErrorCode.VERIFY_USER_ALREADY_VERIFIED: {
                                 "summary": "The user is already verified.",
                                 "value": bad_request_json_content(
-                                    code=ErrorCode.VERIFY_USER_ALREADY_VERIFIED.lower(),
+                                    code=ErrorCode.VERIFY_USER_ALREADY_VERIFIED,
                                     instance="http://127.0.0.1:8000/app/v1/auth/verify",
                                 ),
                             },

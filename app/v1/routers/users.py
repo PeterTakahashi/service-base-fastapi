@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Request, status
 from fastapi_users import models
 from fastapi_users.manager import BaseUserManager
-from fastapi_users.router.common import ErrorCode
+from app.lib.error_code import ErrorCode
 from app.lib.schemas.error import ErrorResponse
 
 from app.lib.fastapi_users.user_setup import current_active_user
@@ -39,7 +39,7 @@ async def get_me(
                         ErrorCode.UPDATE_USER_EMAIL_ALREADY_EXISTS: {
                             "summary": "A user with this email already exists.",
                             "value": unprocessable_entity_json_content_with_code(
-                                code=ErrorCode.UPDATE_USER_EMAIL_ALREADY_EXISTS.lower(),
+                                code=ErrorCode.UPDATE_USER_EMAIL_ALREADY_EXISTS,
                                 instance="http://127.0.0.1:8000/app/v1/auth/register/register",
                                 source_parameter="email",
                             ),
@@ -47,7 +47,7 @@ async def get_me(
                         ErrorCode.UPDATE_USER_INVALID_PASSWORD: {
                             "summary": "Password validation failed.",
                             "value": unprocessable_entity_json_content_with_code(
-                                code=ErrorCode.UPDATE_USER_INVALID_PASSWORD.lower(),
+                                code=ErrorCode.UPDATE_USER_INVALID_PASSWORD,
                                 instance="http://127.0.0.1:8000/app/v1/auth/register/register",
                                 detail="Password must be at least 8 characters long",
                                 source_parameter="password",

@@ -12,7 +12,7 @@ from fastapi_users.authentication import AuthenticationBackend, Authenticator, S
 from fastapi_users.exceptions import UserAlreadyExists
 from fastapi_users.jwt import SecretType, decode_jwt
 from fastapi_users.manager import BaseUserManager, UserManagerDependency
-from fastapi_users.router.common import ErrorCode
+from app.lib.error_code import ErrorCode
 from app.lib.schemas.error import ErrorResponse
 
 
@@ -97,7 +97,7 @@ def get_oauth_router(
                                 "summary": "User is inactive.",
                                 "value": APIException.openapi_example(
                                     status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                                    detail_code=ErrorCode.OAUTH_USER_ALREADY_EXISTS.lower(),
+                                    detail_code=ErrorCode.OAUTH_USER_ALREADY_EXISTS,
                                     instance="http://127.0.0.1:8000/app/v1/auth/cookie/google/callback",
                                 ),
                             },
@@ -114,7 +114,7 @@ def get_oauth_router(
                                 "summary": "Bad credentials or the user is inactive.",
                                 "value": APIException.openapi_example(
                                     status_code=status.HTTP_401_UNAUTHORIZED,
-                                    detail_code=ErrorCode.LOGIN_BAD_CREDENTIALS.lower(),
+                                    detail_code=ErrorCode.LOGIN_BAD_CREDENTIALS,
                                     instance="http://127.0.0.1:8000/app/v1/auth/cookie/google/callback",
                                 ),
                             },
@@ -140,7 +140,7 @@ def get_oauth_router(
         if account_email is None:
             raise APIException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail_code=ErrorCode.OAUTH_NOT_AVAILABLE_EMAIL.lower(),
+                detail_code=ErrorCode.OAUTH_NOT_AVAILABLE_EMAIL,
             )
 
         try:
@@ -148,7 +148,7 @@ def get_oauth_router(
         except jwt.DecodeError:
             raise APIException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail_code=ErrorCode.INVALID_PAYLOAD.lower(),
+                detail_code=ErrorCode.INVALID_PAYLOAD,
             )
 
         try:
@@ -166,13 +166,13 @@ def get_oauth_router(
         except UserAlreadyExists:
             raise APIException(
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                detail_code=ErrorCode.OAUTH_USER_ALREADY_EXISTS.lower(),
+                detail_code=ErrorCode.OAUTH_USER_ALREADY_EXISTS,
             )
 
         if not user.is_active:
             raise APIException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail_code=ErrorCode.LOGIN_BAD_CREDENTIALS.lower(),
+                detail_code=ErrorCode.LOGIN_BAD_CREDENTIALS,
             )
 
         # Authenticate
@@ -274,7 +274,7 @@ def get_oauth_associate_router(
         if account_email is None:
             raise APIException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail_code=ErrorCode.OAUTH_NOT_AVAILABLE_EMAIL.lower(),
+                detail_code=ErrorCode.OAUTH_NOT_AVAILABLE_EMAIL,
             )
 
         try:
@@ -282,13 +282,13 @@ def get_oauth_associate_router(
         except jwt.DecodeError:
             raise APIException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail_code=ErrorCode.INVALID_PAYLOAD.lower(),
+                detail_code=ErrorCode.INVALID_PAYLOAD,
             )
 
         if state_data["sub"] != str(user.id):
             raise APIException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail_code=ErrorCode.INVALID_PAYLOAD.lower(),
+                detail_code=ErrorCode.INVALID_PAYLOAD,
             )
 
         user = await user_manager.oauth_associate_callback(

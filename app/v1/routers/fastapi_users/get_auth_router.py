@@ -5,7 +5,7 @@ from fastapi_users import models
 from fastapi_users.authentication import AuthenticationBackend, Authenticator, Strategy
 from fastapi_users.manager import BaseUserManager, UserManagerDependency
 from fastapi_users.openapi import OpenAPIResponseType
-from fastapi_users.router.common import ErrorCode
+from app.lib.error_code import ErrorCode
 from app.lib.schemas.error import ErrorResponse
 
 from app.lib.exception.http.api_exception import APIException
@@ -34,7 +34,7 @@ def get_auth_router(
                             "summary": "Bad credentials or the user is inactive.",
                             "value": APIException.openapi_example(
                                 status_code=status.HTTP_401_UNAUTHORIZED,
-                                detail_code=ErrorCode.LOGIN_BAD_CREDENTIALS.lower(),
+                                detail_code=ErrorCode.LOGIN_BAD_CREDENTIALS,
                                 instance="http://127.0.0.1:8000/app/v1/auth/jwt/login",
                             ),
                         },
@@ -61,7 +61,7 @@ def get_auth_router(
         if user is None or not user.is_active:
             raise APIException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail_code=ErrorCode.LOGIN_BAD_CREDENTIALS.lower(),
+                detail_code=ErrorCode.LOGIN_BAD_CREDENTIALS,
             )
         response = await backend.login(strategy, user)
         await user_manager.on_after_login(user, request, response)

@@ -5,7 +5,7 @@ from freezegun import freeze_time
 
 from fastapi import status
 
-from fastapi_users.router.common import ErrorCode
+from app.lib.error_code import ErrorCode
 from tests.common.check_error_response import check_api_exception_response
 
 
@@ -54,7 +54,7 @@ async def test_cookie_login_bad_credentials(client: AsyncClient, faker):
     check_api_exception_response(
         resp,
         status_code=status.HTTP_401_UNAUTHORIZED,
-        detail_code=ErrorCode.LOGIN_BAD_CREDENTIALS.lower(),
+        detail_code=ErrorCode.LOGIN_BAD_CREDENTIALS,
     )
 
 
@@ -82,7 +82,7 @@ async def test_cookie_login_lockout_reached(client: AsyncClient, faker):
         check_api_exception_response(
             resp,
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail_code=ErrorCode.LOGIN_BAD_CREDENTIALS.lower(),
+            detail_code=ErrorCode.LOGIN_BAD_CREDENTIALS,
         )
 
     # 3. Verify that we can still log in successfully before hitting the threshold
@@ -109,7 +109,7 @@ async def test_cookie_login_lockout_reached(client: AsyncClient, faker):
         check_api_exception_response(
             resp,
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail_code=ErrorCode.LOGIN_BAD_CREDENTIALS.lower(),
+            detail_code=ErrorCode.LOGIN_BAD_CREDENTIALS,
         )
 
     # 5. At this point, the account should be locked
@@ -155,7 +155,7 @@ async def test_cookie_login_failed_attempts_reset_after_time(
     check_api_exception_response(
         resp,
         status_code=status.HTTP_401_UNAUTHORIZED,
-        detail_code=ErrorCode.LOGIN_BAD_CREDENTIALS.lower(),
+        detail_code=ErrorCode.LOGIN_BAD_CREDENTIALS,
     )
 
     # 3. Advance the current time by 31 minutes (30 + 1)
@@ -172,7 +172,7 @@ async def test_cookie_login_failed_attempts_reset_after_time(
         check_api_exception_response(
             resp,
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail_code=ErrorCode.LOGIN_BAD_CREDENTIALS.lower(),
+            detail_code=ErrorCode.LOGIN_BAD_CREDENTIALS,
         )
 
         # 5. A correct password should now succeed
@@ -214,7 +214,7 @@ async def test_cookie_login_unlock_after_time(client: AsyncClient, faker):
         check_api_exception_response(
             resp,
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail_code=ErrorCode.LOGIN_BAD_CREDENTIALS.lower(),
+            detail_code=ErrorCode.LOGIN_BAD_CREDENTIALS,
         )
 
     # 3. Confirm the account is locked - correct password => 423

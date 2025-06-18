@@ -4,7 +4,7 @@ from pydantic import EmailStr
 from fastapi_users import exceptions, models
 from fastapi_users.manager import BaseUserManager, UserManagerDependency
 from fastapi_users.openapi import OpenAPIResponseType
-from fastapi_users.router.common import ErrorCode
+from app.lib.error_code import ErrorCode
 from app.lib.schemas.error import ErrorResponse
 from app.v1.exception_handlers.unprocessable_entity_exception_handler import (
     unprocessable_entity_json_content,
@@ -23,7 +23,7 @@ RESET_PASSWORD_RESPONSES: OpenAPIResponseType = {
                     ErrorCode.RESET_PASSWORD_BAD_TOKEN: {
                         "summary": "Bad or expired token.",
                         "value": bad_request_json_content(
-                            code=ErrorCode.RESET_PASSWORD_BAD_TOKEN.lower(),
+                            code=ErrorCode.RESET_PASSWORD_BAD_TOKEN,
                             instance="http://127.0.0.1:8000/app/v1/auth/reset-password",
                         ),
                     },
@@ -42,7 +42,7 @@ RESET_PASSWORD_RESPONSES: OpenAPIResponseType = {
                             instance="http://127.0.0.1:8000/app/v1/auth/reset-password",
                             errors=[
                                 {
-                                    "code": ErrorCode.RESET_PASSWORD_INVALID_PASSWORD.lower(),
+                                    "code": ErrorCode.RESET_PASSWORD_INVALID_PASSWORD,
                                     "title": "Invalid Password",
                                     "detail": "Password should be at least 3 characters",
                                     "source": {"pointer": "#/password"},
@@ -114,7 +114,7 @@ def get_reset_password_router(
                     instance=str(request.url),
                     errors=[
                         {
-                            "code": ErrorCode.RESET_PASSWORD_INVALID_PASSWORD.lower(),
+                            "code": ErrorCode.RESET_PASSWORD_INVALID_PASSWORD,
                             "title": "Invalid Password",
                             "detail": e.reason,
                             "source": {"pointer": "#/password"},

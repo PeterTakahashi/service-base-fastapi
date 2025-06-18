@@ -6,7 +6,7 @@ from app.v1.schemas.user import UserUpdate
 from app.models.user import User
 from app.v1.repositories.user_repository import UserRepository
 from fastapi_users import exceptions
-from fastapi_users.router.common import ErrorCode
+from app.lib.error_code import ErrorCode
 
 
 @pytest.mark.asyncio
@@ -84,7 +84,7 @@ async def test_update_me_already_exists():
 
     # fastapi-users 内部では UserAlreadyExists が起きる
     assert exc_info.value.status_code == 422
-    assert exc_info.value.detail == ErrorCode.UPDATE_USER_EMAIL_ALREADY_EXISTS.lower()
+    assert exc_info.value.detail == ErrorCode.UPDATE_USER_EMAIL_ALREADY_EXISTS
 
 
 @pytest.mark.asyncio
@@ -131,7 +131,7 @@ async def test_update_me_password_invalid():
     assert exc_info.value.status_code == 422
     assert (
         exc_info.value.detail["errors"][0]["code"]
-        == ErrorCode.UPDATE_USER_INVALID_PASSWORD.lower()
+        == ErrorCode.UPDATE_USER_INVALID_PASSWORD
     )
     assert (
         "must contain at least one digit"
