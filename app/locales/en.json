@@ -37,12 +37,12 @@
   "oauth_user_already_exists": {
     "openapi_example_summary": "OAuth user already exists.",
     "title": "User Already Exists",
-    "detail": "An account with this email already exists. Please log in or use a different email."
+    "detail": "An account with this email already exists. Please use a different email."
   },
   "oauth_not_available_email": {
     "openapi_example_summary": "OAuth email not available.",
     "title": "Email Not Available",
-    "detail": "The email address is not available. Please use a different email address."
+    "detail": "The email is not available. Please use a different email."
   },
   "validation_error": {
     "openapi_example_summary": "Validation failed on input data.",
@@ -99,7 +99,7 @@
   "update_user_email_already_exists": {
     "openapi_example_summary": "Email already in use.",
     "title": "User Email Already Exists",
-    "detail": "The email address you are trying to use is already associated with another account. Please use a different email address."
+    "detail": "The email you are trying to use is already associated with another account. Please use a different email."
   },
   "update_user_invalid_password": {
     "openapi_example_summary": "New password is invalid.",
@@ -124,7 +124,7 @@
   "register_user_already_exists": {
     "openapi_example_summary": "User already exists with this email.",
     "title": "User Already Exists",
-    "detail": "An account with this email already exists. Please log in or use a different email."
+    "detail": "An account with this email already exists. Please use a different email."
   },
   "register_invalid_password": {
     "openapi_example_summary": "Password does not meet criteria.",
