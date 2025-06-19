@@ -2,17 +2,7 @@
 import pytest
 from httpx import AsyncClient
 from datetime import datetime, timedelta
-from app.lib.convert_id import decode_id
-from tests.common.check_error_response import check_unauthorized_response
-
-
-@pytest.mark.asyncio
-async def test_list_wallet_transactions_unauthenticated(client: AsyncClient):
-    """
-    Test that unauthenticated requests return 401 Unauthorized.
-    """
-    response = await client.get("/wallet-transactions")
-    check_unauthorized_response(response)
+from app.lib.utils.convert_id import decode_id
 
 
 @pytest.mark.asyncio

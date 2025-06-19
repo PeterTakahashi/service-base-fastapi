@@ -7,7 +7,7 @@ messages = {}
 
 def load_messages():
     global messages
-    base_path = Path(__file__).parent.parent / "locales"
+    base_path = Path(__file__).parent.parent.parent / "locales"
     for path in base_path.glob("*.json"):
         lang = path.stem
         with open(path, encoding="utf-8") as f:
@@ -19,10 +19,12 @@ def get_locale(request: Request) -> str:
     return lang
 
 
-def get_message(locale: str, category: str, key: str, **kwargs) -> str:
+def get_message(locale: str, code: str, key: str) -> str:
+    if not messages:
+        load_messages()
     try:
-        template = messages[locale][category][key]
+        template = messages[locale][code][key]
     except KeyError:
-        template = messages["en"][category][key]  # fallback English
+        return ""
 
-    return template.format(**kwargs)
+    return template

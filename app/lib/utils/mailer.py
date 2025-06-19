@@ -2,7 +2,7 @@ from fastapi_mail import FastMail, ConnectionConfig
 from pathlib import Path
 from app.core.config import settings
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 TEMPLATE_FOLDER = Path(BASE_DIR / "templates")
 
 mailer_config = ConnectionConfig(

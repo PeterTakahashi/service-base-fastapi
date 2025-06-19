@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, status
+from fastapi import Depends, status
 
 from app.v1.schemas.user_api_key.verify import UserApiKeyVerifyResponse
 from app.v1.dependencies.services.user_api_key_service import get_user_api_key_service
@@ -9,7 +9,9 @@ from app.v1.dependencies.auth.current_active_user_from_token_or_api_key import (
 )
 from app.models.user import User
 
-router = APIRouter()
+from app.core.routers.api_key_auth_api_router import ApiKeyAuthAPIRouter
+
+router = ApiKeyAuthAPIRouter(prefix="/user-api-keys", tags=["User API Keys"])
 
 
 @router.post(

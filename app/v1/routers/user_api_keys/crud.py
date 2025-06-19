@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Request, status
+from fastapi import Depends, Request, status
 
 from app.v1.schemas.user_api_key import (
     UserApiKeyListRead,
@@ -14,7 +14,9 @@ from app.lib.fastapi_users.user_setup import current_active_user
 from app.models.user import User
 from app.models.user_api_key import UserApiKey
 
-router = APIRouter()
+from app.core.routers.auth_api_router import AuthAPIRouter
+
+router = AuthAPIRouter(prefix="/user-api-keys", tags=["User API Keys"])
 
 
 @router.get(

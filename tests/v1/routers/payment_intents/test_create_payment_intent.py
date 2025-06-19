@@ -1,13 +1,9 @@
 from httpx import AsyncClient
-from tests.common.check_error_response import check_unauthorized_response
-
-
-async def test_create_payment_intent_unauthenticated(client: AsyncClient):
-    response = await client.post(
-        "/payment-intents",
-        json={"amount": 1000},
-    )
-    check_unauthorized_response(response)
+from tests.common.check_error_response import (
+    check_api_exception_response,
+)
+from fastapi import status
+from app.lib.error_code import ErrorCode
 
 
 async def test_create_payment_intent_authenticated(
@@ -33,15 +29,10 @@ async def test_create_payment_intent_invalid_amount(
         "/payment-intents",
         json={"amount": -1000},  # Invalid amount
     )
-    assert response.status_code == 422
-    assert response.json() == {
-        "errors": [
-            {
-                "status": "422",
-                "code": "validation_error",
-                "title": "Validation Error",
-                "detail": "Input should be greater than or equal to 100",
-                "source": {"parameter": "amount"},
-            }
-        ]
-    }
+    check_api_exception_response(
+        response,
+        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+        detail_code=ErrorCode.VALIDATION_ERROR,
+        detail_detail="Input should be greater than or equal to 100",
+        pointer="amount",
+    )

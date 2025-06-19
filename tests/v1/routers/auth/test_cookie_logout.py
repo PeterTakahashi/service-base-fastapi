@@ -1,4 +1,7 @@
 from httpx import AsyncClient
+from fastapi import status
+from tests.common.check_error_response import check_api_exception_response
+from app.lib.error_code import ErrorCode
 
 
 async def test_cookie_logout_success(client: AsyncClient, faker):
@@ -23,16 +26,9 @@ async def test_cookie_logout_success(client: AsyncClient, faker):
 
 
 async def test_cookie_logout_unauthorized(client: AsyncClient):
-    logout_resp = await client.post("/auth/cookie/logout")
-    assert logout_resp.status_code == 401
-    resp_json = logout_resp.json()
-    assert resp_json == {
-        "errors": [
-            {
-                "code": "unauthorized",
-                "detail": "Authentication credentials were not provided or are invalid.",
-                "status": "401",
-                "title": "Unauthorized",
-            }
-        ]
-    }
+    resp = await client.post("/auth/cookie/logout")
+    check_api_exception_response(
+        resp,
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail_code=ErrorCode.UNAUTHORIZED,
+    )

@@ -11,7 +11,7 @@ from tests.v1.fixtures.client_fixture import (
     auth_client,
     not_verified_auth_client,
 )
-from app.lib.convert_id import encode_id
+from app.lib.utils.convert_id import encode_id
 
 
 @pytest_asyncio.fixture

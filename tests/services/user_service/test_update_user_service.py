@@ -6,7 +6,9 @@ from app.v1.schemas.user import UserUpdate
 from app.models.user import User
 from app.v1.repositories.user_repository import UserRepository
 from fastapi_users import exceptions
-from fastapi_users.router.common import ErrorCode
+from app.lib.error_code import ErrorCode
+from tests.common.check_api_exception_info import check_api_exception_info
+from fastapi import status
 
 
 @pytest.mark.asyncio
@@ -82,11 +84,12 @@ async def test_update_me_already_exists():
             ),
         )
 
-    # fastapi-users 内部では UserAlreadyExists が起きると
-    # user_service 側は HTTPException(400) を投げるようにしている
-    # のでそれを確認
-    assert exc_info.value.status_code == 400
-    assert exc_info.value.detail == ErrorCode.UPDATE_USER_EMAIL_ALREADY_EXISTS
+    check_api_exception_info(
+        exc_info,
+        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+        detail_code=ErrorCode.UPDATE_USER_EMAIL_ALREADY_EXISTS,
+        pointer="email",
+    )
 
 
 @pytest.mark.asyncio
@@ -128,12 +131,13 @@ async def test_update_me_password_invalid():
             user=existing_user,
         )
 
-    # -- 6) 発生した例外をアサート
-    # user_service 側では InvalidPasswordException を受け取ると
-    # HTTPException(400, detail={ code: ErrorCode.UPDATE_USER_INVALID_PASSWORD, reason: "..." }) を投げる。
-    assert exc_info.value.status_code == 400
-    assert exc_info.value.detail["code"] == ErrorCode.UPDATE_USER_INVALID_PASSWORD
-    assert "must contain at least one digit" in exc_info.value.detail["reason"]
+    check_api_exception_info(
+        exc_info,
+        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+        detail_code=ErrorCode.UPDATE_USER_INVALID_PASSWORD,
+        detail_detail="Password must contain at least one digit",
+        pointer="password",
+    )
 
     # -- 7) user_manager.update が正しく呼ばれたことも確認
     user_manager_mock.update.assert_awaited_once_with(

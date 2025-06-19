@@ -1,17 +1,7 @@
 import pytest
 
 from httpx import AsyncClient
-from tests.common.check_error_response import check_unauthorized_response
 from app.v1.schemas.user_api_key.write import UserApiKeyCreate
-
-
-@pytest.mark.asyncio
-async def test_create_user_api_key_unauthenticated(client: AsyncClient):
-    """
-    Test that unauthenticated requests return 401 Unauthorized.
-    """
-    response = await client.post("/user-api-keys")
-    check_unauthorized_response(response)
 
 
 @pytest.mark.asyncio

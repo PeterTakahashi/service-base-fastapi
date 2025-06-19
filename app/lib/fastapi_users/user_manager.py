@@ -5,11 +5,13 @@ This module defines the UserManager class and utility functions for managing use
 from uuid import UUID
 from typing import Optional, Union
 from datetime import datetime, timezone, timedelta
-from app.lib.stripe import stripe
+from app.lib.utils.stripe import stripe
 
-from fastapi import Depends, Request, HTTPException
+from fastapi import Depends, Request, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.lib.exception.api_exception import init_api_exception
 
 from fastapi_users import BaseUserManager, UUIDIDMixin, exceptions, models, schemas
 from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase
@@ -25,6 +27,7 @@ from fastapi_mail import MessageSchema, MessageType
 from app.models.user import User
 from app.models.oauth_account import OAuthAccount
 from app.v1.repositories.wallet_repository import WalletRepository
+from app.lib.error_code import ErrorCode
 
 
 class UserManager(UUIDIDMixin, BaseUserManager[User, UUID]):
@@ -107,6 +110,10 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, UUID]):
             raise exceptions.InvalidPasswordException(
                 reason="Password must be at least 8 characters long"
             )
+        if len(password) > 100:
+            raise exceptions.InvalidPasswordException(
+                reason="Password must not exceed 100 characters"
+            )
         if not any(char.isdigit() for char in password):
             raise exceptions.InvalidPasswordException(
                 reason="Password must contain at least one digit"
@@ -139,8 +146,10 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, UUID]):
             return None
         # Check if the user is currently locked and possibly unlock
         if not await self._handle_lock_state(user):
-            # Still locked
-            raise HTTPException(status_code=423, detail="LOGIN_ACCOUNT_LOCKED")
+            raise init_api_exception(
+                status_code=status.HTTP_423_LOCKED,
+                detail_code=ErrorCode.LOGIN_ACCOUNT_LOCKED,
+            )
 
         # Reset failed_attempts if enough time has passed since last attempt
         self._maybe_reset_failed_attempts(user)

@@ -1,8 +1,10 @@
 import pytest
 
 from httpx import AsyncClient
-from tests.common.check_error_response import check_unauthorized_response
+from fastapi import status
+from tests.common.check_error_response import check_api_exception_response
 from app.v1.schemas.user_api_key.write import UserApiKeyCreate
+from app.lib.error_code import ErrorCode
 
 
 @pytest.mark.asyncio
@@ -11,7 +13,11 @@ async def test_get_user_api_key_unauthenticated(client: AsyncClient):
     Test that unauthenticated requests return 401 Unauthorized.
     """
     response = await client.get("/user-api-keys/test")
-    check_unauthorized_response(response)
+    check_api_exception_response(
+        response,
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail_code=ErrorCode.UNAUTHORIZED,
+    )
 
 
 @pytest.mark.asyncio
@@ -47,9 +53,6 @@ async def test_get_user_api_key_not_found(auth_client: AsyncClient):
     Test that requesting a non-existent API key returns a 404 Not Found.
     """
     response = await auth_client.get("/user-api-keys/nonexistent-id")
-    assert response.status_code == 404
-    response_json = response.json()
-    assert (
-        response_json["errors"][0]["detail"]
-        == "The requested resource could not be found."
+    check_api_exception_response(
+        response, status_code=status.HTTP_404_NOT_FOUND, detail_code=ErrorCode.NOT_FOUND
     )

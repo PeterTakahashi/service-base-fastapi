@@ -1,7 +1,9 @@
 import pytest
 
 from httpx import AsyncClient
-from tests.common.check_error_response import check_unauthorized_response
+from fastapi import status
+from tests.common.check_error_response import check_api_exception_response
+from app.lib.error_code import ErrorCode
 
 
 @pytest.mark.asyncio
@@ -37,14 +39,22 @@ async def test_verify_expired_user_api_key(
         "/user-api-keys/verify",
         headers={"X-API-KEY": expired_user_api_key.api_key},
     )
-    check_unauthorized_response(resp, code="expired_api_key")
+    check_api_exception_response(
+        resp,
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail_code=ErrorCode.EXPIRED_API_KEY,
+    )
 
 
 @pytest.mark.asyncio
 async def test_verify_user_api_key_missing_header(client: AsyncClient):
     """Requests without the X‑API‑KEY header should be rejected with 401."""
     resp = await client.post("/user-api-keys/verify")
-    check_unauthorized_response(resp)
+    check_api_exception_response(
+        resp,
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail_code=ErrorCode.UNAUTHORIZED,
+    )
 
 
 @pytest.mark.asyncio
@@ -54,7 +64,11 @@ async def test_verify_user_api_key_invalid(client: AsyncClient):
         "/user-api-keys/verify",
         headers={"X-API-KEY": "invalid123"},
     )
-    check_unauthorized_response(resp, code="invalid_api_key")
+    check_api_exception_response(
+        resp,
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail_code=ErrorCode.INVALID_API_KEY,
+    )
 
 
 @pytest.mark.asyncio
@@ -116,7 +130,11 @@ async def test_verify_user_api_key_invalid_origin(
             "Origin": "https://evil.com",
         },
     )
-    check_unauthorized_response(resp, code="invalid_origin")
+    check_api_exception_response(
+        resp,
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail_code=ErrorCode.INVALID_ORIGIN,
+    )
 
 
 @pytest.mark.asyncio
@@ -154,7 +172,9 @@ async def test_verify_user_api_key_invalid_ip(
         "/user-api-keys/verify",
         headers={"X-API-KEY": api_key.api_key},
     )
-    check_unauthorized_response(resp, code="invalid_ip")
+    check_api_exception_response(
+        resp, status_code=status.HTTP_401_UNAUTHORIZED, detail_code=ErrorCode.INVALID_IP
+    )
 
 
 @pytest.mark.asyncio

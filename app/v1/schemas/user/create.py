@@ -11,8 +11,6 @@ class UserCreate(schemas.CreateUpdateDictModel):
     )
     password: str = Field(
         ...,
-        min_length=8,
-        max_length=100,
         json_schema_extra={"example": "password123%"},
         description="The password of the user.",
     )

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import Depends
 from app.v1.dependencies.services.wallet_transaction_service import (
     get_wallet_transaction_service,
 )
@@ -8,15 +8,16 @@ from app.v1.schemas.wallet_transaction import (
     WalletTransactionListResponse,
 )
 from app.models.wallet import Wallet
-from app.lib.convert_id import decode_id
+from app.lib.utils.convert_id import decode_id
 from app.v1.dependencies.models.wallet.get_wallet_by_current_active_user import (
     get_wallet_by_current_active_user,
 )
 from app.v1.dependencies.query_params.get_wallet_transaction_search_params import (
     get_wallet_transaction_search_params,
 )
+from app.core.routers.auth_api_router import AuthAPIRouter
 
-router = APIRouter()
+router = AuthAPIRouter(prefix="/wallet-transactions", tags=["Wallet Transactions"])
 
 
 @router.get(

@@ -1,8 +1,12 @@
 import pytest
 
 from httpx import AsyncClient
-from tests.common.check_error_response import check_unauthorized_response
+from tests.common.check_error_response import (
+    check_api_exception_response,
+)
+from fastapi import status
 from app.v1.schemas.user_api_key.write import UserApiKeyUpdate, UserApiKeyCreate
+from app.lib.error_code import ErrorCode
 
 
 @pytest.mark.asyncio
@@ -11,7 +15,11 @@ async def test_update_user_api_key_unauthenticated(client: AsyncClient):
     Test that unauthenticated requests return 401 Unauthorized.
     """
     response = await client.patch("/user-api-keys/test")
-    check_unauthorized_response(response)
+    check_api_exception_response(
+        response,
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail_code=ErrorCode.UNAUTHORIZED,
+    )
 
 
 @pytest.mark.asyncio
@@ -68,15 +76,10 @@ async def test_update_user_api_key_invalid(auth_client: AsyncClient):
     response = await auth_client.patch(
         f"/user-api-keys/{user_api_key['id']}", json=user_api_key_update.model_dump()
     )
-    assert response.json() == {
-        "errors": [
-            {
-                "status": "422",
-                "code": "validation_error",
-                "title": "Validation Error",
-                "detail": "String should have at least 1 character",
-                "source": {"parameter": "name"},
-            }
-        ]
-    }
-    assert response.status_code == 422
+    check_api_exception_response(
+        response,
+        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+        detail_code=ErrorCode.VALIDATION_ERROR,
+        detail_detail="String should have at least 1 character",
+        pointer="name",
+    )

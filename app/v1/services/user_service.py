@@ -1,12 +1,13 @@
-from fastapi import Depends, HTTPException, Request, status
+from fastapi import Depends, Request, status
 from fastapi_users import exceptions, models
 from fastapi_users.manager import BaseUserManager
-from fastapi_users.router.common import ErrorCode
+from app.lib.error_code import ErrorCode
 
 from app.v1.repositories.user_repository import UserRepository
 from app.models.user import User
 from app.v1.schemas.user import UserUpdate, UserRead, UserWithWalletRead
 from app.lib.fastapi_users.user_setup import current_active_user
+from app.lib.exception.api_exception import init_api_exception
 
 
 class UserService:
@@ -32,15 +33,15 @@ class UserService:
             )
             return UserRead.model_validate(user)
         except exceptions.InvalidPasswordException as e:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail={
-                    "code": ErrorCode.UPDATE_USER_INVALID_PASSWORD,
-                    "reason": e.reason,
-                },
+            raise init_api_exception(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail_code=ErrorCode.UPDATE_USER_INVALID_PASSWORD,
+                detail_detail=e.reason,
+                pointer="password",
             )
         except exceptions.UserAlreadyExists:
-            raise HTTPException(
-                status.HTTP_400_BAD_REQUEST,
-                detail=ErrorCode.UPDATE_USER_EMAIL_ALREADY_EXISTS,
+            raise init_api_exception(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail_code=ErrorCode.UPDATE_USER_EMAIL_ALREADY_EXISTS,
+                pointer="email",
             )

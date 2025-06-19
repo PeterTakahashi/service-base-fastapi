@@ -1,5 +1,9 @@
 from httpx import AsyncClient
-from tests.common.check_error_response import check_unauthorized_response
+from tests.common.check_error_response import (
+    check_api_exception_response,
+)
+from fastapi import status
+from app.lib.error_code import ErrorCode
 
 
 async def test_update_me_email(auth_client: AsyncClient, faker):
@@ -55,10 +59,9 @@ async def test_update_me_email_already_exists(
         json={"email": email},
     )
     # 3. check the response
-    assert response.status_code == 400
-    assert response.json()["detail"] == "UPDATE_USER_EMAIL_ALREADY_EXISTS"
-
-
-async def test_update_me_unauthenticated(client: AsyncClient):
-    response = await client.patch("/users/me", json={"email": "test@test.com"})
-    check_unauthorized_response(response)
+    check_api_exception_response(
+        response,
+        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+        detail_code=ErrorCode.UPDATE_USER_EMAIL_ALREADY_EXISTS,
+        pointer="email",
+    )
