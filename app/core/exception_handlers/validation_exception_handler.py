@@ -25,12 +25,16 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
         else:
             pointer = "#/" + "/".join(str(loc) for loc in error["loc"])
 
+        detail = error.get("ctx", {}).get("reason")
+        if detail is None:
+            detail = error.get("msg", "")
+
         error_details.append(
             ErrorDetail(
                 status=str(status.HTTP_422_UNPROCESSABLE_ENTITY),
                 code=detail_code,
                 title=get_message(locale, detail_code, "title"),
-                detail=error.get('ctx', {}).get('reason'),
+                detail=detail,
                 source=ErrorSource(pointer=pointer) if pointer else None,
             )
         )
