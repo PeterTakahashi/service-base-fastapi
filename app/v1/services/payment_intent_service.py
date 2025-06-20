@@ -10,6 +10,7 @@ from app.lib.utils.int_to_numeric import int_to_numeric
 from app.models.user_wallet_transaction import (
     WalletTransactionStatus,
 )
+from decimal import Decimal
 
 
 class PaymentIntentService:
@@ -41,11 +42,9 @@ class PaymentIntentService:
             stripe_payment_intent_id=payment_intent.id,
         )
 
-        numeric_amount = int_to_numeric(payment_intent_create.amount)
-
         return PaymentIntentCreateResponse(
             id=payment_intent.id,
-            amount=numeric_amount,
+            amount=Decimal(payment_intent_create.amount),
             currency=payment_intent.currency,
             client_secret=payment_intent.client_secret,
             status=payment_intent.status,

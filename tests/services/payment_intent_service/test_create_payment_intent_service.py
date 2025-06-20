@@ -12,7 +12,7 @@ from tests.mocks.stripe import mock_payment_intent_create
 async def test_create_payment_intent_service(
     mock_create, payment_intent_service, user, user_wallet
 ):
-    payment_intent_data = PaymentIntentCreate(amount=10)
+    payment_intent_data = PaymentIntentCreate(amount=1000)
 
     payment_intent = await payment_intent_service.create_payment_intent(
         user=user, payment_intent_create=payment_intent_data
@@ -33,5 +33,5 @@ async def test_create_payment_intent_service(
     assert user_wallet_transaction.stripe_payment_intent_id == payment_intent.id
 
     mock_create.assert_called_once_with(
-        amount=1000, currency="usd", customer=user_wallet.stripe_customer_id
+        amount=100000, currency="usd", customer=user_wallet.stripe_customer_id
     )
