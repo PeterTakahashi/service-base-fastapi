@@ -5,7 +5,7 @@ from app.lib.error_code import ErrorCode
 
 from app.v1.repositories.user_repository import UserRepository
 from app.models.user import User
-from app.v1.schemas.user import UserUpdate, UserRead, UserWithWalletRead
+from app.v1.schemas.user import UserUpdate, UserRead, UserWithUserWalletRead
 from app.lib.fastapi_users.user_setup import current_active_user
 from app.lib.exception.api_exception import init_api_exception
 
@@ -14,11 +14,11 @@ class UserService:
     def __init__(self, user_repository: UserRepository):
         self.user_repository = user_repository
 
-    async def get_me(self, user: User) -> UserWithWalletRead:
-        user_with_wallet = await self.user_repository.find(
-            id=user.id, joinedload_models=[User.wallet]
+    async def get_me(self, user: User) -> UserWithUserWalletRead:
+        user_with_user_wallet = await self.user_repository.find(
+            id=user.id, joinedload_models=[User.user_wallet]
         )
-        return UserWithWalletRead.model_validate(user_with_wallet)
+        return UserWithUserWalletRead.model_validate(user_with_user_wallet)
 
     async def update_me(
         self,

@@ -10,7 +10,7 @@ from tests.mocks.stripe import mock_payment_intent_create
     side_effect=mock_payment_intent_create,
 )
 async def test_create_payment_intent_service(
-    mock_create, payment_intent_service, user, wallet
+    mock_create, payment_intent_service, user, user_wallet
 ):
     payment_intent_data = PaymentIntentCreate(amount=1000)
 
@@ -23,15 +23,15 @@ async def test_create_payment_intent_service(
     assert payment_intent.currency == "usd"
     assert payment_intent.status == "requires_payment_method"
     assert payment_intent.client_secret is not None
-    wallet_transaction = (
-        await payment_intent_service.wallet_transaction_repository.find_by(
-            wallet_id=wallet.id,
+    user_wallet_transaction = (
+        await payment_intent_service.user_wallet_transaction_repository.find_by(
+            user_wallet_id=user_wallet.id,
         )
     )
-    assert wallet_transaction is not None
-    assert wallet_transaction.amount == payment_intent_data.amount
-    assert wallet_transaction.stripe_payment_intent_id == payment_intent.id
+    assert user_wallet_transaction is not None
+    assert user_wallet_transaction.amount == payment_intent_data.amount
+    assert user_wallet_transaction.stripe_payment_intent_id == payment_intent.id
 
     mock_create.assert_called_once_with(
-        amount=1000, currency="usd", customer=wallet.stripe_customer_id
+        amount=1000, currency="usd", customer=user_wallet.stripe_customer_id
     )

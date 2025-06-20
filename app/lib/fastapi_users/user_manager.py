@@ -26,7 +26,7 @@ from fastapi_mail import MessageSchema, MessageType
 
 from app.models.user import User
 from app.models.oauth_account import OAuthAccount
-from app.v1.repositories.wallet_repository import WalletRepository
+from app.v1.repositories.user_wallet_repository import UserWalletRepository
 from app.lib.error_code import ErrorCode
 
 
@@ -51,7 +51,7 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, UUID]):
         password_helper: Optional[PasswordHelperProtocol] = None,
     ):
         super().__init__(user_db, password_helper)
-        self.wallet_repository = WalletRepository(session)
+        self.user_wallet_repository = UserWalletRepository(session)
         self.mailer = mailer
 
     async def on_after_register(self, user: User, request: Optional[Request] = None):
@@ -59,7 +59,7 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, UUID]):
             name=user.email,
             email=user.email,
         )
-        await self.wallet_repository.create(
+        await self.user_wallet_repository.create(
             user_id=user.id, stripe_customer_id=customer.id
         )
 

@@ -1,8 +1,8 @@
 import pytest_asyncio
 from app.v1.repositories.user_repository import UserRepository
-from app.v1.repositories.wallet_repository import WalletRepository
-from app.v1.repositories.wallet_transaction_repository import (
-    WalletTransactionRepository,
+from app.v1.repositories.user_wallet_repository import UserWalletRepository
+from app.v1.repositories.user_wallet_transaction_repository import (
+    UserWalletTransactionRepository,
 )
 from app.v1.repositories.user_api_key_repository import UserApiKeyRepository
 
@@ -13,13 +13,13 @@ async def user_repository(async_session):
 
 
 @pytest_asyncio.fixture
-async def wallet_repository(async_session):
-    return WalletRepository(async_session)
+async def user_wallet_repository(async_session):
+    return UserWalletRepository(async_session)
 
 
 @pytest_asyncio.fixture
-async def wallet_transaction_repository(async_session):
-    return WalletTransactionRepository(async_session)
+async def user_wallet_transaction_repository(async_session):
+    return UserWalletTransactionRepository(async_session)
 
 
 @pytest_asyncio.fixture

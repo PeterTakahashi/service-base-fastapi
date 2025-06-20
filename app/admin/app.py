@@ -3,8 +3,10 @@ from app.db.session import engine
 from app.admin.admin_auth import AdminAuth
 
 from app.admin.model_views.user_admin import UserAdmin
-from app.admin.model_views.wallet_admin import WalletAdmin
-from app.admin.model_views.wallet_transaction_admin import WalletTransactionAdmin
+from app.admin.model_views.user_wallet_admin import UserWalletAdmin
+from app.admin.model_views.user_wallet_transaction_admin import (
+    UserWalletTransactionAdmin,
+)
 from app.admin.model_views.oauth_account_admin import OAuthAccountAdmin
 
 
@@ -18,7 +20,7 @@ def init_sqladmin(app):
         base_url="/admin",
     )
     admin.add_view(UserAdmin)
-    admin.add_view(WalletAdmin)
-    admin.add_view(WalletTransactionAdmin)
+    admin.add_view(UserWalletAdmin)
+    admin.add_view(UserWalletTransactionAdmin)
     admin.add_view(OAuthAccountAdmin)
     return app

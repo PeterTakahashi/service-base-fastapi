@@ -12,8 +12,8 @@ async def test_routers_unauthorized(
     routers = [
         {"method": "get", "path": "/users/me"},
         {"method": "patch", "path": "/users/me"},
-        {"method": "get", "path": "/wallet-transactions"},
-        {"method": "get", "path": f"/wallet-transactions/{dammy_id}"},
+        {"method": "get", "path": "/user-wallet-transactions"},
+        {"method": "get", "path": f"/user-wallet-transactions/{dammy_id}"},
         {"method": "post", "path": "/payment-intents"},
         {"method": "get", "path": "/user-api-keys"},
         {"method": "get", "path": f"/user-api-keys/{dammy_id}"},
