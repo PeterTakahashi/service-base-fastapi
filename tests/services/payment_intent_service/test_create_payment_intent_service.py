@@ -19,7 +19,7 @@ async def test_create_payment_intent_service(
     )
 
     assert payment_intent is not None
-    assert payment_intent.amount == payment_intent_data.amount
+    assert payment_intent.amount == 1000  # Amount in cents
     assert payment_intent.currency == "usd"
     assert payment_intent.status == "requires_payment_method"
     assert payment_intent.client_secret is not None
@@ -33,5 +33,5 @@ async def test_create_payment_intent_service(
     assert user_wallet_transaction.stripe_payment_intent_id == payment_intent.id
 
     mock_create.assert_called_once_with(
-        amount=1000, currency="usd", customer=user_wallet.stripe_customer_id
+        amount=100000, currency="usd", customer=user_wallet.stripe_customer_id
     )

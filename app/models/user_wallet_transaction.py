@@ -1,11 +1,12 @@
 from app.db.base import Base
-from sqlalchemy import Enum as SQLAlchemyEnum, ForeignKey, DateTime, func
+from sqlalchemy import Enum as SQLAlchemyEnum, ForeignKey, DateTime, func, Numeric
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 from datetime import datetime
 from app.models.enums.wallet_transaction import (
     WalletTransactionType,
     WalletTransactionStatus,
 )
+from decimal import Decimal
 
 from typing import TYPE_CHECKING
 
@@ -20,7 +21,11 @@ class UserWalletTransaction(Base):
     user_wallet_id: Mapped[int] = mapped_column(
         ForeignKey("user_wallets.id"), nullable=False
     )
-    amount: Mapped[int] = mapped_column(nullable=False)
+    amount: Mapped[Decimal] = mapped_column(
+        Numeric(precision=38, scale=9, asdecimal=True, decimal_return_scale=True),
+        default=Decimal("0"),
+        nullable=False,
+    )
     stripe_payment_intent_id: Mapped[str | None] = mapped_column(
         nullable=True, unique=True, index=True
     )

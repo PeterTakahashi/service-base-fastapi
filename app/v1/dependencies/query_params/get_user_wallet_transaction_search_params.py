@@ -20,9 +20,9 @@ def get_user_wallet_transaction_search_params(
     user_wallet_transaction_type__in: Optional[List[WalletTransactionType]] = Query(
         None
     ),
-    user_wallet_transaction_status__in: Optional[
-        List[WalletTransactionStatus]
-    ] = Query(None),
+    user_wallet_transaction_status__in: Optional[List[WalletTransactionStatus]] = Query(
+        None
+    ),
     created_at__gte: Optional[datetime] = Query(None),
     created_at__lte: Optional[datetime] = Query(None),
     updated_at__gte: Optional[datetime] = Query(None),

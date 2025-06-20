@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field, ConfigDict
 from datetime import datetime
+from app.v1.schemas.balance import Balance
 
 
 class UserWalletRead(BaseModel):
@@ -7,10 +8,10 @@ class UserWalletRead(BaseModel):
     Schema for reading user_wallet information.
     """
 
-    balance: int = Field(
+    balance: Balance = Field(
         ...,
         description="The current balance of the user_wallet.",
-        json_schema_extra={"example": 1000},  # Example: $10.00 in cents,
+        json_schema_extra={"example": "10.00"},
     )
     created_at: datetime = Field(
         ...,

@@ -7,4 +7,4 @@ async def test_get_me_authenticated(auth_client: AsyncClient):
     assert response.json()["email"] != ""
     assert response.json()["id"] != ""
     assert "user_wallet" in response.json()
-    assert response.json()["user_wallet"]["balance"] == 0
+    assert response.json()["user_wallet"]["balance"] == "0.000000000"
