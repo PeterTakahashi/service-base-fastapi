@@ -1,4 +1,3 @@
-from unicodedata import numeric
 from app.v1.schemas.payment_intent import (
     PaymentIntentCreate,
     PaymentIntentCreateResponse,
