@@ -1,0 +1,61 @@
+from app.db.base import Base
+from sqlalchemy import Enum as SQLAlchemyEnum, ForeignKey, DateTime, func
+from sqlalchemy.orm import mapped_column, Mapped, relationship
+from datetime import datetime
+import enum
+
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from app.models.user_wallet import UserWallet
+
+
+class UserWalletTransactionType(enum.Enum):  # Use standard enum.Enum
+    DEPOSIT = "deposit"
+    SPEND = "spend"
+
+
+class UserWalletTransactionStatus(enum.Enum):  # Use standard enum.Enum
+    PENDING = "pending"
+    COMPLETED = "completed"
+    FAILED = "failed"
+
+
+class UserWalletTransaction(Base):
+    __tablename__ = "user_wallet_transactions"
+
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    user_wallet_id: Mapped[int] = mapped_column(
+        ForeignKey("user_wallets.id"), nullable=False
+    )
+    amount: Mapped[int] = mapped_column(nullable=False)
+    stripe_payment_intent_id: Mapped[str | None] = mapped_column(
+        nullable=True, unique=True, index=True
+    )
+
+    user_wallet_transaction_type: Mapped[UserWalletTransactionType] = mapped_column(
+        SQLAlchemyEnum(UserWalletTransactionType, native_enum=True),
+        nullable=False,
+        default=UserWalletTransactionType.DEPOSIT,
+    )
+
+    user_wallet_transaction_status: Mapped[UserWalletTransactionStatus] = mapped_column(
+        SQLAlchemyEnum(UserWalletTransactionStatus, native_enum=True),
+        nullable=False,
+        default=UserWalletTransactionStatus.PENDING,
+    )
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False,
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
+    )
+    user_wallet: Mapped["UserWallet"] = relationship(
+        back_populates="user_wallet_transactions", uselist=False
+    )

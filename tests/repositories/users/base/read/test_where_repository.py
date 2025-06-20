@@ -42,21 +42,25 @@ async def test_where_repository_sorted_desc(user_repository, users):
     assert found_users == sorted(found_users, key=lambda u: u.email, reverse=True)
 
 
-async def test_where_repository_joinedload(user_repository, users, wallets):
-    found_users = await user_repository.where(joinedload_models=[User.wallet], limit=10)
+async def test_where_repository_joinedload(user_repository, users, user_wallets):
+    found_users = await user_repository.where(
+        joinedload_models=[User.user_wallet], limit=10
+    )
     assert len(found_users) == 10
     for user in found_users:
-        assert user.wallet is not None
-        assert user.wallet.user_id == user.id
+        assert user.user_wallet is not None
+        assert user.user_wallet.user_id == user.id
 
 
-async def test_where_repository_lazyload(user_repository, users, wallets):
-    found_users = await user_repository.where(lazyload_models=[User.wallet], limit=10)
+async def test_where_repository_lazyload(user_repository, users, user_wallets):
+    found_users = await user_repository.where(
+        lazyload_models=[User.user_wallet], limit=10
+    )
     assert len(found_users) == 10
     for user in found_users:
-        assert user.wallet is not None
-        assert user.wallet.user_id == user.id
-        assert user.wallet.balance is not None  # Ensure lazy loading worked
+        assert user.user_wallet is not None
+        assert user.user_wallet.user_id == user.id
+        assert user.user_wallet.balance is not None  # Ensure lazy loading worked
 
 
 async def test_where_repository_attribute_error(user_repository):
