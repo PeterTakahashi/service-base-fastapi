@@ -7,7 +7,7 @@ from app.core.config import settings
 from app.models.user import User
 from app.models.user_wallet import UserWallet
 from app.models.user_wallet_transaction import (
-    UserWalletTransactionStatus,
+    WalletTransactionStatus,
 )
 
 
@@ -60,7 +60,7 @@ class PaymentIntentService:
         await self.user_wallet_transaction_repository.update(
             id=user_wallet_transaction.id,
             amount=amount,
-            user_wallet_transaction_status=UserWalletTransactionStatus.COMPLETED,
+            user_wallet_transaction_status=WalletTransactionStatus.COMPLETED,
         )
         user_wallet = user_wallet_transaction.user_wallet
         new_balance = user_wallet.balance + amount

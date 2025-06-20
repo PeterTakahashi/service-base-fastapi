@@ -2,23 +2,15 @@ from app.db.base import Base
 from sqlalchemy import Enum as SQLAlchemyEnum, ForeignKey, DateTime, func
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 from datetime import datetime
-import enum
+from app.models.enums.wallet_transaction import (
+    WalletTransactionType,
+    WalletTransactionStatus,
+)
 
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from app.models.user_wallet import UserWallet
-
-
-class UserWalletTransactionType(enum.Enum):  # Use standard enum.Enum
-    DEPOSIT = "deposit"
-    SPEND = "spend"
-
-
-class UserWalletTransactionStatus(enum.Enum):  # Use standard enum.Enum
-    PENDING = "pending"
-    COMPLETED = "completed"
-    FAILED = "failed"
 
 
 class UserWalletTransaction(Base):
@@ -33,16 +25,16 @@ class UserWalletTransaction(Base):
         nullable=True, unique=True, index=True
     )
 
-    user_wallet_transaction_type: Mapped[UserWalletTransactionType] = mapped_column(
-        SQLAlchemyEnum(UserWalletTransactionType, native_enum=True),
+    user_wallet_transaction_type: Mapped[WalletTransactionType] = mapped_column(
+        SQLAlchemyEnum(WalletTransactionType, native_enum=True),
         nullable=False,
-        default=UserWalletTransactionType.DEPOSIT,
+        default=WalletTransactionType.DEPOSIT,
     )
 
-    user_wallet_transaction_status: Mapped[UserWalletTransactionStatus] = mapped_column(
-        SQLAlchemyEnum(UserWalletTransactionStatus, native_enum=True),
+    user_wallet_transaction_status: Mapped[WalletTransactionStatus] = mapped_column(
+        SQLAlchemyEnum(WalletTransactionStatus, native_enum=True),
         nullable=False,
-        default=UserWalletTransactionStatus.PENDING,
+        default=WalletTransactionStatus.PENDING,
     )
 
     created_at: Mapped[datetime] = mapped_column(

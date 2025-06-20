@@ -1,8 +1,8 @@
 from datetime import datetime
 from pydantic import Field
-from app.models.user_wallet_transaction import (
-    UserWalletTransactionType,
-    UserWalletTransactionStatus,
+from app.models.enums.wallet_transaction import (
+    WalletTransactionType,
+    WalletTransactionStatus,
 )
 from app.v1.schemas.common.id_encoder import HasEncodedID
 
@@ -17,15 +17,15 @@ class UserWalletTransactionRead(HasEncodedID):
         description="The amount of the transaction in cents.",
         json_schema_extra={"example": 1000},
     )
-    user_wallet_transaction_type: UserWalletTransactionType = Field(
+    user_wallet_transaction_type: WalletTransactionType = Field(
         ...,
         description="The type of the user_wallet transaction (e.g., 'deposit', 'spend').",
-        json_schema_extra={"example": UserWalletTransactionType.DEPOSIT.value},
+        json_schema_extra={"example": WalletTransactionType.DEPOSIT.value},
     )
-    user_wallet_transaction_status: UserWalletTransactionStatus = Field(
+    user_wallet_transaction_status: WalletTransactionStatus = Field(
         ...,
         description="The status of the user_wallet transaction (e.g., 'pending', 'completed').",
-        json_schema_extra={"example": UserWalletTransactionStatus.COMPLETED.value},
+        json_schema_extra={"example": WalletTransactionStatus.COMPLETED.value},
     )
     created_at: datetime = Field(
         ...,

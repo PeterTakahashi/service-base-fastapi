@@ -1,8 +1,8 @@
 from typing import Optional, List
 from fastapi import Query
-from app.models.user_wallet_transaction import (
-    UserWalletTransactionType,
-    UserWalletTransactionStatus,
+from app.models.enums.wallet_transaction import (
+    WalletTransactionType,
+    WalletTransactionStatus,
 )
 from datetime import datetime
 from app.v1.schemas.user_wallet_transaction.search_params import (
@@ -17,11 +17,11 @@ def get_user_wallet_transaction_search_params(
     sorted_order: str = Query("desc"),
     amount__gte: Optional[int] = Query(None),
     amount__lte: Optional[int] = Query(None),
-    user_wallet_transaction_type__in: Optional[List[UserWalletTransactionType]] = Query(
+    user_wallet_transaction_type__in: Optional[List[WalletTransactionType]] = Query(
         None
     ),
     user_wallet_transaction_status__in: Optional[
-        List[UserWalletTransactionStatus]
+        List[WalletTransactionStatus]
     ] = Query(None),
     created_at__gte: Optional[datetime] = Query(None),
     created_at__lte: Optional[datetime] = Query(None),
