@@ -7,6 +7,80 @@
       "default": "None"
     }
   ],
+  "users": [
+    {
+      "name": "failed_attempts",
+      "type": "INTEGER",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "last_attempted_at",
+      "type": "TIMESTAMP",
+      "nullable": true,
+      "default": "None"
+    },
+    {
+      "name": "is_locked",
+      "type": "BOOLEAN",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "locked_until",
+      "type": "TIMESTAMP",
+      "nullable": true,
+      "default": "None"
+    },
+    {
+      "name": "created_at",
+      "type": "TIMESTAMP",
+      "nullable": false,
+      "default": "now()"
+    },
+    {
+      "name": "updated_at",
+      "type": "TIMESTAMP",
+      "nullable": false,
+      "default": "now()"
+    },
+    {
+      "name": "id",
+      "type": "UUID",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "email",
+      "type": "VARCHAR(320)",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "hashed_password",
+      "type": "VARCHAR(1024)",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "is_active",
+      "type": "BOOLEAN",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "is_superuser",
+      "type": "BOOLEAN",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "is_verified",
+      "type": "BOOLEAN",
+      "nullable": false,
+      "default": "None"
+    }
+  ],
   "oauth_accounts": [
     {
       "name": "id",
@@ -57,66 +131,154 @@
       "default": "None"
     }
   ],
-  "users": [
+  "user_api_keys": [
     {
       "name": "id",
+      "type": "INTEGER",
+      "nullable": false,
+      "default": "nextval('user_api_keys_id_seq'::regclass)"
+    },
+    {
+      "name": "name",
+      "type": "VARCHAR",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "api_key",
+      "type": "VARCHAR",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "user_id",
       "type": "UUID",
       "nullable": false,
       "default": "None"
     },
     {
-      "name": "email",
-      "type": "VARCHAR(320)",
-      "nullable": false,
+      "name": "expires_at",
+      "type": "TIMESTAMP",
+      "nullable": true,
       "default": "None"
     },
     {
-      "name": "hashed_password",
-      "type": "VARCHAR(1024)",
-      "nullable": false,
+      "name": "allowed_origin",
+      "type": "VARCHAR",
+      "nullable": true,
       "default": "None"
     },
     {
-      "name": "is_active",
-      "type": "BOOLEAN",
-      "nullable": false,
+      "name": "allowed_ip",
+      "type": "VARCHAR",
+      "nullable": true,
       "default": "None"
     },
     {
-      "name": "is_superuser",
-      "type": "BOOLEAN",
+      "name": "created_at",
+      "type": "TIMESTAMP",
       "nullable": false,
-      "default": "None"
+      "default": "now()"
     },
     {
-      "name": "is_verified",
-      "type": "BOOLEAN",
+      "name": "updated_at",
+      "type": "TIMESTAMP",
       "nullable": false,
-      "default": "None"
+      "default": "now()"
     },
     {
-      "name": "failed_attempts",
+      "name": "deleted_at",
+      "type": "TIMESTAMP",
+      "nullable": true,
+      "default": "None"
+    }
+  ],
+  "user_wallets": [
+    {
+      "name": "id",
       "type": "INTEGER",
       "nullable": false,
-      "default": "0"
+      "default": "nextval('user_wallets_id_seq'::regclass)"
     },
     {
-      "name": "last_attempted_at",
-      "type": "TIMESTAMP",
-      "nullable": true,
-      "default": "None"
-    },
-    {
-      "name": "is_locked",
-      "type": "BOOLEAN",
+      "name": "user_id",
+      "type": "UUID",
       "nullable": false,
-      "default": "false"
+      "default": "None"
     },
     {
-      "name": "locked_until",
+      "name": "stripe_customer_id",
+      "type": "VARCHAR",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "balance",
+      "type": "INTEGER",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "created_at",
       "type": "TIMESTAMP",
+      "nullable": false,
+      "default": "now()"
+    },
+    {
+      "name": "updated_at",
+      "type": "TIMESTAMP",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "user_wallet_transactions": [
+    {
+      "name": "id",
+      "type": "INTEGER",
+      "nullable": false,
+      "default": "nextval('user_wallet_transactions_id_seq'::regclass)"
+    },
+    {
+      "name": "user_wallet_id",
+      "type": "INTEGER",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "amount",
+      "type": "INTEGER",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "stripe_payment_intent_id",
+      "type": "VARCHAR",
       "nullable": true,
       "default": "None"
+    },
+    {
+      "name": "user_wallet_transaction_type",
+      "type": "VARCHAR(7)",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "user_wallet_transaction_status",
+      "type": "VARCHAR(9)",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "created_at",
+      "type": "TIMESTAMP",
+      "nullable": false,
+      "default": "now()"
+    },
+    {
+      "name": "updated_at",
+      "type": "TIMESTAMP",
+      "nullable": false,
+      "default": "now()"
     }
   ]
 }

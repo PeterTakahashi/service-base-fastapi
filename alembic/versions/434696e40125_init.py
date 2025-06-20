@@ -1,8 +1,8 @@
 """init
 
-Revision ID: 3b154338a046
+Revision ID: 434696e40125
 Revises: 
-Create Date: 2025-06-20 09:31:58.806421
+Create Date: 2025-06-20 10:10:57.645505
 
 """
 from typing import Sequence, Union
@@ -13,7 +13,7 @@ import fastapi_users_db_sqlalchemy.generics
 
 
 # revision identifiers, used by Alembic.
-revision: str = '3b154338a046'
+revision: str = '434696e40125'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -83,8 +83,8 @@ def upgrade() -> None:
     sa.Column('user_wallet_id', sa.Integer(), nullable=False),
     sa.Column('amount', sa.Integer(), nullable=False),
     sa.Column('stripe_payment_intent_id', sa.String(), nullable=True),
-    sa.Column('user_wallet_transaction_type', sa.Enum('DEPOSIT', 'SPEND', name='userwallettransactiontype'), nullable=False),
-    sa.Column('user_wallet_transaction_status', sa.Enum('PENDING', 'COMPLETED', 'FAILED', name='userwallettransactionstatus'), nullable=False),
+    sa.Column('user_wallet_transaction_type', sa.Enum('DEPOSIT', 'SPEND', name='wallettransactiontype'), nullable=False),
+    sa.Column('user_wallet_transaction_status', sa.Enum('PENDING', 'COMPLETED', 'FAILED', name='wallettransactionstatus'), nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
     sa.Column('updated_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
     sa.ForeignKeyConstraint(['user_wallet_id'], ['user_wallets.id'], ),

@@ -62,7 +62,7 @@ class PaymentIntentService:
             amount=amount,
             user_wallet_transaction_status=WalletTransactionStatus.COMPLETED,
         )
-        user_wallet = user_wallet_transaction.user_wallet
+        user_wallet = await self.user_wallet_repository.find(user_wallet_transaction.user_wallet_id)
         new_balance = user_wallet.balance + amount
         updated_user_wallet = await self.user_wallet_repository.update(
             id=user_wallet.id, balance=new_balance
