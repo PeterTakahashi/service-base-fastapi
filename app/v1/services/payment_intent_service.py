@@ -1,3 +1,4 @@
+from unicodedata import numeric
 from app.v1.schemas.payment_intent import (
     PaymentIntentCreate,
     PaymentIntentCreateResponse,
@@ -28,7 +29,8 @@ class PaymentIntentService:
             user_id=user.id
         )
         payment_intent = stripe.PaymentIntent.create(
-            amount=payment_intent_create.amount * 100,  # Convert to smallest currency unit
+            amount=payment_intent_create.amount
+            * 100,  # Convert to smallest currency unit
             currency=settings.PAYMENT_CURRENCY,
             customer=user_wallet.stripe_customer_id,
         )
@@ -40,9 +42,11 @@ class PaymentIntentService:
             stripe_payment_intent_id=payment_intent.id,
         )
 
+        numeric_amount = int_to_numeric(payment_intent_create.amount)
+
         return PaymentIntentCreateResponse(
             id=payment_intent.id,
-            amount=payment_intent.amount,
+            amount=numeric_amount,
             currency=payment_intent.currency,
             client_secret=payment_intent.client_secret,
             status=payment_intent.status,
@@ -65,7 +69,9 @@ class PaymentIntentService:
             amount=converted_amount,  # Convert back to original amount
             user_wallet_transaction_status=WalletTransactionStatus.COMPLETED,
         )
-        user_wallet = await self.user_wallet_repository.find(user_wallet_transaction.user_wallet_id)
+        user_wallet = await self.user_wallet_repository.find(
+            user_wallet_transaction.user_wallet_id
+        )
         new_balance = user_wallet.balance + converted_amount
         updated_user_wallet = await self.user_wallet_repository.update(
             id=user_wallet.id, balance=new_balance

@@ -15,6 +15,4 @@ class UserWalletTransactionSearchParams(BaseSearchParams):
     updated_at__gte: Optional[datetime] = None
     updated_at__lte: Optional[datetime] = None
     user_wallet_transaction_type__in: Optional[List[WalletTransactionType]] = None
-    user_wallet_transaction_status__in: Optional[List[WalletTransactionStatus]] = (
-        None
-    )
+    user_wallet_transaction_status__in: Optional[List[WalletTransactionStatus]] = None

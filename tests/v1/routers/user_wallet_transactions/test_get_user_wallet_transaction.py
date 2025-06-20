@@ -21,7 +21,7 @@ async def test_get_user_wallet_transaction_authenticated(
     )
     assert response.status_code == 200
     assert decode_id(response.json()["id"]) == user_wallet_transaction.id
-    assert response.json()["amount"] == user_wallet_transaction.amount
+    assert response.json()["amount"] == str(user_wallet_transaction.amount)
 
 
 async def test_get_user_wallet_transaction_not_found(

@@ -16,7 +16,7 @@ async def test_create_payment_intent_authenticated(
     assert response.status_code == 201
     data = response.json()
     assert "id" in data
-    assert data["amount"] == 1000
+    assert data["amount"] == "1000.000000000"
     assert data["currency"] == "usd"
     assert "client_secret" in data
     assert data["status"] == "requires_payment_method"

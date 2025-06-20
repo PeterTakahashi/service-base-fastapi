@@ -109,7 +109,7 @@ async def test_list_user_wallet_transactions_sorting(
     amounts = [tx["amount"] for tx in data]
 
     # They should come back in descending order by amount: 2000, 1000, 500
-    assert amounts == sorted([500, 1000, 2000], reverse=True)
+    assert amounts == ["2000.000000000", "1000.000000000", "500.000000000"]
 
 
 @pytest.mark.asyncio

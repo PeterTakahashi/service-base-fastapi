@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field, ConfigDict
 from app.v1.schemas.balance import Balance
-from decimal import Decimal
+
 
 class PaymentIntentCreateResponse(BaseModel):
     id: str = Field(
@@ -11,7 +11,7 @@ class PaymentIntentCreateResponse(BaseModel):
     amount: Balance = Field(
         ...,
         description="The amount to be charged in the smallest currency unit (e.g., cents for USD).",
-        json_schema_extra={"example": "10"}
+        json_schema_extra={"example": "10"},
     )
     currency: str = Field(
         ...,
@@ -28,4 +28,4 @@ class PaymentIntentCreateResponse(BaseModel):
         description="The current status of the payment intent.",
         json_schema_extra={"example": "requires_confirmation"},
     )
-    model_config = ConfigDict(from_attributes=True, json_encoders={Decimal: str})
+    model_config = ConfigDict(from_attributes=True)

@@ -22,7 +22,7 @@ class UserWalletTransaction(Base):
         ForeignKey("user_wallets.id"), nullable=False
     )
     amount: Mapped[Decimal] = mapped_column(
-        Numeric(precision=38, scale=9, asdecimal=True),
+        Numeric(precision=38, scale=9, asdecimal=True, decimal_return_scale=True),
         default=Decimal("0"),
         nullable=False,
     )

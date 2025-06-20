@@ -6,7 +6,7 @@ from app.models.enums.wallet_transaction import (
 )
 from app.v1.schemas.common.id_encoder import HasEncodedID
 from app.v1.schemas.balance import Balance
-from decimal import Decimal
+
 
 class UserWalletTransactionRead(HasEncodedID):
     """
@@ -38,4 +38,4 @@ class UserWalletTransactionRead(HasEncodedID):
         description="The date and time when the transaction was last updated.",
         json_schema_extra={"example": "2023-10-01T12:00:00Z"},
     )
-    model_config = ConfigDict(from_attributes=True, json_encoders={Decimal: str})
+    model_config = ConfigDict(from_attributes=True)
