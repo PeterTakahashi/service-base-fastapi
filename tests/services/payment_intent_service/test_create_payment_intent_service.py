@@ -12,14 +12,14 @@ from tests.mocks.stripe import mock_payment_intent_create
 async def test_create_payment_intent_service(
     mock_create, payment_intent_service, user, user_wallet
 ):
-    payment_intent_data = PaymentIntentCreate(amount=1000)
+    payment_intent_data = PaymentIntentCreate(amount=10)
 
     payment_intent = await payment_intent_service.create_payment_intent(
         user=user, payment_intent_create=payment_intent_data
     )
 
     assert payment_intent is not None
-    assert payment_intent.amount == payment_intent_data.amount
+    assert payment_intent.amount == 1000  # Amount in cents
     assert payment_intent.currency == "usd"
     assert payment_intent.status == "requires_payment_method"
     assert payment_intent.client_secret is not None

@@ -27,12 +27,12 @@ async def test_create_payment_intent_invalid_amount(
 ):
     response = await auth_client.post(
         "/payment-intents",
-        json={"amount": -1000},  # Invalid amount
+        json={"amount": -1},  # Invalid amount
     )
     check_api_exception_response(
         response,
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
         detail_code=ErrorCode.VALIDATION_ERROR,
-        detail_detail="Input should be greater than or equal to 100",
+        detail_detail="Input should be greater than or equal to 1",
         pointer="amount",
     )

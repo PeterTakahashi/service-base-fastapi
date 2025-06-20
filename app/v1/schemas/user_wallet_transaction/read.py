@@ -1,21 +1,22 @@
 from datetime import datetime
-from pydantic import Field
+from pydantic import Field, ConfigDict
 from app.models.enums.wallet_transaction import (
     WalletTransactionType,
     WalletTransactionStatus,
 )
 from app.v1.schemas.common.id_encoder import HasEncodedID
-
+from app.v1.schemas.balance import Balance
+from decimal import Decimal
 
 class UserWalletTransactionRead(HasEncodedID):
     """
     Schema for reading user_wallet transaction information.
     """
 
-    amount: int = Field(
+    amount: Balance = Field(
         ...,
         description="The amount of the transaction in cents.",
-        json_schema_extra={"example": 1000},
+        json_schema_extra={"example": "10.00"},
     )
     user_wallet_transaction_type: WalletTransactionType = Field(
         ...,
@@ -37,3 +38,4 @@ class UserWalletTransactionRead(HasEncodedID):
         description="The date and time when the transaction was last updated.",
         json_schema_extra={"example": "2023-10-01T12:00:00Z"},
     )
+    model_config = ConfigDict(from_attributes=True, json_encoders={Decimal: str})

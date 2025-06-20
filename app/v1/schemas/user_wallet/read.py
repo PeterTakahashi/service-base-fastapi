@@ -1,16 +1,17 @@
 from pydantic import BaseModel, Field, ConfigDict
 from datetime import datetime
-
+from decimal import Decimal
+from app.v1.schemas.balance import Balance
 
 class UserWalletRead(BaseModel):
     """
     Schema for reading user_wallet information.
     """
 
-    balance: int = Field(
+    balance: Balance = Field(
         ...,
         description="The current balance of the user_wallet.",
-        json_schema_extra={"example": 1000},  # Example: $10.00 in cents,
+        json_schema_extra={"example": "10.00"},
     )
     created_at: datetime = Field(
         ...,
@@ -22,4 +23,4 @@ class UserWalletRead(BaseModel):
         description="The date and time when the user_wallet was last updated.",
         json_schema_extra={"example": "2023-10-01T12:00:00Z"},
     )
-    model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(from_attributes=True, json_encoders={Decimal: str})

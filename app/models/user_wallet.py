@@ -1,9 +1,10 @@
 from app.db.base import Base
-from sqlalchemy import ForeignKey, DateTime, func
+from sqlalchemy import ForeignKey, DateTime, func, Numeric
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from datetime import datetime
 from typing import List
 import fastapi_users_db_sqlalchemy
+from decimal import Decimal
 
 from typing import TYPE_CHECKING
 
@@ -22,7 +23,12 @@ class UserWallet(Base):
     stripe_customer_id: Mapped[str] = mapped_column(
         nullable=False, unique=True, index=True
     )
-    balance: Mapped[int] = mapped_column(default=0, nullable=False)
+    balance: Mapped[Decimal] = mapped_column(
+        Numeric(precision=38, scale=9, asdecimal=True),
+        default=Decimal("0"),
+        nullable=False,
+    )
+
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         server_default=func.now(),
