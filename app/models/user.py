@@ -1,7 +1,7 @@
 from fastapi_users_db_sqlalchemy import SQLAlchemyBaseUserTableUUID
 from app.db.base import Base
 from app.models.oauth_account import OAuthAccount
-from sqlalchemy import Boolean, Integer, DateTime
+from sqlalchemy import Boolean, Integer, DateTime, func
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from typing import List
 from datetime import datetime
@@ -29,4 +29,15 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
     wallet: Mapped["Wallet"] = relationship(back_populates="user", uselist=False)
     user_api_keys: Mapped[List["UserApiKey"]] = relationship(
         "UserApiKey", back_populates="user", cascade="all, delete-orphan"
+    )
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False,
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
     )

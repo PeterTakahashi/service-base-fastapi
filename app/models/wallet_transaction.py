@@ -1,5 +1,5 @@
 from app.db.base import Base
-from sqlalchemy import Enum as SQLAlchemyEnum, ForeignKey
+from sqlalchemy import Enum as SQLAlchemyEnum, ForeignKey, DateTime, func
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 from datetime import datetime
 import enum
@@ -44,10 +44,15 @@ class WalletTransaction(Base):
     )
 
     created_at: Mapped[datetime] = mapped_column(
-        default=datetime.utcnow, nullable=False
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False,
     )
     updated_at: Mapped[datetime] = mapped_column(
-        default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
     )
     wallet: Mapped["Wallet"] = relationship(
         back_populates="wallet_transactions", uselist=False

@@ -1,5 +1,5 @@
 from app.db.base import Base
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, DateTime, func
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from datetime import datetime
 from typing import List
@@ -24,10 +24,15 @@ class Wallet(Base):
     )
     balance: Mapped[int] = mapped_column(default=0, nullable=False)
     created_at: Mapped[datetime] = mapped_column(
-        default=datetime.utcnow, nullable=False
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False,
     )
     updated_at: Mapped[datetime] = mapped_column(
-        default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
     )
 
     user: Mapped["User"] = relationship("User", back_populates="wallet", uselist=False)

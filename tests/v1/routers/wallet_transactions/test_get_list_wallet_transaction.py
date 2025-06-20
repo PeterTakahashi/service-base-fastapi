@@ -157,14 +157,9 @@ async def test_list_wallet_transactions_date_filter(
     )
 
     # 1) Only get transactions newer than 5 days ago
-    resp = await auth_client.get(
-        "/wallet-transactions?created_at__gte=2025-01-01T00:00:00"
-    )
+    query = f"created_at__gte={(datetime.utcnow() - timedelta(days=5)).strftime('%Y-%m-%dT%H:%M:%S')}"
+    resp = await auth_client.get(f"/wallet-transactions?{query}")
     assert resp.status_code == 200
     data = resp.json()["data"]
-    if old_tx.created_at < datetime(2025, 1, 1):
-        # Then presumably only new_tx is returned
-        assert len(data) == 1
-        assert decode_id(data[0]["id"]) == new_tx.id
-    else:
-        pass
+    assert len(data) == 1
+    assert decode_id(data[0]["id"]) == new_tx.id
