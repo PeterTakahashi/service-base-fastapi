@@ -15,8 +15,13 @@ class UserWalletTransactionRead(HasEncodedID):
 
     amount: Balance = Field(
         ...,
-        description="The amount of the transaction in cents.",
+        description="The amount of the transaction in USD",
         json_schema_extra={"example": "10.00"},
+    )
+    balance_after_transaction: Balance | None = Field(
+        None,
+        description="The balance after the transaction in USD",
+        json_schema_extra={"example": "100.00"},
     )
     user_wallet_transaction_type: WalletTransactionType = Field(
         ...,

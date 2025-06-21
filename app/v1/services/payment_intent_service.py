@@ -60,17 +60,18 @@ class PaymentIntentService:
             raise ValueError(
                 "UserWallet transaction not found for the given payment intent ID"
             )
-        # Convert from smallest currency unit and format as Decimal with scale=9
-        converted_amount = int_to_numeric(amount)
-        await self.user_wallet_transaction_repository.update(
-            id=user_wallet_transaction.id,
-            amount=converted_amount,  # Convert back to original amount
-            user_wallet_transaction_status=WalletTransactionStatus.COMPLETED,
-        )
         user_wallet = await self.user_wallet_repository.find(
             user_wallet_transaction.user_wallet_id
         )
+        # Convert from smallest currency unit and format as Decimal with scale=9
+        converted_amount = int_to_numeric(amount)
         new_balance = user_wallet.balance + converted_amount
+        await self.user_wallet_transaction_repository.update(
+            id=user_wallet_transaction.id,
+            amount=converted_amount,  # Convert back to original amount
+            balance_after_transaction=new_balance,
+            user_wallet_transaction_status=WalletTransactionStatus.COMPLETED,
+        )
         updated_user_wallet = await self.user_wallet_repository.update(
             id=user_wallet.id, balance=new_balance
         )

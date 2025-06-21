@@ -26,6 +26,11 @@ class UserWalletTransaction(Base):
         default=Decimal("0"),
         nullable=False,
     )
+    balance_after_transaction: Mapped[Decimal] = mapped_column(
+        Numeric(precision=38, scale=9, asdecimal=True, decimal_return_scale=True),
+        default=Decimal("0"),
+        nullable=True,
+    )
     stripe_payment_intent_id: Mapped[str | None] = mapped_column(
         nullable=True, unique=True, index=True
     )

@@ -12,6 +12,7 @@ class UserWalletTransactionAdmin(ModelView, model=UserWalletTransaction):
         "id",
         "user_wallet_id",
         "amount",
+        "balance_after_transaction",
         "stripe_payment_intent_id",
         "user_wallet_transaction_type",
         "user_wallet_transaction_status",
@@ -22,6 +23,7 @@ class UserWalletTransactionAdmin(ModelView, model=UserWalletTransaction):
     form_columns = [
         "user_wallet_id",
         "amount",
+        "balance_after_transaction",
         "stripe_payment_intent_id",
         "user_wallet_transaction_type",
         "user_wallet_transaction_status",
