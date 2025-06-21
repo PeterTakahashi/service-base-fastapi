@@ -3,6 +3,8 @@ from .user import User
 from .user_api_key import UserApiKey
 from .user_wallet import UserWallet
 from .user_wallet_transaction import UserWalletTransaction
+from .organization import Organization
+from .user_organization_assignment import UserOrganizationAssignment
 
 __all__ = [
     "OAuthAccount",
@@ -10,4 +12,6 @@ __all__ = [
     "UserApiKey",
     "UserWallet",
     "UserWalletTransaction",
+    "Organization",
+    "UserOrganizationAssignment",
 ]

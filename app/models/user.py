@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from app.models.user_wallet import UserWallet
     from app.models.user_api_key import UserApiKey
+    from app.models.user_organization_assignment import UserOrganizationAssignment
 
 
 class User(SQLAlchemyBaseUserTableUUID, Base):
@@ -42,4 +43,9 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
         server_default=func.now(),
         onupdate=func.now(),
         nullable=False,
+    )
+    organization_assignments: Mapped[List["UserOrganizationAssignment"]] = relationship(
+        "UserOrganizationAssignment",
+        back_populates="user",
+        cascade="all, delete-orphan",
     )
