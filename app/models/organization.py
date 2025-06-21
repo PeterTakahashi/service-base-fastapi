@@ -36,6 +36,4 @@ class Organization(Base):
         back_populates="organization",
         cascade="all, delete-orphan",
     )
-    created_by_user: Mapped["User"] = relationship(
-        "User", back_populates="organization", uselist=False
-    )
+    created_by_user: Mapped["User"] = relationship("User")

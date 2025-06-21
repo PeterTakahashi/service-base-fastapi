@@ -11,6 +11,7 @@ if TYPE_CHECKING:
     from app.models.user_wallet import UserWallet
     from app.models.user_api_key import UserApiKey
     from app.models.user_organization_assignment import UserOrganizationAssignment
+    from app.models.organization import Organization
 
 
 class User(SQLAlchemyBaseUserTableUUID, Base):
@@ -48,4 +49,7 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
         "UserOrganizationAssignment",
         back_populates="user",
         cascade="all, delete-orphan",
+    )
+    organization: Mapped["Organization"] = relationship(
+        "Organization", back_populates="created_by_user", uselist=False
     )
