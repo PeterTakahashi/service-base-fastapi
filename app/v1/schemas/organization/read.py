@@ -2,6 +2,7 @@ from datetime import datetime
 from pydantic import Field, EmailStr, ConfigDict
 from app.v1.schemas.common.id_encoder import HasEncodedID
 
+
 class OrganizationRead(HasEncodedID):
     name: str = Field(..., description="Organization name.")
     profile_image_key: str | None = Field(None, description="Profile image object key.")

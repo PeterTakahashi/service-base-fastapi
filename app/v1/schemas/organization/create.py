@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field, EmailStr
 
+
 class OrganizationCreate(BaseModel):
     name: str = Field(
         ...,
