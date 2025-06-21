@@ -16,7 +16,7 @@ class Organization(Base):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     name: Mapped[str] = mapped_column(String, nullable=False)
     profile_image_key: Mapped[str | None] = mapped_column(String, nullable=True, default=None)
-    billing_email: Mapped[str] = mapped_column(String, nullable=True)
+    billing_email: Mapped[str | None] = mapped_column(String, nullable=True, default=None)
 
     created_by_user_id: Mapped[Uuid] = mapped_column(ForeignKey("users.id"), nullable=False)
     created_at: Mapped[datetime] = mapped_column(
