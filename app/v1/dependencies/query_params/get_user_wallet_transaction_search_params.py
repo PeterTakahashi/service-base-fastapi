@@ -17,6 +17,8 @@ def get_user_wallet_transaction_search_params(
     sorted_order: str = Query("desc"),
     amount__gte: Optional[int] = Query(None),
     amount__lte: Optional[int] = Query(None),
+    balance_after_transaction__gte: Optional[int] = None,
+    balance_after_transaction__lte: Optional[int] = None,
     user_wallet_transaction_type__in: Optional[List[WalletTransactionType]] = Query(
         None
     ),
@@ -35,6 +37,8 @@ def get_user_wallet_transaction_search_params(
         sorted_order=sorted_order,
         amount__gte=amount__gte,
         amount__lte=amount__lte,
+        balance_after_transaction__gte=balance_after_transaction__gte,
+        balance_after_transaction__lte=balance_after_transaction__lte,
         user_wallet_transaction_type__in=user_wallet_transaction_type__in,
         user_wallet_transaction_status__in=user_wallet_transaction_status__in,
         created_at__gte=created_at__gte,

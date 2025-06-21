@@ -6,7 +6,7 @@ class UserWalletAdmin(ModelView, model=UserWallet):
     name = "UserWallet"
     name_plural = "UserWallets"
 
-    icon = "fa-solid fa-user_wallet"
+    icon = "fa-solid fa-wallet"
 
     column_list = [
         "id",

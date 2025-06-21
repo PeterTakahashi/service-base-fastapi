@@ -10,6 +10,8 @@ from app.models.enums.wallet_transaction import (
 class UserWalletTransactionSearchParams(BaseSearchParams):
     amount__gte: Optional[int] = None
     amount__lte: Optional[int] = None
+    balance_after_transaction__gte: Optional[int] = None
+    balance_after_transaction__lte: Optional[int] = None
     created_at__gte: Optional[datetime] = None
     created_at__lte: Optional[datetime] = None
     updated_at__gte: Optional[datetime] = None

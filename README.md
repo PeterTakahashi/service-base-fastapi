@@ -27,7 +27,6 @@ stripe listen --events=payment_intent.succeeded --forward-to http://127.0.0.1:80
 ref: https://docs.stripe.com/cli/listen
 stripe test card: https://docs.stripe.com/testing
 
-
 #### create db migration file
 
 ```bash
@@ -81,3 +80,7 @@ http://0.0.0.0:8000/app/v1/docs#/
 
 json
 http://0.0.0.0:8000/app/v1/openapi.json
+
+#### Admin Console
+
+http://127.0.0.1:8000/admin/login

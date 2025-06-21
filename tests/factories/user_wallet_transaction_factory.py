@@ -11,6 +11,7 @@ class UserWalletTransactionFactory(AsyncSQLAlchemyModelFactory):
 
     user_wallet = factory.SubFactory(UserWalletFactory)
     amount = factory.Faker("random_int", min=100, max=10000)
+    balance_after_transaction = factory.Faker("random_int", min=100, max=10000)
     stripe_payment_intent_id = factory.Faker("uuid4")
     user_wallet_transaction_type = factory.Faker(
         "random_element", elements=["DEPOSIT", "SPEND"]
