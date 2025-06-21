@@ -44,7 +44,7 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
         onupdate=func.now(),
         nullable=False,
     )
-    organization_assignments: Mapped[List["UserOrganizationAssignment"]] = relationship(
+    user_organization_assignments: Mapped[List["UserOrganizationAssignment"]] = relationship(
         "UserOrganizationAssignment",
         back_populates="user",
         cascade="all, delete-orphan",

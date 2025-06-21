@@ -31,10 +31,10 @@ class UserOrganizationAssignment(Base):
     )
 
     user: Mapped["User"] = relationship(
-        "User", back_populates="organization_assignments"
+        "User", back_populates="user_organization_assignments"
     )
     organization: Mapped["Organization"] = relationship(
-        "Organization", back_populates="user_assignments"
+        "Organization", back_populates="user_organization_assignments"
     )
 
     __table_args__ = (
