@@ -20,29 +20,35 @@ from tests.fixtures.models import (
     user_api_keys,
     expired_user_api_key,
     user_api_key_with_expires_at,
+    organization,
+    soft_deleted_organization,
+    organizations,
 )
-from tests.fixtures.repository_fixture import (
+from tests.fixtures.repositories import (
     user_repository,
     user_wallet_repository,
     user_wallet_transaction_repository,
     user_api_key_repository,
+    organization_repository,
 )
-from tests.fixtures.service_fixture import (
+from tests.fixtures.services import (
     user_service,
     payment_intent_service,
     user_wallet_transaction_service,
     user_api_key_service,
+    organization_service,
 )
 from tests.mocks.stripe import (
     mock_stripe_customer_create,
     mock_payment_intent_create_patch,
 )
-from tests.factories.user_factory import user_factory
-from tests.factories.user_wallet_factory import user_wallet_factory
-from tests.factories.user_wallet_transaction_factory import (
+from tests.factories import (
+    user_factory,
+    user_wallet_factory,
     user_wallet_transaction_factory,
+    user_api_key_factory,
+    organization_factory,
 )
-from tests.factories.user_api_key_factory import user_api_key_factory
 
 
 @pytest.fixture(scope="session")

@@ -5,6 +5,7 @@ from app.v1.schemas.common.id_encoder import HasEncodedID
 
 class OrganizationRead(HasEncodedID):
     name: str = Field(..., description="Organization name.")
+    description: str | None = Field(None, description="Organization description.")
     profile_image_key: str | None = Field(None, description="Profile image object key.")
     billing_email: EmailStr | None = Field(None, description="Billing contact e-mail.")
     created_at: datetime = Field(..., description="Record creation timestamp.")

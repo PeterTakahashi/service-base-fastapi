@@ -11,6 +11,7 @@ from .user_wallet_transaction_fixture import (
     user_wallet_transaction,
     other_user_wallet_transaction,
 )
+from .organization_fixture import organization, soft_deleted_organization, organizations
 
 
 __all__ = [
@@ -27,4 +28,7 @@ __all__ = [
     "user_api_keys",
     "expired_user_api_key",
     "user_api_key_with_expires_at",
+    "organization",
+    "soft_deleted_organization",
+    "organizations",
 ]
