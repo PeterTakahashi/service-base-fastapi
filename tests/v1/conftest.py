@@ -11,9 +11,6 @@ from tests.v1.fixtures.client_fixture import (
     auth_client,
     not_verified_auth_client,
 )
-from app.lib.utils.convert_id import encode_id
-
-
-@pytest_asyncio.fixture
-async def fake_id() -> str:
-    return encode_id(0)
+from tests.v1.fixtures.models import (
+    organization
+)

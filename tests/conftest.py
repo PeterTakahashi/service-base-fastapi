@@ -10,6 +10,7 @@ from tests.fixtures.faker import (
     fake_password,
     faker,
     fake_hashed_password,
+    fake_id,
 )
 from tests.fixtures.models import (
     user,
