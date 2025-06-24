@@ -37,6 +37,7 @@ from tests.fixtures.repositories import (
     user_api_key_repository,
     organization_repository,
     user_organization_assignment_repository,
+    user_organization_invitation_repository,
 )
 from tests.fixtures.services import (
     user_service,
@@ -44,6 +45,7 @@ from tests.fixtures.services import (
     user_wallet_transaction_service,
     user_api_key_service,
     organization_service,
+    organization_user_invitation_service,
 )
 from tests.mocks.stripe import (
     mock_stripe_customer_create,

@@ -28,14 +28,11 @@ router = AuthAPIRouter(
     status_code=status.HTTP_201_CREATED,
     responses=INVITE_RESPONSES,
 )
-async def get_organization(
+async def invite(
     params: OrganizationUserInvite,
     organization: Organization = Depends(get_organization_by_id),
-):
-    """
-    Retrieve an organization by its ID.
-    """
-    return OrganizationRead.model_validate(organization)
+) -> None:
+    return None
 
 
 @router.post(
@@ -44,11 +41,8 @@ async def get_organization(
     name="organizations:users:invite:accept",
     status_code=status.HTTP_201_CREATED,
 )
-async def get_organization(
+async def accept_invitation(
     user: User = Depends(current_active_user),
     organization: Organization = Depends(get_organization_by_id),
-):
-    """
-    Retrieve an organization by its ID.
-    """
-    return OrganizationRead.model_validate(organization)
+) -> None:
+    return None

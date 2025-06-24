@@ -58,7 +58,16 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
             "UserOrganizationInvitation",
             back_populates="user",
             cascade="all, delete-orphan",
+            foreign_keys="[UserOrganizationInvitation.user_id]",
         )
+    )
+    user_organization_invitations_though_created_by: Mapped[
+        List["UserOrganizationInvitation"]
+    ] = relationship(
+        "UserOrganizationInvitation",
+        back_populates="created_by_user",
+        cascade="all, delete-orphan",
+        foreign_keys="[UserOrganizationInvitation.created_by_user_id]",
     )
     organization: Mapped["Organization"] = relationship(
         "Organization", back_populates="created_by_user", uselist=False

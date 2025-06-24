@@ -1,8 +1,8 @@
 """init
 
-Revision ID: d346b7d09ec6
+Revision ID: 5e82ae03cc5a
 Revises:
-Create Date: 2025-06-24 10:41:11.728349
+Create Date: 2025-06-24 12:41:41.391624
 
 """
 
@@ -14,7 +14,7 @@ import fastapi_users_db_sqlalchemy.generics
 
 
 # revision identifiers, used by Alembic.
-revision: str = "d346b7d09ec6"
+revision: str = "5e82ae03cc5a"
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -215,7 +215,12 @@ def upgrade() -> None:
             "user_id", fastapi_users_db_sqlalchemy.generics.GUID(), nullable=False
         ),
         sa.Column("organization_id", sa.Integer(), nullable=False),
-        sa.Column("completed_at", sa.DateTime(timezone=True), nullable=True),
+        sa.Column(
+            "created_by_user_id",
+            fastapi_users_db_sqlalchemy.generics.GUID(),
+            nullable=False,
+        ),
+        sa.Column("assigned_at", sa.DateTime(timezone=True), nullable=True),
         sa.Column(
             "created_at",
             sa.DateTime(timezone=True),
@@ -227,6 +232,10 @@ def upgrade() -> None:
             sa.DateTime(timezone=True),
             server_default=sa.text("now()"),
             nullable=False,
+        ),
+        sa.ForeignKeyConstraint(
+            ["created_by_user_id"],
+            ["users.id"],
         ),
         sa.ForeignKeyConstraint(
             ["organization_id"], ["organizations.id"], ondelete="CASCADE"

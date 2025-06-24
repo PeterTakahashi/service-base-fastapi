@@ -24,6 +24,13 @@ def get_password_reset_token_from_email_source(prefix: str, source: str) -> str:
     return token_match.group(1)
 
 
+def get_subject_from_email_source(source: str) -> str:
+    subject_match = re.search(r"Subject: (.+)", source)
+    if not subject_match:
+        raise ValueError("Subject not found")
+    return subject_match.group(1).strip()
+
+
 def get_latest_mail_source_by_recipient(target_email: str) -> str:
     url = f"http://{settings.MAIL_SERVER}:{settings.MAIL_WEB_PORT}/api/messages/?page=1"
     response = httpx.get(url).json()
