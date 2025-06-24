@@ -25,7 +25,7 @@ async def test_update_organization(
     organization,
     updated_data: OrganizationUpdate,
 ):
-    response = await auth_client.put(
+    response = await auth_client.patch(
         f"/organizations/{encode_id(organization.id)}", json=updated_data.model_dump()
     )
     # Assert
@@ -43,7 +43,7 @@ async def test_update_by_other_user(
     organization,
     updated_data: OrganizationUpdate,
 ):
-    response = await other_auth_client.put(
+    response = await other_auth_client.patch(
         f"/organizations/{encode_id(organization.id)}", json=updated_data.model_dump()
     )
     # Assert
@@ -59,7 +59,7 @@ async def test_update_uncreated_organization(
     fake_id,
     updated_data: OrganizationUpdate,
 ):
-    response = await auth_client.put(
+    response = await auth_client.patch(
         f"/organizations/{fake_id}", json=updated_data.model_dump()
     )
     # Assert

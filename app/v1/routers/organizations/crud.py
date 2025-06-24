@@ -43,6 +43,7 @@ async def list_organizations(
     name="organizations:get_organization",
 )
 async def get_organization(
+    user: User = Depends(current_active_user),
     organization: Organization = Depends(get_organization_by_id),
 ):
     """
@@ -69,13 +70,14 @@ async def create_organization(
     return await service.create(organization_params=organization_params, user=user)
 
 
-@router.put(
+@router.patch(
     "/{organization_id}",
     response_model=OrganizationRead,
     name="organizations:update_organization",
 )
 async def update_organization(
     organization_params: OrganizationUpdate,
+    user: User = Depends(current_active_user),
     organization: Organization = Depends(get_organization_by_id),
     service: OrganizationService = Depends(get_organization_service),
 ):

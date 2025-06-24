@@ -77,8 +77,10 @@ class OrganizationUserInvitationService:
             )
         )
         if user_organization_assignment:
-            print("User already assigned to organization")
-            return None
+            raise init_api_exception(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail_code=ErrorCode.USER_ORGANIZATION_INVITATION_ALREADY_ASSIGNED,
+            )
 
         # invalid if invitation not found
         user_organization_invitation = (
@@ -99,20 +101,13 @@ class OrganizationUserInvitationService:
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail_code=ErrorCode.USER_ORGANIZATION_INVITATION_EXPIRED,
             )
-        # invalid if already assigned
-        if user_organization_invitation.assigned_at:
-            raise init_api_exception(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail_code=ErrorCode.USER_ORGANIZATION_INVITATION_ALREADY_ASSIGNED,
-            )
         # create user organization assignment
         await self.user_organization_assignment_repository.create(
             user_id=user.id,
             organization_id=organization.id,
         )
-        await self.user_organization_invitation_repository.update(
+        await self.user_organization_invitation_repository.destroy(
             user_organization_invitation.id,
-            assigned_at=datetime.now(timezone.utc),
         )
         return None
 

@@ -13,4 +13,8 @@ from tests.v1.fixtures.client_fixture import (
     not_verified_auth_client,
     other_auth_client,
 )
-from tests.v1.fixtures.models import organization
+from tests.v1.fixtures.models import (
+    organization,
+    user_organization_invitation,
+    other_user,
+)
