@@ -1,8 +1,8 @@
 """init
 
-Revision ID: ad4b913e75ba
+Revision ID: 2d9ad1416927
 Revises:
-Create Date: 2025-06-23 16:05:15.494634
+Create Date: 2025-06-24 08:51:06.088584
 
 """
 
@@ -14,7 +14,7 @@ import fastapi_users_db_sqlalchemy.generics
 
 
 # revision identifiers, used by Alembic.
-revision: str = "ad4b913e75ba"
+revision: str = "2d9ad1416927"
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -194,14 +194,19 @@ def upgrade() -> None:
             server_default=sa.text("now()"),
             nullable=False,
         ),
+        sa.Column("deleted_at", sa.DateTime(timezone=True), nullable=True),
         sa.ForeignKeyConstraint(
             ["organization_id"], ["organizations.id"], ondelete="CASCADE"
         ),
         sa.ForeignKeyConstraint(["user_id"], ["users.id"], ondelete="CASCADE"),
         sa.PrimaryKeyConstraint("id"),
-        sa.UniqueConstraint(
-            "user_id", "organization_id", name="uq_user_organization_assignment"
-        ),
+    )
+    op.create_index(
+        "uq_user_organization_assignment_active",
+        "user_organization_assignments",
+        ["user_id", "organization_id"],
+        unique=True,
+        postgresql_where=sa.text("deleted_at IS NULL"),
     )
     op.create_table(
         "user_wallet_transactions",
@@ -263,6 +268,11 @@ def downgrade() -> None:
         table_name="user_wallet_transactions",
     )
     op.drop_table("user_wallet_transactions")
+    op.drop_index(
+        "uq_user_organization_assignment_active",
+        table_name="user_organization_assignments",
+        postgresql_where=sa.text("deleted_at IS NULL"),
+    )
     op.drop_table("user_organization_assignments")
     op.drop_index(op.f("ix_user_wallets_stripe_customer_id"), table_name="user_wallets")
     op.drop_table("user_wallets")

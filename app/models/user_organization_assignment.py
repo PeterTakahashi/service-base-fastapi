@@ -1,5 +1,5 @@
 from app.db.base import Base
-from sqlalchemy import ForeignKey, DateTime, func, UniqueConstraint
+from sqlalchemy import ForeignKey, DateTime, func, Index
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from datetime import datetime
 from typing import TYPE_CHECKING
@@ -41,7 +41,11 @@ class UserOrganizationAssignment(Base):
     )
 
     __table_args__ = (
-        UniqueConstraint(
-            "user_id", "organization_id", name="uq_user_organization_assignment"
+        Index(
+            "uq_user_organization_assignment_active",
+            "user_id",
+            "organization_id",
+            unique=True,
+            postgresql_where=(deleted_at.is_(None)),
         ),
     )
