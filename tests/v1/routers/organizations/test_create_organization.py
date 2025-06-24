@@ -7,7 +7,7 @@ from app.v1.schemas.organization import OrganizationCreate
 @pytest.mark.asyncio
 async def test_create_organization(
     auth_client: AsyncClient,
-    authed_user,
+    user,
 ):
     # Arrange
     organization_data = OrganizationCreate(
@@ -26,4 +26,4 @@ async def test_create_organization(
     assert response_data["description"] == organization_data.description
     assert response_data["profile_image_key"] == organization_data.profile_image_key
     assert response_data["billing_email"] == organization_data.billing_email
-    assert response_data["created_by_user"]["id"] == str(authed_user.id)
+    assert response_data["created_by_user"]["id"] == str(user.id)

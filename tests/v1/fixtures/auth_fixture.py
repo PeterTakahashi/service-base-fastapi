@@ -54,13 +54,3 @@ async def other_access_token(
     user = await user_repository.find_by(email=email)
     await user_repository.update(id=user.id, is_verified=True)
     return access_token
-
-
-@pytest_asyncio.fixture
-async def authed_user(
-    access_token: str,
-    user_repository: UserRepository,
-    fake_email: str,
-):
-    user = await user_repository.find_by(email=fake_email)
-    return user

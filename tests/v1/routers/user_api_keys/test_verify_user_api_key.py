@@ -23,7 +23,10 @@ async def test_verify_has_expires_at_user_api_key_success(
 ):
     resp = await client.post(
         "/user-api-keys/verify",
-        headers={"X-API-KEY": user_api_key_with_expires_at.api_key},
+        headers={
+            "X-API-KEY": user_api_key_with_expires_at.api_key,
+            "Authorization": "",
+        },
     )
     assert resp.status_code == 200
     body = resp.json()
@@ -37,7 +40,7 @@ async def test_verify_expired_user_api_key(
     """An expired API key should be rejected with 401."""
     resp = await client.post(
         "/user-api-keys/verify",
-        headers={"X-API-KEY": expired_user_api_key.api_key},
+        headers={"X-API-KEY": expired_user_api_key.api_key, "Authorization": ""},
     )
     check_api_exception_response(
         resp,
@@ -128,6 +131,7 @@ async def test_verify_user_api_key_invalid_origin(
         headers={
             "X-API-KEY": api_key.api_key,
             "Origin": "https://evil.com",
+            "Authorization": "",
         },
     )
     check_api_exception_response(
@@ -151,7 +155,7 @@ async def test_verify_user_api_key_allowed_ip_success(
     )
     resp = await client.post(
         "/user-api-keys/verify",
-        headers={"X-API-KEY": api_key.api_key},
+        headers={"X-API-KEY": api_key.api_key, "Authorization": ""},
     )
     assert resp.status_code == 200
     assert resp.json()["is_valid"] is True
@@ -170,7 +174,7 @@ async def test_verify_user_api_key_invalid_ip(
     )
     resp = await client.post(
         "/user-api-keys/verify",
-        headers={"X-API-KEY": api_key.api_key},
+        headers={"X-API-KEY": api_key.api_key, "Authorization": ""},
     )
     check_api_exception_response(
         resp, status_code=status.HTTP_401_UNAUTHORIZED, detail_code=ErrorCode.INVALID_IP

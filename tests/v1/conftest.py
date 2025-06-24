@@ -5,7 +5,6 @@ from tests.v1.fixtures.auth_fixture import (
     access_token,
     not_verified_access_token,
     other_access_token,
-    authed_user,
 )
 from tests.v1.fixtures.client_fixture import (
     client,
@@ -16,5 +15,6 @@ from tests.v1.fixtures.client_fixture import (
 from tests.v1.fixtures.models import (
     organization,
     user_organization_invitation,
+    user,
     other_user,
 )
