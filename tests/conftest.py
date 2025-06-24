@@ -29,6 +29,7 @@ from tests.fixtures.models import (
     organization,
     soft_deleted_organization,
     organizations,
+    organization_with_users,
 )
 from tests.fixtures.repositories import (
     user_repository,
@@ -46,6 +47,7 @@ from tests.fixtures.services import (
     user_api_key_service,
     organization_service,
     organization_user_invitation_service,
+    organization_user_service,
 )
 from tests.mocks.stripe import (
     mock_stripe_customer_create,

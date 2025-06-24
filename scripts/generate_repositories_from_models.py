@@ -1,4 +1,3 @@
-import os
 from pathlib import Path
 
 MODELS_DIR = Path("app/models")
@@ -6,7 +5,7 @@ REPO_DIR = Path("app/v1/repositories")
 BASE_REPO_IMPORT = "from app.v1.repositories.base_repository import BaseRepository"
 SQLALCHEMY_IMPORT = "from sqlalchemy.ext.asyncio import AsyncSession"
 
-REPO_TEMPLATE = '''{sqlalchemy_import}
+REPO_TEMPLATE = """{sqlalchemy_import}
 from app.models.{model_module} import {model_class}
 {base_repo_import}
 
@@ -14,10 +13,12 @@ from app.models.{model_module} import {model_class}
 class {repo_class}(BaseRepository):
     def __init__(self, session: AsyncSession):
         super().__init__(session, {model_class})
-'''
+"""
+
 
 def snake_to_pascal(name: str) -> str:
     return "".join(part.capitalize() for part in name.split("_"))
+
 
 def main():
     REPO_DIR.mkdir(parents=True, exist_ok=True)
@@ -46,6 +47,7 @@ def main():
 
         repo_path.write_text(content)
         print(f"Generated: {repo_path}")
+
 
 if __name__ == "__main__":
     main()

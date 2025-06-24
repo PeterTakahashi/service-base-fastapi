@@ -233,18 +233,35 @@ class BaseRepository:
         for key, value in search_params.items():
             # keyに "__" が含まれていれば、フィールド名と演算子を分割する
             if "__" in key:
-                field_name, op = key.split("__", 1)
-                column = getattr(self.model, field_name, None)
-                if column is None:
+                parts = key.split("__")
+                op = "exact"
+                if parts[-1] in OPERATORS:  # 末尾が演算子なら取り除く
+                    op = parts.pop()
+
+                # 単純カラム: foo__icontains=bar
+                if len(parts) == 1:
+                    column = getattr(self.model, parts[0], None)
+                    if column is None:
+                        raise AttributeError(
+                            f"{self.model.__name__} has no attribute '{parts[0]}'"
+                        )
+                    conditions.append(OPERATORS[op](column, value))
+                    continue
+
+                # 1ホップのリレーション: rel__field__op=value
+                rel_attr = getattr(self.model, parts[0], None)
+                if rel_attr is None or not hasattr(rel_attr, "property"):
                     raise AttributeError(
-                        f"{self.model.__name__} has no attribute '{field_name}'"
+                        f"{self.model.__name__} has no relationship '{parts[0]}'"
                     )
-
-                operator_func = OPERATORS.get(op)
-                if not operator_func:
-                    raise ValueError(f"Unsupported operator '{op}' in '{key}'")
-
-                conditions.append(operator_func(column, value))
+                target_cls = rel_attr.property.mapper.class_
+                target_column = getattr(target_cls, parts[1], None)
+                if target_column is None:
+                    raise AttributeError(
+                        f"{target_cls.__name__} has no attribute '{parts[1]}'"
+                    )
+                conditions.append(rel_attr.any(OPERATORS[op](target_column, value)))
+                continue
             else:
                 # "__"が含まれていない場合は eq (=) 比較とみなす
                 column = getattr(self.model, key, None)

@@ -11,7 +11,12 @@ from .user_wallet_transaction_fixture import (
     user_wallet_transaction,
     other_user_wallet_transaction,
 )
-from .organization_fixture import organization, soft_deleted_organization, organizations
+from .organization_fixture import (
+    organization,
+    soft_deleted_organization,
+    organizations,
+    organization_with_users,
+)
 
 
 __all__ = [
@@ -31,4 +36,5 @@ __all__ = [
     "organization",
     "soft_deleted_organization",
     "organizations",
+    "organization_with_users",
 ]
