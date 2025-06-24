@@ -20,7 +20,7 @@ class UserOrganizationInvitation(Base):
         ForeignKey("organizations.id", ondelete="CASCADE"), nullable=False, index=True
     )
 
-    completed_at: Mapped[datetime | None] = mapped_column(
+    assigned_at: Mapped[datetime | None] = mapped_column(
         DateTime(timezone=True), default=None, nullable=True
     )
     created_at: Mapped[datetime] = mapped_column(
