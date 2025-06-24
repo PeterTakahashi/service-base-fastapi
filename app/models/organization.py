@@ -6,6 +6,7 @@ from typing import List, TYPE_CHECKING
 from sqlalchemy import Uuid
 
 if TYPE_CHECKING:
+    from app.models.organization_wallet import OrganizationWallet
     from app.models.user_organization_assignment import UserOrganizationAssignment
     from app.models.user_organization_invitation import UserOrganizationInvitation
     from app.models.user import User
@@ -54,3 +55,6 @@ class Organization(Base):
         )
     )
     created_by_user: Mapped["User"] = relationship("User")
+    organization_wallet: Mapped["OrganizationWallet"] = relationship(
+        back_populates="organization", uselist=False
+    )
