@@ -131,6 +131,62 @@
       "default": "None"
     }
   ],
+  "organizations": [
+    {
+      "name": "id",
+      "type": "INTEGER",
+      "nullable": false,
+      "default": "nextval('organizations_id_seq'::regclass)"
+    },
+    {
+      "name": "name",
+      "type": "VARCHAR",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "description",
+      "type": "VARCHAR",
+      "nullable": true,
+      "default": "None"
+    },
+    {
+      "name": "profile_image_key",
+      "type": "VARCHAR",
+      "nullable": true,
+      "default": "None"
+    },
+    {
+      "name": "billing_email",
+      "type": "VARCHAR",
+      "nullable": true,
+      "default": "None"
+    },
+    {
+      "name": "created_by_user_id",
+      "type": "UUID",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "created_at",
+      "type": "TIMESTAMP",
+      "nullable": false,
+      "default": "now()"
+    },
+    {
+      "name": "updated_at",
+      "type": "TIMESTAMP",
+      "nullable": false,
+      "default": "now()"
+    },
+    {
+      "name": "deleted_at",
+      "type": "TIMESTAMP",
+      "nullable": true,
+      "default": "None"
+    }
+  ],
   "user_api_keys": [
     {
       "name": "id",
@@ -214,7 +270,83 @@
     },
     {
       "name": "balance",
+      "type": "NUMERIC(38, 9)",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "created_at",
+      "type": "TIMESTAMP",
+      "nullable": false,
+      "default": "now()"
+    },
+    {
+      "name": "updated_at",
+      "type": "TIMESTAMP",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "user_organization_assignments": [
+    {
+      "name": "id",
       "type": "INTEGER",
+      "nullable": false,
+      "default": "nextval('user_organization_assignments_id_seq'::regclass)"
+    },
+    {
+      "name": "user_id",
+      "type": "UUID",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "organization_id",
+      "type": "INTEGER",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "created_at",
+      "type": "TIMESTAMP",
+      "nullable": false,
+      "default": "now()"
+    },
+    {
+      "name": "updated_at",
+      "type": "TIMESTAMP",
+      "nullable": false,
+      "default": "now()"
+    },
+    {
+      "name": "deleted_at",
+      "type": "TIMESTAMP",
+      "nullable": true,
+      "default": "None"
+    }
+  ],
+  "user_organization_invitations": [
+    {
+      "name": "id",
+      "type": "INTEGER",
+      "nullable": false,
+      "default": "nextval('user_organization_invitations_id_seq'::regclass)"
+    },
+    {
+      "name": "user_id",
+      "type": "UUID",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "organization_id",
+      "type": "INTEGER",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "created_by_user_id",
+      "type": "UUID",
       "nullable": false,
       "default": "None"
     },
@@ -246,8 +378,14 @@
     },
     {
       "name": "amount",
-      "type": "INTEGER",
+      "type": "NUMERIC(38, 9)",
       "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "balance_after_transaction",
+      "type": "NUMERIC(38, 9)",
+      "nullable": true,
       "default": "None"
     },
     {

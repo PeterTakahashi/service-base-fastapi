@@ -57,6 +57,8 @@ docker compose down -v
 
 ```bash
 python -m scripts.create_schema
+python scripts/generate_repositories_from_models.py
+python scripts/generate_repository_dependencies.py
 ```
 
 #### code formatter
