@@ -3,7 +3,12 @@ from app.v1.schemas.organization import OrganizationCreate, OrganizationRead
 
 
 @pytest.mark.asyncio
-async def test_create_organization(organization_service, organization_repository, user):
+async def test_create_organization(
+    organization_service,
+    organization_repository,
+    user_organization_assignment_repository,
+    user,
+):
     # Arrange
     organization_data = OrganizationCreate(
         name="Test Organization",
@@ -29,3 +34,11 @@ async def test_create_organization(organization_service, organization_repository
     assert saved_organization is not None
     assert saved_organization.name == organization_data.name
     assert saved_organization.description == organization_data.description
+    user_organization_assignment = (
+        await user_organization_assignment_repository.find_by(
+            user_id=user.id, organization_id=saved_organization.id
+        )
+    )
+    assert user_organization_assignment is not None
+    assert user_organization_assignment.user_id == user.id
+    assert user_organization_assignment.organization_id == saved_organization.id

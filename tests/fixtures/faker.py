@@ -1,0 +1,34 @@
+from faker import Faker
+import pytest_asyncio
+from fastapi_users.password import PasswordHelper
+
+
+@pytest_asyncio.fixture
+def faker():
+    return Faker()
+
+
+@pytest_asyncio.fixture
+def fake_email(faker) -> str:
+    """
+    Generate a fake email address.
+    """
+    return faker.unique.email()
+
+
+@pytest_asyncio.fixture
+def fake_password(faker) -> str:
+    """
+    Generate a fake password.
+    """
+    return faker.password(
+        length=12, special_chars=True, digits=True, upper_case=True, lower_case=True
+    )
+
+
+@pytest_asyncio.fixture
+def fake_hashed_password(fake_password) -> str:
+    """
+    Generate a hashed password using the Faker library.
+    """
+    return PasswordHelper().hash(password=fake_password)

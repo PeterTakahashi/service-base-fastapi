@@ -5,14 +5,6 @@ from app.v1.repositories.user_repository import UserRepository
 
 
 @pytest_asyncio.fixture
-def fake_email(faker: Faker) -> str:
-    """
-    Generate a fake email address.
-    """
-    return faker.unique.email()
-
-
-@pytest_asyncio.fixture
 async def not_verified_access_token(
     client: AsyncClient, faker: Faker, fake_email: str
 ) -> str:
@@ -44,3 +36,13 @@ async def access_token(
     user = await user_repository.find_by(email=fake_email)
     await user_repository.update(id=user.id, is_verified=True)
     return not_verified_access_token
+
+
+@pytest_asyncio.fixture
+async def authed_user(
+    access_token: str,
+    user_repository: UserRepository,
+    fake_email: str,
+):
+    user = await user_repository.find_by(email=fake_email)
+    return user

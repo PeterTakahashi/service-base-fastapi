@@ -11,7 +11,7 @@ class UserWalletFactory(AsyncSQLAlchemyModelFactory):
 
     user = factory.SubFactory(UserFactory)
     stripe_customer_id = factory.Faker("uuid4")
-    balance = 1000
+    balance = 0
 
 
 @pytest_asyncio.fixture

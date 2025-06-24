@@ -7,13 +7,24 @@ from app.v1.schemas.organization import (
 )
 from app.models.user import User
 from app.v1.repositories.organization_repository import OrganizationRepository
+from app.v1.repositories.user_organization_assignment_repository import (
+    UserOrganizationAssignmentRepository,
+)
 from uuid import UUID
 from app.v1.schemas.common.list.base_list_response import ListResponseMeta
+from datetime import datetime
 
 
 class OrganizationService:
-    def __init__(self, organization_repository: OrganizationRepository):
+    def __init__(
+        self,
+        organization_repository: OrganizationRepository,
+        user_organization_assignment_repository: UserOrganizationAssignmentRepository,
+    ):
         self.organization_repository = organization_repository
+        self.user_organization_assignment_repository = (
+            user_organization_assignment_repository
+        )
 
     async def get_list(
         self, user_id: UUID, search_params: OrganizationSearchParams
@@ -40,10 +51,6 @@ class OrganizationService:
             data=[OrganizationRead.model_validate(tx) for tx in organizations],
         )
 
-    async def get(self, id: int) -> OrganizationRead:
-        organization = await self.organization_repository.find(id)
-        return OrganizationRead.model_validate(organization)
-
     async def create(
         self,
         organization_params: OrganizationCreate,
@@ -55,6 +62,10 @@ class OrganizationService:
             billing_email=organization_params.billing_email,
             profile_image_key=organization_params.profile_image_key,  # TODO: upload to storage
             created_by_user_id=user.id,
+        )
+        await self.user_organization_assignment_repository.create(
+            user_id=user.id,
+            organization_id=organization.id,
         )
         return OrganizationRead.model_validate(organization)
 
@@ -71,4 +82,9 @@ class OrganizationService:
         return OrganizationRead.model_validate(organization)
 
     async def delete(self, id: int) -> None:
+        await self.user_organization_assignment_repository.update_all(
+            {"deleted_at": datetime.utcnow()},
+            organization_id__exact=id,
+            deleted_at__exact=None,
+        )
         await self.organization_repository.soft_delete(id)

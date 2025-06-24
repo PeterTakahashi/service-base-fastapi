@@ -29,6 +29,9 @@ class UserOrganizationAssignment(Base):
         onupdate=func.now(),
         nullable=False,
     )
+    deleted_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
 
     user: Mapped["User"] = relationship(
         "User", back_populates="user_organization_assignments"

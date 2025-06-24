@@ -5,7 +5,12 @@ import pytest
 import pytest_asyncio
 from app.core.startup import database
 from app.db.session import get_async_session
-from faker import Faker
+from tests.fixtures.faker import (
+    fake_email,
+    fake_password,
+    faker,
+    fake_hashed_password,
+)
 from tests.fixtures.models import (
     user,
     other_user,
@@ -30,6 +35,7 @@ from tests.fixtures.repositories import (
     user_wallet_transaction_repository,
     user_api_key_repository,
     organization_repository,
+    user_organization_assignment_repository,
 )
 from tests.fixtures.services import (
     user_service,
@@ -48,6 +54,7 @@ from tests.factories import (
     user_wallet_transaction_factory,
     user_api_key_factory,
     organization_factory,
+    user_organization_assignment_factory,
 )
 
 
@@ -77,8 +84,3 @@ async def clean_tables():
 async def async_session():
     async for session in get_async_session():
         yield session
-
-
-@pytest_asyncio.fixture
-def faker():
-    return Faker()

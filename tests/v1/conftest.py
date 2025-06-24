@@ -3,8 +3,8 @@
 import pytest_asyncio
 from tests.v1.fixtures.auth_fixture import (
     access_token,
-    fake_email,
     not_verified_access_token,
+    authed_user,
 )
 from tests.v1.fixtures.client_fixture import (
     client,

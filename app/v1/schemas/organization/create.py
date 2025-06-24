@@ -1,6 +1,7 @@
 from pydantic import BaseModel, Field, EmailStr
 from typing import Optional
 
+
 class OrganizationCreate(BaseModel):
     name: str = Field(
         ...,
