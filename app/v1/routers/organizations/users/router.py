@@ -16,7 +16,7 @@ from app.v1.schemas.organization.users.search_params import (
     OrganizationUserSearchParams,
 )
 from app.v1.schemas.organization.users.read_list import UserListRead
-
+from app.v1.schemas.user.read import UserRead
 
 router = AuthAPIRouter(
     prefix="/organizations/{organization_id}/users",
@@ -39,4 +39,21 @@ async def get_list(
     return await service.get_list(
         organization_id=organization.id,
         search_params=search_params,
+    )
+
+@router.get(
+    "/{user_id}",
+    name="organizations:user",
+    status_code=status.HTTP_200_OK,
+    response_model=UserRead,
+)
+async def get(
+    user_id: str,
+    organization: Organization = Depends(get_organization_by_id),
+    user: User = Depends(current_active_user),
+    service: OrganizationUserService = Depends(get_organization_user_service),
+) -> UserRead:
+    return await service.get(
+        organization_id=organization.id,
+        user_id=user_id
     )

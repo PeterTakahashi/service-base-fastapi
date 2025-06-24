@@ -33,3 +33,12 @@ class OrganizationUserService:
             ),
             data=[UserRead.model_validate(tx) for tx in users],
         )
+
+    async def get(
+        self, organization_id: int, user_id: str
+    ) -> UserRead:
+        user = await self.user_repository.find_by_or_raise(
+            id=user_id,
+            user_organization_assignments__organization_id__exact=organization_id,
+        )
+        return UserRead.model_validate(user)
