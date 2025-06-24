@@ -25,3 +25,8 @@ class ErrorCode(str, Enum):
     LOGIN_ACCOUNT_LOCKED = "login_account_locked"
     INVALID_STATE_TOKEN = "invalid_state_token"
     INTERNAL_SERVER_ERROR = "internal_server_error"
+    USER_ORGANIZATION_INVITATION_NOT_FOUND = "user_organization_invitation_not_found"
+    USER_ORGANIZATION_INVITATION_EXPIRED = "user_organization_invitation_expired"
+    USER_ORGANIZATION_INVITATION_ALREADY_ASSIGNED = (
+        "user_organization_invitation_already_assigned"
+    )

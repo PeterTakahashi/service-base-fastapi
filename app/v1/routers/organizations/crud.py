@@ -66,7 +66,6 @@ async def create_organization(
     """
     Create a new organization.
     """
-    print(f"Creating organization by: {user.id}")
     return await service.create(organization_params=organization_params, user=user)
 
 

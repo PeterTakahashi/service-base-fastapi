@@ -130,5 +130,20 @@
     "openapi_example_summary": "Password does not meet criteria.",
     "title": "Invalid Password",
     "detail": "The provided password does not meet the required criteria. Please ensure it is at least 8 characters long and contains a mix of letters, numbers, and special characters."
+  },
+  "user_organization_invitation_not_found": {
+    "openapi_example_summary": "Organization invitation not found.",
+    "title": "Invitation Not Found",
+    "detail": "The organization invitation could not be found. Please check the invitation link or contact support."
+  },
+  "user_organization_invitation_expired": {
+    "openapi_example_summary": "Organization invitation has expired.",
+    "title": "Invitation Expired",
+    "detail": "The organization invitation has expired. Please request a new invitation."
+  },
+  "user_organization_invitation_already_assigned": {
+    "openapi_example_summary": "Organization invitation already assigned",
+    "title": "Invitation Already Assigned",
+    "detail": "The organization invitation has already been assigned. You can log in to your account."
   }
 }
