@@ -43,8 +43,10 @@ class OrganizationWallet(Base):
     organization: Mapped["Organization"] = relationship(
         "Organization", back_populates="organization_wallet", uselist=False
     )
-    organization_wallet_transactions: Mapped[List["OrganizationWalletTransaction"]] = relationship(
-        "OrganizationWalletTransaction",
-        back_populates="organization_wallet",
-        cascade="all, delete-orphan",
+    organization_wallet_transactions: Mapped[List["OrganizationWalletTransaction"]] = (
+        relationship(
+            "OrganizationWalletTransaction",
+            back_populates="organization_wallet",
+            cascade="all, delete-orphan",
+        )
     )

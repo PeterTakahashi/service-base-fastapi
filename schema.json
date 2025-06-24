@@ -512,5 +512,67 @@
       "nullable": false,
       "default": "now()"
     }
+  ],
+  "organization_api_keys": [
+    {
+      "name": "id",
+      "type": "INTEGER",
+      "nullable": false,
+      "default": "nextval('organization_api_keys_id_seq'::regclass)"
+    },
+    {
+      "name": "name",
+      "type": "VARCHAR",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "api_key",
+      "type": "VARCHAR",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "organization_id",
+      "type": "INTEGER",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "expires_at",
+      "type": "TIMESTAMP",
+      "nullable": true,
+      "default": "None"
+    },
+    {
+      "name": "allowed_origin",
+      "type": "VARCHAR",
+      "nullable": true,
+      "default": "None"
+    },
+    {
+      "name": "allowed_ip",
+      "type": "VARCHAR",
+      "nullable": true,
+      "default": "None"
+    },
+    {
+      "name": "created_at",
+      "type": "TIMESTAMP",
+      "nullable": false,
+      "default": "now()"
+    },
+    {
+      "name": "updated_at",
+      "type": "TIMESTAMP",
+      "nullable": false,
+      "default": "now()"
+    },
+    {
+      "name": "deleted_at",
+      "type": "TIMESTAMP",
+      "nullable": true,
+      "default": "None"
+    }
   ]
 }

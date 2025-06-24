@@ -4,17 +4,19 @@ REPO_DIR = Path("app/v1/repositories")
 FIXTURE_DIR = Path("tests/fixtures/repositories")
 INIT_FILE = FIXTURE_DIR / "__init__.py"
 
-fixture_template = '''import pytest_asyncio
+fixture_template = """import pytest_asyncio
 from app.v1.repositories.{repo_module} import {repo_class}
 
 
 @pytest_asyncio.fixture
 async def {fixture_name}(async_session):
     return {repo_class}(async_session)
-'''
+"""
+
 
 def snake_to_pascal(name: str) -> str:
     return "".join(word.capitalize() for word in name.split("_")) + "Repository"
+
 
 def main():
     FIXTURE_DIR.mkdir(parents=True, exist_ok=True)
@@ -53,6 +55,7 @@ def main():
 
     INIT_FILE.write_text("\n".join(init_lines))
     print(f"Updated: {INIT_FILE}")
+
 
 if __name__ == "__main__":
     main()

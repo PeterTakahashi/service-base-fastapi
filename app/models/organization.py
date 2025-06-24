@@ -10,6 +10,7 @@ if TYPE_CHECKING:
     from app.models.user_organization_assignment import UserOrganizationAssignment
     from app.models.user_organization_invitation import UserOrganizationInvitation
     from app.models.user import User
+    from app.models.organization_api_key import OrganizationApiKey
 
 
 class Organization(Base):
@@ -57,4 +58,9 @@ class Organization(Base):
     created_by_user: Mapped["User"] = relationship("User")
     organization_wallet: Mapped["OrganizationWallet"] = relationship(
         back_populates="organization", uselist=False
+    )
+    organization_api_keys: Mapped[List["OrganizationApiKey"]] = relationship(
+        "OrganizationApiKey",
+        back_populates="organization",
+        cascade="all, delete-orphan",
     )

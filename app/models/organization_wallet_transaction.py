@@ -41,10 +41,12 @@ class OrganizationWalletTransaction(Base):
         default=WalletTransactionType.DEPOSIT,
     )
 
-    organization_wallet_transaction_status: Mapped[WalletTransactionStatus] = mapped_column(
-        SQLAlchemyEnum(WalletTransactionStatus, native_enum=True),
-        nullable=False,
-        default=WalletTransactionStatus.PENDING,
+    organization_wallet_transaction_status: Mapped[WalletTransactionStatus] = (
+        mapped_column(
+            SQLAlchemyEnum(WalletTransactionStatus, native_enum=True),
+            nullable=False,
+            default=WalletTransactionStatus.PENDING,
+        )
     )
 
     created_at: Mapped[datetime] = mapped_column(
