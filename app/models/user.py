@@ -11,6 +11,7 @@ if TYPE_CHECKING:
     from app.models.user_wallet import UserWallet
     from app.models.user_api_key import UserApiKey
     from app.models.user_organization_assignment import UserOrganizationAssignment
+    from app.models.user_organization_invitation import UserOrganizationInvitation
     from app.models.organization import Organization
 
 
@@ -48,6 +49,13 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
     user_organization_assignments: Mapped[List["UserOrganizationAssignment"]] = (
         relationship(
             "UserOrganizationAssignment",
+            back_populates="user",
+            cascade="all, delete-orphan",
+        )
+    )
+    user_organization_invitations: Mapped[List["UserOrganizationInvitation"]] = (
+        relationship(
+            "UserOrganizationInvitation",
             back_populates="user",
             cascade="all, delete-orphan",
         )

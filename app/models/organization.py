@@ -7,6 +7,7 @@ from sqlalchemy import Uuid
 
 if TYPE_CHECKING:
     from app.models.user_organization_assignment import UserOrganizationAssignment
+    from app.models.user_organization_invitation import UserOrganizationInvitation
     from app.models.user import User
 
 
@@ -41,6 +42,13 @@ class Organization(Base):
     user_organization_assignments: Mapped[List["UserOrganizationAssignment"]] = (
         relationship(
             "UserOrganizationAssignment",
+            back_populates="organization",
+            cascade="all, delete-orphan",
+        )
+    )
+    user_organization_invitations: Mapped[List["UserOrganizationInvitation"]] = (
+        relationship(
+            "UserOrganizationInvitation",
             back_populates="organization",
             cascade="all, delete-orphan",
         )

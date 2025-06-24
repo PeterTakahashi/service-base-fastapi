@@ -5,6 +5,7 @@ from .user_wallet import UserWallet
 from .user_wallet_transaction import UserWalletTransaction
 from .organization import Organization
 from .user_organization_assignment import UserOrganizationAssignment
+from .user_organization_invitation import UserOrganizationInvitation
 
 __all__ = [
     "OAuthAccount",
@@ -14,4 +15,5 @@ __all__ = [
     "UserWalletTransaction",
     "Organization",
     "UserOrganizationAssignment",
+    "UserOrganizationInvitation",
 ]
