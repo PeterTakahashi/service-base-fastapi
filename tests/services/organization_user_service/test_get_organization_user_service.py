@@ -1,9 +1,9 @@
 import pytest
-from app.v1.schemas.common.list.base_list_response import ListResponseMeta
 from app.v1.schemas.user.read import UserRead
 
+
 @pytest.mark.asyncio
-async def test_get_list_organization_user_service(
+async def test_get_user_organization_user_service(
     organization_user_service, organization, user
 ):
     """

@@ -41,6 +41,7 @@ async def get_list(
         search_params=search_params,
     )
 
+
 @router.get(
     "/{user_id}",
     name="organizations:user",
@@ -53,7 +54,18 @@ async def get(
     user: User = Depends(current_active_user),
     service: OrganizationUserService = Depends(get_organization_user_service),
 ) -> UserRead:
-    return await service.get(
-        organization_id=organization.id,
-        user_id=user_id
-    )
+    return await service.get(organization_id=organization.id, user_id=user_id)
+
+
+@router.delete(
+    "/{user_id}",
+    name="organizations:user:delete",
+    status_code=status.HTTP_200_OK,
+)
+async def delete(
+    user_id: str,
+    organization: Organization = Depends(get_organization_by_id),
+    user: User = Depends(current_active_user),
+    service: OrganizationUserService = Depends(get_organization_user_service),
+) -> None:
+    return await service.delete(organization_id=organization.id, user_id=user_id)

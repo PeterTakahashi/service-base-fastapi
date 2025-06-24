@@ -30,3 +30,6 @@ class ErrorCode(str, Enum):
     USER_ORGANIZATION_INVITATION_ALREADY_ASSIGNED = (
         "user_organization_invitation_already_assigned"
     )
+    ORGANIZATION_LAST_USER_CANNOT_BE_DELETED = (
+        "organization_last_user_cannot_be_deleted"
+    )

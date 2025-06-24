@@ -145,5 +145,10 @@
     "openapi_example_summary": "Organization invitation already assigned",
     "title": "Invitation Already Assigned",
     "detail": "The organization invitation has already been assigned. You can log in to your account."
+  },
+  "organization_last_user_cannot_be_deleted": {
+    "openapi_example_summary": "Cannot delete the last user in an organization.",
+    "title": "Last User Cannot Be Deleted",
+    "detail": "You cannot delete the last user in an organization. Please add another user before attempting to delete this one."
   }
 }

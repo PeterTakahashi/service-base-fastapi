@@ -21,9 +21,7 @@ async def test_get_user_organization(auth_client: AsyncClient, organization, use
 
 
 @pytest.mark.asyncio
-async def test_get_user_not_found(
-    auth_client: AsyncClient, organization, other_user
-):
+async def test_get_user_not_found(auth_client: AsyncClient, organization, other_user):
     response = await auth_client.get(
         f"/organizations/{encode_id(organization.id)}/users/{other_user.id}"
     )
@@ -33,13 +31,10 @@ async def test_get_user_not_found(
         response, status_code=status.HTTP_404_NOT_FOUND, detail_code=ErrorCode.NOT_FOUND
     )
 
+
 @pytest.mark.asyncio
-async def test_get_org_not_found(
-    auth_client: AsyncClient, fake_id, user
-):
-    response = await auth_client.get(
-        f"/organizations/{fake_id}/users/{user.id}"
-    )
+async def test_get_org_not_found(auth_client: AsyncClient, fake_id, user):
+    response = await auth_client.get(f"/organizations/{fake_id}/users/{user.id}")
     # Assert
     assert response.status_code == 404
     check_api_exception_response(
