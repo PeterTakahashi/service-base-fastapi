@@ -1,9 +1,9 @@
 from app.v1.schemas.common.api_key.write import ApiKeyCreate, ApiKeyUpdate
 
 
-class OrganizationApiKeyCreate(ApiKeyCreate):
+class UserApiKeyCreate(ApiKeyCreate):
     pass
 
 
-class OrganizationApiKeyUpdate(ApiKeyUpdate):
+class UserApiKeyUpdate(ApiKeyUpdate):
     pass

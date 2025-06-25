@@ -1,9 +1,9 @@
 from .read import UserWalletTransactionRead
 from .search_params import UserWalletTransactionSearchParams
-from .list_response import UserWalletTransactionListResponse
+from .read_list import UserWalletTransactionListRead
 
 __all__ = [
     "UserWalletTransactionRead",
     "UserWalletTransactionSearchParams",
-    "UserWalletTransactionListResponse",
+    "UserWalletTransactionListRead",
 ]

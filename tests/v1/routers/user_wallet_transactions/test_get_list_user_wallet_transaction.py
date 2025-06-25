@@ -36,8 +36,8 @@ async def test_list_user_wallet_transactions_no_filter(
     for tx_data in data:
         assert "id" in tx_data
         assert "amount" in tx_data
-        assert "user_wallet_transaction_type" in tx_data
-        assert "user_wallet_transaction_status" in tx_data
+        assert "wallet_transaction_type" in tx_data
+        assert "wallet_transaction_status" in tx_data
 
 
 @pytest.mark.asyncio

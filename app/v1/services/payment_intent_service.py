@@ -70,7 +70,7 @@ class PaymentIntentService:
             id=user_wallet_transaction.id,
             amount=converted_amount,  # Convert back to original amount
             balance_after_transaction=new_balance,
-            user_wallet_transaction_status=WalletTransactionStatus.COMPLETED,
+            wallet_transaction_status=WalletTransactionStatus.COMPLETED,
         )
         updated_user_wallet = await self.user_wallet_repository.update(
             id=user_wallet.id, balance=new_balance

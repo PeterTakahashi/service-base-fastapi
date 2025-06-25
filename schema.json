@@ -501,13 +501,13 @@
       "default": "None"
     },
     {
-      "name": "user_wallet_transaction_type",
+      "name": "wallet_transaction_type",
       "type": "VARCHAR(7)",
       "nullable": false,
       "default": "None"
     },
     {
-      "name": "user_wallet_transaction_status",
+      "name": "wallet_transaction_status",
       "type": "VARCHAR(9)",
       "nullable": false,
       "default": "None"
@@ -557,13 +557,13 @@
       "default": "None"
     },
     {
-      "name": "organization_wallet_transaction_type",
+      "name": "wallet_transaction_type",
       "type": "VARCHAR(7)",
       "nullable": false,
       "default": "None"
     },
     {
-      "name": "organization_wallet_transaction_status",
+      "name": "wallet_transaction_status",
       "type": "VARCHAR(9)",
       "nullable": false,
       "default": "None"

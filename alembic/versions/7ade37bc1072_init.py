@@ -1,8 +1,8 @@
 """init
 
-Revision ID: 8023d47a6c6f
+Revision ID: 7ade37bc1072
 Revises:
-Create Date: 2025-06-25 04:21:32.774448
+Create Date: 2025-06-25 04:43:17.178318
 
 """
 
@@ -14,7 +14,7 @@ import fastapi_users_db_sqlalchemy.generics
 
 
 # revision identifiers, used by Alembic.
-revision: str = "8023d47a6c6f"
+revision: str = "7ade37bc1072"
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -353,12 +353,12 @@ def upgrade() -> None:
         ),
         sa.Column("stripe_payment_intent_id", sa.String(), nullable=True),
         sa.Column(
-            "user_wallet_transaction_type",
+            "wallet_transaction_type",
             sa.Enum("DEPOSIT", "SPEND", name="wallettransactiontype"),
             nullable=False,
         ),
         sa.Column(
-            "user_wallet_transaction_status",
+            "wallet_transaction_status",
             sa.Enum("PENDING", "COMPLETED", "FAILED", name="wallettransactionstatus"),
             nullable=False,
         ),
@@ -402,12 +402,12 @@ def upgrade() -> None:
         ),
         sa.Column("stripe_payment_intent_id", sa.String(), nullable=True),
         sa.Column(
-            "organization_wallet_transaction_type",
+            "wallet_transaction_type",
             sa.Enum("DEPOSIT", "SPEND", name="wallettransactiontype"),
             nullable=False,
         ),
         sa.Column(
-            "organization_wallet_transaction_status",
+            "wallet_transaction_status",
             sa.Enum("PENDING", "COMPLETED", "FAILED", name="wallettransactionstatus"),
             nullable=False,
         ),
