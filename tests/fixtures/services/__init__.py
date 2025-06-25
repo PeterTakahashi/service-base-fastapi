@@ -7,6 +7,10 @@ from .organization_user_invitation_service_fixture import (
     organization_user_invitation_service,
 )
 from .organization_user_service_fixture import organization_user_service
+from .organization_api_key_service_fixture import organization_api_key_service
+from .organization_wallet_transaction_service_fixture import (
+    organization_wallet_transaction_service,
+)
 
 __all__ = [
     "organization_service",
@@ -16,4 +20,6 @@ __all__ = [
     "payment_intent_service",
     "organization_user_invitation_service",
     "organization_user_service",
+    "organization_api_key_service",
+    "organization_wallet_transaction_service",
 ]

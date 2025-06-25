@@ -17,6 +17,20 @@ async def organization(
 
 
 @pytest_asyncio.fixture
+async def other_organization(
+    organization_factory, user_organization_assignment_factory, other_user
+):
+    organization = await organization_factory.create(
+        created_by_user_id=other_user.id,
+    )
+    await user_organization_assignment_factory.create(
+        user_id=other_user.id,
+        organization_id=organization.id,
+    )
+    return organization
+
+
+@pytest_asyncio.fixture
 async def organization_with_users(
     organization, user_organization_assignment_factory, users
 ):
