@@ -1,8 +1,8 @@
 """init
 
-Revision ID: 185c97b296f5
+Revision ID: 8023d47a6c6f
 Revises:
-Create Date: 2025-06-24 18:35:30.238618
+Create Date: 2025-06-25 04:21:32.774448
 
 """
 
@@ -14,7 +14,7 @@ import fastapi_users_db_sqlalchemy.generics
 
 
 # revision identifiers, used by Alembic.
-revision: str = "185c97b296f5"
+revision: str = "8023d47a6c6f"
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -176,6 +176,49 @@ def upgrade() -> None:
         unique=True,
     )
     op.create_table(
+        "organization_api_keys",
+        sa.Column("id", sa.Integer(), autoincrement=True, nullable=False),
+        sa.Column("name", sa.String(), nullable=False),
+        sa.Column("api_key", sa.String(), nullable=False),
+        sa.Column("organization_id", sa.Integer(), nullable=False),
+        sa.Column("expires_at", sa.DateTime(timezone=True), nullable=True),
+        sa.Column("allowed_origin", sa.String(), nullable=True),
+        sa.Column("allowed_ip", sa.String(), nullable=True),
+        sa.Column(
+            "created_by_user_id",
+            fastapi_users_db_sqlalchemy.generics.GUID(),
+            nullable=False,
+        ),
+        sa.Column(
+            "created_at",
+            sa.DateTime(timezone=True),
+            server_default=sa.text("now()"),
+            nullable=False,
+        ),
+        sa.Column(
+            "updated_at",
+            sa.DateTime(timezone=True),
+            server_default=sa.text("now()"),
+            nullable=False,
+        ),
+        sa.Column("deleted_at", sa.DateTime(timezone=True), nullable=True),
+        sa.ForeignKeyConstraint(
+            ["created_by_user_id"],
+            ["users.id"],
+        ),
+        sa.ForeignKeyConstraint(
+            ["organization_id"],
+            ["organizations.id"],
+        ),
+        sa.PrimaryKeyConstraint("id"),
+    )
+    op.create_index(
+        op.f("ix_organization_api_keys_api_key"),
+        "organization_api_keys",
+        ["api_key"],
+        unique=True,
+    )
+    op.create_table(
         "organization_wallets",
         sa.Column("id", sa.Integer(), autoincrement=True, nullable=False),
         sa.Column("organization_id", sa.Integer(), nullable=False),
@@ -202,6 +245,12 @@ def upgrade() -> None:
             ["organizations.id"],
         ),
         sa.PrimaryKeyConstraint("id"),
+    )
+    op.create_index(
+        op.f("ix_organization_wallets_organization_id"),
+        "organization_wallets",
+        ["organization_id"],
+        unique=True,
     )
     op.create_index(
         op.f("ix_organization_wallets_stripe_customer_id"),
@@ -421,7 +470,15 @@ def downgrade() -> None:
         op.f("ix_organization_wallets_stripe_customer_id"),
         table_name="organization_wallets",
     )
+    op.drop_index(
+        op.f("ix_organization_wallets_organization_id"),
+        table_name="organization_wallets",
+    )
     op.drop_table("organization_wallets")
+    op.drop_index(
+        op.f("ix_organization_api_keys_api_key"), table_name="organization_api_keys"
+    )
+    op.drop_table("organization_api_keys")
     op.drop_index(op.f("ix_user_wallets_stripe_customer_id"), table_name="user_wallets")
     op.drop_table("user_wallets")
     op.drop_index(op.f("ix_user_api_keys_api_key"), table_name="user_api_keys")

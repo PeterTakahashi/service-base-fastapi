@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from app.models.organization import Organization
+    from app.models.user import User
 
 
 class OrganizationApiKey(Base):
@@ -25,6 +26,10 @@ class OrganizationApiKey(Base):
     )
     allowed_origin: Mapped[str | None] = mapped_column(String, nullable=True)
     allowed_ip: Mapped[str | None] = mapped_column(String, nullable=True)
+
+    created_by_user_id: Mapped[Uuid] = mapped_column(
+        ForeignKey("users.id"), nullable=False
+    )
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         server_default=func.now(),
@@ -43,3 +48,4 @@ class OrganizationApiKey(Base):
     organization: Mapped["Organization"] = relationship(
         "Organization", back_populates="organization_api_keys"
     )
+    created_by_user: Mapped["User"] = relationship("User")

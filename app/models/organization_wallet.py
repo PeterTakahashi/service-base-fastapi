@@ -17,7 +17,7 @@ class OrganizationWallet(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     organization_id: Mapped[int] = mapped_column(
-        ForeignKey("organizations.id"), nullable=False
+        ForeignKey("organizations.id"), nullable=False, unique=True, index=True
     )
     stripe_customer_id: Mapped[str] = mapped_column(
         nullable=False, unique=True, index=True

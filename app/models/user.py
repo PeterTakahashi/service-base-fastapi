@@ -13,6 +13,7 @@ if TYPE_CHECKING:
     from app.models.user_organization_assignment import UserOrganizationAssignment
     from app.models.user_organization_invitation import UserOrganizationInvitation
     from app.models.organization import Organization
+    from app.models.organization_api_key import OrganizationApiKey
 
 
 class User(SQLAlchemyBaseUserTableUUID, Base):
@@ -71,4 +72,12 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
     )
     organization: Mapped["Organization"] = relationship(
         "Organization", back_populates="created_by_user", uselist=False
+    )
+    organization_api_keys_though_created_by: Mapped[List["OrganizationApiKey"]] = (
+        relationship(
+            "OrganizationApiKey",
+            back_populates="created_by_user",
+            cascade="all, delete-orphan",
+            foreign_keys="[OrganizationApiKey.created_by_user_id]",
+        )
     )
