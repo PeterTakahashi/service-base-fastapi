@@ -27,7 +27,7 @@ async def get_me(
     "/me",
     response_model=UserRead,
     name="users:patch_current_user",
-    responses=UPDATE_USER_RESPONSES,
+    responses=UPDATE_USER_RESPONSES, # type: ignore
 )
 async def update_me(
     request: Request,
