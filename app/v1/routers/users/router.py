@@ -10,7 +10,6 @@ from app.lib.fastapi_users.user_manager import get_user_manager
 from app.v1.dependencies.services.user_service import get_user_service
 
 
-
 from app.v1.routers.users.response_type import UPDATE_USER_RESPONSES
 
 router = APIRouter(prefix="/users", tags=["Users"])
