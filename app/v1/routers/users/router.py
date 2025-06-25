@@ -1,7 +1,6 @@
-from fastapi import APIRouter, Depends, Request, status
+from fastapi import APIRouter, Depends, Request
 from fastapi_users import models
 from fastapi_users.manager import BaseUserManager
-from app.lib.error_code import ErrorCode
 
 from app.lib.fastapi_users.user_setup import current_active_user
 from app.v1.schemas.user import UserRead, UserUpdate, UserWithUserWalletRead
@@ -11,8 +10,8 @@ from app.lib.fastapi_users.user_manager import get_user_manager
 from app.v1.dependencies.services.user_service import get_user_service
 
 
-from app.lib.utils.openapi_response_type import openapi_response_type
-from app.schemas.api_exception_openapi_example import APIExceptionOpenAPIExample
+
+from app.v1.routers.users.response_type import UPDATE_USER_RESPONSES
 
 router = APIRouter(prefix="/users", tags=["Users"])
 
@@ -29,22 +28,7 @@ async def get_me(
     "/me",
     response_model=UserRead,
     name="users:patch_current_user",
-    responses={
-        status.HTTP_422_UNPROCESSABLE_ENTITY: openapi_response_type(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            request_path="/app/v1/users/me",
-            api_exception_openapi_examples=[
-                APIExceptionOpenAPIExample(
-                    detail_code=ErrorCode.UPDATE_USER_EMAIL_ALREADY_EXISTS,
-                    pointer="email",
-                ),
-                APIExceptionOpenAPIExample(
-                    detail_code=ErrorCode.UPDATE_USER_INVALID_PASSWORD,
-                    pointer="password",
-                ),
-            ],
-        ),
-    },
+    responses=UPDATE_USER_RESPONSES,
 )
 async def update_me(
     request: Request,
