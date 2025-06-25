@@ -1,5 +1,5 @@
 from app.v1.schemas.common.api_key.verify import ApiKeyVerifyResponse
 
 
-class UserApiKeyVerifyResponse(ApiKeyVerifyResponse):
+class OrganizationApiKeyVerifyResponse(ApiKeyVerifyResponse):
     pass
