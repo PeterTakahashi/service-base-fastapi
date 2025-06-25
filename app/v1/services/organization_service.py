@@ -10,9 +10,15 @@ from app.v1.repositories.organization_repository import OrganizationRepository
 from app.v1.repositories.user_organization_assignment_repository import (
     UserOrganizationAssignmentRepository,
 )
+from app.v1.repositories.organization_wallet_repository import (
+    OrganizationWalletRepository,
+)
+
 from uuid import UUID
 from app.v1.schemas.common.list.base_list_response import ListResponseMeta
 from datetime import datetime
+
+from app.lib.utils.stripe import stripe
 
 
 class OrganizationService:
@@ -20,11 +26,13 @@ class OrganizationService:
         self,
         organization_repository: OrganizationRepository,
         user_organization_assignment_repository: UserOrganizationAssignmentRepository,
+        organization_wallet_repository: OrganizationWalletRepository,
     ):
         self.organization_repository = organization_repository
         self.user_organization_assignment_repository = (
             user_organization_assignment_repository
         )
+        self.organization_wallet_repository = organization_wallet_repository
 
     async def get_list(
         self, user_id: UUID, search_params: OrganizationSearchParams
@@ -66,6 +74,15 @@ class OrganizationService:
         await self.user_organization_assignment_repository.create(
             user_id=user.id,
             organization_id=organization.id,
+        )
+        customer = stripe.Customer.create(
+            name=organization.name,
+            email=organization.billing_email,
+            description=organization.description,
+        )
+        await self.organization_wallet_repository.create(
+            organization_id=organization.id,
+            stripe_customer_id=customer.id,
         )
         return OrganizationRead.model_validate(organization)
 

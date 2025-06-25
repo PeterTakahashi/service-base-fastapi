@@ -11,7 +11,7 @@
 
 # from app.core.routers.api_key_auth_api_router import ApiKeyAuthAPIRouter
 
-# router = ApiKeyAuthAPIRouter(prefix="/organization-api-keys", tags=["Organization API Keys"])
+# router = ApiKeyAuthAPIRouter(prefix="/api-keys", tags=["Organization API Keys"])
 
 
 # @router.post(

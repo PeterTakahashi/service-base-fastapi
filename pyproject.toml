@@ -85,5 +85,5 @@ files = ["app", "alembic", "tests", "scripts"]
 
 [tool.ruff.lint.per-file-ignores]
 "tests/conftest.py" = ["F401", "F403"]
-"tests/v1/conftest.py" = ["F401"]
+"tests/v1/conftest.py" = ["F401", "F403"]
 "alembic/env.py" = ["F401", "F403"]

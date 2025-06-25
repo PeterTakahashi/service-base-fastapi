@@ -25,7 +25,9 @@ from app.core.routers.auth_api_router import AuthAPIRouter
 from app.lib.fastapi_users.user_setup import current_active_user
 from app.models.user import User
 
-router = AuthAPIRouter(prefix="/organization-api-keys", tags=["Organization API Keys"])
+router = AuthAPIRouter(
+    prefix="/organizations/{organization_id}/api-keys", tags=["Organization API Keys"]
+)
 
 
 @router.get(
