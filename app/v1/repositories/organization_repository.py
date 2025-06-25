@@ -11,9 +11,4 @@ class OrganizationRepository(BaseRepository):
         super().__init__(session, Organization)
 
     def soft_delete(self, id: int):
-        """
-        Soft delete an Organization by its ID.
-        Args:
-            id (int): The ID of the Organization to soft delete.
-        """
         return self.update(id=id, deleted_at=datetime.utcnow())

@@ -7,6 +7,7 @@ from app.v1.schemas.organization_api_key import (
 )
 from app.v1.schemas.common.list.base_list_response import ListResponseMeta
 import secrets
+from uuid import UUID
 
 
 class OrganizationApiKeyService:
@@ -43,6 +44,7 @@ class OrganizationApiKeyService:
 
     async def create(
         self,
+        user_id: UUID,
         organization_id: int,
         organization_api_key_create: OrganizationApiKeyCreate,
     ) -> OrganizationApiKeyRead:
@@ -53,6 +55,7 @@ class OrganizationApiKeyService:
         organization_api_key = await self.organization_api_key_repository.create(
             organization_id=organization_id,
             api_key=api_key,
+            created_by_user_id=user_id,
             **organization_api_key_create.model_dump(),
         )
         return OrganizationApiKeyRead.model_validate(organization_api_key)
