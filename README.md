@@ -27,6 +27,18 @@ stripe listen --events=payment_intent.succeeded --forward-to http://127.0.0.1:80
 ref: https://docs.stripe.com/cli/listen
 stripe test card: https://docs.stripe.com/testing
 
+### reset db
+
+```
+docker compose down -v
+docker compose up -d
+docker exec -it service-base-web bash
+source .venv/bin/activate
+alembic revision --autogenerate -m "init"
+alembic upgrade head
+ENV=test alembic upgrade head
+```
+
 #### create db migration file
 
 ```bash
@@ -39,11 +51,6 @@ for development
 
 ```bash
 alembic upgrade head
-```
-
-for test
-
-```bash
 ENV=test alembic upgrade head
 ```
 

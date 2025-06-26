@@ -1,8 +1,8 @@
 """init
 
-Revision ID: 7ade37bc1072
+Revision ID: d6ac0dc942f6
 Revises:
-Create Date: 2025-06-25 04:43:17.178318
+Create Date: 2025-06-26 10:10:47.233646
 
 """
 
@@ -14,7 +14,7 @@ import fastapi_users_db_sqlalchemy.generics
 
 
 # revision identifiers, used by Alembic.
-revision: str = "7ade37bc1072"
+revision: str = "d6ac0dc942f6"
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -29,6 +29,12 @@ def upgrade() -> None:
         sa.Column("last_attempted_at", sa.DateTime(timezone=True), nullable=True),
         sa.Column("is_locked", sa.Boolean(), nullable=False),
         sa.Column("locked_until", sa.DateTime(timezone=True), nullable=True),
+        sa.Column("id", fastapi_users_db_sqlalchemy.generics.GUID(), nullable=False),
+        sa.Column("email", sa.String(length=320), nullable=False),
+        sa.Column("hashed_password", sa.String(length=1024), nullable=False),
+        sa.Column("is_active", sa.Boolean(), nullable=False),
+        sa.Column("is_superuser", sa.Boolean(), nullable=False),
+        sa.Column("is_verified", sa.Boolean(), nullable=False),
         sa.Column(
             "created_at",
             sa.DateTime(timezone=True),
@@ -41,12 +47,6 @@ def upgrade() -> None:
             server_default=sa.text("now()"),
             nullable=False,
         ),
-        sa.Column("id", fastapi_users_db_sqlalchemy.generics.GUID(), nullable=False),
-        sa.Column("email", sa.String(length=320), nullable=False),
-        sa.Column("hashed_password", sa.String(length=1024), nullable=False),
-        sa.Column("is_active", sa.Boolean(), nullable=False),
-        sa.Column("is_superuser", sa.Boolean(), nullable=False),
-        sa.Column("is_verified", sa.Boolean(), nullable=False),
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_index(op.f("ix_users_email"), "users", ["email"], unique=True)
@@ -87,6 +87,7 @@ def upgrade() -> None:
             fastapi_users_db_sqlalchemy.generics.GUID(),
             nullable=False,
         ),
+        sa.Column("deleted_at", sa.DateTime(timezone=True), nullable=True),
         sa.Column(
             "created_at",
             sa.DateTime(timezone=True),
@@ -99,7 +100,6 @@ def upgrade() -> None:
             server_default=sa.text("now()"),
             nullable=False,
         ),
-        sa.Column("deleted_at", sa.DateTime(timezone=True), nullable=True),
         sa.ForeignKeyConstraint(
             ["created_by_user_id"],
             ["users.id"],
@@ -107,16 +107,17 @@ def upgrade() -> None:
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_table(
-        "user_api_keys",
-        sa.Column("id", sa.Integer(), autoincrement=True, nullable=False),
-        sa.Column("name", sa.String(), nullable=False),
-        sa.Column("api_key", sa.String(), nullable=False),
+        "user_addresses",
         sa.Column(
             "user_id", fastapi_users_db_sqlalchemy.generics.GUID(), nullable=False
         ),
-        sa.Column("expires_at", sa.DateTime(timezone=True), nullable=True),
-        sa.Column("allowed_origin", sa.String(), nullable=True),
-        sa.Column("allowed_ip", sa.String(), nullable=True),
+        sa.Column("id", sa.Integer(), autoincrement=True, nullable=False),
+        sa.Column("city", sa.String(), nullable=False),
+        sa.Column("country", sa.String(length=2), nullable=False),
+        sa.Column("line1", sa.String(), nullable=False),
+        sa.Column("line2", sa.String(), nullable=True),
+        sa.Column("postal_code", sa.String(), nullable=False),
+        sa.Column("state", sa.String(), nullable=False),
         sa.Column(
             "created_at",
             sa.DateTime(timezone=True),
@@ -129,7 +130,36 @@ def upgrade() -> None:
             server_default=sa.text("now()"),
             nullable=False,
         ),
+        sa.ForeignKeyConstraint(["user_id"], ["users.id"], ondelete="CASCADE"),
+        sa.PrimaryKeyConstraint("id"),
+    )
+    op.create_index(
+        op.f("ix_user_addresses_user_id"), "user_addresses", ["user_id"], unique=True
+    )
+    op.create_table(
+        "user_api_keys",
+        sa.Column("id", sa.Integer(), autoincrement=True, nullable=False),
+        sa.Column(
+            "user_id", fastapi_users_db_sqlalchemy.generics.GUID(), nullable=False
+        ),
         sa.Column("deleted_at", sa.DateTime(timezone=True), nullable=True),
+        sa.Column(
+            "created_at",
+            sa.DateTime(timezone=True),
+            server_default=sa.text("now()"),
+            nullable=False,
+        ),
+        sa.Column(
+            "updated_at",
+            sa.DateTime(timezone=True),
+            server_default=sa.text("now()"),
+            nullable=False,
+        ),
+        sa.Column("name", sa.String(), nullable=False),
+        sa.Column("api_key", sa.String(), nullable=False),
+        sa.Column("expires_at", sa.DateTime(timezone=True), nullable=True),
+        sa.Column("allowed_origin", sa.String(), nullable=True),
+        sa.Column("allowed_ip", sa.String(), nullable=True),
         sa.ForeignKeyConstraint(
             ["user_id"],
             ["users.id"],
@@ -145,12 +175,43 @@ def upgrade() -> None:
         sa.Column(
             "user_id", fastapi_users_db_sqlalchemy.generics.GUID(), nullable=False
         ),
+        sa.Column(
+            "created_at",
+            sa.DateTime(timezone=True),
+            server_default=sa.text("now()"),
+            nullable=False,
+        ),
+        sa.Column(
+            "updated_at",
+            sa.DateTime(timezone=True),
+            server_default=sa.text("now()"),
+            nullable=False,
+        ),
         sa.Column("stripe_customer_id", sa.String(), nullable=False),
         sa.Column(
             "balance",
             sa.Numeric(precision=38, scale=9, decimal_return_scale=True),
             nullable=False,
         ),
+        sa.ForeignKeyConstraint(["user_id"], ["users.id"], ondelete="CASCADE"),
+        sa.PrimaryKeyConstraint("id"),
+    )
+    op.create_index(
+        op.f("ix_user_wallets_stripe_customer_id"),
+        "user_wallets",
+        ["stripe_customer_id"],
+        unique=True,
+    )
+    op.create_table(
+        "organization_addresses",
+        sa.Column("organization_id", sa.Integer(), nullable=False),
+        sa.Column("id", sa.Integer(), autoincrement=True, nullable=False),
+        sa.Column("city", sa.String(), nullable=False),
+        sa.Column("country", sa.String(length=2), nullable=False),
+        sa.Column("line1", sa.String(), nullable=False),
+        sa.Column("line2", sa.String(), nullable=True),
+        sa.Column("postal_code", sa.String(), nullable=False),
+        sa.Column("state", sa.String(), nullable=False),
         sa.Column(
             "created_at",
             sa.DateTime(timezone=True),
@@ -164,31 +225,26 @@ def upgrade() -> None:
             nullable=False,
         ),
         sa.ForeignKeyConstraint(
-            ["user_id"],
-            ["users.id"],
+            ["organization_id"], ["organizations.id"], ondelete="CASCADE"
         ),
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_index(
-        op.f("ix_user_wallets_stripe_customer_id"),
-        "user_wallets",
-        ["stripe_customer_id"],
+        op.f("ix_organization_addresses_organization_id"),
+        "organization_addresses",
+        ["organization_id"],
         unique=True,
     )
     op.create_table(
         "organization_api_keys",
         sa.Column("id", sa.Integer(), autoincrement=True, nullable=False),
-        sa.Column("name", sa.String(), nullable=False),
-        sa.Column("api_key", sa.String(), nullable=False),
         sa.Column("organization_id", sa.Integer(), nullable=False),
-        sa.Column("expires_at", sa.DateTime(timezone=True), nullable=True),
-        sa.Column("allowed_origin", sa.String(), nullable=True),
-        sa.Column("allowed_ip", sa.String(), nullable=True),
         sa.Column(
             "created_by_user_id",
             fastapi_users_db_sqlalchemy.generics.GUID(),
             nullable=False,
         ),
+        sa.Column("deleted_at", sa.DateTime(timezone=True), nullable=True),
         sa.Column(
             "created_at",
             sa.DateTime(timezone=True),
@@ -201,7 +257,11 @@ def upgrade() -> None:
             server_default=sa.text("now()"),
             nullable=False,
         ),
-        sa.Column("deleted_at", sa.DateTime(timezone=True), nullable=True),
+        sa.Column("name", sa.String(), nullable=False),
+        sa.Column("api_key", sa.String(), nullable=False),
+        sa.Column("expires_at", sa.DateTime(timezone=True), nullable=True),
+        sa.Column("allowed_origin", sa.String(), nullable=True),
+        sa.Column("allowed_ip", sa.String(), nullable=True),
         sa.ForeignKeyConstraint(
             ["created_by_user_id"],
             ["users.id"],
@@ -222,12 +282,6 @@ def upgrade() -> None:
         "organization_wallets",
         sa.Column("id", sa.Integer(), autoincrement=True, nullable=False),
         sa.Column("organization_id", sa.Integer(), nullable=False),
-        sa.Column("stripe_customer_id", sa.String(), nullable=False),
-        sa.Column(
-            "balance",
-            sa.Numeric(precision=38, scale=9, decimal_return_scale=True),
-            nullable=False,
-        ),
         sa.Column(
             "created_at",
             sa.DateTime(timezone=True),
@@ -238,6 +292,12 @@ def upgrade() -> None:
             "updated_at",
             sa.DateTime(timezone=True),
             server_default=sa.text("now()"),
+            nullable=False,
+        ),
+        sa.Column("stripe_customer_id", sa.String(), nullable=False),
+        sa.Column(
+            "balance",
+            sa.Numeric(precision=38, scale=9, decimal_return_scale=True),
             nullable=False,
         ),
         sa.ForeignKeyConstraint(
@@ -265,6 +325,7 @@ def upgrade() -> None:
             "user_id", fastapi_users_db_sqlalchemy.generics.GUID(), nullable=False
         ),
         sa.Column("organization_id", sa.Integer(), nullable=False),
+        sa.Column("deleted_at", sa.DateTime(timezone=True), nullable=True),
         sa.Column(
             "created_at",
             sa.DateTime(timezone=True),
@@ -277,7 +338,6 @@ def upgrade() -> None:
             server_default=sa.text("now()"),
             nullable=False,
         ),
-        sa.Column("deleted_at", sa.DateTime(timezone=True), nullable=True),
         sa.ForeignKeyConstraint(
             ["organization_id"], ["organizations.id"], ondelete="CASCADE"
         ),
@@ -342,9 +402,26 @@ def upgrade() -> None:
         sa.Column("id", sa.Integer(), autoincrement=True, nullable=False),
         sa.Column("user_wallet_id", sa.Integer(), nullable=False),
         sa.Column(
+            "created_at",
+            sa.DateTime(timezone=True),
+            server_default=sa.text("now()"),
+            nullable=False,
+        ),
+        sa.Column(
+            "updated_at",
+            sa.DateTime(timezone=True),
+            server_default=sa.text("now()"),
+            nullable=False,
+        ),
+        sa.Column(
             "amount",
             sa.Numeric(precision=38, scale=9, decimal_return_scale=True),
             nullable=False,
+        ),
+        sa.Column(
+            "amount_inclusive_tax",
+            sa.Numeric(precision=38, scale=9, decimal_return_scale=True),
+            nullable=True,
         ),
         sa.Column(
             "balance_after_transaction",
@@ -362,21 +439,8 @@ def upgrade() -> None:
             sa.Enum("PENDING", "COMPLETED", "FAILED", name="wallettransactionstatus"),
             nullable=False,
         ),
-        sa.Column(
-            "created_at",
-            sa.DateTime(timezone=True),
-            server_default=sa.text("now()"),
-            nullable=False,
-        ),
-        sa.Column(
-            "updated_at",
-            sa.DateTime(timezone=True),
-            server_default=sa.text("now()"),
-            nullable=False,
-        ),
         sa.ForeignKeyConstraint(
-            ["user_wallet_id"],
-            ["user_wallets.id"],
+            ["user_wallet_id"], ["user_wallets.id"], ondelete="CASCADE"
         ),
         sa.PrimaryKeyConstraint("id"),
     )
@@ -391,9 +455,26 @@ def upgrade() -> None:
         sa.Column("id", sa.Integer(), autoincrement=True, nullable=False),
         sa.Column("organization_wallet_id", sa.Integer(), nullable=False),
         sa.Column(
+            "created_at",
+            sa.DateTime(timezone=True),
+            server_default=sa.text("now()"),
+            nullable=False,
+        ),
+        sa.Column(
+            "updated_at",
+            sa.DateTime(timezone=True),
+            server_default=sa.text("now()"),
+            nullable=False,
+        ),
+        sa.Column(
             "amount",
             sa.Numeric(precision=38, scale=9, decimal_return_scale=True),
             nullable=False,
+        ),
+        sa.Column(
+            "amount_inclusive_tax",
+            sa.Numeric(precision=38, scale=9, decimal_return_scale=True),
+            nullable=True,
         ),
         sa.Column(
             "balance_after_transaction",
@@ -409,18 +490,6 @@ def upgrade() -> None:
         sa.Column(
             "wallet_transaction_status",
             sa.Enum("PENDING", "COMPLETED", "FAILED", name="wallettransactionstatus"),
-            nullable=False,
-        ),
-        sa.Column(
-            "created_at",
-            sa.DateTime(timezone=True),
-            server_default=sa.text("now()"),
-            nullable=False,
-        ),
-        sa.Column(
-            "updated_at",
-            sa.DateTime(timezone=True),
-            server_default=sa.text("now()"),
             nullable=False,
         ),
         sa.ForeignKeyConstraint(
@@ -479,10 +548,17 @@ def downgrade() -> None:
         op.f("ix_organization_api_keys_api_key"), table_name="organization_api_keys"
     )
     op.drop_table("organization_api_keys")
+    op.drop_index(
+        op.f("ix_organization_addresses_organization_id"),
+        table_name="organization_addresses",
+    )
+    op.drop_table("organization_addresses")
     op.drop_index(op.f("ix_user_wallets_stripe_customer_id"), table_name="user_wallets")
     op.drop_table("user_wallets")
     op.drop_index(op.f("ix_user_api_keys_api_key"), table_name="user_api_keys")
     op.drop_table("user_api_keys")
+    op.drop_index(op.f("ix_user_addresses_user_id"), table_name="user_addresses")
+    op.drop_table("user_addresses")
     op.drop_table("organizations")
     op.drop_index(op.f("ix_oauth_accounts_oauth_name"), table_name="oauth_accounts")
     op.drop_index(op.f("ix_oauth_accounts_account_id"), table_name="oauth_accounts")
