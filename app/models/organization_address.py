@@ -1,8 +1,7 @@
 from typing import TYPE_CHECKING
 from app.db.base import Base
-from sqlalchemy import String, DateTime, func, ForeignKey
+from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from datetime import datetime
 from app.models.mixin.address import _AddressMixin
 
 if TYPE_CHECKING:
@@ -16,7 +15,7 @@ class OrganizationAddress(_AddressMixin, Base):
         ForeignKey("organizations.id", ondelete="CASCADE"),
         nullable=False,
         index=True,
-        unique=True
+        unique=True,
     )
 
     # back-populates は Organization 側で定義
