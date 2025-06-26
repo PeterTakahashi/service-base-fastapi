@@ -11,6 +11,7 @@ from app.lib.fastapi_users.user_setup import current_active_user
 from app.lib.exception.api_exception import init_api_exception
 from app.lib.utils.stripe import stripe
 
+
 class UserService:
     def __init__(
         self,

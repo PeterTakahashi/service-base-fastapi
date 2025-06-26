@@ -11,12 +11,18 @@ from fastapi import status
 from app.lib.exception.api_exception import init_api_exception
 from app.lib.error_code import ErrorCode
 
+
 class UserPaymentIntentService:
     """
     Service class for handling payment intents.
     """
 
-    def __init__(self, user_wallet_repository, user_wallet_transaction_repository, user_address_repository):
+    def __init__(
+        self,
+        user_wallet_repository,
+        user_wallet_transaction_repository,
+        user_address_repository,
+    ):
         self.user_wallet_repository = user_wallet_repository
         self.user_wallet_transaction_repository = user_wallet_transaction_repository
         self.user_address_repository = user_address_repository
@@ -28,9 +34,7 @@ class UserPaymentIntentService:
             user_id=user.id
         )
         amount_inclusive_tax = payment_intent_create.amount
-        address = await self.user_address_repository.find_by(
-            user_id=user.id
-        )
+        address = await self.user_address_repository.find_by(user_id=user.id)
         address_read = AddressRead.model_validate(address) if address else None
         if address_read:
             calculation = tax_calculation(

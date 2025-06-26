@@ -26,9 +26,7 @@ async def get_stripe_webhook_event(request: Request):
         )
 
 
-def tax_calculation(
-    amount: Decimal, address: AddressRead, tax_code: str
-) -> Decimal:
+def tax_calculation(amount: Decimal, address: AddressRead, tax_code: str) -> Decimal:
     calc = stripe.tax.Calculation.create(
         currency=settings.PAYMENT_CURRENCY,
         customer_details={
@@ -38,7 +36,7 @@ def tax_calculation(
                 "line1": address.line1,
                 "line2": address.line2,
                 "postal_code": address.postal_code,
-                "state": address.state
+                "state": address.state,
             },
             "address_source": "billing",
         },

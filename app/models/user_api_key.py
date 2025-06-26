@@ -11,6 +11,8 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from app.models.user import User
 
+API_KEY_PREFIX = "user_"
+
 
 class UserApiKey(TimestampMixin, ApiKeyMixin, Base):
     __tablename__ = "user_api_keys"

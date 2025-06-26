@@ -1,4 +1,3 @@
-from app.lib.utils.int_to_numeric import int_to_numeric
 from app.models.enums.wallet_transaction import (
     WalletTransactionStatus,
 )
@@ -7,6 +6,7 @@ from app.lib.error_code import ErrorCode
 from fastapi import status
 from app.lib.utils.stripe import stripe
 from app.lib.utils.convert_id import encode_id
+
 
 class PaymentIntentService:
     """
@@ -28,7 +28,9 @@ class PaymentIntentService:
         )
 
     async def update_payment_intent_by_webhook(
-        self, stripe_payment_intent_id: str, currency: str,
+        self,
+        stripe_payment_intent_id: str,
+        currency: str,
     ) -> None:
         user_wallet_transaction = await self.user_wallet_transaction_repository.find_by(
             stripe_payment_intent_id=stripe_payment_intent_id
@@ -76,7 +78,7 @@ class PaymentIntentService:
         stripe_customer_id: str,
         amount: int,
         currency: str,
-        wallet_transaction_id: int
+        wallet_transaction_id: int,
     ) -> None:
         try:
             customer = stripe.Customer.retrieve(stripe_customer_id)
@@ -87,7 +89,7 @@ class PaymentIntentService:
 
             stripe.InvoiceItem.create(
                 customer=customer.id,
-                amount=amount,           # 最小通貨単位
+                amount=amount,  # 最小通貨単位
                 currency=currency,
                 description=f"Wallet top-up ({encode_id(wallet_transaction_id)})",
             )

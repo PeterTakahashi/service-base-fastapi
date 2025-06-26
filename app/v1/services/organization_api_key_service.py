@@ -9,6 +9,8 @@ from app.v1.schemas.common.list.base_list_response import ListResponseMeta
 import secrets
 from uuid import UUID
 
+from app.models.organization_api_key import API_KEY_PREFIX
+
 
 class OrganizationApiKeyService:
     def __init__(self, organization_api_key_repository):
@@ -51,7 +53,7 @@ class OrganizationApiKeyService:
         """
         Create a new organization API key.
         """
-        api_key = secrets.token_urlsafe(32)
+        api_key = API_KEY_PREFIX + secrets.token_urlsafe(32)
         organization_api_key = await self.organization_api_key_repository.create(
             organization_id=organization_id,
             api_key=api_key,

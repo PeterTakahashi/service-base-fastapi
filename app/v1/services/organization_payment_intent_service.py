@@ -11,6 +11,7 @@ from fastapi import status
 from app.lib.exception.api_exception import init_api_exception
 from app.lib.error_code import ErrorCode
 
+
 class OrganizationPaymentIntentService:
     """
     Service class for handling payment intents.
@@ -20,7 +21,7 @@ class OrganizationPaymentIntentService:
         self,
         organization_wallet_repository,
         organization_wallet_transaction_repository,
-        organization_address_repository
+        organization_address_repository,
     ):
         self.organization_wallet_repository = organization_wallet_repository
         self.organization_wallet_transaction_repository = (
@@ -31,8 +32,10 @@ class OrganizationPaymentIntentService:
     async def create_payment_intent(
         self, organization: Organization, payment_intent_create: PaymentIntentCreate
     ) -> PaymentIntentCreateResponse:
-        organization_wallet = await self.organization_wallet_repository.find_by_or_raise(
-            organization_id=organization.id
+        organization_wallet = (
+            await self.organization_wallet_repository.find_by_or_raise(
+                organization_id=organization.id
+            )
         )
         amount_inclusive_tax = payment_intent_create.amount
         address = await self.organization_address_repository.find_by(

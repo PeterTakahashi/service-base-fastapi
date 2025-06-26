@@ -11,6 +11,8 @@ if TYPE_CHECKING:
     from app.models.organization import Organization
     from app.models.user import User
 
+API_KEY_PREFIX = "organization_"
+
 
 class OrganizationApiKey(TimestampMixin, ApiKeyMixin, Base):
     __tablename__ = "organization_api_keys"
