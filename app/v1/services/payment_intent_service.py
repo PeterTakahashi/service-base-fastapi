@@ -2,6 +2,9 @@ from app.lib.utils.int_to_numeric import int_to_numeric
 from app.models.enums.wallet_transaction import (
     WalletTransactionStatus,
 )
+from app.lib.exception.api_exception import init_api_exception
+from app.lib.error_code import ErrorCode
+from fastapi import status
 
 
 class PaymentIntentService:
@@ -47,8 +50,9 @@ class PaymentIntentService:
                 self.organization_wallet_transaction_repository
             )
         if not user_wallet_transaction and not organization_wallet_transaction:
-            raise ValueError(
-                "UserWallet or OrganizationWallet transaction not found for the given payment intent ID"
+            raise init_api_exception(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail_code=ErrorCode.FAILED_TO_WEBHOOK_PAYMENT_INTENT_UPDATE,
             )
         wallet = await wallet_repository.find(wallet_id)
         # Convert from smallest currency unit and format as Decimal with scale=9

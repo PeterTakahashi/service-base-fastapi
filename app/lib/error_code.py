@@ -33,3 +33,5 @@ class ErrorCode(str, Enum):
     ORGANIZATION_LAST_USER_CANNOT_BE_DELETED = (
         "organization_last_user_cannot_be_deleted"
     )
+    FAILED_TO_CREATE_PAYMENT_INTENT = "failed_to_create_payment_intent"
+    FAILED_TO_WEBHOOK_PAYMENT_INTENT_UPDATE = "failed_to_webhook_payment_intent_update"

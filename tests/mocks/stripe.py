@@ -1,6 +1,8 @@
 import pytest
 from unittest.mock import patch, MagicMock
 from faker import Faker
+import stripe
+from uuid import uuid4
 
 fake = Faker()
 
@@ -37,4 +39,58 @@ def mock_stripe_customer_create():
     patch_path = "app.lib.fastapi_users.user_manager.stripe.Customer.create"
 
     with patch(patch_path, side_effect=mock_create) as mock_func:
+        yield mock_func
+
+
+
+@pytest.fixture(autouse=True)
+def mock_stripe_tax_calculation_create():
+    def _fake_calc_create(**params):
+        mock_calc = {
+          "amount_total": params['line_items'][0]['amount'],  # Convert to smallest currency unit
+          "currency": "usd",
+          "customer": None,
+          "customer_details": {
+            "address": {
+              "city": "Seattle",
+              "country": "US",
+              "line1": "920 5th Ave",
+              "line2": "Apt 100",
+              "postal_code": "98104",
+              "state": "WA"
+            },
+            "address_source": "shipping",
+            "ip_address": None,
+            "tax_ids": [],
+            "taxability_override": "none"
+          },
+          "expires_at": 1758634284,
+          "id": "taxcalc_1RdtQ8C1hs6oFImMg9vdFNBr",
+          "livemode": False,
+          "object": "tax.calculation",
+          "ship_from_details": None,
+          "shipping_cost": None,
+          "tax_amount_exclusive": 0,
+          "tax_amount_inclusive": 0,
+          "tax_breakdown": [
+            {
+              "amount": 0,
+              "inclusive": True,
+              "tax_rate_details": {
+                "country": "US",
+                "flat_amount": None,
+                "percentage_decimal": "0.0",
+                "rate_type": "percentage",
+                "state": "WA",
+                "tax_type": "sales_tax"
+              },
+              "taxability_reason": "not_collecting",
+              "taxable_amount": 0
+            }
+          ],
+          "tax_date": 1750858284
+        }
+        return mock_calc
+
+    with patch.object(stripe.tax.Calculation, "create", side_effect=_fake_calc_create) as mock_func:
         yield mock_func

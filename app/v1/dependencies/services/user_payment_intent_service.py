@@ -6,13 +6,26 @@ from app.v1.repositories.user_wallet_transaction_repository import (
     UserWalletTransactionRepository,
 )
 from app.v1.services.user_payment_intent_service import UserPaymentIntentService
-
+from app.v1.dependencies.repositories.user_wallet_repository import (
+    get_user_wallet_repository,
+)
+from app.v1.dependencies.repositories.user_wallet_transaction_repository import (
+    get_user_wallet_transaction_repository,
+)
+from app.v1.dependencies.repositories.user_address_repository import (
+    get_user_address_repository,
+)
+from app.v1.repositories.user_address_repository import UserAddressRepository
 
 def get_user_payment_intent_service(
-    session: AsyncSession = Depends(get_async_session),
+    user_wallet_repository: UserWalletRepository = Depends(get_user_wallet_repository),
+    user_wallet_transaction_repository: UserWalletTransactionRepository = Depends(
+        get_user_wallet_transaction_repository
+    ),
+    user_address_repository: UserAddressRepository = Depends(get_user_address_repository),
 ) -> UserPaymentIntentService:
-    user_wallet_repository = UserWalletRepository(session)
-    user_wallet_transaction_repository = UserWalletTransactionRepository(session)
     return UserPaymentIntentService(
-        user_wallet_repository, user_wallet_transaction_repository
+        user_wallet_repository,
+        user_wallet_transaction_repository,
+        user_address_repository
     )
