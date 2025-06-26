@@ -26,6 +26,11 @@ class OrganizationWalletTransaction(Base):
         default=Decimal("0"),
         nullable=False,
     )
+    amount_inclusive_tax: Mapped[Decimal] = mapped_column(
+        Numeric(precision=38, scale=9, asdecimal=True, decimal_return_scale=True),
+        default=Decimal("0"),
+        nullable=True,
+    )
     balance_after_transaction: Mapped[Decimal] = mapped_column(
         Numeric(precision=38, scale=9, asdecimal=True, decimal_return_scale=True),
         default=Decimal("0"),
