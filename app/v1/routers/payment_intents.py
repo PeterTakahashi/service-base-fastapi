@@ -38,9 +38,9 @@ async def update_payment_intent_by_webhook(
     if event["type"] == "payment_intent.succeeded":
         payment_intent = event["data"]["object"]
         stripe_payment_intent_id = payment_intent["id"]
-        amount = payment_intent["amount_received"]
+        currency = payment_intent["currency"]
         await service.update_payment_intent_by_webhook(
             stripe_payment_intent_id=stripe_payment_intent_id,
-            amount=amount,
+            currency=currency,
         )
     return None

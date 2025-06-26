@@ -5,7 +5,8 @@ from app.models.enums.wallet_transaction import (
 from app.lib.exception.api_exception import init_api_exception
 from app.lib.error_code import ErrorCode
 from fastapi import status
-
+from app.lib.utils.stripe import stripe
+from app.lib.utils.convert_id import encode_id
 
 class PaymentIntentService:
     """
@@ -27,7 +28,7 @@ class PaymentIntentService:
         )
 
     async def update_payment_intent_by_webhook(
-        self, stripe_payment_intent_id: str, amount: int
+        self, stripe_payment_intent_id: str, currency: str,
     ) -> None:
         user_wallet_transaction = await self.user_wallet_transaction_repository.find_by(
             stripe_payment_intent_id=stripe_payment_intent_id
@@ -55,14 +56,47 @@ class PaymentIntentService:
                 detail_code=ErrorCode.FAILED_TO_WEBHOOK_PAYMENT_INTENT_UPDATE,
             )
         wallet = await wallet_repository.find(wallet_id)
-        # Convert from smallest currency unit and format as Decimal with scale=9
-        converted_amount = int_to_numeric(amount)
-        new_balance = wallet.balance + converted_amount
+        new_balance = wallet.balance + wallet_transaction.amount
         await wallet_transaction_repository.update(
             id=wallet_transaction.id,
-            amount=converted_amount,  # Convert back to original amount
             balance_after_transaction=new_balance,
             wallet_transaction_status=WalletTransactionStatus.COMPLETED,
         )
         await wallet_repository.update(id=wallet.id, balance=new_balance)
+        await self._maybe_send_invoice(
+            stripe_customer_id=wallet.stripe_customer_id,
+            amount=wallet_transaction.amount_inclusive_tax,
+            currency=currency,
+            wallet_transaction_id=wallet_transaction.id,
+        )
         return None
+
+    async def _maybe_send_invoice(
+        self,
+        stripe_customer_id: str,
+        amount: int,
+        currency: str,
+        wallet_transaction_id: int
+    ) -> None:
+        try:
+            customer = stripe.Customer.retrieve(stripe_customer_id)
+            address = customer.get("address", {})
+
+            if not address or not address.get("line1"):
+                return
+
+            stripe.InvoiceItem.create(
+                customer=customer.id,
+                amount=amount,           # 最小通貨単位
+                currency=currency,
+                description=f"Wallet top-up ({encode_id(wallet_transaction_id)})",
+            )
+            stripe.Invoice.create(
+                customer=customer.id,
+                collection_method="send_invoice",
+                days_until_due=0,
+                auto_advance=True,
+            )
+        except Exception as e:
+            print(f"Failed to send invoice: {e}")
+            return None
