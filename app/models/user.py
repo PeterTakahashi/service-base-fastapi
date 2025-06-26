@@ -14,6 +14,7 @@ if TYPE_CHECKING:
     from app.models.user_organization_invitation import UserOrganizationInvitation
     from app.models.organization import Organization
     from app.models.organization_api_key import OrganizationApiKey
+    from app.models.user_address import UserAddress
 
 
 class User(SQLAlchemyBaseUserTableUUID, Base):
@@ -80,4 +81,7 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
             cascade="all, delete-orphan",
             foreign_keys="[OrganizationApiKey.created_by_user_id]",
         )
+    )
+    address: Mapped["UserAddress"] = relationship(
+        "UserAddress", back_populates="user", uselist=False
     )

@@ -9,6 +9,8 @@ from .user_organization_invitation import UserOrganizationInvitation
 from .organization_wallet import OrganizationWallet
 from .organization_wallet_transaction import OrganizationWalletTransaction
 from .organization_api_key import OrganizationApiKey
+from .organization_address import OrganizationAddress
+from .user_address import UserAddress
 
 __all__ = [
     "OAuthAccount",
@@ -22,4 +24,6 @@ __all__ = [
     "OrganizationWallet",
     "OrganizationWalletTransaction",
     "OrganizationApiKey",
+    "OrganizationAddress",
+    "UserAddress",
 ]

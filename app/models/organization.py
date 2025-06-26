@@ -11,6 +11,7 @@ if TYPE_CHECKING:
     from app.models.user_organization_invitation import UserOrganizationInvitation
     from app.models.user import User
     from app.models.organization_api_key import OrganizationApiKey
+    from app.models.organization_address import OrganizationAddress
 
 
 class Organization(Base):
@@ -63,4 +64,7 @@ class Organization(Base):
         "OrganizationApiKey",
         back_populates="organization",
         cascade="all, delete-orphan",
+    )
+    address: Mapped["OrganizationAddress"] = relationship(
+        "OrganizationAddress", back_populates="organization", uselist=False
     )
