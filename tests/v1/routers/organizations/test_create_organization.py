@@ -3,21 +3,16 @@ import pytest
 from httpx import AsyncClient
 from app.v1.schemas.organization import OrganizationCreate
 
-from app.v1.schemas.common.address.read import AddressRead
 
 @pytest.mark.asyncio
-async def test_create_organization(
-    auth_client: AsyncClient,
-    user,
-    fake_address
-):
+async def test_create_organization(auth_client: AsyncClient, user, fake_address):
     # Arrange
     organization_data = OrganizationCreate(
         name="Test Organization",
         description="A test organization",
         profile_image_key="test_profile_image_key",
         billing_email="test@test.com",
-        address=fake_address
+        address=fake_address,
     )
     response = await auth_client.post(
         "/organizations", json=organization_data.model_dump()

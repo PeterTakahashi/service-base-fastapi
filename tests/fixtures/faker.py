@@ -4,6 +4,7 @@ from fastapi_users.password import PasswordHelper
 from app.lib.utils.convert_id import encode_id
 from app.v1.schemas.common.address.read import AddressRead
 
+
 @pytest_asyncio.fixture
 def faker():
     return Faker()
@@ -39,16 +40,32 @@ def fake_hashed_password(fake_password) -> str:
     """
     return PasswordHelper().hash(password=fake_password)
 
+
 @pytest_asyncio.fixture
 def fake_address(faker) -> AddressRead:
     """
     Generate a fake address.
     """
     return AddressRead(
-            line1=faker.street_address(),
-            line2=faker.secondary_address(),
-            city=faker.city(),
-            state=faker.state_abbr(),
-            postal_code=faker.postcode(),
-            country="US"
+        line1=faker.street_address(),
+        line2=faker.secondary_address(),
+        city=faker.city(),
+        state=faker.state_abbr(),
+        postal_code=faker.postcode(),
+        country="US",
+    )
+
+
+@pytest_asyncio.fixture
+def other_fake_address(faker) -> AddressRead:
+    """
+    Generate a fake address.
+    """
+    return AddressRead(
+        line1=faker.street_address(),
+        line2=faker.secondary_address(),
+        city=faker.city(),
+        state=faker.state_abbr(),
+        postal_code=faker.postcode(),
+        country="US",
     )

@@ -31,7 +31,7 @@ class OrganizationService:
         organization_repository: OrganizationRepository,
         user_organization_assignment_repository: UserOrganizationAssignmentRepository,
         organization_wallet_repository: OrganizationWalletRepository,
-        organization_address_repository: OrganizationAddressRepository
+        organization_address_repository: OrganizationAddressRepository,
     ):
         self.organization_repository = organization_repository
         self.organization_address_repository = organization_address_repository

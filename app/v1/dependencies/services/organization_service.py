@@ -31,7 +31,7 @@ def get_organization_service(
     organization_wallet_repository: OrganizationWalletRepository = Depends(
         get_organization_wallet_repository
     ),
-    organization_address_repository = Depends(get_organization_address_repository),
+    organization_address_repository=Depends(get_organization_address_repository),
 ) -> OrganizationService:
     return OrganizationService(
         organization_repository=organization_repository,

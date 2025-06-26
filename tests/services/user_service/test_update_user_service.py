@@ -1,10 +1,8 @@
 import pytest
 from unittest.mock import AsyncMock, MagicMock
 from fastapi import Request
-from app.v1.services.user_service import UserService
 from app.v1.schemas.user import UserUpdate
 from app.models.user import User
-from app.v1.repositories.user_repository import UserRepository
 from fastapi_users import exceptions
 from app.lib.error_code import ErrorCode
 from tests.common.check_api_exception_info import check_api_exception_info
@@ -12,59 +10,37 @@ from fastapi import status
 
 
 @pytest.mark.asyncio
-async def test_update_me_success():
-    # -- 1) UserRepository自体が必要ならモック (純粋に使わないなら None でもOK)
-    repo_mock = MagicMock(spec=UserRepository)
-    user_service = UserService(repo_mock)
-
-    # -- 2) user_manager は fastapi-users の BaseUserManager をモック化して
-    #        .update(...) が呼ばれたら更新済ユーザーを返すようにする
+async def test_update_with_address_success(user_service, fake_address, user):
     user_manager_mock = AsyncMock()
-    user_manager_mock.update.return_value = User(
-        id="123e4567-e89b-12d3-a456-426614174000",
-        email="updated@example.com",
-        hashed_password="hashed_pwd",
-        is_active=True,
-        is_superuser=False,
-        is_verified=True,
-    )
+    user_manager_mock.update.return_value = user
 
     # -- 3) request をモック化
     request_mock = MagicMock(spec=Request)
 
     # -- 4) user_update, user をテストデータとして用意
-    user_update = UserUpdate(email="updated@example.com", password=None)
-    existing_user = User(
-        id="123e4567-e89b-12d3-a456-426614174000",
-        email="old@example.com",
-        hashed_password="old_hashed_pwd",
-        is_active=True,
-        is_superuser=False,
-        is_verified=False,
+    user_update = UserUpdate(
+        email="updated@example.com", password=None, address=fake_address
     )
-
     # -- 5) いよいよメソッドを実行
     updated_user_read = await user_service.update_me(
         request=request_mock,
         user_manager=user_manager_mock,
         user_update=user_update,
-        user=existing_user,  # current_active_user 相当
+        user=user,
     )
 
     # -- 6) 結果のアサーション
-    assert updated_user_read.email == "updated@example.com"
-    assert updated_user_read.is_verified is True
+    assert updated_user_read.address == fake_address
     user_manager_mock.update.assert_awaited_once_with(
-        user_update, existing_user, safe=True, request=request_mock
+        user_update, user, safe=True, request=request_mock
     )
 
 
 @pytest.mark.asyncio
-async def test_update_me_already_exists():
+async def test_update_me_already_exists(user_service):
     """
     すでに同じ email のユーザーがいるなどで fastapi-users が UserAlreadyExists 例外を投げる想定をテスト
     """
-    user_service = UserService(MagicMock(spec=UserRepository))
     user_manager_mock = AsyncMock()
     # .update(...) が例外を吐くように設定
     user_manager_mock.update.side_effect = exceptions.UserAlreadyExists()
@@ -93,13 +69,10 @@ async def test_update_me_already_exists():
 
 
 @pytest.mark.asyncio
-async def test_update_me_password_invalid():
+async def test_update_me_password_invalid(user_service):
     """
     不正なパスワードのときに fastapi-users が InvalidPasswordException を投げる場合のテスト。
     """
-    # -- 1) UserService インスタンス作成 (UserRepository はモック)
-    repo_mock = MagicMock(spec=UserRepository)
-    user_service = UserService(repo_mock)
 
     # -- 2) user_manager をモック化
     user_manager_mock = AsyncMock()

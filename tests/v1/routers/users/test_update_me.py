@@ -65,3 +65,34 @@ async def test_update_me_email_already_exists(
         detail_code=ErrorCode.UPDATE_USER_EMAIL_ALREADY_EXISTS,
         pointer="email",
     )
+
+
+async def test_update_me_address(
+    auth_client: AsyncClient, fake_address, other_fake_address
+):
+    response = await auth_client.patch(
+        "/users/me",
+        json={"address": fake_address.model_dump()},
+    )
+
+    assert response.status_code == 200
+    response_data = response.json()
+    assert response_data["address"] is not None
+    assert response_data["address"]["city"] == fake_address.city
+    assert response_data["address"]["country"] == fake_address.country
+    assert response_data["address"]["postal_code"] == fake_address.postal_code
+    assert response_data["address"]["state"] == fake_address.state
+
+    # second time
+    response = await auth_client.patch(
+        "/users/me",
+        json={"address": other_fake_address.model_dump()},
+    )
+
+    assert response.status_code == 200
+    response_data = response.json()
+    assert response_data["address"] is not None
+    assert response_data["address"]["city"] == other_fake_address.city
+    assert response_data["address"]["country"] == other_fake_address.country
+    assert response_data["address"]["postal_code"] == other_fake_address.postal_code
+    assert response_data["address"]["state"] == other_fake_address.state

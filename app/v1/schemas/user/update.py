@@ -20,7 +20,7 @@ class UserUpdate(schemas.CreateUpdateDictModel):
     )
     address: Optional[AddressWrite] = Field(
         None,
-        description="Registered address of the organization.",
+        description="Registered address of the user.",
         json_schema_extra={
             "example": {
                 "line1": "123 Main St",
@@ -32,3 +32,20 @@ class UserUpdate(schemas.CreateUpdateDictModel):
             }
         },
     )
+
+    def create_update_dict(self):
+        return schemas.model_dump(
+            self,
+            exclude_unset=True,
+            exclude={
+                "id",
+                "is_superuser",
+                "is_active",
+                "is_verified",
+                "oauth_accounts",
+                "address",
+            },
+        )
+
+    def create_update_dict_superuser(self):
+        return schemas.model_dump(self, exclude_unset=True, exclude={"id", "address"})

@@ -46,6 +46,7 @@ async def get_organization_by_id(
     )
     return organization
 
+
 async def get_organization_with_address_by_id(
     organization_id: str,
     organization_repository: OrganizationRepository = Depends(

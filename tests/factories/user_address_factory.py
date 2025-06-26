@@ -15,6 +15,7 @@ class UserAddressFactory(AsyncSQLAlchemyModelFactory):
     postal_code = factory.Faker("postcode")
     country = "US"
 
+
 @pytest_asyncio.fixture
 async def user_address_factory(async_session):
     UserAddressFactory._meta.session = async_session

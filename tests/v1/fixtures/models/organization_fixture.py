@@ -3,16 +3,18 @@ import pytest_asyncio
 from httpx import AsyncClient
 from app.v1.schemas.organization import OrganizationCreate
 from app.lib.utils.convert_id import decode_id
-from app.v1.schemas.common.address.read import AddressRead
+
 
 @pytest_asyncio.fixture
-async def organization(auth_client: AsyncClient, faker, organization_repository, fake_address):
+async def organization(
+    auth_client: AsyncClient, faker, organization_repository, fake_address
+):
     organization_data = OrganizationCreate(
         name=faker.company(),
         description=faker.sentence(),
         profile_image_key="test_profile_image_key",
         billing_email=faker.email(),
-        address=fake_address
+        address=fake_address,
     )
     response = await auth_client.post(
         "/organizations", json=organization_data.model_dump()

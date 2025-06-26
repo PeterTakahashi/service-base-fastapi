@@ -5,6 +5,7 @@ from app.v1.schemas.organization_api_key.write import OrganizationApiKeyCreate
 
 from app.lib.utils.convert_id import encode_id
 
+
 @pytest.mark.asyncio
 async def test_create_organization_api_key(
     auth_client: AsyncClient,

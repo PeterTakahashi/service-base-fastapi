@@ -58,5 +58,8 @@ class Organization(TimestampMixin, Base):
         cascade="all, delete-orphan",
     )
     address: Mapped["OrganizationAddress"] = relationship(
-        "OrganizationAddress", back_populates="organization", uselist=False
+        "OrganizationAddress",
+        back_populates="organization",
+        uselist=False,
+        cascade="all, delete-orphan",
     )

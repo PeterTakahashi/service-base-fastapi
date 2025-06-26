@@ -15,7 +15,7 @@ class UserWalletTransaction(TimestampMixin, WalletTransactionMixin, Base):
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     user_wallet_id: Mapped[int] = mapped_column(
-        ForeignKey("user_wallets.id"), nullable=False
+        ForeignKey("user_wallets.id", ondelete="CASCADE"), nullable=False
     )
     user_wallet: Mapped["UserWallet"] = relationship(
         back_populates="user_wallet_transactions", uselist=False

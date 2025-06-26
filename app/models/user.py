@@ -33,7 +33,7 @@ class User(SQLAlchemyBaseUserTableUUID, TimestampMixin, Base):
         "OAuthAccount", lazy="joined"
     )
     user_wallet: Mapped["UserWallet"] = relationship(
-        back_populates="user", uselist=False
+        back_populates="user", uselist=False, cascade="all, delete-orphan"
     )
     user_api_keys: Mapped[List["UserApiKey"]] = relationship(
         "UserApiKey", back_populates="user", cascade="all, delete-orphan"
@@ -73,5 +73,8 @@ class User(SQLAlchemyBaseUserTableUUID, TimestampMixin, Base):
         )
     )
     address: Mapped["UserAddress"] = relationship(
-        "UserAddress", back_populates="user", uselist=False
+        "UserAddress",
+        back_populates="user",
+        uselist=False,
+        cascade="all, delete-orphan",
     )

@@ -18,7 +18,7 @@ class UserWallet(TimestampMixin, WalletMixin, Base):
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     user_id: Mapped[fastapi_users_db_sqlalchemy.generics.GUID] = mapped_column(
-        ForeignKey("users.id"), nullable=False
+        ForeignKey("users.id", ondelete="CASCADE"), nullable=False
     )
     user: Mapped["User"] = relationship(
         "User", back_populates="user_wallet", uselist=False

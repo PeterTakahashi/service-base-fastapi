@@ -16,7 +16,7 @@ def updated_data(fake_address):
         description="An updated organization",
         profile_image_key="updated_profile_image_key",
         billing_email="test@test.com",
-        address=fake_address
+        address=fake_address,
     )
 
 
