@@ -469,6 +469,68 @@
       "default": "now()"
     }
   ],
+  "organization_wallet_transactions": [
+    {
+      "name": "id",
+      "type": "INTEGER",
+      "nullable": false,
+      "default": "nextval('organization_wallet_transactions_id_seq'::regclass)"
+    },
+    {
+      "name": "organization_wallet_id",
+      "type": "INTEGER",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "amount",
+      "type": "NUMERIC(38, 9)",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "balance_after_transaction",
+      "type": "NUMERIC(38, 9)",
+      "nullable": true,
+      "default": "None"
+    },
+    {
+      "name": "stripe_payment_intent_id",
+      "type": "VARCHAR",
+      "nullable": true,
+      "default": "None"
+    },
+    {
+      "name": "wallet_transaction_type",
+      "type": "VARCHAR(7)",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "wallet_transaction_status",
+      "type": "VARCHAR(9)",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "created_at",
+      "type": "TIMESTAMP",
+      "nullable": false,
+      "default": "now()"
+    },
+    {
+      "name": "updated_at",
+      "type": "TIMESTAMP",
+      "nullable": false,
+      "default": "now()"
+    },
+    {
+      "name": "amount_inclusive_tax",
+      "type": "NUMERIC(38, 9)",
+      "nullable": true,
+      "default": "None"
+    }
+  ],
   "user_wallet_transactions": [
     {
       "name": "id",
@@ -523,48 +585,122 @@
       "type": "TIMESTAMP",
       "nullable": false,
       "default": "now()"
+    },
+    {
+      "name": "amount_inclusive_tax",
+      "type": "NUMERIC(38, 9)",
+      "nullable": true,
+      "default": "None"
     }
   ],
-  "organization_wallet_transactions": [
+  "user_addresses": [
+    {
+      "name": "user_id",
+      "type": "UUID",
+      "nullable": false,
+      "default": "None"
+    },
     {
       "name": "id",
       "type": "INTEGER",
       "nullable": false,
-      "default": "nextval('organization_wallet_transactions_id_seq'::regclass)"
+      "default": "nextval('user_addresses_id_seq'::regclass)"
     },
     {
-      "name": "organization_wallet_id",
-      "type": "INTEGER",
+      "name": "city",
+      "type": "VARCHAR",
       "nullable": false,
       "default": "None"
     },
     {
-      "name": "amount",
-      "type": "NUMERIC(38, 9)",
+      "name": "country",
+      "type": "VARCHAR(2)",
       "nullable": false,
       "default": "None"
     },
     {
-      "name": "balance_after_transaction",
-      "type": "NUMERIC(38, 9)",
-      "nullable": true,
+      "name": "line1",
+      "type": "VARCHAR",
+      "nullable": false,
       "default": "None"
     },
     {
-      "name": "stripe_payment_intent_id",
+      "name": "line2",
       "type": "VARCHAR",
       "nullable": true,
       "default": "None"
     },
     {
-      "name": "wallet_transaction_type",
-      "type": "VARCHAR(7)",
+      "name": "postal_code",
+      "type": "VARCHAR",
       "nullable": false,
       "default": "None"
     },
     {
-      "name": "wallet_transaction_status",
-      "type": "VARCHAR(9)",
+      "name": "state",
+      "type": "VARCHAR",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "created_at",
+      "type": "TIMESTAMP",
+      "nullable": false,
+      "default": "now()"
+    },
+    {
+      "name": "updated_at",
+      "type": "TIMESTAMP",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "organization_addresses": [
+    {
+      "name": "organization_id",
+      "type": "INTEGER",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "id",
+      "type": "INTEGER",
+      "nullable": false,
+      "default": "nextval('organization_addresses_id_seq'::regclass)"
+    },
+    {
+      "name": "city",
+      "type": "VARCHAR",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "country",
+      "type": "VARCHAR(2)",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "line1",
+      "type": "VARCHAR",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "line2",
+      "type": "VARCHAR",
+      "nullable": true,
+      "default": "None"
+    },
+    {
+      "name": "postal_code",
+      "type": "VARCHAR",
+      "nullable": false,
+      "default": "None"
+    },
+    {
+      "name": "state",
+      "type": "VARCHAR",
       "nullable": false,
       "default": "None"
     },

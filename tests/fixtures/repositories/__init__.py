@@ -1,10 +1,12 @@
 from .oauth_account_repository_fixture import oauth_account_repository
+from .organization_address_repository_fixture import organization_address_repository
 from .organization_api_key_repository_fixture import organization_api_key_repository
 from .organization_repository_fixture import organization_repository
 from .organization_wallet_repository_fixture import organization_wallet_repository
 from .organization_wallet_transaction_repository_fixture import (
     organization_wallet_transaction_repository,
 )
+from .user_address_repository_fixture import user_address_repository
 from .user_api_key_repository_fixture import user_api_key_repository
 from .user_organization_assignment_repository_fixture import (
     user_organization_assignment_repository,
@@ -20,10 +22,12 @@ from .user_wallet_transaction_repository_fixture import (
 
 __all__ = [
     "oauth_account_repository",
+    "organization_address_repository",
     "organization_api_key_repository",
     "organization_repository",
     "organization_wallet_repository",
     "organization_wallet_transaction_repository",
+    "user_address_repository",
     "user_api_key_repository",
     "user_organization_assignment_repository",
     "user_organization_invitation_repository",
