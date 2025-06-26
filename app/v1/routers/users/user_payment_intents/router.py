@@ -13,7 +13,7 @@ from app.v1.services.user_payment_intent_service import UserPaymentIntentService
 
 from app.core.routers.auth_api_router import AuthAPIRouter
 
-router = AuthAPIRouter(prefix="/users/payment-intents", tags=["User Payment Intents"])
+router = AuthAPIRouter(prefix="/users/payment-intents", tags=["Payment Intents"])
 
 
 @router.post(

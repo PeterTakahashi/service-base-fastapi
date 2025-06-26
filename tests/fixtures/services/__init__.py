@@ -12,6 +12,9 @@ from .organization_wallet_transaction_service_fixture import (
     organization_wallet_transaction_service,
 )
 from .payment_intent_service_fixture import payment_intent_service
+from .organization_payment_intent_service_fixture import (
+    organization_payment_intent_service,
+)
 
 __all__ = [
     "organization_service",
@@ -24,4 +27,5 @@ __all__ = [
     "organization_api_key_service",
     "organization_wallet_transaction_service",
     "payment_intent_service",
+    "organization_payment_intent_service",
 ]

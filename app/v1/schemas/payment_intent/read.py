@@ -13,6 +13,11 @@ class PaymentIntentCreateResponse(BaseModel):
         description="The amount to be charged in the smallest currency unit (e.g., cents for USD).",
         json_schema_extra={"example": "10"},
     )
+    amount_inclusive_tax: Balance = Field(
+        ...,
+        description="The amount to be charged inclusive of tax in the smallest currency unit.",
+        json_schema_extra={"example": "11"},
+    )
     currency: str = Field(
         ...,
         description="The currency in which the payment intent is created.",

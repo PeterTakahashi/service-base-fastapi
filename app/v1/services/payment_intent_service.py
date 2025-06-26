@@ -4,7 +4,6 @@ from app.models.enums.wallet_transaction import (
 )
 
 
-
 class PaymentIntentService:
     """
     Service class for handling payment intents.
