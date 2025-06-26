@@ -6,12 +6,16 @@ from app.v1.schemas.organization import (
     OrganizationSearchParams,
 )
 from app.models.user import User
+from app.models.organization import Organization
 from app.v1.repositories.organization_repository import OrganizationRepository
 from app.v1.repositories.user_organization_assignment_repository import (
     UserOrganizationAssignmentRepository,
 )
 from app.v1.repositories.organization_wallet_repository import (
     OrganizationWalletRepository,
+)
+from app.v1.repositories.organization_address_repository import (
+    OrganizationAddressRepository,
 )
 
 from uuid import UUID
@@ -27,8 +31,10 @@ class OrganizationService:
         organization_repository: OrganizationRepository,
         user_organization_assignment_repository: UserOrganizationAssignmentRepository,
         organization_wallet_repository: OrganizationWalletRepository,
+        organization_address_repository: OrganizationAddressRepository
     ):
         self.organization_repository = organization_repository
+        self.organization_address_repository = organization_address_repository
         self.user_organization_assignment_repository = (
             user_organization_assignment_repository
         )
@@ -43,6 +49,7 @@ class OrganizationService:
         organizations = await self.organization_repository.where(
             **search_params.model_dump(exclude_none=True),
             created_by_user_id=user_id,
+            joinedload_models=[Organization.address],
         )
         total_count = await self.organization_repository.count(
             **search_params.model_dump(
@@ -71,6 +78,15 @@ class OrganizationService:
             profile_image_key=organization_params.profile_image_key,  # TODO: upload to storage
             created_by_user_id=user.id,
         )
+        organization.address = await self.organization_address_repository.create(
+            organization_id=organization.id,
+            city=organization_params.address.city,
+            country=organization_params.address.country,
+            line1=organization_params.address.line1,
+            line2=organization_params.address.line2,
+            postal_code=organization_params.address.postal_code,
+            state=organization_params.address.state,
+        )
         await self.user_organization_assignment_repository.create(
             user_id=user.id,
             organization_id=organization.id,
@@ -84,7 +100,7 @@ class OrganizationService:
             organization_id=organization.id,
             stripe_customer_id=customer.id,
         )
-        return OrganizationRead.model_validate(organization)
+        return OrganizationRead.model_validate(organization)  # type: ignore
 
     async def update(
         self, id: int, organization_params: OrganizationUpdate
@@ -95,6 +111,18 @@ class OrganizationService:
             description=organization_params.description,
             billing_email=organization_params.billing_email,
             profile_image_key=organization_params.profile_image_key,  # TODO: upload to storage
+        )
+        address = await self.organization_address_repository.find_by(
+            organization_id=id,
+        )
+        organization.address = await self.organization_address_repository.update(
+            id=address.id,
+            city=organization_params.address.city,
+            country=organization_params.address.country,
+            line1=organization_params.address.line1,
+            line2=organization_params.address.line2,
+            postal_code=organization_params.address.postal_code,
+            state=organization_params.address.state,
         )
         return OrganizationRead.model_validate(organization)
 

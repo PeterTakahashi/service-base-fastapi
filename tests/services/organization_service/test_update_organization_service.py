@@ -1,10 +1,10 @@
 import pytest
 from app.v1.schemas.organization import OrganizationUpdate, OrganizationRead
-
+from app.v1.schemas.common.address.read import AddressRead
 
 @pytest.mark.asyncio
 async def test_update_organization_service(
-    organization_service, organization_repository, organization
+    organization_service, organization_repository, organization, fake_address
 ):
     # Arrange
     update_data = OrganizationUpdate(
@@ -12,6 +12,7 @@ async def test_update_organization_service(
         description="A test organization",
         profile_image_key="test_profile_image_key",
         billing_email="test@test.com",
+        address=fake_address
     )
 
     # Act

@@ -10,12 +10,13 @@ from fastapi import status
 
 
 @pytest_asyncio.fixture
-def updated_data():
+def updated_data(fake_address):
     return OrganizationUpdate(
         name="Updated Organization",
         description="An updated organization",
         profile_image_key="updated_profile_image_key",
         billing_email="test@test.com",
+        address=fake_address
     )
 
 

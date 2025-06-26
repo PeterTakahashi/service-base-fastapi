@@ -1,6 +1,6 @@
 import pytest
 from app.v1.schemas.organization import OrganizationCreate, OrganizationRead
-
+from app.v1.schemas.common.address.read import AddressRead
 
 @pytest.mark.asyncio
 async def test_create_organization(
@@ -8,6 +8,7 @@ async def test_create_organization(
     organization_repository,
     user_organization_assignment_repository,
     user,
+    fake_address
 ):
     # Arrange
     organization_data = OrganizationCreate(
@@ -15,6 +16,7 @@ async def test_create_organization(
         description="A test organization",
         profile_image_key="test_profile_image_key",
         billing_email="test@test.com",
+        address=fake_address
     )
 
     # Act

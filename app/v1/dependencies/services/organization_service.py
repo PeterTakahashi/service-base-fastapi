@@ -16,6 +16,9 @@ from app.v1.dependencies.repositories.organization_wallet_repository import (
 from app.v1.repositories.organization_wallet_repository import (
     OrganizationWalletRepository,
 )
+from app.v1.dependencies.repositories.organization_address_repository import (
+    get_organization_address_repository,
+)
 
 
 def get_organization_service(
@@ -28,9 +31,11 @@ def get_organization_service(
     organization_wallet_repository: OrganizationWalletRepository = Depends(
         get_organization_wallet_repository
     ),
+    organization_address_repository = Depends(get_organization_address_repository),
 ) -> OrganizationService:
     return OrganizationService(
         organization_repository=organization_repository,
         user_organization_assignment_repository=user_organization_assignment_repository,
         organization_wallet_repository=organization_wallet_repository,
+        organization_address_repository=organization_address_repository,
     )

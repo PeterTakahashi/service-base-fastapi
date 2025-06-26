@@ -45,3 +45,22 @@ async def get_organization_by_id(
         user_id=user.id, organization_id=organization.id
     )
     return organization
+
+async def get_organization_with_address_by_id(
+    organization_id: str,
+    organization_repository: OrganizationRepository = Depends(
+        get_organization_repository
+    ),
+    user_organization_assignment_repository: UserOrganizationAssignmentRepository = Depends(
+        get_user_organization_assignment_repository
+    ),
+    user: User = Depends(current_active_user),
+) -> Organization:
+    organization = await organization_repository.find_by_or_raise(
+        id=decode_id(organization_id),
+        joinedload_models=[Organization.address],
+    )
+    await user_organization_assignment_repository.find_by_or_raise(
+        user_id=user.id, organization_id=organization.id
+    )
+    return organization

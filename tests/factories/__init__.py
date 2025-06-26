@@ -9,6 +9,8 @@ from .organization_wallet_transaction_factory import (
 )
 from .organization_wallet_factory import organization_wallet_factory
 from .user_organization_assignment_factory import user_organization_assignment_factory
+from .organization_address_factory import organization_address_factory
+from .user_address_factory import user_address_factory
 
 __all__ = [
     "user_factory",
@@ -20,4 +22,6 @@ __all__ = [
     "organization_wallet_transaction_factory",
     "organization_wallet_factory",
     "user_organization_assignment_factory",
+    "organization_address_factory",
+    "user_address_factory",
 ]

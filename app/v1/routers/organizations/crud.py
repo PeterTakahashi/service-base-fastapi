@@ -8,6 +8,7 @@ from app.v1.schemas.organization import (
 )
 from app.v1.dependencies.models.organization.get_organization_by_id import (
     get_organization_by_id,
+    get_organization_with_address_by_id,
 )
 from app.v1.dependencies.services.organization_service import get_organization_service
 from app.v1.services.organization_service import OrganizationService
@@ -44,7 +45,7 @@ async def list_organizations(
 )
 async def get_organization(
     user: User = Depends(current_active_user),
-    organization: Organization = Depends(get_organization_by_id),
+    organization: Organization = Depends(get_organization_with_address_by_id),
 ):
     """
     Retrieve an organization by its ID.
