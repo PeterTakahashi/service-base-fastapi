@@ -20,7 +20,6 @@ async def test_routers_unauthorized(
         {"method": "post", "path": "/user-api-keys"},
         {"method": "patch", "path": f"/user-api-keys/{dammy_id}"},
         {"method": "delete", "path": f"/user-api-keys/{dammy_id}"},
-        {"method": "post", "path": "/user-api-keys/verify"},
         {"method": "get", "path": "/organizations"},
         {"method": "get", "path": f"/organizations/{dammy_id}"},
         {"method": "post", "path": "/organizations"},

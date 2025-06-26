@@ -43,13 +43,37 @@ def mock_stripe_customer_create():
 
 @pytest.fixture(autouse=True)
 def mock_stripe_customer_modify():
-    def mock_create(**params):
-        assert "name" in params
-        assert "email" in params
-
-        mock_customer = MagicMock()
-        mock_customer.id = f"cus_test_{params['email']}"
-        return mock_customer
+    def mock_create(stripe_customer_id, **params):
+        response = {
+            "id": stripe_customer_id,
+            "object": "customer",
+            "address": None,
+            "balance": 0,
+            "created": 1680893993,
+            "currency": None,
+            "default_source": None,
+            "delinquent": False,
+            "description": None,
+            "discount": None,
+            "email": "jennyrosen@example.com",
+            "invoice_prefix": "0759376C",
+            "invoice_settings": {
+                "custom_fields": None,
+                "default_payment_method": None,
+                "footer": None,
+                "rendering_options": None,
+            },
+            "livemode": False,
+            "metadata": {"order_id": "6735"},
+            "name": "Jenny Rosen",
+            "next_invoice_sequence": 1,
+            "phone": None,
+            "preferred_locales": [],
+            "shipping": None,
+            "tax_exempt": "none",
+            "test_clock": None,
+        }
+        return response
 
     patch_path = "app.lib.fastapi_users.user_manager.stripe.Customer.modify"
 

@@ -5,7 +5,7 @@ async def test_update_payment_intent_by_webhook_service(
     # Act
     result = await payment_intent_service.update_payment_intent_by_webhook(
         stripe_payment_intent_id=user_wallet_transaction.stripe_payment_intent_id,
-        amount=user_wallet_transaction.amount,
+        currency="usd",
     )
 
     # Assert
