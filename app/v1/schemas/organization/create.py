@@ -27,7 +27,7 @@ class OrganizationCreate(BaseModel):
         json_schema_extra={"example": "billing@acme.com"},
     )
     address: AddressWrite = Field(
-        None,
+        ...,
         description="Registered address of the organization.",
         json_schema_extra={
             "example": {
