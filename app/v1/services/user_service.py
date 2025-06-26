@@ -9,7 +9,7 @@ from app.models.user import User
 from app.v1.schemas.user import UserUpdate, UserWithRelationRead
 from app.lib.fastapi_users.user_setup import current_active_user
 from app.lib.exception.api_exception import init_api_exception
-
+from app.lib.utils.stripe import stripe
 
 class UserService:
     def __init__(
@@ -49,6 +49,24 @@ class UserService:
                     )
             user = await self.user_repository.find(
                 id=user.id, joinedload_models=[User.user_wallet, User.address]
+            )
+
+            stripe_metadata = {
+                "name": user.email,
+                "email": user.email,
+            }
+            if user.address:
+                stripe_metadata["address"] = {
+                    "city": user.address.city,
+                    "country": user.address.country,
+                    "line1": user.address.line1,
+                    "line2": user.address.line2,
+                    "postal_code": user.address.postal_code,
+                    "state": user.address.state,
+                }
+            stripe.Customer.modify(
+                user.user_wallet.stripe_customer_id,
+                metadata=stripe_metadata,
             )
             return UserWithRelationRead.model_validate(user)
         except exceptions.InvalidPasswordException as e:

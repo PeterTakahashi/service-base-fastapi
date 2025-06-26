@@ -41,7 +41,20 @@ def mock_stripe_customer_create():
     with patch(patch_path, side_effect=mock_create) as mock_func:
         yield mock_func
 
+@pytest.fixture(autouse=True)
+def mock_stripe_customer_modify():
+    def mock_create(**params):
+        assert "name" in params
+        assert "email" in params
 
+        mock_customer = MagicMock()
+        mock_customer.id = f"cus_test_{params['email']}"
+        return mock_customer
+
+    patch_path = "app.lib.fastapi_users.user_manager.stripe.Customer.modify"
+
+    with patch(patch_path, side_effect=mock_create) as mock_func:
+        yield mock_func
 
 @pytest.fixture(autouse=True)
 def mock_stripe_tax_calculation_create():

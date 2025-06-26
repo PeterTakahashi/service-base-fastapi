@@ -97,6 +97,14 @@ class OrganizationService:
             name=organization.name,
             email=organization.billing_email,
             description=organization.description,
+            address={
+                "city": organization.address.city,
+                "country": organization.address.country,
+                "line1": organization.address.line1,
+                "line2": organization.address.line2,
+                "postal_code": organization.address.postal_code,
+                "state": organization.address.state,
+            }
         )
         await self.organization_wallet_repository.create(
             organization_id=organization.id,
@@ -127,6 +135,25 @@ class OrganizationService:
             line2=organization_params.address.line2,
             postal_code=organization_params.address.postal_code,
             state=organization_params.address.state,
+        )
+        organization_wallet = await self.organization_wallet_repository.find_by_or_raise(
+            organization_id=id,
+        )
+        stripe.Customer.modify(
+            organization_wallet.stripe_customer_id,
+            metadata={
+                "name": organization.name,
+                "email": organization.billing_email,
+                "description": organization.description,
+                "address": {
+                    "city": organization.address.city,
+                    "country": organization.address.country,
+                    "line1": organization.address.line1,
+                    "line2": organization.address.line2,
+                    "postal_code": organization.address.postal_code,
+                    "state": organization.address.state,
+                },
+            }
         )
         return OrganizationRead.model_validate(organization)
 
