@@ -40,3 +40,13 @@ class OrganizationCreate(BaseModel):
             }
         },
     )
+    tax_type: Optional[str] = Field(
+        None,
+        description="Tax type (e.g., eu_vat) for the organization. ref: https://docs.stripe.com/api/tax_ids/object",
+        json_schema_extra={"example": "VAT"},
+    )
+    tax_id: Optional[str] = Field(
+        None,
+        description="Tax ID (e.g., VAT number).",
+        json_schema_extra={"example": "VAT123456789"},
+    )

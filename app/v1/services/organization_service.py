@@ -77,6 +77,8 @@ class OrganizationService:
             billing_email=organization_params.billing_email,
             profile_image_key=organization_params.profile_image_key,  # TODO: upload to storage
             created_by_user_id=user.id,
+            tax_type=organization_params.tax_type,
+            tax_id=organization_params.tax_id,
         )
         organization.address = await self.organization_address_repository.create(
             organization_id=organization.id,
@@ -111,6 +113,8 @@ class OrganizationService:
             description=organization_params.description,
             billing_email=organization_params.billing_email,
             profile_image_key=organization_params.profile_image_key,  # TODO: upload to storage
+            tax_type=organization_params.tax_type,
+            tax_id=organization_params.tax_id,
         )
         address = await self.organization_address_repository.find_by(
             organization_id=id,

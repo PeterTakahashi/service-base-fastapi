@@ -17,6 +17,8 @@ async def test_create_organization(
         profile_image_key="test_profile_image_key",
         billing_email="test@test.com",
         address=fake_address,
+        tax_type="eu_vat",
+        tax_id="123456789",
     )
 
     # Act
@@ -30,6 +32,14 @@ async def test_create_organization(
     assert created_organization.description == organization_data.description
     assert created_organization.profile_image_key == organization_data.profile_image_key
     assert created_organization.billing_email == organization_data.billing_email
+    assert created_organization.address.city == organization_data.address.city
+    assert created_organization.address.country == organization_data.address.country
+    assert created_organization.address.line1 == organization_data.address.line1
+    assert created_organization.address.line2 == organization_data.address.line2
+    assert created_organization.address.postal_code == organization_data.address.postal_code
+    assert created_organization.address.state == organization_data.address.state
+    assert created_organization.tax_type == organization_data.tax_type
+    assert created_organization.tax_id == organization_data.tax_id
 
     # Verify that the organization was saved in the repository
     saved_organization = await organization_repository.find(created_organization.id)

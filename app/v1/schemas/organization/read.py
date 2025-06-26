@@ -10,6 +10,11 @@ class OrganizationRead(HasEncodedID):
     description: str | None = Field(None, description="Organization description.")
     profile_image_key: str | None = Field(None, description="Profile image object key.")
     billing_email: EmailStr | None = Field(None, description="Billing contact e-mail.")
+    tax_type: str | None = Field(
+        None,
+        description="Tax type (e.g., eu_vat) for the organization. ref: https://docs.stripe.com/api/tax_ids/object",
+    )
+    tax_id: str | None = Field(None, description="Tax ID (e.g., VAT number).")
     created_by_user: UserRead = Field(
         ..., description="User who created the organization."
     )

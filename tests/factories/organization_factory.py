@@ -13,6 +13,8 @@ class OrganizationFactory(AsyncSQLAlchemyModelFactory):
     description = factory.Faker("text", max_nb_chars=200)
     billing_email = factory.Faker("email")
     profile_image_key = factory.Faker("file_name", extension="jpg")
+    tax_type = "eu_vat"
+    tax_id = factory.Faker("ean13")
 
 
 @pytest_asyncio.fixture

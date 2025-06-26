@@ -17,6 +17,8 @@ def updated_data(fake_address):
         profile_image_key="updated_profile_image_key",
         billing_email="test@test.com",
         address=fake_address,
+        tax_type="eu_vat",
+        tax_id="123456789",
     )
 
 
@@ -36,6 +38,14 @@ async def test_update_organization(
     assert response_data["description"] == updated_data.description
     assert response_data["profile_image_key"] == updated_data.profile_image_key
     assert response_data["billing_email"] == updated_data.billing_email
+    assert response_data["address"]["city"] == updated_data.address.city
+    assert response_data["address"]["country"] == updated_data.address.country
+    assert response_data["address"]["line1"] == updated_data.address.line1
+    assert response_data["address"]["line2"] == updated_data.address.line2
+    assert response_data["address"]["postal_code"] == updated_data.address.postal_code
+    assert response_data["address"]["state"] == updated_data.address.state
+    assert response_data["tax_type"] == updated_data.tax_type
+    assert response_data["tax_id"] == updated_data.tax_id
 
 
 @pytest.mark.asyncio
