@@ -18,7 +18,7 @@ def mock_payment_intent_create(**params):
 @pytest.fixture
 def mock_payment_intent_create_patch():
     with patch(
-        "app.v1.services.payment_intent_service.stripe.PaymentIntent.create",
+        "app.v1.services.user_payment_intent_service.stripe.PaymentIntent.create",
         side_effect=mock_payment_intent_create,
     ):
         yield mock_payment_intent_create

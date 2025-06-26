@@ -6,15 +6,15 @@ from tests.mocks.stripe import mock_payment_intent_create
 
 @pytest.mark.asyncio
 @patch(
-    "app.v1.services.payment_intent_service.stripe.PaymentIntent.create",
+    "app.v1.services.user_payment_intent_service.stripe.PaymentIntent.create",
     side_effect=mock_payment_intent_create,
 )
-async def test_create_payment_intent_service(
-    mock_create, payment_intent_service, user, user_wallet
+async def test_create_user_payment_intent_service(
+    mock_create, user_payment_intent_service, user, user_wallet
 ):
     payment_intent_data = PaymentIntentCreate(amount=1000)
 
-    payment_intent = await payment_intent_service.create_payment_intent(
+    payment_intent = await user_payment_intent_service.create_payment_intent(
         user=user, payment_intent_create=payment_intent_data
     )
 
@@ -24,7 +24,7 @@ async def test_create_payment_intent_service(
     assert payment_intent.status == "requires_payment_method"
     assert payment_intent.client_secret is not None
     user_wallet_transaction = (
-        await payment_intent_service.user_wallet_transaction_repository.find_by(
+        await user_payment_intent_service.user_wallet_transaction_repository.find_by(
             user_wallet_id=user_wallet.id,
         )
     )

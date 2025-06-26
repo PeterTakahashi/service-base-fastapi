@@ -11,7 +11,7 @@ async def test_get_user_wallet_transaction_authenticated(
     user_wallet_transaction_repository,
 ):
     await auth_client.post(
-        "/payment-intents",
+        "/users/payment-intents",
         json={"amount": 1000},
     )
     user_wallet_transactions = await user_wallet_transaction_repository.where()

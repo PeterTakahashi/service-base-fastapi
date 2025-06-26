@@ -36,7 +36,10 @@ async def test_create_organization(
     assert created_organization.address.country == organization_data.address.country
     assert created_organization.address.line1 == organization_data.address.line1
     assert created_organization.address.line2 == organization_data.address.line2
-    assert created_organization.address.postal_code == organization_data.address.postal_code
+    assert (
+        created_organization.address.postal_code
+        == organization_data.address.postal_code
+    )
     assert created_organization.address.state == organization_data.address.state
     assert created_organization.tax_type == organization_data.tax_type
     assert created_organization.tax_id == organization_data.tax_id

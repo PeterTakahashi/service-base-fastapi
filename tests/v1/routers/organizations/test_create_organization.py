@@ -31,7 +31,9 @@ async def test_create_organization(auth_client: AsyncClient, user, fake_address)
     assert response_data["address"]["country"] == organization_data.address.country
     assert response_data["address"]["line1"] == organization_data.address.line1
     assert response_data["address"]["line2"] == organization_data.address.line2
-    assert response_data["address"]["postal_code"] == organization_data.address.postal_code
+    assert (
+        response_data["address"]["postal_code"] == organization_data.address.postal_code
+    )
     assert response_data["address"]["state"] == organization_data.address.state
     assert response_data["tax_type"] == organization_data.tax_type
     assert response_data["tax_id"] == organization_data.tax_id

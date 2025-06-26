@@ -10,7 +10,7 @@ async def test_create_payment_intent_authenticated(
     mock_payment_intent_create_patch, auth_client: AsyncClient
 ):
     response = await auth_client.post(
-        "/payment-intents",
+        "/users/payment-intents",
         json={"amount": 1000},
     )
     assert response.status_code == 201
@@ -26,7 +26,7 @@ async def test_create_payment_intent_invalid_amount(
     mock_payment_intent_create_patch, auth_client: AsyncClient
 ):
     response = await auth_client.post(
-        "/payment-intents",
+        "/users/payment-intents",
         json={"amount": -1},  # Invalid amount
     )
     check_api_exception_response(

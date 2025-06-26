@@ -27,12 +27,8 @@ class Organization(TimestampMixin, Base):
     billing_email: Mapped[str | None] = mapped_column(
         String, nullable=True, default=None
     )
-    tax_type: Mapped[str | None] = mapped_column(
-        String, nullable=True, default=None
-    )
-    tax_id: Mapped[str | None] = mapped_column(
-        String, nullable=True, default=None
-    )
+    tax_type: Mapped[str | None] = mapped_column(String, nullable=True, default=None)
+    tax_id: Mapped[str | None] = mapped_column(String, nullable=True, default=None)
 
     created_by_user_id: Mapped[Uuid] = mapped_column(
         ForeignKey("users.id"), nullable=False
