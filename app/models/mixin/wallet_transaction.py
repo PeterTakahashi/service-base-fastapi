@@ -1,4 +1,3 @@
-# app/models/mixin/wallet_transaction.py
 from sqlalchemy import Numeric, Enum as SQLAlchemyEnum
 from sqlalchemy.orm import Mapped, mapped_column
 from decimal import Decimal

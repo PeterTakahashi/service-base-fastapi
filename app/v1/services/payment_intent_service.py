@@ -7,7 +7,7 @@ from app.core.config import settings
 from app.models.user import User
 from app.models.user_wallet import UserWallet
 from app.lib.utils.int_to_numeric import int_to_numeric
-from app.models.user_wallet_transaction import (
+from app.models.enums.wallet_transaction import (
     WalletTransactionStatus,
 )
 from decimal import Decimal

@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field, EmailStr
 from typing import Optional
+from app.v1.schemas.common.address.write import AddressWrite
 
 
 class OrganizationCreate(BaseModel):
@@ -24,4 +25,18 @@ class OrganizationCreate(BaseModel):
         None,
         description="Billing contact e-mail address.",
         json_schema_extra={"example": "billing@acme.com"},
+    )
+    address: AddressWrite = Field(
+        None,
+        description="Registered address of the organization.",
+        json_schema_extra={
+            "example": {
+                "line1": "123 Main St",
+                "line2": "Suite 100",
+                "city": "Metropolis",
+                "state": "NY",
+                "postal_code": "12345",
+                "country": "US",
+            }
+        },
     )
