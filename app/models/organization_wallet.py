@@ -1,9 +1,10 @@
 from app.db.base import Base
-from sqlalchemy import ForeignKey, DateTime, func, Numeric
+from sqlalchemy import ForeignKey, Numeric
 from sqlalchemy.orm import relationship, Mapped, mapped_column
-from datetime import datetime
 from typing import List
 from decimal import Decimal
+
+from app.models.mixin.timestamp import TimestampMixin
 
 from typing import TYPE_CHECKING
 
@@ -12,7 +13,7 @@ if TYPE_CHECKING:
     from app.models.organization_wallet_transaction import OrganizationWalletTransaction
 
 
-class OrganizationWallet(Base):
+class OrganizationWallet(TimestampMixin, Base):
     __tablename__ = "organization_wallets"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
@@ -27,19 +28,6 @@ class OrganizationWallet(Base):
         default=Decimal("0"),
         nullable=False,
     )
-
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True),
-        server_default=func.now(),
-        nullable=False,
-    )
-    updated_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True),
-        server_default=func.now(),
-        onupdate=func.now(),
-        nullable=False,
-    )
-
     organization: Mapped["Organization"] = relationship(
         "Organization", back_populates="organization_wallet", uselist=False
     )

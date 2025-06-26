@@ -2,13 +2,14 @@ from typing import TYPE_CHECKING
 from app.db.base import Base
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from app.models.mixin.address import _AddressMixin
+from app.models.mixin.address import AddressMixin
+from app.models.mixin.timestamp import TimestampMixin
 
 if TYPE_CHECKING:
     from app.models.organization import Organization
 
 
-class OrganizationAddress(_AddressMixin, Base):
+class OrganizationAddress(AddressMixin, TimestampMixin, Base):
     __tablename__ = "organization_addresses"
 
     organization_id: Mapped[int] = mapped_column(

@@ -1,12 +1,12 @@
 from app.db.base import Base
-from sqlalchemy import Enum as SQLAlchemyEnum, ForeignKey, DateTime, func, Numeric
+from sqlalchemy import Enum as SQLAlchemyEnum, ForeignKey, Numeric
 from sqlalchemy.orm import mapped_column, Mapped, relationship
-from datetime import datetime
 from app.models.enums.wallet_transaction import (
     WalletTransactionType,
     WalletTransactionStatus,
 )
 from decimal import Decimal
+from app.models.mixin.timestamp import TimestampMixin
 
 from typing import TYPE_CHECKING
 
@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from app.models.user_wallet import UserWallet
 
 
-class UserWalletTransaction(Base):
+class UserWalletTransaction(TimestampMixin, Base):
     __tablename__ = "user_wallet_transactions"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
@@ -50,18 +50,6 @@ class UserWalletTransaction(Base):
         SQLAlchemyEnum(WalletTransactionStatus, native_enum=True),
         nullable=False,
         default=WalletTransactionStatus.PENDING,
-    )
-
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True),
-        server_default=func.now(),
-        nullable=False,
-    )
-    updated_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True),
-        server_default=func.now(),
-        onupdate=func.now(),
-        nullable=False,
     )
     user_wallet: Mapped["UserWallet"] = relationship(
         back_populates="user_wallet_transactions", uselist=False

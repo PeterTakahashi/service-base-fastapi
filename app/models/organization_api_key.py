@@ -1,16 +1,17 @@
 from app.db.base import Base
-from sqlalchemy import ForeignKey, String, DateTime, func
+from sqlalchemy import ForeignKey, String, DateTime
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from datetime import datetime
 from sqlalchemy import Uuid
 from typing import TYPE_CHECKING
+from app.models.mixin.timestamp import TimestampMixin
 
 if TYPE_CHECKING:
     from app.models.organization import Organization
     from app.models.user import User
 
 
-class OrganizationApiKey(Base):
+class OrganizationApiKey(TimestampMixin, Base):
     __tablename__ = "organization_api_keys"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
@@ -29,17 +30,6 @@ class OrganizationApiKey(Base):
 
     created_by_user_id: Mapped[Uuid] = mapped_column(
         ForeignKey("users.id"), nullable=False
-    )
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True),
-        server_default=func.now(),
-        nullable=False,
-    )
-    updated_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True),
-        server_default=func.now(),
-        onupdate=func.now(),
-        nullable=False,
     )
     deleted_at: Mapped[datetime | None] = mapped_column(
         DateTime(timezone=True), nullable=True

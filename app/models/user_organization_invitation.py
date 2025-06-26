@@ -1,16 +1,16 @@
 from app.db.base import Base
-from sqlalchemy import ForeignKey, DateTime, func
+from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from datetime import datetime
 from typing import TYPE_CHECKING
 from sqlalchemy import Uuid
+from app.models.mixin.timestamp import TimestampMixin
 
 if TYPE_CHECKING:
     from app.models.user import User
     from app.models.organization import Organization
 
 
-class UserOrganizationInvitation(Base):
+class UserOrganizationInvitation(TimestampMixin, Base):
     __tablename__ = "user_organization_invitations"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
@@ -22,16 +22,6 @@ class UserOrganizationInvitation(Base):
     )
     created_by_user_id: Mapped[Uuid] = mapped_column(
         ForeignKey("users.id"), nullable=False
-    )
-
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now(), nullable=False
-    )
-    updated_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True),
-        server_default=func.now(),
-        onupdate=func.now(),
-        nullable=False,
     )
 
     user: Mapped["User"] = relationship(

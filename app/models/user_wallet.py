@@ -1,10 +1,10 @@
 from app.db.base import Base
-from sqlalchemy import ForeignKey, DateTime, func, Numeric
+from sqlalchemy import ForeignKey, Numeric
 from sqlalchemy.orm import relationship, Mapped, mapped_column
-from datetime import datetime
 from typing import List
 import fastapi_users_db_sqlalchemy
 from decimal import Decimal
+from app.models.mixin.timestamp import TimestampMixin
 
 from typing import TYPE_CHECKING
 
@@ -13,7 +13,7 @@ if TYPE_CHECKING:
     from app.models.user_wallet_transaction import UserWalletTransaction
 
 
-class UserWallet(Base):
+class UserWallet(TimestampMixin, Base):
     __tablename__ = "user_wallets"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
@@ -26,18 +26,6 @@ class UserWallet(Base):
     balance: Mapped[Decimal] = mapped_column(
         Numeric(precision=38, scale=9, asdecimal=True, decimal_return_scale=True),
         default=Decimal("0"),
-        nullable=False,
-    )
-
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True),
-        server_default=func.now(),
-        nullable=False,
-    )
-    updated_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True),
-        server_default=func.now(),
-        onupdate=func.now(),
         nullable=False,
     )
 

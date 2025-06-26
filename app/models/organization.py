@@ -1,9 +1,10 @@
 from app.db.base import Base
-from sqlalchemy import String, DateTime, func, ForeignKey
+from sqlalchemy import String, DateTime, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from datetime import datetime
 from typing import List, TYPE_CHECKING
 from sqlalchemy import Uuid
+from app.models.mixin.timestamp import TimestampMixin
 
 if TYPE_CHECKING:
     from app.models.organization_wallet import OrganizationWallet
@@ -14,7 +15,7 @@ if TYPE_CHECKING:
     from app.models.organization_address import OrganizationAddress
 
 
-class Organization(Base):
+class Organization(TimestampMixin, Base):
     __tablename__ = "organizations"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
@@ -29,15 +30,6 @@ class Organization(Base):
 
     created_by_user_id: Mapped[Uuid] = mapped_column(
         ForeignKey("users.id"), nullable=False
-    )
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now(), nullable=False
-    )
-    updated_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True),
-        server_default=func.now(),
-        onupdate=func.now(),
-        nullable=False,
     )
     deleted_at: Mapped[datetime | None] = mapped_column(
         DateTime(timezone=True), nullable=True
