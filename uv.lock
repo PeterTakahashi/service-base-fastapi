@@ -936,6 +936,19 @@ wheels = [
 ]
 
 [[package]]
+name = "fastapi-repository"
+version = "0.0.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "fastapi" },
+    { name = "sqlalchemy" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/94/c1/bc9d64b8d7c7c7feb01c2c8f3f29ed79adbf68809039a67f88944a2bc36f/fastapi_repository-0.0.1.tar.gz", hash = "sha256:c2fee93c52c2e87fe83eaf5a08ad7fb8127cbcd3b6bb17bb522b06d474cb09a4", size = 5827, upload-time = "2025-06-27T16:53:39.866Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ed/d6/75408b7e830701895fe83f08b15fba9c35c7dc9dc8a57e14572b077607b3/fastapi_repository-0.0.1-py3-none-any.whl", hash = "sha256:d4045211b296d94024ff76b1104a13c4c162998a8579a363d0cfbe16fe5abe3e", size = 4625, upload-time = "2025-06-27T16:53:38.772Z" },
+]
+
+[[package]]
 name = "fastapi-users"
 version = "14.0.1"
 source = { registry = "https://pypi.org/simple" }
@@ -2830,6 +2843,7 @@ dependencies = [
     { name = "factory-boy" },
     { name = "fastapi" },
     { name = "fastapi-mail" },
+    { name = "fastapi-repository" },
     { name = "fastapi-users", extra = ["oauth", "sqlalchemy"] },
     { name = "fastapi-users-db-sqlalchemy" },
     { name = "hashids" },
@@ -2892,6 +2906,7 @@ requires-dist = [
     { name = "factory-boy", specifier = ">=3.3.3" },
     { name = "fastapi", specifier = ">=0.115.12" },
     { name = "fastapi-mail", specifier = ">=1.4.2" },
+    { name = "fastapi-repository", specifier = ">=0.0.1" },
     { name = "fastapi-users", extras = ["oauth", "sqlalchemy"], specifier = ">=14.0.1" },
     { name = "fastapi-users-db-sqlalchemy", specifier = ">=7.0.0" },
     { name = "hashids", specifier = ">=1.3.1" },

@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.organization import Organization
-from app.v1.repositories.base_repository import BaseRepository
+from fastapi_repository import BaseRepository
 from datetime import datetime
 
 
