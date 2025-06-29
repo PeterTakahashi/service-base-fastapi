@@ -4,21 +4,9 @@ from faker import Faker
 from app.v1.repositories.user_repository import UserRepository
 
 
-@pytest_asyncio.fixture
-def fake_email(faker: Faker) -> str:
-    """
-    Generate a fake email address.
-    """
-    return faker.unique.email()
-
-
-@pytest_asyncio.fixture
-async def not_verified_access_token(
-    client: AsyncClient, faker: Faker, fake_email: str
+async def create_and_get_access_token(
+    client: AsyncClient, email: str, password: str
 ) -> str:
-    email = fake_email
-    password = faker.password(length=12)
-
     # Register user
     await client.post(
         "/auth/register/register", json={"email": email, "password": password}
@@ -30,8 +18,16 @@ async def not_verified_access_token(
         data={"username": email, "password": password},
         headers={"Content-Type": "application/x-www-form-urlencoded"},
     )
-
     return response.json()["access_token"]
+
+
+@pytest_asyncio.fixture
+async def not_verified_access_token(
+    client: AsyncClient, faker: Faker, fake_email: str
+) -> str:
+    return await create_and_get_access_token(
+        client, fake_email, faker.password(length=12)
+    )
 
 
 @pytest_asyncio.fixture
@@ -44,3 +40,17 @@ async def access_token(
     user = await user_repository.find_by(email=fake_email)
     await user_repository.update(id=user.id, is_verified=True)
     return not_verified_access_token
+
+
+@pytest_asyncio.fixture
+async def other_access_token(
+    client: AsyncClient,
+    faker: Faker,
+    user_repository: UserRepository,
+) -> str:
+    email = faker.email()
+    password = faker.password(length=12)
+    access_token = await create_and_get_access_token(client, email, password)
+    user = await user_repository.find_by(email=email)
+    await user_repository.update(id=user.id, is_verified=True)
+    return access_token

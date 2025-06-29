@@ -1,7 +1,7 @@
 from app.v1.schemas.user_wallet_transaction import (
     UserWalletTransactionRead,
     UserWalletTransactionSearchParams,
-    UserWalletTransactionListResponse,
+    UserWalletTransactionListRead,
 )
 from app.v1.schemas.common.list.base_list_response import ListResponseMeta
 
@@ -14,7 +14,7 @@ class UserWalletTransactionService:
         self,
         user_wallet_id: int,
         search_params: UserWalletTransactionSearchParams,
-    ) -> UserWalletTransactionListResponse:
+    ) -> UserWalletTransactionListRead:
         """
         Retrieve a list of user_wallet transactions with filtering, sorting, and pagination.
         """
@@ -29,7 +29,7 @@ class UserWalletTransactionService:
             ),
             user_wallet_id=user_wallet_id,
         )
-        return UserWalletTransactionListResponse(
+        return UserWalletTransactionListRead(
             meta=ListResponseMeta(
                 total_count=total_count,
                 **search_params.model_dump(exclude_none=True),

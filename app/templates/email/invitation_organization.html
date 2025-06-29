@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Invitation to Join Organization</title>
+  </head>
+  <body style="font-family: Arial, sans-serif; padding: 20px">
+    <h2>Invitation to Join {{ organization_name }}</h2>
+    <p>Hello,</p>
+    <p>You have been invited to join an organization.</p>
+    <p>Please click the link below to accept the invitation.</p>
+    <a
+      href="{{ url }}"
+      style="
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #28a745;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 16px;
+      "
+    >
+      Accept Invitation
+    </a>
+    <hr />
+    <p>If you did not expect this email, please ignore it.</p>
+  </body>
+</html>

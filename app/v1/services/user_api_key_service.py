@@ -9,6 +9,8 @@ from app.v1.schemas.common.list.base_list_response import ListResponseMeta
 from uuid import UUID
 import secrets
 
+from app.models.user_api_key import API_KEY_PREFIX
+
 
 class UserApiKeyService:
     def __init__(self, user_api_key_repository):
@@ -45,7 +47,7 @@ class UserApiKeyService:
         """
         Create a new user API key.
         """
-        api_key = secrets.token_urlsafe(32)
+        api_key = API_KEY_PREFIX + secrets.token_urlsafe(32)
         user_api_key = await self.user_api_key_repository.create(
             user_id=user_id, api_key=api_key, **user_api_key_create.model_dump()
         )

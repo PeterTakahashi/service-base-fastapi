@@ -1,0 +1,7 @@
+import pytest_asyncio
+from app.v1.services.user_wallet_transaction_service import UserWalletTransactionService
+
+
+@pytest_asyncio.fixture
+async def user_wallet_transaction_service(user_wallet_transaction_repository):
+    return UserWalletTransactionService(user_wallet_transaction_repository)

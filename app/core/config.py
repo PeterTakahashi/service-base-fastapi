@@ -59,6 +59,9 @@ class Settings(BaseSettings):
     ADMIN_USERNAME: str = os.getenv("ADMIN_USERNAME", "admin")
     ADMIN_PASSWORD: str = os.getenv("ADMIN_PASSWORD", "password")
 
+    STRIPE_PERSONAL_TAX_CODE: str = "txcd_10103000"
+    STRIPE_BUSINESS_TAX_CODE: str = "txcd_10103001"
+
 
 print("Loading environment variables...")
 print(f"DATABASE_URL: {os.getenv('DATABASE_URL')}")

@@ -21,7 +21,7 @@ from app.core.exception_handlers.validation_exception_handler import (
 
 v1_app = FastAPI(
     title=settings.PROJECT_NAME,
-    description="Version 1 of the FastAPI Applicatoin",
+    description="Version 1 of the FastAPI Application",
     version="1.0.0",
 )
 

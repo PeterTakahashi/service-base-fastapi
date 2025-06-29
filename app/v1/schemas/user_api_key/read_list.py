@@ -1,7 +1,5 @@
-from typing import List
-from app.v1.schemas.common.list.base_list_response import BaseListResponse
-from app.v1.schemas.user_api_key.read import UserApiKeyRead
+from app.v1.schemas.common.api_key.read_list import ApiKeyListRead
 
 
-class UserApiKeyListRead(BaseListResponse):
-    data: List[UserApiKeyRead]
+class UserApiKeyListRead(ApiKeyListRead):
+    pass

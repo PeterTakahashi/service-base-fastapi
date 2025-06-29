@@ -5,44 +5,12 @@ import pytest
 import pytest_asyncio
 from app.core.startup import database
 from app.db.session import get_async_session
-from faker import Faker
-from tests.fixtures.models import (
-    user,
-    other_user,
-    users,
-    user_wallet,
-    other_user_wallet,
-    user_wallets,
-    user_wallet_transaction,
-    other_user_wallet_transaction,
-    user_api_key,
-    soft_deleted_user_api_key,
-    user_api_keys,
-    expired_user_api_key,
-    user_api_key_with_expires_at,
-)
-from tests.fixtures.repository_fixture import (
-    user_repository,
-    user_wallet_repository,
-    user_wallet_transaction_repository,
-    user_api_key_repository,
-)
-from tests.fixtures.service_fixture import (
-    user_service,
-    payment_intent_service,
-    user_wallet_transaction_service,
-    user_api_key_service,
-)
-from tests.mocks.stripe import (
-    mock_stripe_customer_create,
-    mock_payment_intent_create_patch,
-)
-from tests.factories.user_factory import user_factory
-from tests.factories.user_wallet_factory import user_wallet_factory
-from tests.factories.user_wallet_transaction_factory import (
-    user_wallet_transaction_factory,
-)
-from tests.factories.user_api_key_factory import user_api_key_factory
+from tests.fixtures.faker import *
+from tests.fixtures.models import *
+from tests.fixtures.repositories import *
+from tests.fixtures.services import *
+from tests.mocks.stripe import *
+from tests.factories import *
 
 
 @pytest.fixture(scope="session")
@@ -71,8 +39,3 @@ async def clean_tables():
 async def async_session():
     async for session in get_async_session():
         yield session
-
-
-@pytest_asyncio.fixture
-def faker():
-    return Faker()

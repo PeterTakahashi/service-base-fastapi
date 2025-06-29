@@ -7,6 +7,7 @@ import pytest_asyncio  # Third-party imports
 from httpx import AsyncClient
 from httpx._transports.asgi import ASGITransport
 from main import app  # Local application import
+from copy import copy
 
 BASE_URL = "/app/v1"
 
@@ -45,3 +46,13 @@ async def not_verified_auth_client(
         {"Authorization": f"Bearer {not_verified_access_token}"}
     )
     return authenticated_client
+
+
+@pytest_asyncio.fixture
+async def other_auth_client(
+    client: AsyncClient, other_access_token: str
+) -> AsyncClient:
+    copied_client = copy(client)
+    copied_client.headers = client.headers.copy()
+    copied_client.headers.update({"Authorization": f"Bearer {other_access_token}"})
+    return copied_client

@@ -30,7 +30,7 @@ app = init_sqladmin(app)
 
 @app.get("/")
 def root():
-    return {"message": "Welcome to the FastAPI Applicatoin!"}
+    return {"message": "Welcome to the FastAPI Application!"}
 
 
 @app.get("/up")
