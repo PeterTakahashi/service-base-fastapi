@@ -1,4 +1,4 @@
-# Service Base FastAPI
+# 🚀 Service Base for Generative AI APIs — FastAPI & React
 
 <img src="docs/img/front/home.png" width="700" />
 
@@ -6,21 +6,39 @@ A robust and scalable FastAPI boilerplate for building modern web services. This
 
 ## Table of Contents
 
-- [Features](#features)
-- [Related Projects](#related-projects)
-- [Installation](#installation)
-  - [Prerequisites](#prerequisites)
-  - [Get Started on Local](#get-started-on-local)
-- [Local Development](#local-development)
-  - [Docker Commands](#docker-commands)
-  - [Database Management](#database-management)
-  - [Code Quality](#code-quality)
-- [API Documentation](#api-documentation)
-- [Admin Panel](#admin-panel)
-- [Deployment](#deployment)
-- [Screenshots](#screenshots)
-- [Contributing](#contributing)
-- [License](#license)
+- [🚀 Service Base for Generative AI APIs — FastAPI \& React](#-service-base-for-generative-ai-apis--fastapi--react)
+  - [Table of Contents](#table-of-contents)
+  - [Features](#features)
+  - [Related Projects](#related-projects)
+  - [Installation](#installation)
+    - [Prerequisites](#prerequisites)
+    - [Get Started on Local](#get-started-on-local)
+  - [Local Development](#local-development)
+    - [Docker Commands](#docker-commands)
+    - [Database Management](#database-management)
+    - [Code Quality](#code-quality)
+  - [API Documentation](#api-documentation)
+  - [Admin Panel](#admin-panel)
+  - [Deployment](#deployment)
+    - [Terraform](#terraform)
+      - [Create IAM Service Account and Attach Roles](#create-iam-service-account-and-attach-roles)
+      - [Configure Terraform State Bucket](#configure-terraform-state-bucket)
+      - [Apply Terraform Changes](#apply-terraform-changes)
+  - [Screenshots](#screenshots)
+    - [SignIn](#signin)
+    - [Account](#account)
+    - [Add Funds](#add-funds)
+    - [API Key List](#api-key-list)
+    - [Create API Key](#create-api-key)
+    - [Edit Email](#edit-email)
+    - [Forgot Password](#forgot-password)
+    - [Home](#home)
+    - [Input Card](#input-card)
+    - [Sign Up](#sign-up)
+    - [Transactions](#transactions)
+    - [Wallet](#wallet)
+  - [Contributing](#contributing)
+  - [License](#license)
 
 ## Features
 
@@ -53,23 +71,27 @@ A robust and scalable FastAPI boilerplate for building modern web services. This
 ### Get Started on Local
 
 1.  **Clone the backend repository:**
+
     ```sh
     git clone git@github.com:PeterTakahashi/service-base-fastapi.git
     cd service-base-fastapi
     ```
 
 2.  **Set up environment variables:**
+
     ```sh
     cp .env.example .env
     # Edit .env with your specific configurations if needed
     ```
 
 3.  **Start the backend services with Docker Compose:**
+
     ```sh
     docker compose up -d
     ```
 
 4.  **Access the backend container and run database migrations:**
+
     ```sh
     docker exec -it service-base-web bash
     source .venv/bin/activate
@@ -79,6 +101,7 @@ A robust and scalable FastAPI boilerplate for building modern web services. This
     ```
 
 5.  **Start the frontend (if applicable, from its own directory):**
+
     ```sh
     # Assuming you have cloned the frontend repository in a sibling directory
     # cd ../service-base-react-vite
@@ -98,88 +121,88 @@ A robust and scalable FastAPI boilerplate for building modern web services. This
 
 ### Docker Commands
 
--   **Access the backend web container:**
-    ```bash
-    docker exec -it service-base-web bash
-    source .venv/bin/activate
-    ```
--   **Stop and remove all services, including volumes (for a clean slate):**
-    ```bash
-    docker compose down -v
-    ```
+- **Access the backend web container:**
+  ```bash
+  docker exec -it service-base-web bash
+  source .venv/bin/activate
+  ```
+- **Stop and remove all services, including volumes (for a clean slate):**
+  ```bash
+  docker compose down -v
+  ```
 
 ### Database Management
 
--   **Reset Database (clean slate):**
-    ```bash
-    docker compose down -v
-    docker compose up -d
-    docker exec -it service-base-web bash
-    source .venv/bin/activate
-    alembic revision --autogenerate -m "init" # Only if starting from scratch or major schema change
-    alembic upgrade head
-    ENV=test alembic upgrade head # For test environment
-    exit
-    ```
--   **Create new database migration file:**
-    ```bash
-    docker exec -it service-base-web bash
-    source .venv/bin/activate
-    alembic revision --autogenerate -m "Your migration message here"
-    exit
-    ```
--   **Apply database migrations:**
-    ```bash
-    docker exec -it service-base-web bash
-    source .venv/bin/activate
-    alembic upgrade head
-    ENV=test alembic upgrade head # For test environment
-    exit
-    ```
--   **Generate schema and repository files:**
-    ```bash
-    docker exec -it service-base-web bash
-    source .venv/bin/activate
-    python -m scripts.create_schema
-    python scripts/generate_repositories_from_models.py
-    python scripts/generate_repository_dependencies.py
-    python scripts/generate_repository_fixtures.py
-    exit
-    ```
+- **Reset Database (clean slate):**
+  ```bash
+  docker compose down -v
+  docker compose up -d
+  docker exec -it service-base-web bash
+  source .venv/bin/activate
+  alembic revision --autogenerate -m "init" # Only if starting from scratch or major schema change
+  alembic upgrade head
+  ENV=test alembic upgrade head # For test environment
+  exit
+  ```
+- **Create new database migration file:**
+  ```bash
+  docker exec -it service-base-web bash
+  source .venv/bin/activate
+  alembic revision --autogenerate -m "Your migration message here"
+  exit
+  ```
+- **Apply database migrations:**
+  ```bash
+  docker exec -it service-base-web bash
+  source .venv/bin/activate
+  alembic upgrade head
+  ENV=test alembic upgrade head # For test environment
+  exit
+  ```
+- **Generate schema and repository files:**
+  ```bash
+  docker exec -it service-base-web bash
+  source .venv/bin/activate
+  python -m scripts.create_schema
+  python scripts/generate_repositories_from_models.py
+  python scripts/generate_repository_dependencies.py
+  python scripts/generate_repository_fixtures.py
+  exit
+  ```
 
 ### Code Quality
 
--   **Run tests and generate coverage report:**
-    ```bash
-    docker exec -it service-base-web bash
-    source .venv/bin/activate
-    pytest --cov=app --cov-report=term-missing --cov-report=html
-    open htmlcov/index.html # Open coverage report in browser (if on macOS)
-    exit
-    ```
--   **Format code with Black and Ruff:**
-    ```bash
-    black .
-    ruff check . --fix
-    ```
--   **Check code with Ruff and MyPy:**
-    ```bash
-    ruff check .
-    mypy --config-file mypy.ini .
-    ```
+- **Run tests and generate coverage report:**
+  ```bash
+  docker exec -it service-base-web bash
+  source .venv/bin/activate
+  pytest --cov=app --cov-report=term-missing --cov-report=html
+  open htmlcov/index.html # Open coverage report in browser (if on macOS)
+  exit
+  ```
+- **Format code with Black and Ruff:**
+  ```bash
+  black .
+  ruff check . --fix
+  ```
+- **Check code with Ruff and MyPy:**
+  ```bash
+  ruff check .
+  mypy --config-file mypy.ini .
+  ```
 
 ## API Documentation
 
--   **Local OpenAPI (Swagger UI):** [http://127.0.0.1:8000/app/v1/docs](http://127.0.0.1:8000/app/v1/docs)
--   **Local OpenAPI (JSON):** [http://127.0.0.1:8000/app/v1/openapi.json](http://127.0.0.1:8000/app/v1/openapi.json)
--   **Deployed OpenAPI (Swagger UI):** [https://service-base-fastapi-swagger.vercel.app](https://service-base-fastapi-swagger.vercel.app)
--   **Deployed OpenAPI (JSON):** [https://raw.githubusercontent.com/PeterTakahashi/service-base-fastapi/refs/heads/main/docs/openapi.json](https://raw.githubusercontent.com/PeterTakahashi/service-base-fastapi/refs/heads/main/docs/openapi.json)
+- **Local OpenAPI (Swagger UI):** [http://127.0.0.1:8000/app/v1/docs](http://127.0.0.1:8000/app/v1/docs)
+- **Local OpenAPI (JSON):** [http://127.0.0.1:8000/app/v1/openapi.json](http://127.0.0.1:8000/app/v1/openapi.json)
+- **Deployed OpenAPI (Swagger UI):** [https://service-base-fastapi-swagger.vercel.app](https://service-base-fastapi-swagger.vercel.app)
+- **Deployed OpenAPI (JSON):** [https://raw.githubusercontent.com/PeterTakahashi/service-base-fastapi/refs/heads/main/docs/openapi.json](https://raw.githubusercontent.com/PeterTakahashi/service-base-fastapi/refs/heads/main/docs/openapi.json)
 
 ## Admin Panel
 
--   **Local Admin Login:** [http://127.0.0.1:8000/admin/login](http://127.0.0.1:8000/admin/login)
-    -   **Username:** `admin`
-    -   **Password:** `password`
+- **Local Admin Login:** [http://127.0.0.1:8000/admin/login](http://127.0.0.1:8000/admin/login)
+  - **Username:** `admin`
+  - **Password:** `password`
 
 ## Deployment
 
@@ -190,6 +213,7 @@ This section outlines the steps for deploying the application using Terraform, p
 #### Create IAM Service Account and Attach Roles
 
 1.  **Create Service Account:**
+
     ```sh
     cd terraform/infra
     gcloud iam service-accounts create service-base-deployment-user \
@@ -197,6 +221,7 @@ This section outlines the steps for deploying the application using Terraform, p
     ```
 
 2.  **Grant Roles to Service Account:**
+
     ```sh
     SERVICE_ACCOUNT_EMAIL=$(gcloud iam service-accounts list \
       --filter="displayName:Service Account for CI deployment" \
@@ -244,6 +269,7 @@ gsutil mb -p $GCP_PROJECT_ID -l us-central1 gs://aiproject-terraform-state/ # Re
 #### Apply Terraform Changes
 
 1.  **Set Terraform Variables:**
+
     ```sh
     export TF_VAR_project_id="aiproject-460606" # Replace with your GCP Project ID
     export TF_VAR_db_password="" # Set your database password
@@ -257,6 +283,7 @@ gsutil mb -p $GCP_PROJECT_ID -l us-central1 gs://aiproject-terraform-state/ # Re
     ```
 
 2.  **Get Kubernetes Cluster Credentials:**
+
     ```sh
     gcloud container clusters get-credentials service-base-auth-ap-cluster \
       --region us-central1 \
