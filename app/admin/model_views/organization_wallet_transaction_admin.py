@@ -2,7 +2,9 @@ from sqladmin import ModelView
 from app.models.organization_wallet_transaction import OrganizationWalletTransaction
 
 
-class OrganizationWalletTransactionAdmin(ModelView, model=OrganizationWalletTransaction):
+class OrganizationWalletTransactionAdmin(
+    ModelView, model=OrganizationWalletTransaction
+):
     name = "Organization Wallet Transaction"
     name_plural = "Organization Wallet Transactions"
 
