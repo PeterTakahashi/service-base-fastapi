@@ -1,117 +1,117 @@
-name: Deploy
+# name: Deploy
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches: [main, develop]
+# on:
+#   push:
+#     branches:
+#       - main
+#   pull_request:
+#     branches: [main, develop]
 
-jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
-    env:
-      ENV_NAME: "production"
-    steps:
-      - name: Check out
-        uses: actions/checkout@v3
+# jobs:
+#   build-and-deploy:
+#     runs-on: ubuntu-latest
+#     env:
+#       ENV_NAME: "production"
+#     steps:
+#       - name: Check out
+#         uses: actions/checkout@v3
 
-      - name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@v1
-        with:
-          credentials_json: ${{ secrets.GCP_CREDENTIALS_JSON }}
+#       - name: Authenticate to Google Cloud
+#         uses: google-github-actions/auth@v1
+#         with:
+#           credentials_json: ${{ secrets.GCP_CREDENTIALS_JSON }}
 
-      - name: Set up gcloud
-        uses: google-github-actions/setup-gcloud@v1
-        with:
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
+#       - name: Set up gcloud
+#         uses: google-github-actions/setup-gcloud@v1
+#         with:
+#           project_id: ${{ secrets.GCP_PROJECT_ID }}
 
-      - name: Get GKE Credentials
-        id: get-gke-credentials
-        uses: google-github-actions/get-gke-credentials@v2
-        with:
-          cluster_name: "service-base-auth-ap-cluster"
-          location: ${{ secrets.GCP_REGION }}
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
+#       - name: Get GKE Credentials
+#         id: get-gke-credentials
+#         uses: google-github-actions/get-gke-credentials@v2
+#         with:
+#           cluster_name: "service-base-auth-ap-cluster"
+#           location: ${{ secrets.GCP_REGION }}
+#           project_id: ${{ secrets.GCP_PROJECT_ID }}
 
-      # - name: Install Terraform
-      #   uses: hashicorp/setup-terraform@v2
+#       # - name: Install Terraform
+#       #   uses: hashicorp/setup-terraform@v2
 
-      # - name: Terraform Init
-      #   working-directory: ./terraform/infra
-      #   run: terraform init -input=false
+#       # - name: Terraform Init
+#       #   working-directory: ./terraform/infra
+#       #   run: terraform init -input=false
 
-      # - name: Terraform Plan
-      #   working-directory: ./terraform/infra
-      #   env:
-      #     KUBECONFIG: ${{ steps.get-gke-credentials.outputs.kubeconfig_path }}
-      #     TF_VAR_project_id: ${{ secrets.GCP_PROJECT_ID }}
-      #     TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
-      #     TF_VAR_github_oauth_client_id: ${{ secrets.GIT_HUB_OAUTH_CLIENT_ID }}
-      #     TF_VAR_github_oauth_client_secret: ${{ secrets.GIT_HUB_OAUTH_CLIENT_SECRET }}
-      #     TF_VAR_google_oauth_client_id: ${{ secrets.GOOGLE_OAUTH_CLIENT_ID }}
-      #     TF_VAR_google_oauth_client_secret: ${{ secrets.GOOGLE_OAUTH_CLIENT_SECRET }}
-      #     TF_VAR_docker_username: ${{ secrets.DOCKERHUB_USERNAME }}
-      #     TF_VAR_docker_password: ${{ secrets.DOCKERHUB_TOKEN }}
-      #     TF_VAR_docker_email: ${{ secrets.DOCKERHUB_EMAIL }}
-      #   run: terraform plan -lock=false
+#       # - name: Terraform Plan
+#       #   working-directory: ./terraform/infra
+#       #   env:
+#       #     KUBECONFIG: ${{ steps.get-gke-credentials.outputs.kubeconfig_path }}
+#       #     TF_VAR_project_id: ${{ secrets.GCP_PROJECT_ID }}
+#       #     TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
+#       #     TF_VAR_github_oauth_client_id: ${{ secrets.GIT_HUB_OAUTH_CLIENT_ID }}
+#       #     TF_VAR_github_oauth_client_secret: ${{ secrets.GIT_HUB_OAUTH_CLIENT_SECRET }}
+#       #     TF_VAR_google_oauth_client_id: ${{ secrets.GOOGLE_OAUTH_CLIENT_ID }}
+#       #     TF_VAR_google_oauth_client_secret: ${{ secrets.GOOGLE_OAUTH_CLIENT_SECRET }}
+#       #     TF_VAR_docker_username: ${{ secrets.DOCKERHUB_USERNAME }}
+#       #     TF_VAR_docker_password: ${{ secrets.DOCKERHUB_TOKEN }}
+#       #     TF_VAR_docker_email: ${{ secrets.DOCKERHUB_EMAIL }}
+#       #   run: terraform plan -lock=false
 
-      # - name: Terraform Apply
-      #   working-directory: ./terraform/infra
-      #   env:
-      #     KUBECONFIG: ${{ steps.get-gke-credentials.outputs.kubeconfig_path }}
-      #     TF_VAR_project_id: ${{ secrets.GCP_PROJECT_ID }}
-      #     TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
-      #     TF_VAR_github_oauth_client_id: ${{ secrets.GIT_HUB_OAUTH_CLIENT_ID }}
-      #     TF_VAR_github_oauth_client_secret: ${{ secrets.GIT_HUB_OAUTH_CLIENT_SECRET }}
-      #     TF_VAR_google_oauth_client_id: ${{ secrets.GOOGLE_OAUTH_CLIENT_ID }}
-      #     TF_VAR_google_oauth_client_secret: ${{ secrets.GOOGLE_OAUTH_CLIENT_SECRET }}
-      #     TF_VAR_docker_username: ${{ secrets.DOCKERHUB_USERNAME }}
-      #     TF_VAR_docker_password: ${{ secrets.DOCKERHUB_TOKEN }}
-      #     TF_VAR_docker_email: ${{ secrets.DOCKERHUB_EMAIL }}
-      #   run: terraform apply -auto-approve -lock=false
+#       # - name: Terraform Apply
+#       #   working-directory: ./terraform/infra
+#       #   env:
+#       #     KUBECONFIG: ${{ steps.get-gke-credentials.outputs.kubeconfig_path }}
+#       #     TF_VAR_project_id: ${{ secrets.GCP_PROJECT_ID }}
+#       #     TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
+#       #     TF_VAR_github_oauth_client_id: ${{ secrets.GIT_HUB_OAUTH_CLIENT_ID }}
+#       #     TF_VAR_github_oauth_client_secret: ${{ secrets.GIT_HUB_OAUTH_CLIENT_SECRET }}
+#       #     TF_VAR_google_oauth_client_id: ${{ secrets.GOOGLE_OAUTH_CLIENT_ID }}
+#       #     TF_VAR_google_oauth_client_secret: ${{ secrets.GOOGLE_OAUTH_CLIENT_SECRET }}
+#       #     TF_VAR_docker_username: ${{ secrets.DOCKERHUB_USERNAME }}
+#       #     TF_VAR_docker_password: ${{ secrets.DOCKERHUB_TOKEN }}
+#       #     TF_VAR_docker_email: ${{ secrets.DOCKERHUB_EMAIL }}
+#       #   run: terraform apply -auto-approve -lock=false
 
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+#       - name: Log in to Docker Hub
+#         uses: docker/login-action@v2
+#         with:
+#           username: ${{ secrets.DOCKERHUB_USERNAME }}
+#           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and Push Docker Image
-        run: |
-          IMAGE_NAME="takahashiseiya/service-base-fastapi-web"
-          COMMIT_SHA="${{ github.sha }}"
-          SHORT_SHA=$(echo "$COMMIT_SHA" | cut -c1-7)
+#       - name: Build and Push Docker Image
+#         run: |
+#           IMAGE_NAME="takahashiseiya/service-base-fastapi-web"
+#           COMMIT_SHA="${{ github.sha }}"
+#           SHORT_SHA=$(echo "$COMMIT_SHA" | cut -c1-7)
 
-          docker build -t $IMAGE_NAME:$SHORT_SHA -f Dockerfile.prod .
-          docker push $IMAGE_NAME:$SHORT_SHA
-          docker tag $IMAGE_NAME:$SHORT_SHA $IMAGE_NAME:latest
-          docker push $IMAGE_NAME:latest
+#           docker build -t $IMAGE_NAME:$SHORT_SHA -f Dockerfile.prod .
+#           docker push $IMAGE_NAME:$SHORT_SHA
+#           docker tag $IMAGE_NAME:$SHORT_SHA $IMAGE_NAME:latest
+#           docker push $IMAGE_NAME:latest
 
-      - name: Deploy to GKE
-        run: |
-          export IMAGE_TAG=$(echo "${{ github.sha }}" | cut -c1-7)
-          export NAMESPACE=${ENV_NAME}
-          export CLOUD_SQL_INSTANCE_CONNECTION_NAME="${{ secrets.GCP_PROJECT_ID}}:${{ secrets.GCP_REGION}}:service-base-auth-postgres"
-          export API_DOMAIN=${{ secrets.API_DOMAIN }}
+#       - name: Deploy to GKE
+#         run: |
+#           export IMAGE_TAG=$(echo "${{ github.sha }}" | cut -c1-7)
+#           export NAMESPACE=${ENV_NAME}
+#           export CLOUD_SQL_INSTANCE_CONNECTION_NAME="${{ secrets.GCP_PROJECT_ID}}:${{ secrets.GCP_REGION}}:service-base-auth-postgres"
+#           export API_DOMAIN=${{ secrets.API_DOMAIN }}
 
-          envsubst < k8s/namespace.yaml.template > k8s/namespace.yaml
-          kubectl apply -f k8s/namespace.yaml
+#           envsubst < k8s/namespace.yaml.template > k8s/namespace.yaml
+#           kubectl apply -f k8s/namespace.yaml
 
-          kubectl apply -f k8s/fastapi/frontendconfig.yaml --namespace $NAMESPACE
+#           kubectl apply -f k8s/fastapi/frontendconfig.yaml --namespace $NAMESPACE
 
-          envsubst < k8s/fastapi/ingress.yaml.template > k8s/fastapi/ingress.yaml
-          kubectl apply -f k8s/fastapi/ingress.yaml --namespace $NAMESPACE
+#           envsubst < k8s/fastapi/ingress.yaml.template > k8s/fastapi/ingress.yaml
+#           kubectl apply -f k8s/fastapi/ingress.yaml --namespace $NAMESPACE
 
-          envsubst < k8s/fastapi/deployment.yaml.template > k8s/fastapi/deployment.yaml
+#           envsubst < k8s/fastapi/deployment.yaml.template > k8s/fastapi/deployment.yaml
 
-          # FastAPIデプロイ
-          kubectl apply -f k8s/fastapi/service-account.yaml --namespace $NAMESPACE
-          kubectl apply -f k8s/fastapi/deployment.yaml --namespace $NAMESPACE
-          kubectl apply -f k8s/fastapi/service.yaml --namespace $NAMESPACE
-          kubectl delete -f k8s/fastapi/horizontal-pod-autoscaler.yaml --namespace $NAMESPACE
+#           # FastAPIデプロイ
+#           kubectl apply -f k8s/fastapi/service-account.yaml --namespace $NAMESPACE
+#           kubectl apply -f k8s/fastapi/deployment.yaml --namespace $NAMESPACE
+#           kubectl apply -f k8s/fastapi/service.yaml --namespace $NAMESPACE
+#           kubectl delete -f k8s/fastapi/horizontal-pod-autoscaler.yaml --namespace $NAMESPACE
 
-          envsubst < k8s/fastapi/managed-cert.yaml.template > k8s/fastapi/managed-cert.yaml
-          kubectl apply -f k8s/fastapi/managed-cert.yaml --namespace $NAMESPACE
+#           envsubst < k8s/fastapi/managed-cert.yaml.template > k8s/fastapi/managed-cert.yaml
+#           kubectl apply -f k8s/fastapi/managed-cert.yaml --namespace $NAMESPACE
 
-          # kubectl rollout status deployment/fastapi-app --namespace $NAMESPACE
+#           # kubectl rollout status deployment/fastapi-app --namespace $NAMESPACE
