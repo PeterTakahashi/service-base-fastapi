@@ -103,11 +103,11 @@ A robust and scalable FastAPI boilerplate for building modern web services. This
 5.  **Start the frontend (if applicable, from its own directory):**
 
     ```sh
-    # Assuming you have cloned the frontend repository in a sibling directory
-    # cd ../service-base-react-vite
-    # npm install
-    # cp .env.example .env
-    # npm run dev
+    git clone git@github.com:PeterTakahashi/service-base-react-vite
+    cd service-base-react-vite
+    npm install
+    cp .env.example .env
+    npm run dev
     ```
 
 6.  **Set up Stripe local server (for webhook testing):**
