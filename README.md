@@ -2,13 +2,18 @@
 
 <img src="docs/img/front/home.png" width="700" />
 
+api docs: https://raw.githubusercontent.com/PeterTakahashi/service-base-fastapi/refs/heads/main/docs/openapi.json
+storybook: https://service-base-react-vite-storybook.vercel.app/?path=/docs/configure-your-project--docs
+backend repository: https://github.com/PeterTakahashi/service-base-fastapi.git
+frontend repository: https://github.com/PeterTakahashi/service-base-react-vite.git
+
 ## Installation
 
 ### Get Start on local
 
 ```sh
 # start backend
-git clone
+git clone git@github.com:PeterTakahashi/service-base-fastapi.git
 cp .env.example .env
 docker compose up
 docker exec -it service-base-web bash
