@@ -99,10 +99,13 @@ mypy --config-file mypy.ini .
 #### OpenAPI
 
 html
-http://localhost:8000/app/v1/docs
+local: http://localhost:8000/app/v1/docs
+server: https://service-base-fastapi-swagger.vercel.app
 
 json
-http://0.0.0.0:8000/app/v1/openapi.json
+local: http://0.0.0.0:8000/app/v1/openapi.json
+server: https://raw.githubusercontent.com/PeterTakahashi/service-base-fastapi/refs/heads/main/docs/openapi.json
+
 
 http://127.0.0.1:8000/admin/login
 username: `admin`
