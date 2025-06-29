@@ -63,6 +63,7 @@ class Settings(BaseSettings):
     STRIPE_BUSINESS_TAX_CODE: str = "txcd_10103001"
 
 
-print("Loading environment variables...")
-print(f"DATABASE_URL: {os.getenv('DATABASE_URL')}")
 settings = Settings()
+
+print("Loading environment variables...")
+print(f"DATABASE_URL: {settings.DATABASE_URL}")

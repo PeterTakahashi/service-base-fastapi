@@ -102,10 +102,85 @@ html
 http://localhost:8000/app/v1/docs
 
 json
-http://localhost:8000/app/v1/docsopenapi.json
-
-#### Admin Console
+http://0.0.0.0:8000/app/v1/openapi.json
 
 http://127.0.0.1:8000/admin/login
 username: `admin`
 password: `password`
+
+## deployment
+
+### terraform
+
+#### create iam and attach role
+
+create service user
+
+```sh
+cd terraform/infra
+gcloud iam service-accounts create service-base-deployment-user \
+  --display-name "Service Account for CI deployment"
+```
+
+```sh
+SERVICE_ACCOUNT_EMAIL=$(gcloud iam service-accounts list \
+  --filter="displayName:Service Account for CI deployment" \
+  --format="value(email)")
+
+ROLES=(
+  "roles/container.developer"
+  "roles/compute.viewer"
+  "roles/iam.serviceAccountUser"
+  "roles/container.clusterViewer"
+  "roles/iam.serviceAccountAdmin"
+  "roles/container.admin"
+  "roles/servicenetworking.networksAdmin"
+  "roles/compute.networkAdmin"
+  "roles/cloudsql.admin"
+  "roles/storage.admin"
+  "roles/cloudsql.client"
+  "roles/cloudsql.viewer"
+)
+
+GCP_PROJECT_ID="aiproject-460606"
+
+for ROLE in "${ROLES[@]}"; do
+  gcloud projects add-iam-policy-binding "$GCP_PROJECT_ID" \
+    --member="serviceAccount:$SERVICE_ACCOUNT_EMAIL" \
+    --role="$ROLE"
+done
+```
+
+```sh
+gcloud iam service-accounts keys create service-account-key.json \
+  --iam-account="$SERVICE_ACCOUNT_EMAIL"
+export GOOGLE_APPLICATION_CREDENTIALS=./service-account-key.json
+```
+
+### bucket create for remaining terraform state
+
+```sh
+gsutil mb -p $GCP_PROJECT_ID -l us-central1 gs://aiproject-terraform-state/
+```
+
+#### change resource
+
+```sh
+export TF_VAR_project_id="aiproject-460606"
+export TF_VAR_db_password=""
+export TF_VAR_github_oauth_client_id=""
+export TF_VAR_github_oauth_client_secret=""
+export TF_VAR_google_oauth_client_id=""
+export TF_VAR_google_oauth_client_secret=""
+export TF_VAR_docker_username=""
+export TF_VAR_docker_password=""
+export TF_VAR_docker_email=""
+
+gcloud container clusters get-credentials service-base-auth-ap-cluster \
+  --region us-central1 \
+  --project aiproject-460606
+
+terraform init
+terraform plan
+terraform apply
+```

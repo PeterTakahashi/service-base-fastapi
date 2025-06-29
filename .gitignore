@@ -48,3 +48,9 @@ coverage.txt
 .pytest_cache
 .mypy_cache
 htmlcov
+
+terraform/infra/.terraform
+terraform/infra/terraform.tfstate.backup
+terraform/infra/terraform.tfstate
+terraform/infra/.terraform.tfstate.lock.info
+terraform/infra/service-account-key.json

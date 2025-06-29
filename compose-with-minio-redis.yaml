@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgres:15
+    image: postgres:17
     container_name: service-base-db
     ports:
       - "5432:5432"
@@ -31,16 +31,6 @@ services:
     depends_on:
       - db
       - minio
-      - redis
-    networks:
-      - service-base_default
-
-  sendria:
-    image: msztolcman/sendria:v2.2.2.0
-    container_name: service-base-sendria
-    ports:
-      - "1025:1025" # SMTP
-      - "1080:1080" # Web UI
     networks:
       - service-base_default
 
@@ -59,7 +49,6 @@ services:
     command: -c "minio server /data --address :9000 --console-address :9090;"
     networks:
       - service-base_default
-
   minio-console:
     image: minio/mc
     container_name: service-base-mc
@@ -83,8 +72,18 @@ services:
     networks:
       - service-base_default
 
+  sendria:
+    image: msztolcman/sendria:v2.2.2.0
+    container_name: service-base-sendria
+    ports:
+      - "1025:1025" # SMTP
+      - "1080:1080" # Web UI
+    networks:
+      - service-base_default
+
 volumes:
   postgres_data:
+  minio-volume:
   pgadmin-data:
 
 networks:

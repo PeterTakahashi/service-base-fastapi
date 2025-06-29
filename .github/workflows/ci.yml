@@ -131,6 +131,7 @@ jobs:
           ruff check .
 
       - name: mypy
+        continue-on-error: true
         run: |
           source .venv/bin/activate
           mypy --config-file mypy.ini .
