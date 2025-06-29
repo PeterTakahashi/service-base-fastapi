@@ -17,7 +17,14 @@ ENV=test alembic upgrade head
 # start frontend
 git clone
 npm install
+cp .env.example .env
 npm run dev
+
+# start stripe local server
+# ref: https://docs.stripe.com/cli/listen
+# stripe test card: https://docs.stripe.com/testing
+stripe listen --events=payment_intent.succeeded --forward-to http://127.0.0.1:8000/app/v1/payment-intents/webhook
+
 ```
 
 ### Local setup
@@ -34,15 +41,6 @@ open htmlcov/index.html # if you wanna see cov report
 open http://localhost:1080 # open mail log
 open http://127.0.0.1:8000/app/v1/docs # open api docs
 ```
-
-### start stripe local server
-
-```sh
-stripe listen --events=payment_intent.succeeded --forward-to http://127.0.0.1:8000/app/v1/payment-intents/webhook
-```
-
-ref: https://docs.stripe.com/cli/listen
-stripe test card: https://docs.stripe.com/testing
 
 ### reset db
 
@@ -109,3 +107,5 @@ http://localhost:8000/app/v1/docsopenapi.json
 #### Admin Console
 
 http://127.0.0.1:8000/admin/login
+username: `admin`
+password: `password`
