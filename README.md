@@ -2,6 +2,24 @@
 
 ## Installation
 
+### Get Start on local
+
+```sh
+# start backend
+git clone
+cp .env.example .env
+docker compose up
+docker exec -it service-base-web bash
+source .venv/bin/activate
+alembic upgrade head
+ENV=test alembic upgrade head
+
+# start frontend
+git clone
+npm install
+npm run dev
+```
+
 ### Local setup
 
 #### Docker
@@ -15,7 +33,6 @@ open htmlcov/index.html # if you wanna see cov report
 
 open http://localhost:1080 # open mail log
 open http://127.0.0.1:8000/app/v1/docs # open api docs
-
 ```
 
 ### start stripe local server
@@ -46,8 +63,6 @@ alembic revision --autogenerate -m ""
 ```
 
 #### db migrate
-
-for development
 
 ```bash
 alembic upgrade head
@@ -86,10 +101,10 @@ mypy --config-file mypy.ini .
 #### OpenAPI
 
 html
-http://0.0.0.0:8000/app/v1/docs#/
+http://localhost:8000/app/v1/docs
 
 json
-http://0.0.0.0:8000/app/v1/openapi.json
+http://localhost:8000/app/v1/docsopenapi.json
 
 #### Admin Console
 
