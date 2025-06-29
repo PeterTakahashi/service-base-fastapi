@@ -1,5 +1,7 @@
 # Service Base FastAPI
 
+<img src="docs/img/front/home.png" width="700" />
+
 ## Installation
 
 ### Get Start on local
@@ -106,7 +108,6 @@ json
 local: http://0.0.0.0:8000/app/v1/openapi.json
 server: https://raw.githubusercontent.com/PeterTakahashi/service-base-fastapi/refs/heads/main/docs/openapi.json
 
-
 http://127.0.0.1:8000/admin/login
 username: `admin`
 password: `password`
@@ -187,3 +188,53 @@ terraform init
 terraform plan
 terraform apply
 ```
+
+## screan shots
+
+### SignIn
+
+<img src="docs/img/front/signin.png" width="700" />
+
+### Account
+
+<img src="docs/img/front/account.png" width="700" />
+
+### Add Funds
+
+<img src="docs/img/front/addfunds.png" width="700" />
+
+### API Key List
+
+<img src="docs/img/front/apikeylist.png" width="700" />
+
+### Create API Key
+
+<img src="docs/img/front/createapikey.png" width="700" />
+
+### Edit Email
+
+<img src="docs/img/front/editemail.png" width="700" />
+
+### Forgot Password
+
+<img src="docs/img/front/forgotpassword.png" width="700" />
+
+### Home
+
+<img src="docs/img/front/home.png" width="700" />
+
+### Input Card
+
+<img src="docs/img/front/inputcard.png" width="700" />
+
+### Sign Up
+
+<img src="docs/img/front/signup.png" width="700" />
+
+### Transactions
+
+<img src="docs/img/front/transactions.png" width="700" />
+
+### Wallet
+
+<img src="docs/img/front/wallet.png" width="700" />
