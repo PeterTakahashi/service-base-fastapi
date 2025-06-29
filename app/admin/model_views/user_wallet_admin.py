@@ -15,6 +15,8 @@ class UserWalletAdmin(ModelView, model=UserWallet):
         "balance",
         "created_at",
         "updated_at",
+        "user",
+        "user_wallet_transactions",
     ]
 
     form_columns = [

@@ -17,11 +17,21 @@ class ErrorCode(str, Enum):
     VALIDATION_ERROR = "validation_error"
     INVALID_PAYLOAD = "invalid_payload"
     UNAUTHORIZED = "unauthorized"
+    UNAUTHORIZED_API_KEY = "unauthorized_api_key"
     NOT_FOUND = "not_found"
-    INVALID_API_KEY = "invalid_api_key"
     INVALID_IP = "invalid_ip"
     INVALID_ORIGIN = "invalid_origin"
     EXPIRED_API_KEY = "expired_api_key"
     LOGIN_ACCOUNT_LOCKED = "login_account_locked"
     INVALID_STATE_TOKEN = "invalid_state_token"
     INTERNAL_SERVER_ERROR = "internal_server_error"
+    USER_ORGANIZATION_INVITATION_NOT_FOUND = "user_organization_invitation_not_found"
+    USER_ORGANIZATION_INVITATION_EXPIRED = "user_organization_invitation_expired"
+    USER_ORGANIZATION_INVITATION_ALREADY_ASSIGNED = (
+        "user_organization_invitation_already_assigned"
+    )
+    ORGANIZATION_LAST_USER_CANNOT_BE_DELETED = (
+        "organization_last_user_cannot_be_deleted"
+    )
+    FAILED_TO_CREATE_PAYMENT_INTENT = "failed_to_create_payment_intent"
+    FAILED_TO_WEBHOOK_PAYMENT_INTENT_UPDATE = "failed_to_webhook_payment_intent_update"

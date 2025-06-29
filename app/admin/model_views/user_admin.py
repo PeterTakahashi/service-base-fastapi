@@ -16,6 +16,12 @@ class UserAdmin(ModelView, model=User):
         "locked_until",
         "is_superuser",
         "created_at",
+        "oauth_accounts",
+        "user_wallet",
+        "user_api_keys",
+        "user_organization_assignments",
+        "user_organization_invitations",
+        "address",
     ]
 
     form_columns = [

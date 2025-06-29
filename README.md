@@ -9,11 +9,22 @@
 git clone
 cp .env.example .env
 docker compose up
+docker exec -it service-base-web bash
+source .venv/bin/activate
+alembic upgrade head
+ENV=test alembic upgrade head
 
 # start frontend
 git clone
 npm install
+cp .env.example .env
 npm run dev
+
+# start stripe local server
+# ref: https://docs.stripe.com/cli/listen
+# stripe test card: https://docs.stripe.com/testing
+stripe listen --events=payment_intent.succeeded --forward-to http://127.0.0.1:8000/app/v1/payment-intents/webhook
+
 ```
 
 ### Local setup
@@ -29,17 +40,19 @@ open htmlcov/index.html # if you wanna see cov report
 
 open http://localhost:1080 # open mail log
 open http://127.0.0.1:8000/app/v1/docs # open api docs
-
 ```
 
-### start stripe local server
+### reset db
 
-```sh
-stripe listen --events=payment_intent.succeeded --forward-to http://127.0.0.1:8000/app/v1/payment-intents/webhook
 ```
-
-ref: https://docs.stripe.com/cli/listen
-stripe test card: https://docs.stripe.com/testing
+docker compose down -v
+docker compose up -d
+docker exec -it service-base-web bash
+source .venv/bin/activate
+alembic revision --autogenerate -m "init"
+alembic upgrade head
+ENV=test alembic upgrade head
+```
 
 #### create db migration file
 
@@ -49,15 +62,8 @@ alembic revision --autogenerate -m ""
 
 #### db migrate
 
-for development
-
 ```bash
 alembic upgrade head
-```
-
-for test
-
-```bash
 ENV=test alembic upgrade head
 ```
 
@@ -71,6 +77,9 @@ docker compose down -v
 
 ```bash
 python -m scripts.create_schema
+python scripts/generate_repositories_from_models.py
+python scripts/generate_repository_dependencies.py
+python scripts/generate_repository_fixtures.py
 ```
 
 #### code formatter
@@ -94,6 +103,10 @@ http://localhost:8000/app/v1/docs
 
 json
 http://0.0.0.0:8000/app/v1/openapi.json
+
+http://127.0.0.1:8000/admin/login
+username: `admin`
+password: `password`
 
 ## deployment
 

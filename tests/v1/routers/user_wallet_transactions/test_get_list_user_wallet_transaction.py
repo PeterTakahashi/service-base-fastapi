@@ -9,17 +9,15 @@ from app.lib.utils.convert_id import decode_id
 async def test_list_user_wallet_transactions_no_filter(
     mock_payment_intent_create_patch,
     auth_client: AsyncClient,
+    user,
     user_wallet_transaction_factory,
     user_wallet_repository,
-    user_wallet_factory,
-    other_user_wallet_transaction,
 ):
     """
     Test that all user_wallet transactions for the authenticated user are returned when no filter is provided.
     """
     # Create multiple transactions for the same user
-    user_wallets = await user_wallet_repository.where()
-    user_wallet = user_wallets[0]
+    user_wallet = await user_wallet_repository.find_by(user_id=user.id)
     tx1 = await user_wallet_transaction_factory.create(user_wallet=user_wallet)
     tx2 = await user_wallet_transaction_factory.create(user_wallet=user_wallet)
 
@@ -38,8 +36,8 @@ async def test_list_user_wallet_transactions_no_filter(
     for tx_data in data:
         assert "id" in tx_data
         assert "amount" in tx_data
-        assert "user_wallet_transaction_type" in tx_data
-        assert "user_wallet_transaction_status" in tx_data
+        assert "wallet_transaction_type" in tx_data
+        assert "wallet_transaction_status" in tx_data
 
 
 @pytest.mark.asyncio

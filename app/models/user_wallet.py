@@ -1,10 +1,10 @@
 from app.db.base import Base
-from sqlalchemy import ForeignKey, DateTime, func, Numeric
+from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship, Mapped, mapped_column
-from datetime import datetime
 from typing import List
 import fastapi_users_db_sqlalchemy
-from decimal import Decimal
+from app.models.mixin.timestamp import TimestampMixin
+from app.models.mixin.wallet import WalletMixin
 
 from typing import TYPE_CHECKING
 
@@ -13,34 +13,13 @@ if TYPE_CHECKING:
     from app.models.user_wallet_transaction import UserWalletTransaction
 
 
-class UserWallet(Base):
+class UserWallet(TimestampMixin, WalletMixin, Base):
     __tablename__ = "user_wallets"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     user_id: Mapped[fastapi_users_db_sqlalchemy.generics.GUID] = mapped_column(
-        ForeignKey("users.id"), nullable=False
+        ForeignKey("users.id", ondelete="CASCADE"), nullable=False
     )
-    stripe_customer_id: Mapped[str] = mapped_column(
-        nullable=False, unique=True, index=True
-    )
-    balance: Mapped[Decimal] = mapped_column(
-        Numeric(precision=38, scale=9, asdecimal=True, decimal_return_scale=True),
-        default=Decimal("0"),
-        nullable=False,
-    )
-
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True),
-        server_default=func.now(),
-        nullable=False,
-    )
-    updated_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True),
-        server_default=func.now(),
-        onupdate=func.now(),
-        nullable=False,
-    )
-
     user: Mapped["User"] = relationship(
         "User", back_populates="user_wallet", uselist=False
     )

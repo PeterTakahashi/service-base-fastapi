@@ -15,7 +15,6 @@ class ApiKeyAuthAPIRouter(BaseRouter):
                 description="Unauthorized access.",
                 api_exception_openapi_examples=[
                     APIExceptionOpenAPIExample(detail_code=ErrorCode.UNAUTHORIZED),
-                    APIExceptionOpenAPIExample(detail_code=ErrorCode.INVALID_API_KEY),
                     APIExceptionOpenAPIExample(detail_code=ErrorCode.INVALID_IP),
                     APIExceptionOpenAPIExample(detail_code=ErrorCode.INVALID_ORIGIN),
                     APIExceptionOpenAPIExample(detail_code=ErrorCode.EXPIRED_API_KEY),

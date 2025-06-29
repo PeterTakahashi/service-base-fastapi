@@ -4,6 +4,11 @@
     "title": "Unauthorized",
     "detail": "Authentication credentials were not provided or are invalid."
   },
+  "unauthorized_api_key": {
+    "openapi_example_summary": "API key is missing or invalid.",
+    "title": "Unauthorized API Key",
+    "detail": "The provided API key is missing or invalid. Please provide a valid API key."
+  },
   "unprocessable_entity": {
     "openapi_example_summary": "Request contains semantic errors.",
     "title": "Unprocessable Entity",
@@ -13,11 +18,6 @@
     "openapi_example_summary": "API key has expired.",
     "title": "Expired API Key",
     "detail": "The provided API key has expired. Please obtain a new API key."
-  },
-  "invalid_api_key": {
-    "openapi_example_summary": "API key is invalid.",
-    "title": "Invalid API Key",
-    "detail": "The provided API key is invalid. Please check your API key and try again."
   },
   "invalid_origin": {
     "openapi_example_summary": "Request origin not allowed.",
@@ -130,5 +130,35 @@
     "openapi_example_summary": "Password does not meet criteria.",
     "title": "Invalid Password",
     "detail": "The provided password does not meet the required criteria. Please ensure it is at least 8 characters long and contains a mix of letters, numbers, and special characters."
+  },
+  "user_organization_invitation_not_found": {
+    "openapi_example_summary": "Organization invitation not found.",
+    "title": "Invitation Not Found",
+    "detail": "The organization invitation could not be found. Please check the invitation link or contact support."
+  },
+  "user_organization_invitation_expired": {
+    "openapi_example_summary": "Organization invitation has expired.",
+    "title": "Invitation Expired",
+    "detail": "The organization invitation has expired. Please request a new invitation."
+  },
+  "user_organization_invitation_already_assigned": {
+    "openapi_example_summary": "Organization invitation already assigned",
+    "title": "Invitation Already Assigned",
+    "detail": "The organization invitation has already been assigned. You can log in to your account."
+  },
+  "organization_last_user_cannot_be_deleted": {
+    "openapi_example_summary": "Cannot delete the last user in an organization.",
+    "title": "Last User Cannot Be Deleted",
+    "detail": "You cannot delete the last user in an organization. Please add another user before attempting to delete this one."
+  },
+  "failed_to_create_payment_intent": {
+    "openapi_example_summary": "Failed to create payment intent.",
+    "title": "Payment Intent Creation Failed",
+    "detail": "An error occurred while trying to create a payment intent. Please try again later or contact support."
+  },
+  "failed_to_webhook_payment_intent_update": {
+    "openapi_example_summary": "Failed to process payment intent update webhook.",
+    "title": "Payment Intent Update Failed",
+    "detail": "An error occurred while processing the payment intent update webhook. Please try again later or contact support."
   }
 }

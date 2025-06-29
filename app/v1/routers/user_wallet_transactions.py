@@ -5,7 +5,7 @@ from app.v1.dependencies.services.user_wallet_transaction_service import (
 from app.v1.schemas.user_wallet_transaction import (
     UserWalletTransactionRead,
     UserWalletTransactionSearchParams,
-    UserWalletTransactionListResponse,
+    UserWalletTransactionListRead,
 )
 from app.models.user_wallet import UserWallet
 from app.lib.utils.convert_id import decode_id
@@ -24,7 +24,7 @@ router = AuthAPIRouter(
 
 @router.get(
     "",
-    response_model=UserWalletTransactionListResponse,
+    response_model=UserWalletTransactionListRead,
     name="user_wallet_transactions:list_user_wallet_transactions",
 )
 async def list_user_wallet_transactions(

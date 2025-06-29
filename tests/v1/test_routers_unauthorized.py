@@ -14,17 +14,24 @@ async def test_routers_unauthorized(
         {"method": "patch", "path": "/users/me"},
         {"method": "get", "path": "/user-wallet-transactions"},
         {"method": "get", "path": f"/user-wallet-transactions/{dammy_id}"},
-        {"method": "post", "path": "/payment-intents"},
+        {"method": "post", "path": "/users/payment-intents"},
         {"method": "get", "path": "/user-api-keys"},
         {"method": "get", "path": f"/user-api-keys/{dammy_id}"},
         {"method": "post", "path": "/user-api-keys"},
         {"method": "patch", "path": f"/user-api-keys/{dammy_id}"},
         {"method": "delete", "path": f"/user-api-keys/{dammy_id}"},
-        {"method": "post", "path": "/user-api-keys/verify"},
+        {"method": "get", "path": "/organizations"},
+        {"method": "get", "path": f"/organizations/{dammy_id}"},
+        {"method": "post", "path": "/organizations"},
+        {"method": "patch", "path": f"/organizations/{dammy_id}"},
+        {"method": "delete", "path": f"/organizations/{dammy_id}"},
+        {"method": "post", "path": f"/organizations/{dammy_id}/invite"},
+        {"method": "patch", "path": f"/organizations/{dammy_id}/invite/accept"},
     ]
     for router in routers:
         method = router["method"]
         path = router["path"]
+        print(f"Testing {method.upper()} {path}")
         response = await getattr(client, method)(path)
         check_api_exception_response(
             response,

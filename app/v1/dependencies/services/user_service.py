@@ -1,10 +1,19 @@
-from app.db.session import get_async_session
 from app.v1.repositories.user_repository import UserRepository
 from app.v1.services.user_service import UserService
-from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import Depends
+from app.v1.dependencies.repositories.user_repository import get_user_repository
+from app.v1.repositories.user_address_repository import UserAddressRepository
+from app.v1.dependencies.repositories.user_address_repository import (
+    get_user_address_repository,
+)
 
 
-def get_user_service(session: AsyncSession = Depends(get_async_session)) -> UserService:
-    repo = UserRepository(session)
-    return UserService(repo)
+def get_user_service(
+    user_repository: UserRepository = Depends(get_user_repository),
+    user_address_repository: UserAddressRepository = Depends(
+        get_user_address_repository
+    ),
+) -> UserService:
+    return UserService(
+        user_repository=user_repository, user_address_repository=user_address_repository
+    )
