@@ -28,6 +28,9 @@ class Settings(BaseSettings):
     HASHIDS_SALT: str = os.getenv("HASHIDS_SALT", "SECRET")
     ACCESS_TOKEN_EXPIRED_SECONDS: int = 3600 * 24 * 7  # 1 week
 
+    STRIPE_API_KEY: str = os.getenv("STRIPE_API_KEY", "")
+    STRIPE_WEBHOOK_SECRET: str = os.getenv("STRIPE_WEBHOOK_SECRET", "")
+
     GITHUB_CLIENT_ID: str = os.getenv("GITHUB_CLIENT_ID", "")
     GITHUB_CLIENT_SECRET: str = os.getenv("GITHUB_CLIENT_SECRET", "")
     GOOGLE_CLIENT_ID: str = os.getenv("GOOGLE_CLIENT_ID", "")
@@ -48,8 +51,13 @@ class Settings(BaseSettings):
     USE_CREDENTIALS: bool = env == "prod"
     VALIDATE_CERTS: bool = env == "prod"
     SECURE_COOKIES: bool = env == "prod"
+    ENV: str = env
+
+    PAYMENT_CURRENCY: str = "usd"
 
     AUTHENTICATE_MAX_FAILED_ATTEMPTS: int = 5
+    ADMIN_USERNAME: str = os.getenv("ADMIN_USERNAME", "admin")
+    ADMIN_PASSWORD: str = os.getenv("ADMIN_PASSWORD", "password")
 
 settings = Settings()
 

@@ -1,0 +1,24 @@
+import stripe
+from app.core.config import settings
+from fastapi import Request, status
+from app.lib.exception.api_exception import init_api_exception
+from app.lib.error_code import ErrorCode
+
+stripe.api_key = settings.STRIPE_API_KEY
+
+
+async def get_stripe_webhook_event(request: Request):
+    payload = await request.body()
+    sig_header = request.headers.get("stripe-signature")
+
+    try:
+        return stripe.Webhook.construct_event(
+            payload=payload,
+            sig_header=sig_header,
+            secret=settings.STRIPE_WEBHOOK_SECRET,
+        )
+    except ValueError:
+        raise init_api_exception(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail_code=ErrorCode.INVALID_PAYLOAD,
+        )

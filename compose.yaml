@@ -30,6 +30,8 @@ services:
       - "8888:8888" # for jupyter notebook when debugging
     depends_on:
       - db
+      - minio
+      - redis
     networks:
       - service-base_default
 
@@ -39,6 +41,45 @@ services:
     ports:
       - "1025:1025" # SMTP
       - "1080:1080" # Web UI
+    networks:
+      - service-base_default
+
+  minio:
+    image: minio/minio
+    container_name: service-base-minio
+    ports:
+      - "9000:9000"
+      - "9090:9090"
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: password
+    entrypoint: sh
+    volumes:
+      - minio-volume:/data
+    command: -c "minio server /data --address :9000 --console-address :9090;"
+    networks:
+      - service-base_default
+
+  minio-console:
+    image: minio/mc
+    container_name: service-base-mc
+    depends_on:
+      - minio
+    entrypoint: >
+      sh -c "
+      sleep 5 &&
+      mc alias set local http://service-base-minio:9000 admin password &&
+      mc mb local/fastapi-app-dev &&
+      mc mb local/fastapi-app-test
+      "
+    networks:
+      - service-base_default
+
+  redis:
+    image: redis:7.4.2
+    container_name: service-base-redis
+    ports:
+      - "6379:6379"
     networks:
       - service-base_default
 

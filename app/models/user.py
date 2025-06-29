@@ -1,10 +1,15 @@
 from fastapi_users_db_sqlalchemy import SQLAlchemyBaseUserTableUUID
 from app.db.base import Base
 from app.models.oauth_account import OAuthAccount
-from sqlalchemy import Boolean, Integer, DateTime
+from sqlalchemy import Boolean, Integer, DateTime, func
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from typing import List
 from datetime import datetime
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from app.models.user_wallet import UserWallet
+    from app.models.user_api_key import UserApiKey
 
 
 class User(SQLAlchemyBaseUserTableUUID, Base):
@@ -20,4 +25,21 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
     )
     oauth_accounts: Mapped[List[OAuthAccount]] = relationship(
         "OAuthAccount", lazy="joined"
+    )
+    user_wallet: Mapped["UserWallet"] = relationship(
+        back_populates="user", uselist=False
+    )
+    user_api_keys: Mapped[List["UserApiKey"]] = relationship(
+        "UserApiKey", back_populates="user", cascade="all, delete-orphan"
+    )
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False,
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
     )

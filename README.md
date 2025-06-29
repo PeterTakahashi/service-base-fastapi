@@ -2,6 +2,20 @@
 
 ## Installation
 
+### Get Start on local
+
+```sh
+# start backend
+git clone
+cp .env.example .env
+docker compose up
+
+# start frontend
+git clone
+npm install
+npm run dev
+```
+
 ### Local setup
 
 #### Docker
@@ -18,6 +32,15 @@ open http://127.0.0.1:8000/app/v1/docs # open api docs
 
 ```
 
+### start stripe local server
+
+```sh
+stripe listen --events=payment_intent.succeeded --forward-to http://127.0.0.1:8000/app/v1/payment-intents/webhook
+```
+
+ref: https://docs.stripe.com/cli/listen
+stripe test card: https://docs.stripe.com/testing
+
 #### create db migration file
 
 ```bash
@@ -26,8 +49,16 @@ alembic revision --autogenerate -m ""
 
 #### db migrate
 
+for development
+
 ```bash
 alembic upgrade head
+```
+
+for test
+
+```bash
+ENV=test alembic upgrade head
 ```
 
 #### reset table
@@ -59,7 +90,7 @@ mypy --config-file mypy.ini .
 #### OpenAPI
 
 html
-http://0.0.0.0:8000/app/v1/docs#/
+http://localhost:8000/app/v1/docs
 
 json
 http://0.0.0.0:8000/app/v1/openapi.json

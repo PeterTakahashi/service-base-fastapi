@@ -14,7 +14,12 @@ from dotenv import load_dotenv
 from alembic import context
 from app.db.base import Base
 from app.core.config import settings
-from app.models import User
+
+from app.models.user import User
+from app.models.user_wallet import UserWallet
+from app.models.user_wallet_transaction import UserWalletTransaction
+from app.models.oauth_account import OAuthAccount
+from app.models.user_api_key import UserApiKey
 
 load_dotenv()
 

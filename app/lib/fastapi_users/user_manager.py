@@ -5,21 +5,29 @@ This module defines the UserManager class and utility functions for managing use
 from uuid import UUID
 from typing import Optional, Union
 from datetime import datetime, timezone, timedelta
+from app.lib.utils.stripe import stripe
 
-from fastapi import Depends, Request, HTTPException
+from fastapi import Depends, Request, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.lib.exception.api_exception import init_api_exception
+
 from fastapi_users import BaseUserManager, UUIDIDMixin, exceptions, models, schemas
 from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase
+from fastapi_users.db import BaseUserDatabase
+from fastapi_users.password import PasswordHelperProtocol
 
 from app.core.config import settings
 from app.db.session import get_async_session
-from app.core.mailer import mailer
+from fastapi_mail import FastMail
+from app.v1.dependencies.mailer import get_mailer
 from fastapi_mail import MessageSchema, MessageType
 
 from app.models.user import User
 from app.models.oauth_account import OAuthAccount
+from app.v1.repositories.user_wallet_repository import UserWalletRepository
+from app.lib.error_code import ErrorCode
 
 
 class UserManager(UUIDIDMixin, BaseUserManager[User, UUID]):
@@ -35,6 +43,26 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, UUID]):
     LOCK_MINUTES = 30
     RESET_FAILED_ATTEMPTS_SECONDS = 1800  # 30 minutes
 
+    def __init__(
+        self,
+        user_db: BaseUserDatabase[User, UUID],
+        session: AsyncSession,
+        mailer: FastMail,
+        password_helper: Optional[PasswordHelperProtocol] = None,
+    ):
+        super().__init__(user_db, password_helper)
+        self.user_wallet_repository = UserWalletRepository(session)
+        self.mailer = mailer
+
+    async def on_after_register(self, user: User, request: Optional[Request] = None):
+        customer = stripe.Customer.create(
+            name=user.email,
+            email=user.email,
+        )
+        await self.user_wallet_repository.create(
+            user_id=user.id, stripe_customer_id=customer.id
+        )
+
     async def on_after_request_verify(
         self, user: User, token: str, request: Optional[Request] = None
     ):
@@ -49,7 +77,7 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, UUID]):
             template_body={"url": url},
             subtype=MessageType.html,
         )
-        await mailer.send_message(message, template_name="email/verify_email.html")
+        await self.mailer.send_message(message, template_name="email/verify_email.html")
 
     async def on_after_forgot_password(
         self, user: User, token: str, request: Optional[Request] = None
@@ -65,7 +93,9 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, UUID]):
             template_body={"user_id": str(user.id), "url": url},
             subtype=MessageType.html,
         )
-        await mailer.send_message(message, template_name="email/reset_password.html")
+        await self.mailer.send_message(
+            message, template_name="email/reset_password.html"
+        )
 
     async def validate_password(
         self, password: str, user: Union[schemas.UC, models.UP]
@@ -79,6 +109,10 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, UUID]):
         if len(password) < 8:
             raise exceptions.InvalidPasswordException(
                 reason="Password must be at least 8 characters long"
+            )
+        if len(password) > 100:
+            raise exceptions.InvalidPasswordException(
+                reason="Password must not exceed 100 characters"
             )
         if not any(char.isdigit() for char in password):
             raise exceptions.InvalidPasswordException(
@@ -112,8 +146,10 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, UUID]):
             return None
         # Check if the user is currently locked and possibly unlock
         if not await self._handle_lock_state(user):
-            # Still locked
-            raise HTTPException(status_code=423, detail="LOGIN_ACCOUNT_LOCKED")
+            raise init_api_exception(
+                status_code=status.HTTP_423_LOCKED,
+                detail_code=ErrorCode.LOGIN_ACCOUNT_LOCKED,
+            )
 
         # Reset failed_attempts if enough time has passed since last attempt
         self._maybe_reset_failed_attempts(user)
@@ -214,7 +250,11 @@ async def get_user_db(session: AsyncSession = Depends(get_async_session)):
     yield SQLAlchemyUserDatabase(session, User, OAuthAccount)
 
 
-async def get_user_manager(user_db=Depends(get_user_db)):
+async def get_user_manager(
+    user_db=Depends(get_user_db),
+    session: AsyncSession = Depends(get_async_session),
+    mailer: FastMail = Depends(get_mailer),
+):
     """
     Dependency function to retrieve the user manager instance.
 
@@ -224,4 +264,4 @@ async def get_user_manager(user_db=Depends(get_user_db)):
     Yields:
         UserManager: The user manager instance.
     """
-    yield UserManager(user_db)
+    yield UserManager(user_db=user_db, session=session, mailer=mailer)

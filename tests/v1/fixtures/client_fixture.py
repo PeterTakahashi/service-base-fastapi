@@ -31,3 +31,17 @@ async def auth_client(client: AsyncClient, access_token: str) -> AsyncClient:
     authenticated_client = client  # Avoid name collision
     authenticated_client.headers.update({"Authorization": f"Bearer {access_token}"})
     return authenticated_client
+
+
+@pytest_asyncio.fixture
+async def not_verified_auth_client(
+    client: AsyncClient, not_verified_access_token: str
+) -> AsyncClient:
+    """
+    Fixture to provide an authenticated HTTP client for testing.
+    """
+    authenticated_client = client
+    authenticated_client.headers.update(
+        {"Authorization": f"Bearer {not_verified_access_token}"}
+    )
+    return authenticated_client
