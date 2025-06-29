@@ -62,6 +62,7 @@ class Settings(BaseSettings):
     STRIPE_PERSONAL_TAX_CODE: str = "txcd_10103000"
     STRIPE_BUSINESS_TAX_CODE: str = "txcd_10103001"
 
+
 settings = Settings()
 
 print("Loading environment variables...")
