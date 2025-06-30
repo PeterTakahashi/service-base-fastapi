@@ -2,7 +2,7 @@
 
 <img src="docs/img/front/home.png" width="700" />
 
-A robust and scalable FastAPI boilerplate for building modern web services. This project provides foundational features for developing applications that require user authentication (including OAuth 2.0), API key management, wallet functionalities (with transactions), and organization management. It integrates with Stripe for payment processing and can serve as a base for building services similar to generative AI APIs (like OpenAI or Gemini), combining aspects of API gateways (like Kong) and metering/wallet services (like OpenMeter).
+A robust and scalable FastAPI boilerplate for building modern web services. This project provides foundational features for developing applications that require user authentication (including OAuth 2.0), API key management, wallet functionalities (with transactions). It integrates with Stripe for payment processing and can serve as a base for building services similar to generative AI APIs (like OpenAI or Gemini), combining aspects of API gateways (like Kong) and metering/wallet services (like OpenMeter).
 
 ## Table of Contents
 
