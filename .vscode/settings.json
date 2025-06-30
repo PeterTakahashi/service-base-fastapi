@@ -1,0 +1,8 @@
+{
+  "python.defaultInterpreterPath": "/usr/local/bin/python",
+  "python.analysis.indexing": true,
+  "python.analysis.autoSearchPaths": true,
+  "python.analysis.diagnosticMode": "workspace",
+  "python.testing.pytestArgs": ["tests"],
+  "python.analysis.extraPaths": ["./app"]
+}

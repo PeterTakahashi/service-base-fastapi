@@ -1,0 +1,15 @@
+{
+  "unauthorized": {
+    "title": "認証エラー",
+    "detail": "認証情報が提供されていないか無効です。"
+  },
+  "validation_error": {
+    "title": "バリデーションエラー",
+    "required": "'{field}'フィールドは必須です。",
+    "max_length": "'{field}'フィールドは最大{max_length}文字までです。"
+  },
+  "internal_server_error": {
+    "title": "サーバーエラー",
+    "detail": "予期しないエラーが発生しました。後ほど再試行してください。"
+  }
+}
