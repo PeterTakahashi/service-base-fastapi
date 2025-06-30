@@ -86,6 +86,7 @@ services:
 volumes:
   postgres_data:
   pgadmin-data:
+  minio-volume:
 
 networks:
   service-base_default:
